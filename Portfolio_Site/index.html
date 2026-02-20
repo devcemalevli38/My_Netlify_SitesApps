@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cemal Evli's Portfolio</title>
+    
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/cemal201138/main/profile.ico">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #020617;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #38bdf8;
+            --neon-shadow: 0 0 10px rgba(56, 189, 248, 0.5), 0 0 20px rgba(56, 189, 248, 0.3);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 40%;
+            height: 40%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.05) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        /* Profil Resmi - Keskinlik Ayarı Yapıldı */
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 25px;
+            border: 3px solid var(--accent);
+            padding: 5px;
+            box-shadow: var(--neon-shadow);
+            transition: var(--transition);
+            object-fit: cover;
+            /* Resim kalitesini artırmak için */
+            image-rendering: -webkit-optimize-contrast;
+            background-color: var(--card-bg);
+        }
+
+        .profile-img:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.8);
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, var(--accent), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+            text-shadow: var(--neon-shadow);
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .subtitle {
+            color: var(--accent);
+            font-size: 1.2rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+        }
+
+        .social-links {
+            margin-top: 35px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .social-links a {
+            color: var(--text-main);
+            font-size: 1.8rem;
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-block;
+            filter: drop-shadow(0 0 5px transparent);
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2) translateY(-5px);
+        }
+
+        .fa-github:hover { color: #fff !important; filter: drop-shadow(0 0 8px #fff); }
+        .fa-instagram:hover { color: #E1306C !important; filter: drop-shadow(0 0 8px #E1306C); }
+        .fa-facebook:hover { color: #1877F2 !important; filter: drop-shadow(0 0 8px #1877F2); }
+        .fa-envelope:hover { color: var(--accent) !important; filter: drop-shadow(0 0 8px var(--accent)); }
+        
+        .fa-tiktok:hover { 
+            color: #fff !important; 
+            text-shadow: -2px -1px 0 #ff0050, 2px 1px 0 #00f2ea !important;
+            filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
+        }
+
+        .section-title {
+            border-left: 4px solid var(--accent);
+            padding-left: 15px;
+            margin-top: 80px;
+            margin-bottom: 30px;
+            color: var(--text-main);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: -10px 0 20px -10px var(--accent);
+        }
+
+        .about-text {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            background: rgba(30, 41, 59, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+            text-decoration: none;
+            display: block;
+            color: inherit;
+            position: relative;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 35px -12px rgba(56, 189, 248, 0.4);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-title {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: #fff;
+        }
+
+        .project-desc {
+            color: var(--text-dim);
+            margin: 18px 0;
+        }
+
+        .tags {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(56, 189, 248, 0.05);
+            color: var(--accent);
+            padding: 6px 16px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 120px;
+            padding: 50px 0;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(56, 189, 248, 0.1);
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.4rem; }
+            .social-links { gap: 15px; }
+            .profile-img { width: 120px; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <img src="https://github.com/cemal201138.png" alt="Cemal Evli" class="profile-img">
+            
+            <h1>Cemal Evli</h1>
+            <p class="subtitle">Student & Future Developer</p>
+            <div class="social-links">
+                <a href="https://github.com/cemal201138" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.instagram.com/cemalevli38/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="http://www.tiktok.com/@cemalevli38" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=100076601840154" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="mailto:cemal201138.dev@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+            </div>
+        </header>
+
+        <section id="about">
+            <h2 class="section-title">Hakkımda</h2>
+            <p class="about-text">
+                Teknolojiye duyduğum merakı, somut projelere dönüştürme hedefiyle çalışan bir öğrenciyim. 
+                Yazılım dünyasının sunduğu sınırsız imkanları keşfetmeyi, yeni diller öğrenmeyi ve modern tasarım trendlerini 
+                takip etmeyi seviyorum. Şu anki odağım, temiz kod prensiplerini benimseyerek kendimi web teknolojileri alanında geliştirmek 
+                ve her geçen gün bilgi birikimime yenilerini eklemek.
+            </p>
+        </section>
+
+        <section id="projects">
+            <h2 class="section-title">Projelerim</h2>
+            
+            <a href="https://github.com/cemal201138/Python-Hand-Mouse" target="_blank" class="project-card">
+                <div class="project-header">
+                    <span class="project-title">Python Hand Mouse</span>
+                    <i class="fas fa-hand-pointer" style="color: var(--accent); font-size: 1.5rem;"></i>
+                </div>
+                <p class="project-desc">Görüntü işleme tekniklerini kullanarak el hareketleriyle bilgisayar faresini kontrol etmeyi sağlayan yenilikçi bir Python projesi.</p>
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">OpenCV</span>
+                    <span class="tag">MediaPipe</span>
+                </div>
+            </a>
+
+            <a href="https://github.com/cemal201138/Python_Muzik_Calar" target="_blank" class="project-card">
+                <div class="project-header">
+                    <span class="project-title">Python Müzik Çalar</span>
+                    <i class="fas fa-music" style="color: var(--accent); font-size: 1.5rem;"></i>
+                </div>
+                <p class="project-desc">Python dilinde geliştirilmiş, kullanıcı dostu arayüze sahip işlevsel bir müzik oynatıcı uygulaması.</p>
+                <div class="tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Tkinter</span>
+                    <span class="tag">Pygame</span>
+                </div>
+            </a>
+
+            <a href="https://github.com/cemal201138/My_Netlify_SitesApps" target="_blank" class="project-card">
+                <div class="project-header">
+                    <span class="project-title">Websitelerim</span>
+                    <i class="fas fa-rocket" style="color: var(--accent); font-size: 1.5rem;"></i>
+                </div>
+                <p class="project-desc">Netlify üzerinde canlıya alınmış web projelerimin ve uygulamalarımın toplandığı dijital sergi.</p>
+                <div class="tags">
+                    <span class="tag">Web Apps</span>
+                    <span class="tag">Netlify</span>
+                    <span class="tag">Deployment</span>
+                </div>
+            </a>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Cemal Evli. Tüm Hakları Saklıdır.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
