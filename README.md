@@ -14,6 +14,9 @@ Aşağıda bu repo içinde bulunan ve Netlify’da çalışan projeler yer almak
 - 📄 **Şifre Çöz**  
   👉 Canlı Demo: https://sifrecoz.netlify.app/  |  https://cemal201138.github.io/My_Netlify_SitesApps/%C5%9Eifre_%C3%87%C3%B6z/index.html
 
+- 📄 **Portfolyom**  
+  👉 Canlı Demo: https://cemal201138.github.io/My_Netlify_SitesApps/Portfolio_Site/index.htm
+
 - 📄 **Müzik Kontrol**  
   👉 Canlı Demo: https://muzikkontrol.netlify.app/  |  https://cemal201138.github.io/My_Netlify_SitesApps/M%C3%BCzik_Kontrol/index.html
 
