@@ -1,215 +1,202 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Proje Portfolyom</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Sitelerim</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: rgba(30, 41, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f1f5f9;
+            --accent: #38bdf8;
+            --hover: #1e293b;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
 
-<link rel="icon" type="image/x-icon" href="favicon.ico">
+        .light {
+            --bg: #f8fafc;
+            --card: rgba(255, 255, 255, 0.8);
+            --border: rgba(0, 0, 0, 0.05);
+            --text: #0f172a;
+            --accent: #0284c7;
+            --hover: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
 
-<style>
-:root {
-  --bg: #0f172a;
-  --card: rgba(30, 41, 59, 0.7);
-  --border: rgba(255, 255, 255, 0.1);
-  --text: #f1f5f9;
-  --accent: #38bdf8;
-  --hover: #1e293b;
-  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-}
+        * { box-sizing: border-box; transition: all 0.2s ease; }
 
-.light {
-  --bg: #f1f5f9;
-  --card: rgba(255, 255, 255, 0.8);
-  --border: rgba(0, 0, 0, 0.05);
-  --text: #1e293b;
-  --accent: #0284c7;
-  --hover: #e2e8f0;
-  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-}
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 50%);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-* { box-sizing: border-box; transition: all 0.3s ease; }
+        header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
 
-body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--bg);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.1) 0px, transparent 50%);
-  color: var(--text);
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  min-height: 100vh;
-}
+        h1 { margin: 0; font-size: 1.8rem; letter-spacing: -1px; }
 
-#root {
-  width: 100%;
-  max-width: 800px;
-  padding: 40px 20px;
-}
+        .controls { display: flex; gap: 10px; }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-}
+        input {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 15px;
+            border-radius: 10px;
+            outline: none;
+            backdrop-filter: blur(5px);
+            width: 250px;
+        }
 
-h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+        input:focus { border-color: var(--accent); }
 
-.controls { display: flex; gap: 10px; }
+        button {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
 
-input {
-  background: var(--card);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 10px 16px;
-  border-radius: 12px;
-  outline: none;
-  backdrop-filter: blur(10px);
-}
+        button:hover { background: var(--hover); }
 
-input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
 
-button {
-  background: var(--card);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 10px;
-  border-radius: 12px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+        .project-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
 
-button:hover { background: var(--hover); }
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            background: var(--hover);
+        }
 
-/* GRID TASARIMI */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
-}
+        .icon {
+            font-size: 28px;
+            background: rgba(56, 189, 248, 0.1);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
 
-.project-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-  text-decoration: none;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
-}
+        .name { font-weight: 600; font-size: 1.1rem; }
 
-.project-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--accent);
-  background: var(--hover);
-}
+        .hidden { display: none; }
 
-.icon {
-  font-size: 24px;
-  background: rgba(56, 189, 248, 0.1);
-  padding: 10px;
-  border-radius: 12px;
-}
-
-.name { font-weight: 600; font-size: 1rem; }
-
-.hidden { display: none; }
-
-@media (max-width: 600px) {
-  header { flex-direction: column; align-items: flex-start; }
-  .controls { width: 100%; margin-top: 15px; }
-  input { flex-grow: 1; }
-}
-</style>
+        @media (max-width: 600px) {
+            header { flex-direction: column; text-align: center; }
+            input { width: 100%; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div id="root">
-  <header>
-    <h1>🚀 Projelerim</h1>
+<header>
+    <h1>📂 Web Sitelerim</h1>
     <div class="controls">
-      <input id="search" placeholder="Proje ara...">
-      <button id="themeToggle" title="Temayı Değiştir">🌓</button>
+        <input id="search" placeholder="🔍 Proje ara...">
+        <button id="themeToggle">🌙 / ☀️</button>
     </div>
-  </header>
+</header>
 
-  <div id="project-container" class="grid">
-    <div style="padding: 20px; opacity: 0.5;">Projeler yükleniyor...</div>
-  </div>
+<div id="project-container" class="grid">
+    <p id="loading">Yükleniyor...</p>
 </div>
 
 <script>
-// GitHub Bilgileri (Kendi kullanıcı adınıza göre düzenleyin)
-const USERNAME = "cemal201138";
-const REPO = "My_Netlify_SitesApps";
-const API = `https://api.github.com/repos/${USERNAME}/${REPO}/contents/`;
+const API = "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/";
 
-// 🌓 Tema Yönetimi
-const body = document.body;
-if(localStorage.getItem("theme") === "light") body.classList.add("light");
+if(localStorage.getItem("theme") === "light") document.body.classList.add("light");
 
 themeToggle.onclick = () => {
-  body.classList.toggle("light");
-  localStorage.setItem("theme", body.classList.contains("light") ? "light" : "dark");
+    document.body.classList.toggle("light");
+    localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 };
 
-// 🔠 Arama Normalleştirme
 const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 async function init() {
-  try {
-    const res = await fetch(API);
-    const items = await res.json();
-    const container = document.getElementById("project-container");
-    container.innerHTML = "";
+    try {
+        const res = await fetch(API);
+        const items = await res.json();
+        const container = document.getElementById("project-container");
+        container.innerHTML = "";
 
-    // Sadece klasörleri (projeleri) filtrele
-    const projects = items.filter(i => i.type === "dir");
+        const projects = items.filter(i => i.type === "dir");
 
-    projects.forEach(p => {
-      // Her klasör için bir kart oluştur
-      const card = document.createElement("a");
-      card.className = "project-card";
-      
-      // Proje linkini oluştur: klasör_adı/index.html
-      // Not: GitHub Pages veya Netlify üzerinde yayınlanmışsa 
-      // i.path direkt klasör ismidir.
-      card.href = `${p.path}/index.html`; 
-      card.target = "_blank";
-      card.dataset.name = norm(p.name);
+        projects.forEach(p => {
+            const cleanName = p.name.replace(/_/g, " ");
+            
+            const card = document.createElement("a");
+            card.className = "project-card";
+            card.href = `${p.path}/index.html`;
+            card.target = "_blank";
+            card.dataset.name = norm(p.name) + " " + norm(cleanName);
 
-      card.innerHTML = `
-        <div class="icon">📁</div>
-        <div class="name">${p.name}</div>
-      `;
+            card.innerHTML = `
+                <div class="icon">🚀</div>
+                <div class="name">${cleanName}</div>
+            `;
 
-      container.appendChild(card);
-    });
-
-  } catch (error) {
-    document.getElementById("project-container").innerHTML = "⚠️ Veriler yüklenirken bir hata oluştu.";
-  }
+            container.appendChild(card);
+        });
+    } catch (e) {
+        document.getElementById("project-container").innerHTML = "Veriler yüklenemedi.";
+        console.error(e);
+    }
 }
 
-init();
-
-// 🔍 Canlı Arama
 search.addEventListener("input", () => {
-  const q = norm(search.value);
-  document.querySelectorAll(".project-card").forEach(card => {
-    card.classList.toggle("hidden", !card.dataset.name.includes(q));
-  });
+    const q = norm(search.value);
+    document.querySelectorAll(".project-card").forEach(card => {
+        card.classList.toggle("hidden", !card.dataset.name.includes(q));
+    });
 });
+
+init();
 </script>
 
 </body>
