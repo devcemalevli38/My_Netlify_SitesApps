@@ -2,208 +2,212 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<title>My Websites</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proje Portfolyom</title>
 
-<!-- ✅ FAVICON -->
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 
 <style>
-:root{
-  --bg:#020617;
-  --bg-grad:#000;
-  --card:rgba(255,255,255,.02);
-  --border:#1e293b;
-  --text:#e5e7eb;
-  --accent:#38bdf8;
-  --folder:#fbbf24;
+:root {
+  --bg: #0f172a;
+  --card: rgba(30, 41, 59, 0.7);
+  --border: rgba(255, 255, 255, 0.1);
+  --text: #f1f5f9;
+  --accent: #38bdf8;
+  --hover: #1e293b;
+  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
 }
 
-.light{
-  --bg:#f8fafc;
-  --bg-grad:#e5e7eb;
-  --card:#ffffff;
-  --border:#cbd5f5;
-  --text:#020617;
-  --accent:#0284c7;
-  --folder:#b45309;
+.light {
+  --bg: #f1f5f9;
+  --card: rgba(255, 255, 255, 0.8);
+  --border: rgba(0, 0, 0, 0.05);
+  --text: #1e293b;
+  --accent: #0284c7;
+  --hover: #e2e8f0;
+  --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
-*{box-sizing:border-box}
+* { box-sizing: border-box; transition: all 0.3s ease; }
 
-body{
-  font-family:system-ui;
-  background:radial-gradient(circle at top,var(--bg),var(--bg-grad));
-  color:var(--text);
-  padding:32px;
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.1) 0px, transparent 50%);
+  color: var(--text);
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
 }
 
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  margin-bottom:20px;
-  flex-wrap:wrap;
+#root {
+  width: 100%;
+  max-width: 800px;
+  padding: 40px 20px;
 }
 
-.controls{display:flex;gap:8px}
-
-input,button{
-  background:var(--card);
-  border:1px solid var(--border);
-  color:var(--text);
-  padding:8px 12px;
-  border-radius:8px;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
 }
 
-button{cursor:pointer}
+h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
 
-#root{max-width:900px}
+.controls { display: flex; gap: 10px; }
 
-.tree{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:16px;
+input {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 16px;
+  border-radius: 12px;
+  outline: none;
+  backdrop-filter: blur(10px);
 }
 
-.folder{
-  cursor:pointer;
-  font-weight:600;
-  color:var(--folder);
-  padding:6px;
-  border-radius:6px;
+input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
+
+button {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-ul{
-  list-style:none;
-  padding-left:18px;
-  display:none;
+button:hover { background: var(--hover); }
+
+/* GRID TASARIMI */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
 }
 
-.file{padding:4px 6px}
+.project-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  text-decoration: none;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
 
-.hidden{display:none}
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  background: var(--hover);
+}
 
-a{
-  color:var(--accent);
-  text-decoration:none;
+.icon {
+  font-size: 24px;
+  background: rgba(56, 189, 248, 0.1);
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.name { font-weight: 600; font-size: 1rem; }
+
+.hidden { display: none; }
+
+@media (max-width: 600px) {
+  header { flex-direction: column; align-items: flex-start; }
+  .controls { width: 100%; margin-top: 15px; }
+  input { flex-grow: 1; }
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>📂 My Websites</h1>
-  <div class="controls">
-    <input id="search" placeholder="🔍 Proje ara...">
-    <button id="themeToggle">🌙 / ☀️</button>
-  </div>
-</header>
+<div id="root">
+  <header>
+    <h1>🚀 Projelerim</h1>
+    <div class="controls">
+      <input id="search" placeholder="Proje ara...">
+      <button id="themeToggle" title="Temayı Değiştir">🌓</button>
+    </div>
+  </header>
 
-<div id="root">Yükleniyor…</div>
+  <div id="project-container" class="grid">
+    <div style="padding: 20px; opacity: 0.5;">Projeler yükleniyor...</div>
+  </div>
+</div>
 
 <script>
-const API="https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/";
+// GitHub Bilgileri (Kendi kullanıcı adınıza göre düzenleyin)
+const USERNAME = "cemal201138";
+const REPO = "My_Netlify_SitesApps";
+const API = `https://api.github.com/repos/${USERNAME}/${REPO}/contents/`;
 
-// 🌙 Tema
-if(localStorage.getItem("theme")==="light")
-  document.body.classList.add("light");
+// 🌓 Tema Yönetimi
+const body = document.body;
+if(localStorage.getItem("theme") === "light") body.classList.add("light");
 
-themeToggle.onclick=()=>{
-  document.body.classList.toggle("light");
-  localStorage.setItem(
-    "theme",
-    document.body.classList.contains("light")?"light":"dark"
-  );
+themeToggle.onclick = () => {
+  body.classList.toggle("light");
+  localStorage.setItem("theme", body.classList.contains("light") ? "light" : "dark");
 };
 
-// 🔠 Normalize
-const norm=t=>t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+// 🔠 Arama Normalleştirme
+const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-async function loadFolder(path){
-  const res=await fetch(API+path);
-  const items=await res.json();
-  const ul=document.createElement("ul");
+async function init() {
+  try {
+    const res = await fetch(API);
+    const items = await res.json();
+    const container = document.getElementById("project-container");
+    container.innerHTML = "";
 
-  for(const i of items){
-    const li=document.createElement("li");
+    // Sadece klasörleri (projeleri) filtrele
+    const projects = items.filter(i => i.type === "dir");
 
-    if(i.type==="dir"){
-      const f=document.createElement("div");
-      f.className="folder";
-      f.textContent="📁 "+i.name;
-      f.dataset.name=norm(i.name);
+    projects.forEach(p => {
+      // Her klasör için bir kart oluştur
+      const card = document.createElement("a");
+      card.className = "project-card";
+      
+      // Proje linkini oluştur: klasör_adı/index.html
+      // Not: GitHub Pages veya Netlify üzerinde yayınlanmışsa 
+      // i.path direkt klasör ismidir.
+      card.href = `${p.path}/index.html`; 
+      card.target = "_blank";
+      card.dataset.name = norm(p.name);
 
-      const child=await loadFolder(i.path);
+      card.innerHTML = `
+        <div class="icon">📁</div>
+        <div class="name">${p.name}</div>
+      `;
 
-      f.onclick=()=>child.style.display=
-        child.style.display==="block"?"none":"block";
+      container.appendChild(card);
+    });
 
-      li.append(f,child);
-      ul.append(li);
-    }
-
-    if(i.type==="file" && i.name.endsWith(".html")){
-      li.className="file";
-      li.dataset.name=norm(i.name);
-      li.innerHTML=`📄 <a href="${i.path}" target="_blank">${i.name}</a>`;
-      ul.append(li);
-    }
+  } catch (error) {
+    document.getElementById("project-container").innerHTML = "⚠️ Veriler yüklenirken bir hata oluştu.";
   }
-  return ul;
 }
 
-async function init(){
-  const res=await fetch(API);
-  const items=await res.json();
-  const tree=document.createElement("div");
-  tree.className="tree";
-
-  for(const i of items){
-    if(i.type==="dir"){
-      const f=document.createElement("div");
-      f.className="folder";
-      f.textContent="📁 "+i.name;
-      f.dataset.name=norm(i.name);
-
-      const c=await loadFolder(i.path);
-
-      f.onclick=()=>c.style.display=
-        c.style.display==="block"?"none":"block";
-
-      tree.append(f,c);
-    }
-  }
-  root.innerHTML="";
-  root.append(tree);
-}
 init();
 
-// 🔍 ARAMA – KLASÖR AÇMADAN
-search.addEventListener("input",()=>{
-  const q=norm(search.value);
-
-  document.querySelectorAll(".file,.folder")
-    .forEach(e=>e.classList.remove("hidden"));
-
-  if(!q) return;
-
-  document.querySelectorAll(".file").forEach(file=>{
-    file.classList.toggle(
-      "hidden",
-      !file.dataset.name.includes(q)
-    );
-  });
-
-  document.querySelectorAll(".folder").forEach(f=>{
-    const hasVisible=f.nextElementSibling
-      ?.querySelector(".file:not(.hidden)");
-    f.classList.toggle(
-      "hidden",
-      !hasVisible && !f.dataset.name.includes(q)
-    );
+// 🔍 Canlı Arama
+search.addEventListener("input", () => {
+  const q = norm(search.value);
+  document.querySelectorAll(".project-card").forEach(card => {
+    card.classList.toggle("hidden", !card.dataset.name.includes(q));
   });
 });
 </script>
