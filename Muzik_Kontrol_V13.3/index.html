@@ -55,7 +55,11 @@ button {
 }
 .player button { width: 60px; height: 60px; font-size: 22px; }
 .play { width: 80px !important; height: 80px !important; background: var(--accent) !important; color: #000 !important; font-size: 30px !important;}
-.volume-controls button { width: 50px; height: 50px; font-size: 18px; background: #243449; }
+
+/* Ses butonları için özel ayar */
+.volume-controls button { width: 60px; height: 60px; font-size: 22px; background: #243449; }
+.mute-btn { width: 100px !important; border-radius: 20px !important; font-size: 14px !important; font-weight: bold; }
+
 button:active { transform: scale(.9); }
 
 .volume-section-title {
@@ -86,16 +90,12 @@ button:active { transform: scale(.9); }
         <button onclick="sendCommand('media', 'next')">⏭</button>
     </div>
 
-    <div class="volume-section-title">Ses Kontrolü</div>
+    <div class="volume-section-title">Sistem Sesi</div>
     
     <div class="volume-controls">
-        <button onclick="sendCommand('volume', 'down')">🔉</button>
-        <button onclick="sendCommand('volume', 'mute')" title="Uygulamayı Sustur">🔇</button>
-        <button onclick="sendCommand('volume', 'up')">🔊</button>
-    </div>
-    
-    <div class="volume-controls">
-        <button style="width: 160px; border-radius: 20px;" onclick="sendCommand('media', 'mute')">Sistem Sessiz</button>
+        <button onclick="sendCommand('media', 'voldown')" title="Sesi Kıs">🔉</button>
+        <button class="mute-btn" onclick="sendCommand('media', 'mute')" title="Sistemi Sustur">SESSİZ</button>
+        <button onclick="sendCommand('media', 'volup')" title="Sesi Aç">🔊</button>
     </div>
 
     <div class="settings" id="settings">
@@ -121,7 +121,6 @@ function saveServer() {
 
 function sendCommand(title, body) {
     if (!serverUrl) return alert("Lütfen ayarlardan sunucu adresini girin!");
-    // URL sonuna /komut ekleyip eklemediğini kontrol et
     let baseUrl = serverUrl.endsWith('/') ? serverUrl.slice(0, -1) : serverUrl;
     fetch(`${baseUrl}/komut?title=${title}&body=${body}`).catch(e => console.error("Hata:", e));
 }
