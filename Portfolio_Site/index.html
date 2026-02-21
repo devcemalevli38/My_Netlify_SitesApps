@@ -51,19 +51,20 @@
             margin-bottom: 80px;
         }
 
-        /* Profil Resmi - Keskinlik Ayarı Yapıldı */
+        /* Profil Resmi - Tam Yuvarlak ve Sabit Boyut */
         .profile-img {
             width: 150px;
             height: 150px;
-            border-radius: 50%;
+            border-radius: 50% !important; /* Tam yuvarlak olmasını sağlar */
             margin-bottom: 25px;
             border: 3px solid var(--accent);
             padding: 5px;
             box-shadow: var(--neon-shadow);
             transition: var(--transition);
-            object-fit: cover;
+            object-fit: cover; /* Resmin bozulmadan kutuya sığmasını sağlar */
             image-rendering: -webkit-optimize-contrast;
             background-color: var(--card-bg);
+            display: inline-block;
         }
 
         .profile-img:hover {
@@ -276,4 +277,21 @@
             <a href="https://github.com/cemal201138/My_Netlify_SitesApps" target="_blank" class="project-card">
                 <div class="project-header">
                     <span class="project-title">Websitelerim</span>
-                    <i class="fas fa-rocket" style="color: var(--
+                    <i class="fas fa-rocket" style="color: var(--accent); font-size: 1.5rem;"></i>
+                </div>
+                <p class="project-desc">Netlify üzerinde canlıya alınmış web projelerimin ve uygulamalarımın toplandığı dijital sergi.</p>
+                <div class="tags">
+                    <span class="tag">Web Apps</span>
+                    <span class="tag">Netlify</span>
+                    <span class="tag">Deployment</span>
+                </div>
+            </a>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 Cemal Evli. Tüm Hakları Saklıdır.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
