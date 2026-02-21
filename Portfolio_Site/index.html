@@ -29,17 +29,6 @@
             overflow-x: hidden;
         }
 
-        body::before {
-            content: "";
-            position: fixed;
-            top: -10%;
-            left: -10%;
-            width: 40%;
-            height: 40%;
-            background: radial-gradient(circle, rgba(56, 189, 248, 0.05) 0%, transparent 70%);
-            z-index: -1;
-        }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -51,18 +40,18 @@
             margin-bottom: 80px;
         }
 
-        /* Profil Resmi - Tam Yuvarlak ve Sabit Boyut */
+        /* PROFIL RESMI KESIN YUVARLAK YAPMA */
         .profile-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50% !important; /* Tam yuvarlak olmasını sağlar */
+            width: 150px !important;
+            height: 150px !important;
+            border-radius: 50% !important; /* Bu satır yuvarlak yapar */
+            object-fit: cover !important;  /* Resmin yamulmasını önler */
+            aspect-ratio: 1 / 1 !important; /* Kare oranını zorlar, radius ile daire olur */
             margin-bottom: 25px;
             border: 3px solid var(--accent);
             padding: 5px;
             box-shadow: var(--neon-shadow);
             transition: var(--transition);
-            object-fit: cover; /* Resmin bozulmadan kutuya sığmasını sağlar */
-            image-rendering: -webkit-optimize-contrast;
             background-color: var(--card-bg);
             display: inline-block;
         }
@@ -80,7 +69,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: shine 3s linear infinite;
-            text-shadow: var(--neon-shadow);
         }
 
         @keyframes shine {
@@ -90,18 +78,16 @@
         .subtitle {
             color: var(--accent);
             font-size: 1.2rem;
-            font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
         }
 
         .social-links {
             margin-top: 35px;
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
             gap: 20px;
+            flex-wrap: wrap;
         }
 
         .social-links a {
@@ -109,39 +95,23 @@
             font-size: 1.8rem;
             text-decoration: none;
             transition: var(--transition);
-            display: inline-block;
-            filter: drop-shadow(0 0 5px transparent);
         }
 
-        .social-links a:hover {
-            transform: scale(1.2) translateY(-5px);
-        }
-
-        .fa-github:hover { color: #fff !important; filter: drop-shadow(0 0 8px #fff); }
-        .fa-instagram:hover { color: #E1306C !important; filter: drop-shadow(0 0 8px #E1306C); }
-        .fa-facebook:hover { color: #1877F2 !important; filter: drop-shadow(0 0 8px #1877F2); }
-        .fa-envelope:hover { color: var(--accent) !important; filter: drop-shadow(0 0 8px var(--accent)); }
-        
-        .fa-tiktok:hover { 
-            color: #fff !important; 
-            text-shadow: -2px -1px 0 #ff0050, 2px 1px 0 #00f2ea !important;
-            filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
-        }
+        .social-links a:hover { transform: scale(1.2) translateY(-5px); }
+        .fa-github:hover { color: #fff; }
+        .fa-instagram:hover { color: #E1306C; }
+        .fa-tiktok:hover { color: #00f2ea; }
+        .fa-envelope:hover { color: var(--accent); }
 
         .section-title {
             border-left: 4px solid var(--accent);
             padding-left: 15px;
-            margin-top: 80px;
-            margin-bottom: 30px;
-            color: var(--text-main);
+            margin: 60px 0 30px;
             font-size: 1.5rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: -10px 0 20px -10px var(--accent);
         }
 
         .about-text {
-            font-size: 1.15rem;
             color: var(--text-dim);
             background: rgba(30, 41, 59, 0.3);
             padding: 20px;
@@ -151,70 +121,36 @@
 
         .project-card {
             background: var(--card-bg);
-            padding: 35px;
+            padding: 25px;
             border-radius: 20px;
-            margin-bottom: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: var(--transition);
+            margin-bottom: 20px;
             text-decoration: none;
             display: block;
             color: inherit;
-            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
         }
 
         .project-card:hover {
             border-color: var(--accent);
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 15px 35px -12px rgba(56, 189, 248, 0.4);
-            background: rgba(30, 41, 59, 0.8);
-        }
-
-        .project-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .project-title {
-            font-weight: 800;
-            font-size: 1.4rem;
-            color: #fff;
-        }
-
-        .project-desc {
-            color: var(--text-dim);
-            margin: 18px 0;
-        }
-
-        .tags {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+            transform: translateY(-5px);
+            background: rgba(30, 41, 59, 0.6);
         }
 
         .tag {
-            background: rgba(56, 189, 248, 0.05);
+            background: rgba(56, 189, 248, 0.1);
             color: var(--accent);
-            padding: 6px 16px;
+            padding: 4px 12px;
             border-radius: 100px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border: 1px solid rgba(56, 189, 248, 0.2);
+            font-size: 0.75rem;
+            margin-right: 5px;
         }
 
         footer {
             text-align: center;
-            margin-top: 120px;
-            padding: 50px 0;
+            padding: 40px 0;
             color: var(--text-dim);
-            font-size: 0.9rem;
             border-top: 1px solid rgba(56, 189, 248, 0.1);
-        }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 2.4rem; }
-            .social-links { gap: 15px; }
-            .profile-img { width: 120px; height: 120px; }
         }
     </style>
 </head>
@@ -223,15 +159,14 @@
     <div class="container">
         <header>
             <img src="https://github.com/cemal201138.png" alt="Cemal Evli" class="profile-img">
-            
             <h1>Cemal Evli</h1>
             <p class="subtitle">Öğrenci ve Geleceğin Yazılımcısı</p>
+            
             <div class="social-links">
-                <a href="https://github.com/cemal201138" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-                <a href="https://www.instagram.com/cemalevli38/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-                <a href="http://www.tiktok.com/@cemalevli38" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
-                <a href="https://www.facebook.com/profile.php?id=100076601840154" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
-                <a href="mailto:cemal201138.dev@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+                <a href="https://github.com/cemal201138" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://www.instagram.com/cemalevli38/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="http://www.tiktok.com/@cemalevli38" target="_blank"><i class="fab fa-tiktok"></i></a>
+                <a href="mailto:cemal201138.dev@gmail.com"><i class="fas fa-envelope"></i></a>
             </div>
         </header>
 
@@ -239,51 +174,28 @@
             <h2 class="section-title">Hakkımda</h2>
             <p class="about-text">
                 Teknolojiye duyduğum merakı, somut projelere dönüştürme hedefiyle çalışan bir öğrenciyim. 
-                Yazılım dünyasının sunduğu sınırsız imkanları keşfetmeyi, yeni diller öğrenmeyi ve modern tasarım trendlerini 
-                takip etmeyi seviyorum. Şu anki odağım, temiz kod prensiplerini benimseyerek kendimi web teknolojileri alanında geliştirmek 
-                ve her geçen gün bilgi birikimime yenilerini eklemek.
+                Web teknolojileri ve Python üzerine kendimi geliştiriyorum.
             </p>
         </section>
 
         <section id="projects">
             <h2 class="section-title">Projelerim</h2>
             
-            <a href="https://github.com/cemal201138/Python-Hand-Mouse" target="_blank" class="project-card">
-                <div class="project-header">
-                    <span class="project-title">Python Hand Mouse</span>
-                    <i class="fas fa-hand-pointer" style="color: var(--accent); font-size: 1.5rem;"></i>
-                </div>
-                <p class="project-desc">Görüntü işleme tekniklerini kullanarak el hareketleriyle bilgisayar faresini kontrol etmeyi sağlayan yenilikçi bir Python projesi.</p>
-                <div class="tags">
+            <a href="https://github.com/cemal201138/Python-Hand-Mouse" class="project-card">
+                <h3>Python Hand Mouse</h3>
+                <p>El hareketleriyle fare kontrolü.</p>
+                <div>
                     <span class="tag">Python</span>
                     <span class="tag">OpenCV</span>
-                    <span class="tag">MediaPipe</span>
                 </div>
             </a>
 
-            <a href="https://github.com/cemal201138/Python_Muzik_Calar" target="_blank" class="project-card">
-                <div class="project-header">
-                    <span class="project-title">Python Müzik Çalar</span>
-                    <i class="fas fa-music" style="color: var(--accent); font-size: 1.5rem;"></i>
-                </div>
-                <p class="project-desc">Python dilinde geliştirilmiş, kullanıcı dostu arayüze sahip işlevsel bir müzik oynatıcı uygulaması.</p>
-                <div class="tags">
-                    <span class="tag">Python</span>
+            <a href="https://github.com/cemal201138/Python_Muzik_Calar" class="project-card">
+                <h3>Python Müzik Çalar</h3>
+                <p>Gelişmiş arayüzlü müzik oynatıcı.</p>
+                <div>
                     <span class="tag">Tkinter</span>
                     <span class="tag">Pygame</span>
-                </div>
-            </a>
-
-            <a href="https://github.com/cemal201138/My_Netlify_SitesApps" target="_blank" class="project-card">
-                <div class="project-header">
-                    <span class="project-title">Websitelerim</span>
-                    <i class="fas fa-rocket" style="color: var(--accent); font-size: 1.5rem;"></i>
-                </div>
-                <p class="project-desc">Netlify üzerinde canlıya alınmış web projelerimin ve uygulamalarımın toplandığı dijital sergi.</p>
-                <div class="tags">
-                    <span class="tag">Web Apps</span>
-                    <span class="tag">Netlify</span>
-                    <span class="tag">Deployment</span>
                 </div>
             </a>
         </section>
