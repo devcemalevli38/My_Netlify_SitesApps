@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Medya Kontrol Pro</title>
+    
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/M%C3%BCzik_Kontrol/app_icon.ico">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/M%C3%BCzik_Kontrol/app_icon.ico">
+
     <style>
         :root {
             --bg: #0b0f14;
             --panel: #121a25;
-            --accent: #243449; /* Yeşil yerine diğer butonlarla uyumlu koyu ton */
+            --accent: #243449;
             --accent-hover: #2c3e56;
             --text: #f1f1f1;
             --muted: #9aa4b2;
@@ -60,7 +64,7 @@
             border-radius: 50%;
             border: none;
             cursor: pointer;
-            background: #1a2635; /* Standart buton rengi */
+            background: #1a2635;
             color: var(--text);
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             transition: all .15s ease;
@@ -73,14 +77,13 @@
 
         .player button { width: 60px; height: 60px; font-size: 22px; }
         
-        /* Ortadaki butonu diğerleriyle aynı renge çektik */
         .play { 
             width: 85px !important; 
             height: 85px !important; 
             background: #243449 !important; 
             color: var(--text) !important; 
             font-size: 32px !important;
-            border: 1px solid #2c3e56 !important; /* Hafif bir belirginlik için */
+            border: 1px solid #2c3e56 !important;
         }
 
         .volume-controls button { width: 60px; height: 60px; font-size: 22px; background: #1a2635; }
