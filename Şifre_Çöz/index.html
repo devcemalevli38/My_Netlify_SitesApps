@@ -5,6 +5,9 @@
 <title>QR Decryptor</title>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 
+<link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/%C5%9Eifre_%C3%87%C3%B6z/icon.ico">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/%C5%9Eifre_%C3%87%C3%B6z/icon.ico">
+
 <style>
 :root{
   --bg:#0b0f14;
@@ -93,6 +96,9 @@ const video=document.getElementById('video');
 const pwdInput=document.getElementById('pwd');
 const rememberChk=document.getElementById('remember');
 const statusBox=document.getElementById('status');
+const pinDisplay=document.getElementById('pinDisplay');
+const startBtn=document.getElementById('startBtn');
+const stopBtn=document.getElementById('stopBtn');
 
 let stream=null, scanActive=false;
 
@@ -124,7 +130,7 @@ async function decryptFromQR(data,pwd){
     );
     pinDisplay.textContent=new TextDecoder().decode(pt).split('|')[0];
     statusBox.textContent='PIN çözüldü.';
-  }catch{
+  }catch(e){
     pinDisplay.textContent='---';
     statusBox.textContent='Decrypt başarısız.';
   }
@@ -133,13 +139,17 @@ async function decryptFromQR(data,pwd){
 async function startCamera(){
   if(scanActive) return;
   statusBox.textContent='Kamera açılıyor...';
-  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
-  video.srcObject=stream;
-  await video.play();
-  scanActive=true;
-  startBtn.disabled=true;
-  stopBtn.disabled=false;
-  scanLoop();
+  try {
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+    video.srcObject=stream;
+    await video.play();
+    scanActive=true;
+    startBtn.disabled=true;
+    stopBtn.disabled=false;
+    scanLoop();
+  } catch(e) {
+    statusBox.textContent='Kamera hatası: ' + e.message;
+  }
 }
 
 function stopCamera(){
@@ -171,7 +181,6 @@ function scanLoop(){
   })();
 }
 
-/* === ŞİFRE KAYDETME MANTIĞI === */
 rememberChk.onchange=()=>{
   if(rememberChk.checked && pwdInput.value){
     savePassword(pwdInput.value);
@@ -207,4 +216,3 @@ window.onload=()=>{
 </script>
 </body>
 </html>
-
