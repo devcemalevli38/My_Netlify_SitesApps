@@ -21,6 +21,8 @@
         * { 
             box-sizing: border-box; 
             -webkit-touch-callout: none;
+            /* Dokunmatik cihazlarda tıklama mavi kutusunu kaldırır */
+            -webkit-tap-highlight-color: transparent; 
         }
 
         body {
@@ -30,7 +32,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: system-ui, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             color: var(--text);
             overflow: hidden; 
             user-select: none;
@@ -43,6 +45,7 @@
             box-shadow: 0 30px 80px rgba(0,0,0,.7);
             padding: 30px;
             width: 360px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         .header {
@@ -67,12 +70,17 @@
             background: #1a2635;
             color: var(--text);
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: all .15s ease;
+            transition: all .1s ease;
             display: flex; 
             align-items: center; 
             justify-content: center;
             touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
+            pointer-events: auto; /* Tıklanabilirliği garanti eder */
+        }
+
+        /* Buton içindeki simgelerin tıklamayı engellemesini önler */
+        button * {
+            pointer-events: none;
         }
 
         .player button { width: 60px; height: 60px; font-size: 22px; }
@@ -81,12 +89,11 @@
             width: 85px !important; 
             height: 85px !important; 
             background: #243449 !important; 
-            color: var(--text) !important; 
             font-size: 32px !important;
             border: 1px solid #2c3e56 !important;
         }
 
-        .volume-controls button { width: 60px; height: 60px; font-size: 22px; background: #1a2635; }
+        .volume-controls button { width: 60px; height: 60px; font-size: 22px; }
         
         .mute-btn { 
             width: 110px !important; 
@@ -96,9 +103,11 @@
             background: #243449 !important;
         }
 
+        /* Görsel Geri Bildirim: Basılma Efekti */
         button:active { 
-            transform: scale(.9); 
+            transform: scale(0.92); 
             background: #2c3e56 !important;
+            filter: brightness(1.2);
         }
 
         .volume-section-title {
@@ -148,8 +157,8 @@
 
 <div class="card">
     <div class="header">
-        <h2 style="font-weight: 500; font-size: 1.2rem;">Medya Kontrol Pro</h2>
-        <button style="background:none; box-shadow:none; font-size: 20px;" onclick="toggleSettings()">⚙️</button>
+        <h2 style="font-weight: 500; font-size: 1.2rem; margin: 0;">Medya Kontrol Pro</h2>
+        <button style="background:none; box-shadow:none; font-size: 20px; width: 40px; height: 40px;" onclick="toggleSettings()">⚙️</button>
     </div>
 
     <div class="player">
@@ -167,8 +176,8 @@
     </div>
 
     <div class="settings" id="settings">
-        <input id="serverInput" placeholder="Sunucu URL">
-        <button onclick="saveServer()">Kaydet</button>
+        <input id="serverInput" type="text" placeholder="Örn: http://192.168.1.5:5000">
+        <button onclick="saveServer()">Ayarları Kaydet</button>
     </div>
 </div>
 
@@ -178,31 +187,48 @@
 
     function toggleSettings() {
         const s = document.getElementById("settings");
-        s.style.display = s.style.display === "block" ? "none" : "block";
+        s.style.display = (s.style.display === "block") ? "none" : "block";
     }
 
     function saveServer() {
-        const val = document.getElementById("serverInput").value.trim();
+        let val = document.getElementById("serverInput").value.trim();
+        
+        // HTTP kontrolü: Eğer kullanıcı http eklemediyse otomatik ekle
+        if (val && !val.startsWith('http')) {
+            val = 'http://' + val;
+        }
+        
         serverUrl = val;
         localStorage.setItem("serverUrl", serverUrl);
-        alert("Ayarlar Kaydedildi!");
+        alert("Bağlantı adresi kaydedildi!");
         toggleSettings();
     }
 
     function sendCommand(title, body) {
         if (!serverUrl) {
-            alert("Lütfen sunucu adresini girin!");
+            alert("Lütfen önce ayarlar simgesinden sunucu adresini girin!");
             toggleSettings();
             return;
         }
-        let baseUrl = serverUrl.endsWith('/') ? serverUrl.slice(0, -1) : serverUrl;
-        fetch(`${baseUrl}/komut?title=${title}&body=${body}`, {
-            mode: 'no-cors',
+
+        // URL sonundaki fazla slaşları temizle
+        let baseUrl = serverUrl.replace(/\/+$/, "");
+        const finalUrl = `${baseUrl}/komut?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+
+        // 'no-cors' bazı durumlarda isteğin sunucuya ulaşmasını engelleyebilir.
+        // Yerel ağda 'cors' modu daha kararlıdır.
+        fetch(finalUrl, {
+            method: 'GET',
+            mode: 'cors', 
             cache: 'no-cache'
-        }).catch(e => console.error("Hata:", e));
+        })
+        .then(() => console.log("Komut başarılı:", body))
+        .catch(e => {
+            console.error("Bağlantı Hatası:", e);
+            // Hata durumunda butonu hafifçe salla veya uyarı ver (isteğe bağlı)
+        });
     }
 </script>
 
 </body>
 </html>
-
