@@ -13,7 +13,6 @@
             --bg: #0b0f14;
             --panel: #121a25;
             --accent: #243449;
-            --accent-hover: #2c3e56;
             --text: #f1f1f1;
             --muted: #9aa4b2;
         }
@@ -21,6 +20,8 @@
         * { 
             box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent; 
+            /* Mobilde tıklama gecikmesini ve seçimleri engeller */
+            touch-action: manipulation; 
         }
 
         body {
@@ -32,8 +33,7 @@
             justify-content: center;
             font-family: system-ui, -apple-system, sans-serif;
             color: var(--text);
-            overflow: hidden; 
-            /* user-select kapatıldı çünkü bazen tıklamayı engelliyor */
+            overflow: hidden;
         }
 
         .card {
@@ -71,13 +71,10 @@
             display: flex; 
             align-items: center; 
             justify-content: center;
-            /* Dokunmatik iyileştirmesi */
-            touch-action: manipulation;
             position: relative;
             z-index: 10;
         }
 
-        /* İçindeki ikonların tıklamayı "çalmasını" engellemek için */
         button * { pointer-events: none; }
 
         .player button { width: 60px; height: 60px; font-size: 22px; }
@@ -106,9 +103,6 @@
             background: #3d5a7d !important;
         }
 
-        /* Buton çalışıyorsa parlasın */
-        .btn-success { background: #2e7d32 !important; }
-
         .volume-section-title {
             text-align: center;
             font-size: 11px;
@@ -132,6 +126,7 @@
             margin-bottom: 10px; 
             background: #000; 
             color: #fff; 
+            font-size: 16px; /* Mobilde zoom yapmaması için en az 16px */
         }
     </style>
 </head>
@@ -144,17 +139,17 @@
     </div>
 
     <div class="player">
-        <button onclick="sendCommand('media', 'prev')">⏮</button>
-        <button class="play" onclick="sendCommand('media', 'play')">⏯</button>
-        <button onclick="sendCommand('media', 'next')">⏭</button>
+        <button onclick="sendCommand(this, 'media', 'prev')">⏮</button>
+        <button class="play" onclick="sendCommand(this, 'media', 'play')">⏯</button>
+        <button onclick="sendCommand(this, 'media', 'next')">⏭</button>
     </div>
 
     <div class="volume-section-title">Sistem Sesi</div>
     
     <div class="volume-controls">
-        <button onclick="sendCommand('media', 'voldown')">🔉</button>
-        <button class="mute-btn" onclick="sendCommand('media', 'mute')">SESSİZ</button>
-        <button onclick="sendCommand('media', 'volup')">🔊</button>
+        <button onclick="sendCommand(this, 'media', 'voldown')">🔉</button>
+        <button class="mute-btn" onclick="sendCommand(this, 'media', 'mute')">SESSİZ</button>
+        <button onclick="sendCommand(this, 'media', 'volup')">🔊</button>
     </div>
 
     <div class="settings" id="settings">
@@ -181,35 +176,35 @@
         toggleSettings();
     }
 
-    function sendCommand(title, body) {
+    // 'thisBtn' parametresi mobildeki 'event' sorununu çözer
+    function sendCommand(thisBtn, title, body) {
         if (!serverUrl) {
             alert("Lütfen Sunucu URL girin!");
             toggleSettings();
             return;
         }
 
-        // Tıklanan butonu bul ve efekt ekle
-        const btn = event.currentTarget;
-        
         let baseUrl = serverUrl.replace(/\/+$/, "");
         const finalUrl = `${baseUrl}/komut?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
 
-        // ÖNEMLİ: no-cors modu bazen isteğin gitmesini engeller.
-        // Yerel sunucuda en güvenli yöntem 'no-cors' ile fetch yapıp sonucu beklememektir.
+        // Mobilde en hızlı tepki için Image Beacon tekniği (Opsiyonel)
+        // Eğer fetch mobilde engellenirse bunu kullanabilirsiniz.
         fetch(finalUrl, {
             method: 'GET',
-            mode: 'no-cors', 
-            cache: 'no-cache'
+            mode: 'no-cors',
+            cache: 'no-cache',
+            // Mobil tarayıcılar bazen bağlantıyı çok bekletir, bunu önlemek için:
+            keepalive: true 
         })
         .then(() => {
-            // Başarılı olursa butonu bir anlık yeşil yap (Görsel geri bildirim)
-            btn.style.background = "#2e7d32";
-            setTimeout(() => { btn.style.background = ""; }, 200);
+            // Başarılı efekti
+            thisBtn.style.background = "#2e7d32";
+            setTimeout(() => { thisBtn.style.background = ""; }, 250);
         })
-        .catch(e => {
-            console.error("Hata:", e);
-            btn.style.background = "#b71c1c";
-            setTimeout(() => { btn.style.background = ""; }, 200);
+        .catch(() => {
+            // Hata efekti (Kırmızı)
+            thisBtn.style.background = "#b71c1c";
+            setTimeout(() => { thisBtn.style.background = ""; }, 250);
         });
     }
 </script>
