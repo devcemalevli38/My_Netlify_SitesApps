@@ -15,12 +15,13 @@
             --accent: #243449;
             --text: #f1f1f1;
             --muted: #9aa4b2;
+            --success: #2e7d32;
+            --error: #b71c1c;
         }
 
         * { 
             box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent; 
-            /* Mobilde tıklama gecikmesini ve seçimleri engeller */
             touch-action: manipulation; 
         }
 
@@ -67,7 +68,7 @@
             background: #1a2635;
             color: var(--text);
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: transform 0.1s ease, background 0.1s ease;
+            transition: transform 0.1s ease, background 0.2s ease;
             display: flex; 
             align-items: center; 
             justify-content: center;
@@ -100,7 +101,6 @@
         /* TIKLAMA GERİ BİLDİRİMİ */
         button:active { 
             transform: scale(0.90) !important; 
-            background: #3d5a7d !important;
         }
 
         .volume-section-title {
@@ -126,7 +126,7 @@
             margin-bottom: 10px; 
             background: #000; 
             color: #fff; 
-            font-size: 16px; /* Mobilde zoom yapmaması için en az 16px */
+            font-size: 16px;
         }
     </style>
 </head>
@@ -176,7 +176,6 @@
         toggleSettings();
     }
 
-    // 'thisBtn' parametresi mobildeki 'event' sorununu çözer
     function sendCommand(thisBtn, title, body) {
         if (!serverUrl) {
             alert("Lütfen Sunucu URL girin!");
@@ -187,30 +186,30 @@
         let baseUrl = serverUrl.replace(/\/+$/, "");
         const finalUrl = `${baseUrl}/komut?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
 
-        // Mobilde en hızlı tepki için Image Beacon tekniği (Opsiyonel)
-        // Eğer fetch mobilde engellenirse bunu kullanabilirsiniz.
         fetch(finalUrl, {
             method: 'GET',
             mode: 'no-cors',
             cache: 'no-cache',
-            // Mobil tarayıcılar bazen bağlantıyı çok bekletir, bunu önlemek için:
             keepalive: true 
         })
         .then(() => {
-            // Başarılı efekti
-            thisBtn.style.background = "#2e7d32";
-            setTimeout(() => { thisBtn.style.background = ""; }, 250);
+            // Başarı: Yeşil yak (Önemli: !important olan CSS'i ezmek için setProperty kullanılır)
+            thisBtn.style.setProperty('background', 'var(--success)', 'important');
+            setTimeout(() => { 
+                thisBtn.style.background = ""; 
+                thisBtn.style.removeProperty('background'); // Eski haline döndür
+            }, 300);
         })
         .catch(() => {
-            // Hata efekti (Kırmızı)
-            thisBtn.style.background = "#b71c1c";
-            setTimeout(() => { thisBtn.style.background = ""; }, 250);
+            // Hata: Kırmızı yak
+            thisBtn.style.setProperty('background', 'var(--error)', 'important');
+            setTimeout(() => { 
+                thisBtn.style.background = ""; 
+                thisBtn.style.removeProperty('background');
+            }, 300);
         });
     }
 </script>
 
 </body>
 </html>
-
-
-
