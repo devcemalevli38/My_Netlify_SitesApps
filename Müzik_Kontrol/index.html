@@ -98,7 +98,38 @@
             background: #243449 !important;
         }
 
-        /* TIKLAMA GERİ BİLDİRİMİ */
+        /* URL KISMI ÖZEL STİLLERİ */
+        .url-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #000;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .url-input:focus {
+            border-color: var(--muted);
+        }
+
+        .url-send-btn {
+            width: 55px !important;
+            height: 55px !important;
+            border-radius: 15px !important;
+            background: var(--accent) !important;
+            font-size: 18px !important;
+        }
+
         button:active { 
             transform: scale(0.90) !important; 
         }
@@ -152,6 +183,13 @@
         <button onclick="sendCommand(this, 'media', 'volup')">🔊</button>
     </div>
 
+    <div class="volume-section-title">Tarayıcıda Aç</div>
+    <div class="url-section">
+        <input id="urlInput" class="url-input" type="text" placeholder="google.com veya link..." 
+               onkeypress="handleKeyPress(event)">
+        <button id="urlSendBtn" class="url-send-btn" onclick="handleUrlSend()">🚀</button>
+    </div>
+
     <div class="settings" id="settings">
         <input id="serverInput" type="text" placeholder="Örn: 192.168.1.5:5000">
         <button onclick="saveServer()" style="width:100%; border-radius:8px; height:45px; background:var(--accent);">KAYDET</button>
@@ -176,6 +214,26 @@
         toggleSettings();
     }
 
+    // URL Gönderme İşlemi
+    function handleUrlSend() {
+        const urlInput = document.getElementById("urlInput");
+        const btn = document.getElementById("urlSendBtn");
+        const urlValue = urlInput.value.trim();
+
+        if (!urlValue) {
+            alert("Lütfen bir URL girin!");
+            return;
+        }
+        sendCommand(btn, 'open_url', urlValue);
+    }
+
+    // Enter Tuşuna Basınca Gönder
+    function handleKeyPress(e) {
+        if (e.key === "Enter") {
+            handleUrlSend();
+        }
+    }
+
     function sendCommand(thisBtn, title, body) {
         if (!serverUrl) {
             alert("Lütfen Sunucu URL girin!");
@@ -193,15 +251,13 @@
             keepalive: true 
         })
         .then(() => {
-            // Başarı: Yeşil yak (Önemli: !important olan CSS'i ezmek için setProperty kullanılır)
             thisBtn.style.setProperty('background', 'var(--success)', 'important');
             setTimeout(() => { 
                 thisBtn.style.background = ""; 
-                thisBtn.style.removeProperty('background'); // Eski haline döndür
+                thisBtn.style.removeProperty('background'); 
             }, 300);
         })
         .catch(() => {
-            // Hata: Kırmızı yak
             thisBtn.style.setProperty('background', 'var(--error)', 'important');
             setTimeout(() => { 
                 thisBtn.style.background = ""; 
