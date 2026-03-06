@@ -7,155 +7,58 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --green: #1DB954;
-    --bg: #0a0a0a;
-    --surface: #111;
-    --border: #1a1a1a;
-    --text: #f0f0f0;
-    --muted: #555;
-  }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: -50%;
-    background:
-      radial-gradient(ellipse 50% 40% at 20% 30%, rgba(29,185,84,0.06) 0%, transparent 55%),
-      radial-gradient(ellipse 30% 50% at 80% 80%, rgba(29,185,84,0.04) 0%, transparent 50%);
-    animation: drift 15s ease-in-out infinite alternate;
-    pointer-events: none;
-  }
-  @keyframes drift {
-    from { transform: translate(0,0); }
-    to   { transform: translate(3%, 2%); }
-  }
-
-  .player {
-    position: relative;
-    z-index: 1;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 40px 48px;
-    width: 100%;
-    max-width: 480px;
-    box-shadow: 0 0 100px rgba(0,0,0,0.7);
-    animation: fadeUp .5s cubic-bezier(.16,1,.3,1) both;
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
+  :root { --green: #1DB954; --bg: #0a0a0a; --surface: #111; --border: #1a1a1a; --text: #f0f0f0; --muted: #555; }
+  body { background: var(--bg); color: var(--text); font-family: 'Syne', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  body::before { content: ''; position: fixed; inset: -50%; background: radial-gradient(ellipse 50% 40% at 20% 30%, rgba(29,185,84,0.06) 0%, transparent 55%), radial-gradient(ellipse 30% 50% at 80% 80%, rgba(29,185,84,0.04) 0%, transparent 50%); animation: drift 15s ease-in-out infinite alternate; pointer-events: none; }
+  @keyframes drift { from { transform: translate(0,0); } to { transform: translate(3%, 2%); } }
+  .player { position: relative; z-index: 1; background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 40px 48px; width: 100%; max-width: 480px; box-shadow: 0 0 100px rgba(0,0,0,0.7); animation: fadeUp .5s cubic-bezier(.16,1,.3,1) both; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   .status { display: flex; align-items: center; gap: 8px; margin-bottom: 32px; }
   .status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .dot-live    { background: var(--green); box-shadow: 0 0 10px var(--green); animation: pulse 1.5s ease-in-out infinite; }
-  .dot-recent  { background: #555; }
-  .dot-offline { background: #333; }
-  @keyframes pulse {
-    0%,100% { opacity:1; transform:scale(1); }
-    50%      { opacity:.4; transform:scale(.7); }
-  }
-
+  .dot-live { background: var(--green); box-shadow: 0 0 10px var(--green); animation: pulse 1.5s ease-in-out infinite; }
+  .dot-recent { background: #555; } .dot-offline { background: #333; }
+  @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.4; transform:scale(.7); } }
   .status-text { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; }
-  .status-text.live    { color: var(--green); }
-  .status-text.recent  { color: var(--muted); }
-  .status-text.offline { color: #333; }
-
-  .track-name  { font-size: 28px; font-weight: 800; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.01em; }
+  .status-text.live { color: var(--green); } .status-text.recent { color: var(--muted); } .status-text.offline { color: #333; }
+  .track-name { font-size: 28px; font-weight: 800; line-height: 1.15; margin-bottom: 10px; letter-spacing: -0.01em; }
   .artist-name { font-family: 'DM Mono', monospace; font-size: 14px; color: var(--muted); margin-bottom: 32px; }
-  .divider     { height: 1px; background: var(--border); margin-bottom: 24px; }
-  .footer      { display: flex; align-items: center; justify-content: space-between; }
-
+  .divider { height: 1px; background: var(--border); margin-bottom: 24px; }
+  .footer { display: flex; align-items: center; justify-content: space-between; }
   .open-link { display: flex; align-items: center; gap: 6px; color: var(--green); font-family: 'DM Mono', monospace; font-size: 12px; text-decoration: none; transition: opacity .2s; }
-  .open-link:hover { opacity: 0.7; }
-  .open-link::before { content: '▶'; font-size: 10px; }
-
+  .open-link:hover { opacity: 0.7; } .open-link::before { content: '▶'; font-size: 10px; }
   .timer { font-family: 'DM Mono', monospace; font-size: 11px; color: #2a2a2a; }
 
+  /* Ayarlar butonu — büyütüldü */
   .settings-btn {
     background: none; border: none; cursor: pointer;
-    color: #2a2a2a; font-size: 15px; padding: 2px 4px;
-    border-radius: 6px; transition: color .2s; line-height: 1;
+    color: #444; font-size: 20px; padding: 6px 8px;
+    border-radius: 8px; transition: color .2s, background .2s; line-height: 1;
   }
-  .settings-btn:hover { color: var(--muted); }
+  .settings-btn:hover { color: var(--muted); background: #1a1a1a; }
 
-  /* Overlay */
-  .overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.75); z-index: 100;
-    align-items: center; justify-content: center;
-  }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; align-items: center; justify-content: center; }
   .overlay.open { display: flex; }
-
-  .settings-card {
-    background: #141414; border: 1px solid #2a2a2a;
-    border-radius: 18px; padding: 32px 36px;
-    width: 100%; max-width: 420px;
-    animation: cardIn .25s cubic-bezier(.16,1,.3,1) both;
-  }
-  @keyframes cardIn {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
+  .settings-card { background: #141414; border: 1px solid #2a2a2a; border-radius: 18px; padding: 32px 36px; width: 100%; max-width: 420px; animation: cardIn .25s cubic-bezier(.16,1,.3,1) both; }
+  @keyframes cardIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
   .settings-card h3 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
-  .settings-card p  { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
-
+  .settings-card p { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
   .settings-label { display: block; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
-
-  .settings-input {
-    width: 100%; background: #0a0a0a; border: 1px solid #2a2a2a;
-    border-radius: 10px; padding: 11px 14px; color: var(--text);
-    font-family: 'DM Mono', monospace; font-size: 12px;
-    outline: none; transition: border-color .2s; margin-bottom: 20px;
-  }
+  .settings-input { width: 100%; background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 10px; padding: 11px 14px; color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px; outline: none; transition: border-color .2s; margin-bottom: 20px; }
   .settings-input:focus { border-color: var(--green); }
-
   .settings-actions { display: flex; gap: 10px; }
-
-  .btn-save {
-    flex: 1; padding: 11px; background: var(--green); color: #000;
-    font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px;
-    border: none; border-radius: 10px; cursor: pointer; transition: background .2s;
-  }
+  .btn-save { flex: 1; padding: 11px; background: var(--green); color: #000; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 13px; border: none; border-radius: 10px; cursor: pointer; transition: background .2s; }
   .btn-save:hover { background: #22d660; }
-
-  .btn-cancel {
-    padding: 11px 20px; background: transparent; color: var(--muted);
-    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
-    border: 1px solid #2a2a2a; border-radius: 10px; cursor: pointer;
-    transition: border-color .2s, color .2s;
-  }
+  .btn-cancel { padding: 11px 20px; background: transparent; color: var(--muted); font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; border: 1px solid #2a2a2a; border-radius: 10px; cursor: pointer; transition: border-color .2s, color .2s; }
   .btn-cancel:hover { border-color: #444; color: var(--text); }
-
   .save-ok { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--green); margin-top: 12px; text-align: center; opacity: 0; transition: opacity .3s; }
   .save-ok.show { opacity: 1; }
-
-  .empty { text-align: center; padding: 20px 0; }
-  .empty-icon { font-size: 40px; margin-bottom: 16px; }
+  .empty { text-align: center; padding: 20px 0; } .empty-icon { font-size: 40px; margin-bottom: 16px; }
   .empty h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-  .empty p  { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
-
-  #content { transition: opacity 0.25s ease; }
-  #content.fading { opacity: 0; }
+  .empty p { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+  #content { transition: opacity 0.25s ease; } #content.fading { opacity: 0; }
 </style>
 </head>
 <body>
-
 <div class="player">
   <div id="content">
     <div class="status">
@@ -175,15 +78,12 @@
   </div>
 </div>
 
-<!-- Ayarlar paneli -->
 <div class="overlay" id="overlay" onclick="overlayClick(event)">
   <div class="settings-card">
     <h3>⚙ Ayarlar</h3>
     <p>Sunucu adresi değişirse buradan güncelleyebilirsin.<br>Tarayıcına kaydedilir, bir daha girmen gerekmez.</p>
     <label class="settings-label">API Adresi</label>
-    <input class="settings-input" id="api-input" type="text"
-           placeholder="https://cemal-pc.taileeb5ce.ts.net/api/now-playing"
-           spellcheck="false" autocomplete="off">
+    <input class="settings-input" id="api-input" type="text" placeholder="kendi_apini_gir" spellcheck="false" autocomplete="off">
     <div class="settings-actions">
       <button class="btn-save" onclick="saveSettings()">Kaydet</button>
       <button class="btn-cancel" onclick="closeSettings()">İptal</button>
@@ -193,126 +93,55 @@
 </div>
 
 <script>
-const DEFAULT_API = "https://cemal-pc.taileeb5ce.ts.net/api/now-playing";
-
-function getAPI() {
-  return localStorage.getItem("nowplaying_api") || DEFAULT_API;
-}
-
-function openSettings() {
-  document.getElementById("api-input").value = getAPI();
-  document.getElementById("save-ok").classList.remove("show");
-  document.getElementById("overlay").classList.add("open");
-}
-function closeSettings() {
-  document.getElementById("overlay").classList.remove("open");
-}
-function overlayClick(e) {
-  if (e.target === document.getElementById("overlay")) closeSettings();
+const DEFAULT_API = "kendi_apini_gir";
+function getAPI() { return localStorage.getItem("nowplaying_api") || DEFAULT_API; }
+function openSettings() { document.getElementById("api-input").value = getAPI(); document.getElementById("save-ok").classList.remove("show"); document.getElementById("overlay").classList.add("open"); }
+function closeSettings() { document.getElementById("overlay").classList.remove("open"); }
+function overlayClick(e) { if (e.target === document.getElementById("overlay")) closeSettings(); }
+function normalizeAPI(raw) {
+  let s = raw.trim().replace(/\/+$/, ""); // sondaki slash'ları kaldır
+  // https:// veya http:// yoksa ekle
+  if (!/^https?:\/\//i.test(s)) s = "https://" + s;
+  // /api/now-playing yoksa ekle
+  if (!s.endsWith("/api/now-playing")) s = s + "/api/now-playing";
+  return s;
 }
 function saveSettings() {
-  const val = document.getElementById("api-input").value.trim();
-  if (!val) return;
+  const raw = document.getElementById("api-input").value.trim();
+  if (!raw) return;
+  const val = normalizeAPI(raw);
   localStorage.setItem("nowplaying_api", val);
+  document.getElementById("api-input").value = val; // normalize edilmiş hali göster
   document.getElementById("save-ok").classList.add("show");
-  setTimeout(() => {
-    closeSettings();
-    lastTrack = null;
-    fetchAndUpdate();
-  }, 1000);
+  setTimeout(() => { closeSettings(); lastTrack = null; fetchAndUpdate(); }, 1000);
 }
-
 const INTERVAL = 10000;
-let countdown = INTERVAL / 1000;
-let lastTrack = null;
-
-function escHtml(s) {
-  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-}
-
+let countdown = INTERVAL / 1000, lastTrack = null;
+function escHtml(s) { return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
 function footerRight() {
-  return `<div style="display:flex;align-items:center;gap:10px">
-    <span class="timer" id="timer"></span>
-    <button class="settings-btn" onclick="openSettings()" title="Ayarlar">⚙</button>
-  </div>`;
+  return `<div style="display:flex;align-items:center;gap:10px"><span class="timer" id="timer"></span><button class="settings-btn" onclick="openSettings()" title="Ayarlar">⚙</button></div>`;
 }
-
 function render(data) {
   const c = document.getElementById("content");
-
-  if (data.error) {
-    c.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">⚠️</div>
-        <h3>Sunucuya bağlanılamıyor</h3>
-        <p>Bilgisayarın açık ve uygulama çalışıyor olmalı.<br>Adres yanlışsa ⚙ butonuna bas.</p>
-      </div>
-      <div class="divider" style="margin-top:28px"></div>
-      <div class="footer"><span></span>${footerRight()}</div>`;
-    return;
-  }
-
-  if (!data.track) {
-    c.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">🎵</div>
-        <h3>Şu an müzik yok</h3>
-        <p>Spotify'da bir şeyler çal,<br>burada görünecek.</p>
-      </div>
-      <div class="divider" style="margin-top:28px"></div>
-      <div class="footer"><span></span>${footerRight()}</div>`;
-    return;
-  }
-
-  const dotClass  = data.live ? "dot-live"  : "dot-recent";
-  const txtClass  = data.live ? "live"       : "recent";
+  if (data.error) { c.innerHTML = `<div class="empty"><div class="empty-icon">⚠️</div><h3>Sunucuya bağlanılamıyor</h3><p>Bilgisayarın açık ve uygulama çalışıyor olmalı.<br>Adres yanlışsa ⚙ butonuna bas.</p></div><div class="divider" style="margin-top:28px"></div><div class="footer"><span></span>${footerRight()}</div>`; return; }
+  if (!data.track) { c.innerHTML = `<div class="empty"><div class="empty-icon">🎵</div><h3>Şu an müzik yok</h3><p>Spotify'da bir şeyler çal,<br>burada görünecek.</p></div><div class="divider" style="margin-top:28px"></div><div class="footer"><span></span>${footerRight()}</div>`; return; }
+  const dotClass = data.live ? "dot-live" : "dot-recent";
+  const txtClass = data.live ? "live" : "recent";
   const statusTxt = data.live ? "Şu an dinleniyor" : "Son dinlenen";
-
-  c.innerHTML = `
-    <div class="status">
-      <div class="status-dot ${dotClass}"></div>
-      <span class="status-text ${txtClass}">${statusTxt}</span>
-    </div>
-    <div class="track-name">${escHtml(data.track)}</div>
-    <div class="artist-name">${escHtml(data.artist)}</div>
-    <div class="divider"></div>
-    <div class="footer">
-      <a class="open-link" href="${data.link}" target="_blank">Spotify'da aç</a>
-      ${footerRight()}
-    </div>`;
+  c.innerHTML = `<div class="status"><div class="status-dot ${dotClass}"></div><span class="status-text ${txtClass}">${statusTxt}</span></div><div class="track-name">${escHtml(data.track)}</div><div class="artist-name">${escHtml(data.artist)}</div><div class="divider"></div><div class="footer"><a class="open-link" href="${data.link}" target="_blank">Spotify'da aç</a>${footerRight()}</div>`;
 }
-
 async function fetchAndUpdate() {
   const c = document.getElementById("content");
   try {
-    const res  = await fetch(getAPI());
-    const data = await res.json();
-    const key  = data.track + data.artist + data.live;
-    if (key !== lastTrack) {
-      c.classList.add("fading");
-      await new Promise(r => setTimeout(r, 200));
-      render(data);
-      c.classList.remove("fading");
-      lastTrack = key;
-    }
+    const res = await fetch(getAPI()); const data = await res.json();
+    const key = data.track + data.artist + data.live;
+    if (key !== lastTrack) { c.classList.add("fading"); await new Promise(r => setTimeout(r, 200)); render(data); c.classList.remove("fading"); lastTrack = key; }
   } catch (e) {
-    if ("__offline__" !== lastTrack) {
-      c.classList.add("fading");
-      await new Promise(r => setTimeout(r, 200));
-      render({ error: true });
-      c.classList.remove("fading");
-      lastTrack = "__offline__";
-    }
+    if ("__offline__" !== lastTrack) { c.classList.add("fading"); await new Promise(r => setTimeout(r, 200)); render({ error: true }); c.classList.remove("fading"); lastTrack = "__offline__"; }
   }
   countdown = INTERVAL / 1000;
 }
-
-setInterval(() => {
-  countdown--;
-  const el = document.getElementById("timer");
-  if (el) el.textContent = countdown > 0 ? `${countdown}s` : "";
-}, 1000);
-
+setInterval(() => { countdown--; const el = document.getElementById("timer"); if (el) el.textContent = countdown > 0 ? `${countdown}s` : ""; }, 1000);
 fetchAndUpdate();
 setInterval(fetchAndUpdate, INTERVAL);
 </script>
