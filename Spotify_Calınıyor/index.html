@@ -83,7 +83,7 @@
     <h3>⚙ Ayarlar</h3>
     <p>Sunucu adresi değişirse buradan güncelleyebilirsin.<br>Tarayıcına kaydedilir, bir daha girmen gerekmez.</p>
     <label class="settings-label">API Adresi</label>
-    <input class="settings-input" id="api-input" type="text" placeholder="kendi_apini_gir" spellcheck="false" autocomplete="off">
+    <input class="settings-input" id="api-input" type="text" placeholder="Kendi Linkinizi Giriniz" spellcheck="false" autocomplete="off">
     <div class="settings-actions">
       <button class="btn-save" onclick="saveSettings()">Kaydet</button>
       <button class="btn-cancel" onclick="closeSettings()">İptal</button>
@@ -93,7 +93,7 @@
 </div>
 
 <script>
-const DEFAULT_API = "kendi_apini_gir";
+const DEFAULT_API = "";
 function getAPI() { return localStorage.getItem("nowplaying_api") || DEFAULT_API; }
 function openSettings() { document.getElementById("api-input").value = getAPI(); document.getElementById("save-ok").classList.remove("show"); document.getElementById("overlay").classList.add("open"); }
 function closeSettings() { document.getElementById("overlay").classList.remove("open"); }
