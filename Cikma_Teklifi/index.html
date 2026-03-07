@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sana Bir Şey Sormak İstiyorum</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+:root {
+  --ink: #0d0d1a;
+  --gold: #e8c87a;
+  --rose: #e07090;
+  --white: #f0eeff;
+}
+
+body {
+  background: var(--ink);
+  font-family: 'Nunito', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  padding: 24px 0;
+}
+
+#stars-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.aurora span {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.13;
+  animation: drift 12s ease-in-out infinite alternate;
+}
+.aurora span:nth-child(1) { width:600px;height:600px;background:#5030c0;top:-150px;left:-200px;animation-duration:14s; }
+.aurora span:nth-child(2) { width:500px;height:500px;background:#c03060;bottom:-100px;right:-150px;animation-duration:11s;animation-delay:-4s; }
+.aurora span:nth-child(3) { width:350px;height:350px;background:#2060c0;top:40%;left:55%;animation-duration:9s;animation-delay:-7s; }
+@keyframes drift {
+  from { transform:translate(0,0) scale(1); }
+  to   { transform:translate(40px,30px) scale(1.1); }
+}
+
+.moon {
+  position: fixed;
+  top: 32px;
+  right: 60px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 38%, #fffbe8, #e8d890 60%, #c0a840);
+  box-shadow: 0 0 40px 10px rgba(232,200,122,0.18), 0 0 80px 30px rgba(232,200,122,0.08);
+  z-index: 1;
+  animation: moonGlow 4s ease-in-out infinite alternate;
+}
+@keyframes moonGlow {
+  from { box-shadow:0 0 40px 10px rgba(232,200,122,0.18),0 0 80px 30px rgba(232,200,122,0.08); }
+  to   { box-shadow:0 0 60px 18px rgba(232,200,122,0.28),0 0 100px 40px rgba(232,200,122,0.13); }
+}
+
+.card {
+  position: relative;
+  z-index: 10;
+  background: rgba(15,10,40,0.78);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(232,200,122,0.18);
+  border-radius: 28px;
+  padding: 40px 40px 36px;
+  max-width: 500px;
+  width: 92%;
+  text-align: center;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 24px 80px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.07);
+  animation: cardIn 1.2s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes cardIn {
+  from { opacity:0; transform:translateY(60px) scale(0.94); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+
+.card::before {
+  content:'';
+  position:absolute;
+  inset:-1px;
+  border-radius:29px;
+  background:linear-gradient(135deg,rgba(232,200,122,0.25),transparent 50%,rgba(224,112,144,0.2));
+  z-index:-1;
+  animation:borderPulse 4s ease-in-out infinite alternate;
+}
+@keyframes borderPulse {
+  from { opacity:0.5; }
+  to   { opacity:1; }
+}
+
+.icon {
+  font-size: 2.4rem;
+  display: block;
+  margin-bottom: 10px;
+  animation: iconFloat 3.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 16px rgba(232,200,122,0.5));
+}
+@keyframes iconFloat {
+  0%,100% { transform:translateY(0) rotate(-4deg); }
+  50%     { transform:translateY(-10px) rotate(4deg); }
+}
+
+.divider {
+  display:flex;align-items:center;gap:10px;
+  margin:0 auto 18px;width:70%;
+  opacity:0;animation:fadeUp 0.8s 0.5s ease both;
+}
+.divider-line { flex:1;height:1px;background:linear-gradient(to right,transparent,rgba(232,200,122,0.4),transparent); }
+.divider-star { color:var(--gold);font-size:0.7rem; }
+
+h1 {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.85rem;font-weight:400;
+  color:var(--white);line-height:1.2;
+  margin-bottom:4px;
+  opacity:0;animation:fadeUp 0.8s 0.3s ease both;
+  text-shadow:0 0 30px rgba(232,200,122,0.2);
+}
+
+.subtitle {
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:0.95rem;
+  color:var(--gold);margin-bottom:18px;
+  opacity:0;animation:fadeUp 0.8s 0.4s ease both;
+}
+
+.message {
+  font-size:0.93rem;
+  color:rgba(240,238,255,0.82);
+  line-height:1.8;font-weight:400;
+  margin-bottom:18px;
+  opacity:0;animation:fadeUp 0.8s 0.6s ease both;
+}
+.message em { font-style:italic;color:var(--gold);font-weight:600; }
+
+.question {
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.4rem;font-weight:600;
+  color:var(--white);margin-bottom:20px;
+  opacity:0;animation:fadeUp 0.8s 0.8s ease both;
+}
+
+.btn-area {
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+  opacity:0;animation:fadeUp 0.8s 1s ease both;
+}
+
+.btn {
+  padding:13px 34px;border-radius:50px;
+  font-family:'Nunito',sans-serif;
+  font-size:0.95rem;font-weight:600;
+  letter-spacing:0.03em;cursor:pointer;border:none;
+  transition:transform 0.2s,box-shadow 0.2s;
+}
+
+.btn-yes {
+  background:linear-gradient(135deg,#e8c87a,#c8983a);
+  color:#1a1000;
+  box-shadow:0 4px 24px rgba(232,200,122,0.35);
+}
+.btn-yes:hover { transform:translateY(-3px) scale(1.04);box-shadow:0 8px 32px rgba(232,200,122,0.5); }
+
+.btn-no {
+  background:transparent;
+  color:rgba(240,238,255,0.55);
+  border:1.5px solid rgba(240,238,255,0.2);
+}
+.btn-no:hover { border-color:rgba(240,238,255,0.4);color:var(--white); }
+
+.no-hint {
+  font-size:0.82rem;
+  color:rgba(232,200,122,0.7);
+  margin-top:10px;
+  min-height:20px;
+  font-weight:600;
+  transition:all 0.3s;
+}
+
+@keyframes fadeUp {
+  from { opacity:0;transform:translateY(18px); }
+  to   { opacity:1;transform:translateY(0); }
+}
+
+/* YES SCREEN */
+.yes-screen {
+  display:none;flex-direction:column;align-items:center;gap:14px;
+  animation:fadeUp 0.7s ease both;
+}
+.yes-screen.show { display:flex; }
+.card.yes .main-content { display:none; }
+
+.big-icon {
+  font-size:4.5rem;
+  animation:heartbeat 0.9s ease-in-out infinite alternate;
+}
+@keyframes heartbeat {
+  from { transform:scale(1);filter:drop-shadow(0 0 12px rgba(232,200,122,0.4)); }
+  to   { transform:scale(1.14);filter:drop-shadow(0 0 28px rgba(232,200,122,0.8)); }
+}
+
+.yes-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem;font-weight:400;
+  color:var(--gold);
+  text-shadow:0 0 30px rgba(232,200,122,0.4);
+}
+.yes-msg {
+  font-size:0.97rem;
+  color:rgba(240,238,255,0.8);
+  font-style:italic;font-weight:300;line-height:1.75;
+}
+
+
+
+@keyframes fall {
+  from { transform:translateY(0) rotate(0deg);opacity:1; }
+  to   { transform:translateY(110vh) rotate(720deg);opacity:0; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+<div class="aurora"><span></span><span></span><span></span></div>
+<div class="moon"></div>
+
+<div class="card" id="card">
+  <div class="main-content">
+    <span class="icon">🌙</span>
+    <h1>Seninle konuşmak<br>istiyorum…</h1>
+    <p class="subtitle">gece yıldızları tanık olsun</p>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-star">✦</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <p class="message">
+      Bazı şeyleri kelimelerle anlatmak zor.<br>
+      Ama bazı şeyleri içinde tutmak da…<br><br>
+      Seninle her konuştuğumda bir şeyler<br>
+      değişiyor içimde — daha iyi bir şey.<br><br>
+      <em>Ve artık bunu söylemeden duramıyorum.</em>
+    </p>
+
+    <p class="question">Benimle çıkar mısın? ✨</p>
+
+    <div class="btn-area">
+      <button class="btn btn-yes" onclick="sayYes()">Evet, çıkarım 🌙</button>
+      <button class="btn btn-no" id="noBtn" onclick="noDenied()">Hayır…</button>
+    </div>
+    <div class="no-hint" id="noHint"></div>
+  </div>
+
+  <div class="yes-screen" id="yesScreen">
+    <span class="big-icon">✨</span>
+    <p class="yes-title">Harika…</p>
+    <p class="yes-msg">
+      Bunu duymak için bekledim.<br>
+      Seninle her anı yaşamaya hazırım.<br>
+      Beraber çok güzel şeyler olacak. 🌙
+    </p>
+  </div>
+</div>
+
+<script>
+// STARS
+const canvas = document.getElementById('stars-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, stars = [];
+
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', () => { resize(); initStars(); });
+
+function initStars() {
+  stars = [];
+  const count = Math.floor((W * H) / 3800);
+  for (let i = 0; i < count; i++) {
+    stars.push({ x:Math.random()*W, y:Math.random()*H, r:Math.random()*1.4+0.2, speed:Math.random()*0.006+0.002, phase:Math.random()*Math.PI*2 });
+  }
+}
+initStars();
+
+function drawStars(t) {
+  ctx.clearRect(0,0,W,H);
+  for (const s of stars) {
+    const alpha = 0.3 + 0.7*(0.5+0.5*Math.sin(t*s.speed+s.phase));
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fillStyle = `rgba(240,238,255,${alpha})`;
+    ctx.fill();
+  }
+  requestAnimationFrame(drawStars);
+}
+requestAnimationFrame(drawStars);
+
+// NO BUTTON
+let tries = 0;
+const noBtn = document.getElementById('noBtn');
+const noHint = document.getElementById('noHint');
+
+function noDenied() {
+  tries++;
+  const msgs = [
+    "Emin misin? 🥺",
+    "Bir daha düşün… 🌙",
+    "Gerçekten mi? 😔",
+    "Lütfen? 🥺",
+    "Son kez soruyorum… 😶",
+    "Bu karardan pişman olursun 🌟",
+    "Kalbim kırıldı az önce 💔",
+    "Dur dur, acele etme… 🙏",
+    "Bir şans ver bana ✨",
+    "Yıldızlar da hayır deme diyor 🌌",
+    "Bugün değilse yarın düşün 🌙",
+    "Hayır diyebilirsin ama ben vazgeçmem 😌",
+  ];
+  // pick random, avoid repeating last shown
+  let idx;
+  do { idx = Math.floor(Math.random() * msgs.length); } while (msgs[idx] === noHint.textContent && msgs.length > 1);
+  noHint.textContent = msgs[idx];
+}
+
+// YES
+function sayYes() {
+  document.getElementById('card').classList.add('yes');
+  document.getElementById('yesScreen').classList.add('show');
+  const emojis = ['✨','🌙','⭐','💫','🌟'];
+  for (let i = 0; i < 28; i++) {
+    const el = document.createElement('div');
+    el.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+    el.style.cssText = `position:fixed;left:${Math.random()*100}vw;top:-30px;font-size:${1+Math.random()*1.4}rem;z-index:999;pointer-events:none;animation:fall ${3+Math.random()*5}s linear ${Math.random()*2}s both;`;
+    document.body.appendChild(el);
+  }
+}
+</script>
+</body>
+</html>
