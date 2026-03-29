@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MacroDroid Media Control</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎧</text></svg>">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* --- MODERN DEĞİŞKENLER & SIFIRLAMA --- */
         :root {
             --cls-bg-dark: #06070a;
-            --cls-accent: #00f2fe;
+            --cls-accent: #00f2fe; 
             --cls-accent-rgb: 0, 242, 254;
-            --cls-danger: #ff0055;
-            --cls-success: #00ff88;
+            --cls-danger: #ff0055; 
+            --cls-success: #00ff88; 
             --cls-panel-bg: rgba(10, 11, 16, 0.75);
             --cls-panel-border: rgba(255, 255, 255, 0.06);
             --cls-font-main: 'Inter', sans-serif;
@@ -37,7 +40,6 @@
             position: relative;
         }
 
-        /* --- ARKA PLAN ANİMASYONU --- */
         body::before {
             content: '';
             position: absolute;
@@ -118,8 +120,9 @@
         .settings-btn {
             background: transparent; border: none; position: absolute; top: 25px; right: 25px;
             color: var(--cls-text-dim); cursor: pointer; transition: all 0.4s var(--cls-ease); font-size: 22px;
+            width: auto; height: auto; padding: 0; opacity: 0.6; z-index: 100;
         }
-        .settings-btn:hover { color: var(--cls-accent); transform: rotate(90deg); }
+        .settings-btn:hover { color: var(--cls-accent); transform: rotate(90deg); opacity: 1; background: transparent; }
 
         .settings-overlay {
             display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -133,11 +136,10 @@
             padding: 18px; border-radius: 18px; color: #fff; margin-bottom: 20px;
         }
 
-        .save-btn { background: var(--cls-accent); color: #000; font-weight: 700; width: 100%; margin-top: auto; border:none; }
+        .save-btn { background: var(--cls-accent); color: #000; font-weight: 700; width: 100%; margin-top: auto; border:none; padding: 20px; border-radius: 20px; cursor: pointer;}
 
-        .status-bar { margin-top: 35px; font-size: 11px; color: var(--cls-text-dim); text-align: center; letter-spacing: 2px; }
+        .status-bar { margin-top: 35px; font-size: 11px; color: var(--cls-text-dim); text-align: center; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
 
-        /* --- FOOTER ENTEGRASYONU --- */
         footer {
             margin-top: 40px;
             text-align: center;
@@ -145,23 +147,10 @@
             color: var(--cls-text-dim);
             opacity: 0.7;
             z-index: 10;
-            letter-spacing: 0.5px;
         }
 
-        footer b {
-            color: var(--cls-accent);
-            text-shadow: 0 0 10px rgba(var(--cls-accent-rgb), 0.3);
-        }
-
-        footer a {
-            text-decoration: none;
-            color: inherit;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover b {
-            color: #fff;
-        }
+        footer b { color: var(--cls-accent); }
+        footer a { text-decoration: none; color: inherit; }
 
         .fade-out { opacity: 0; transform: scale(0.9); pointer-events: none; }
     </style>
