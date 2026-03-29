@@ -199,7 +199,10 @@ async function init() {
             
             const card = document.createElement("a");
             card.className = "project-card";
-            card.href = `${p.path}/index.html`;
+            
+            // "index.html" takısı kaldırıldı, doğrudan klasör yoluna yönlendiriliyor.
+            card.href = p.path; 
+            
             card.target = "_blank";
             card.dataset.name = norm(p.name) + " " + norm(cleanName);
 
