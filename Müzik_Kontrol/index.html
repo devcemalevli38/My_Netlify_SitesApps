@@ -17,12 +17,14 @@
             --muted: #9aa4b2;
             --success: #2e7d32;
             --error: #b71c1c;
+            --link-accent: #38bdf8;
         }
 
         * { 
             box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent; 
             touch-action: manipulation; 
+            transition: all 0.2s ease;
         }
 
         body {
@@ -30,11 +32,13 @@
             min-height: 100vh;
             background: radial-gradient(circle at top, #1b2735, #0b0f14);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             font-family: system-ui, -apple-system, sans-serif;
             color: var(--text);
-            overflow: hidden;
+            overflow-x: hidden;
+            padding: 20px;
         }
 
         .card {
@@ -42,8 +46,10 @@
             border-radius: 26px;
             box-shadow: 0 30px 80px rgba(0,0,0,.7);
             padding: 30px;
-            width: 360px;
+            width: 100%;
+            max-width: 360px;
             border: 1px solid rgba(255,255,255,0.05);
+            z-index: 2;
         }
 
         .header {
@@ -68,12 +74,10 @@
             background: #1a2635;
             color: var(--text);
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: transform 0.1s ease, background 0.2s ease;
             display: flex; 
             align-items: center; 
             justify-content: center;
             position: relative;
-            z-index: 10;
         }
 
         button * { pointer-events: none; }
@@ -98,7 +102,6 @@
             background: #243449 !important;
         }
 
-        /* URL KISMI ÖZEL STİLLERİ */
         .url-section {
             display: flex;
             gap: 10px;
@@ -115,12 +118,9 @@
             color: #fff;
             font-size: 14px;
             outline: none;
-            transition: border-color 0.3s;
         }
 
-        .url-input:focus {
-            border-color: var(--muted);
-        }
+        .url-input:focus { border-color: var(--muted); }
 
         .url-send-btn {
             width: 55px !important;
@@ -130,9 +130,7 @@
             font-size: 18px !important;
         }
 
-        button:active { 
-            transform: scale(0.90) !important; 
-        }
+        button:active { transform: scale(0.90) !important; }
 
         .volume-section-title {
             text-align: center;
@@ -158,6 +156,30 @@
             background: #000; 
             color: #fff; 
             font-size: 16px;
+        }
+
+        /* --- ENTEGRE FOOTER TASARIMI --- */
+        footer {
+            margin-top: 40px;
+            padding: 20px 0;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        footer b { color: var(--link-accent); }
+        
+        footer a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--link-accent);
         }
     </style>
 </head>
@@ -192,9 +214,13 @@
 
     <div class="settings" id="settings">
         <input id="serverInput" type="text" placeholder="Örn: 192.168.1.5:5000">
-        <button onclick="saveServer()" style="width:100%; border-radius:8px; height:45px; background:var(--accent);">KAYDET</button>
+        <button onclick="saveServer()" style="width:100%; border-radius:8px; height:45px; background:var(--accent); font-weight: bold;">KAYDET</button>
     </div>
 </div>
+
+<footer>
+    <p>Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank"><b>Cemal Evli</b></a></p>
+</footer>
 
 <script>
     let serverUrl = localStorage.getItem("serverUrl") || "";
@@ -214,7 +240,6 @@
         toggleSettings();
     }
 
-    // URL Gönderme İşlemi
     function handleUrlSend() {
         const urlInput = document.getElementById("urlInput");
         const btn = document.getElementById("urlSendBtn");
@@ -227,7 +252,6 @@
         sendCommand(btn, 'open_url', urlValue);
     }
 
-    // Enter Tuşuna Basınca Gönder
     function handleKeyPress(e) {
         if (e.key === "Enter") {
             handleUrlSend();
