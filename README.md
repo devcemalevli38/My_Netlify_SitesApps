@@ -37,12 +37,3 @@ Bu projeler eğitim ve demo amaçlıdır.
 
 ---
 
-## 📁 Repo Yapısı
-
-```text
-My_Netlify_SitesApps/
-├─ Şifre_Çöz/
-│  └─ index.html
-├─ Mü<ik_Kontrol/
-│  └─ index.html
-└─ README.md
