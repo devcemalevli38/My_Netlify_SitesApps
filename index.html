@@ -121,19 +121,57 @@
             border-radius: 12px;
         }
 
-        /* --- BÜLTEN KUTUSU STİLLERİ --- */
+        /* --- MODAL TASARIMI --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
         .newsletter-section {
-            width: 100%;
-            max-width: 900px;
-            margin-top: 50px;
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 20px;
             padding: 30px;
             text-align: center;
             box-shadow: var(--shadow);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             border-bottom: 4px solid var(--accent);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .newsletter-section {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
         }
 
         .newsletter-section h2 { margin-top: 0; font-size: 1.4rem; color: var(--accent); }
@@ -143,14 +181,15 @@
             gap: 10px;
             justify-content: center;
             margin-top: 20px;
+            flex-direction: column;
         }
 
-        .newsletter-form input { width: 300px; }
+        .newsletter-form input { width: 100%; }
         
-        #subscribe-btn { background: var(--accent); color: #0f172a; }
+        #subscribe-btn { background: var(--accent); color: #0f172a; border: none; }
         #subscribe-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        #status-msg { margin-top: 15px; font-weight: 600; font-size: 0.9rem; }
+        #status-msg { margin-top: 15px; font-weight: 600; font-size: 0.9rem; min-height: 20px; }
 
         .hidden { display: none; }
 
@@ -168,9 +207,7 @@
 
         @media (max-width: 600px) {
             header { flex-direction: column; }
-            .newsletter-form { flex-direction: column; align-items: center; }
-            .newsletter-form input { width: 100%; }
-            #subscribe-btn { width: 100%; }
+            .controls { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -180,6 +217,7 @@
     <h1>🚀 Web Sitelerim</h1>
     <div class="controls">
         <input id="search" placeholder="🔍 Proje ara...">
+        <button id="openNewsletter" title="Abone Ol">📧</button>
         <button id="themeToggle">🌙 / ☀️</button>
     </div>
 </header>
@@ -188,14 +226,17 @@
     <p id="loading">Yükleniyor...</p>
 </div>
 
-<div class="newsletter-section">
-    <h2>📬 GitHub Bültenine Abone Ol</h2>
-    <p>Yeni projelerden ve günlük GitHub özetlerinden haberdar ol.</p>
-    <form id="newsletter-form" class="newsletter-form">
-        <input type="email" id="email-input" placeholder="E-posta adresini gir..." required>
-        <button type="submit" id="subscribe-btn">Abone Ol</button>
-    </form>
-    <div id="status-msg"></div>
+<div id="newsletterModal" class="modal-overlay">
+    <div class="newsletter-section">
+        <button class="close-modal" id="closeNewsletter">&times;</button>
+        <h2>📬 GitHub Bültenine Abone Ol</h2>
+        <p>Yeni projelerden ve günlük GitHub özetlerinden haberdar ol.</p>
+        <form id="newsletter-form" class="newsletter-form">
+            <input type="email" id="email-input" placeholder="E-posta adresini gir..." required>
+            <button type="submit" id="subscribe-btn">Abone Ol</button>
+        </form>
+        <div id="status-msg"></div>
+    </div>
 </div>
 
 <footer>
@@ -203,11 +244,10 @@
 </footer>
 
 <script>
-// !!! GOOGLE APPS SCRIPT URL'Nİ BURAYA YAPIŞTIR !!!
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec"; 
-
 const API = "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/";
 
+// --- TEMA KONTROLÜ ---
 if(localStorage.getItem("theme") === "light") document.body.classList.add("light");
 
 themeToggle.onclick = () => {
@@ -215,7 +255,27 @@ themeToggle.onclick = () => {
     localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 };
 
-// --- ABONELİK KAYIT FONKSİYONU ---
+// --- MODAL KONTROLÜ ---
+const modal = document.getElementById('newsletterModal');
+const openModalBtn = document.getElementById('openNewsletter');
+const closeModalBtn = document.getElementById('closeNewsletter');
+
+const toggleModal = (show) => {
+    if(show) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden'; // Arka plan kaymasın
+    } else {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        document.getElementById('status-msg').innerText = "";
+    }
+};
+
+openModalBtn.onclick = () => toggleModal(true);
+closeModalBtn.onclick = () => toggleModal(false);
+window.onclick = (e) => { if(e.target === modal) toggleModal(false); };
+
+// --- ABONELİK KAYIT ---
 document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('email-input').value;
@@ -224,24 +284,30 @@ document.getElementById('newsletter-form').addEventListener('submit', async (e) 
 
     btn.disabled = true;
     btn.innerText = "Kaydediliyor...";
-    msg.innerText = "";
 
     try {
-        // "no-cors" modu Google Apps Script için en stabil yoldur
         await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(email)}`, { mode: 'no-cors' });
         
         msg.style.color = "#4ade80";
-        msg.innerText = "✅ Başarıyla abone oldun! Teşekkürler.";
-        document.getElementById('newsletter-form').reset();
+        msg.innerText = "✅ Başarıyla abone oldun!";
+        
+        // 1.5 saniye sonra pencereyi kapat
+        setTimeout(() => {
+            toggleModal(false);
+            document.getElementById('newsletter-form').reset();
+            btn.disabled = false;
+            btn.innerText = "Abone Ol";
+        }, 1500);
+
     } catch (err) {
         msg.style.color = "#f87171";
-        msg.innerText = "❌ Bir hata oluştu, lütfen tekrar dene.";
-    } finally {
+        msg.innerText = "❌ Hata oluştu, tekrar dene.";
         btn.disabled = false;
         btn.innerText = "Abone Ol";
     }
 });
 
+// --- PROJE YÜKLEME ---
 const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 async function init() {
