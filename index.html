@@ -126,6 +126,29 @@
 
         .hidden { display: none; }
 
+        footer {
+            margin-top: auto;
+            padding: 60px 0 20px;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        footer b {
+            color: var(--accent);
+        }
+
+        footer a:hover b {
+            text-decoration: underline;
+        }
+
         @media (max-width: 600px) {
             header { flex-direction: column; text-align: center; }
             input { width: 100%; }
@@ -145,6 +168,10 @@
 <div id="project-container" class="grid">
     <p id="loading">Yükleniyor...</p>
 </div>
+
+<footer>
+    <p>Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank"><b>Cemal Evli</b></a></p>
+</footer>
 
 <script>
 const API = "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/";
