@@ -8,23 +8,16 @@
     <style>
         /* --- MODERN DEĞİŞKENLER & SIFIRLAMA --- */
         :root {
-            /* Renk Paleti (Fütüristik Neon) */
             --cls-bg-dark: #06070a;
-            --cls-accent: #00f2fe; /* Ana Neon Turkuaz */
+            --cls-accent: #00f2fe;
             --cls-accent-rgb: 0, 242, 254;
-            --cls-danger: #ff0055; /* Hata Kırmızısı */
-            --cls-success: #00ff88; /* Başarı Yeşili */
-            
-            /* Cam Efekti (Glassmorphism Pro) */
+            --cls-danger: #ff0055;
+            --cls-success: #00ff88;
             --cls-panel-bg: rgba(10, 11, 16, 0.75);
             --cls-panel-border: rgba(255, 255, 255, 0.06);
-            
-            /* Tipografi */
             --cls-font-main: 'Inter', sans-serif;
             --cls-text-main: #ffffff;
             --cls-text-dim: #8892b0;
-            
-            /* Geçişler */
             --cls-ease: cubic-bezier(0.23, 1, 0.32, 1);
         }
 
@@ -36,6 +29,7 @@
             font-family: var(--cls-font-main);
             margin: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -43,7 +37,7 @@
             position: relative;
         }
 
-        /* --- MODER ARKAPLAN ANİMASYONU --- */
+        /* --- ARKA PLAN ANİMASYONU --- */
         body::before {
             content: '';
             position: absolute;
@@ -59,7 +53,7 @@
             100% { transform: translate(-15%, -15%) scale(1.1); opacity: 0.8; }
         }
 
-        /* --- ANA PANEL TERSARIMI --- */
+        /* --- ANA PANEL --- */
         .panel {
             background: var(--cls-panel-bg);
             backdrop-filter: blur(25px) saturate(180%);
@@ -68,24 +62,20 @@
             border-radius: 40px;
             padding: 50px 35px 35px 35px;
             width: 360px;
-            box-shadow: 
-                0 25px 80px rgba(0, 0, 0, 0.5),
-                0 0 50px rgba(var(--cls-accent-rgb), 0.08);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 50px rgba(var(--cls-accent-rgb), 0.08);
             position: relative;
             z-index: 10;
             transition: transform 0.4s var(--cls-ease), box-shadow 0.4s var(--cls-ease);
         }
 
-        /* Ayarlar paneli açıkken ana paneli hafifçe geriye it */
         .panel.settings-active {
             transform: scale(0.97);
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
         }
 
-        /* --- BAŞLIK VE TİPOGRAFİ --- */
         h2 {
             font-weight: 700;
-            font-size: 26px;
+            font-size: 24px;
             margin: 0 0 40px 0;
             letter-spacing: -1px;
             background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
@@ -94,12 +84,8 @@
             text-align: center;
         }
 
-        /* --- BUTON GRID VE MODERN BUTONLAR --- */
-        .btn-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+        /* --- BUTONLAR --- */
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
         button {
             font-family: var(--cls-font-main);
@@ -119,187 +105,65 @@
             overflow: hidden;
         }
 
-        /* Buton Parlama Efekti */
-        button::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-            transform: scale(0);
-            transition: transform 0.5s var(--cls-ease);
-            opacity: 0;
-        }
-
         button:hover {
             background: rgba(255, 255, 255, 0.06);
             border-color: rgba(var(--cls-accent-rgb), 0.3);
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
-        button:hover::after {
-            transform: scale(1);
-            opacity: 1;
-        }
+        .btn-main { grid-column: span 2; color: var(--cls-accent); background: rgba(var(--cls-accent-rgb), 0.06); }
+        .btn-vol { color: var(--cls-success); border-color: rgba(0, 255, 136, 0.15); }
 
-        button:active {
-            transform: scale(0.96) translateY(-1px);
-            transition: all 0.1s ease;
-        }
-
-        /* Özel Buton Stilleri */
-        .btn-main {
-            grid-column: span 2;
-            font-weight: 600;
-            background: rgba(var(--cls-accent-rgb), 0.06);
-            border-color: rgba(var(--cls-accent-rgb), 0.2);
-            color: var(--cls-accent);
-        }
-        .btn-main:hover {
-            background: rgba(var(--cls-accent-rgb), 0.12);
-            border-color: rgba(var(--cls-accent-rgb), 0.5);
-            box-shadow: 0 10px 40px rgba(var(--cls-accent-rgb), 0.2);
-        }
-
-        .btn-vol {
-            color: var(--cls-success);
-            border-color: rgba(0, 255, 136, 0.15);
-        }
-        .btn-vol:hover {
-            border-color: rgba(0, 255, 136, 0.4);
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.1);
-        }
-
-        /* --- AYARLAR DİŞLİ BUTONU --- */
+        /* --- AYARLAR --- */
         .settings-btn {
-            background: transparent;
-            border: none;
-            padding: 0;
-            position: absolute;
-            top: 25px;
-            right: 25px;
-            font-size: 22px;
-            color: var(--cls-text-dim);
-            opacity: 0.6;
-            z-index: 100;
-            cursor: pointer;
-            width: auto;
-            border-radius: 50%;
-            transition: all 0.4s var(--cls-ease);
+            background: transparent; border: none; position: absolute; top: 25px; right: 25px;
+            color: var(--cls-text-dim); cursor: pointer; transition: all 0.4s var(--cls-ease); font-size: 22px;
         }
-        .settings-btn:hover {
-            opacity: 1;
-            color: var(--cls-accent);
-            transform: rotate(90deg) scale(1.1);
-            background: transparent;
-            border: none;
-            box-shadow: none;
-        }
-        .settings-btn::after { display: none; } /* Parlama efektini kapat */
+        .settings-btn:hover { color: var(--cls-accent); transform: rotate(90deg); }
 
-        /* --- DURUM ÇUBUĞU --- */
-        .status-bar {
-            margin-top: 35px;
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--cls-text-dim);
-            text-transform: uppercase;
-            letter-spacing: 2px;
+        .settings-overlay {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #08090d; border-radius: 40px; z-index: 50; padding: 50px 30px;
+            flex-direction: column; opacity: 0; transform: translateY(20px); transition: all 0.4s var(--cls-ease);
+        }
+        .settings-overlay.show { display: flex; opacity: 1; transform: translateY(0); }
+
+        input {
+            width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 18px; border-radius: 18px; color: #fff; margin-bottom: 20px;
+        }
+
+        .save-btn { background: var(--cls-accent); color: #000; font-weight: 700; width: 100%; margin-top: auto; border:none; }
+
+        .status-bar { margin-top: 35px; font-size: 11px; color: var(--cls-text-dim); text-align: center; letter-spacing: 2px; }
+
+        /* --- FOOTER ENTEGRASYONU --- */
+        footer {
+            margin-top: 40px;
             text-align: center;
-            opacity: 0.8;
+            font-size: 0.85rem;
+            color: var(--cls-text-dim);
+            opacity: 0.7;
+            z-index: 10;
+            letter-spacing: 0.5px;
+        }
+
+        footer b {
+            color: var(--cls-accent);
+            text-shadow: 0 0 10px rgba(var(--cls-accent-rgb), 0.3);
+        }
+
+        footer a {
+            text-decoration: none;
+            color: inherit;
             transition: color 0.3s ease;
         }
 
-        /* --- MODERN AYARLAR PANELİ (OVERLAY) --- */
-        .settings-overlay {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #08090d; /* Daha koyu saf arka plan */
-            border-radius: 40px;
-            z-index: 50;
-            padding: 50px 30px;
-            box-sizing: border-box;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.4s var(--cls-ease), transform 0.4s var(--cls-ease);
+        footer a:hover b {
+            color: #fff;
         }
 
-        .settings-overlay.show {
-            display: flex;
-            flex-direction: column;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .settings-overlay h3 {
-            font-weight: 700;
-            font-size: 22px;
-            margin: 0 0 30px 0;
-            color: var(--cls-text-main);
-        }
-
-        /* Modern Input Alanı */
-        .input-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display:block;
-            font-size: 11px;
-            color: var(--cls-accent);
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 18px;
-            border-radius: 18px;
-            color: var(--cls-text-main);
-            font-family: var(--cls-font-main);
-            font-size: 14px;
-            transition: all 0.3s var(--cls-ease);
-        }
-
-        input:focus {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--cls-accent);
-            box-shadow: 0 0 15px rgba(var(--cls-accent-rgb), 0.15);
-        }
-
-        /* Modern Kaydet Butonu */
-        .save-btn {
-            background: var(--cls-accent);
-            color: #000;
-            font-weight: 700;
-            width: 100%;
-            margin-top: auto; /* En alta yasla */
-            padding: 20px;
-            border: none;
-            border-radius: 20px;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-        }
-        .save-btn:hover {
-            background: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
-        }
-
-        /* Yardımcı Sınıflar */
-        .hidden { display: none !important; }
-        .fade-out { opacity: 0; transform: scale(0.9); transition: all 0.4s var(--cls-ease); }
+        .fade-out { opacity: 0; transform: scale(0.9); pointer-events: none; }
     </style>
 </head>
 <body>
@@ -308,7 +172,7 @@
     <button class="settings-btn" onclick="toggleSettings()" title="Ayarlar">⚙️</button>
 
     <div id="mainContent">
-        <h2>MacroDroid Media Control</h2>
+        <h2>Media Control Pro</h2>
         <div class="btn-grid">
             <button class="btn-main" onclick="gonder('play')">⏯ Play / Pause</button>
             <button onclick="gonder('back')" title="Önceki">⏮</button>
@@ -316,27 +180,27 @@
             <button class="btn-vol" onclick="gonder('vol_up')">VOL +</button>
             <button class="btn-vol" onclick="gonder('vol_down')">VOL -</button>
         </div>
-        <div id="log" class="status-bar">SYSTEM IS READY</div>
+        <div id="log" class="status-bar">SYSTEM READY</div>
     </div>
 
     <div id="settingsPanel" class="settings-overlay">
         <h3>Settings</h3>
-        <div class="input-group">
-            <label for="baseUrlInput">MacroDroid Webhook URL</label>
-            <input type="text" id="baseUrlInput" placeholder="https://trigger.macrodroid.com/...">
-        </div>
-        <button class="save-btn" onclick="saveUrls()">SAVE</button>
+        <label style="font-size:11px; color:var(--cls-accent); font-weight:700; margin-bottom:10px; display:block; text-transform:uppercase;">Webhook URL</label>
+        <input type="text" id="baseUrlInput" placeholder="https://trigger.macrodroid.com/...">
+        <button class="save-btn" onclick="saveUrls()">SAVE SETTINGS</button>
     </div>
 </div>
 
+<footer>
+    <p>Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank"><b>Cemal Evli</b></a></p>
+</footer>
+
 <script>
-    // --- JAVASCRIPT MANTIĞI (GÜNCELLENMİŞ GÖRSEL EFEKTLERLE) ---
     let baseUrl = "";
     const mainPanel = document.getElementById('mainPanel');
     const settingsPanel = document.getElementById('settingsPanel');
     const mainContent = document.getElementById('mainContent');
 
-    // Sayfa yüklendiğinde LocalStorage'dan URL'yi al
     window.onload = () => {
         const saved = localStorage.getItem('macrodroid_base_url');
         if (saved) {
@@ -345,20 +209,15 @@
         }
     };
 
-    // Ayarlar panelini aç/kapat (Akıcı animasyonla)
     function toggleSettings() {
         if (settingsPanel.classList.contains('show')) {
-            // Kapat
             settingsPanel.classList.remove('show');
             mainContent.classList.remove('fade-out');
             mainPanel.classList.remove('settings-active');
-            // Animasyon bitiminde gizle
             setTimeout(() => { if(!settingsPanel.classList.contains('show')) settingsPanel.style.display = 'none'; }, 400);
         } else {
-            // Aç
             settingsPanel.style.display = 'flex';
             mainPanel.classList.add('settings-active');
-            // Reflow için küçük gecikme
             setTimeout(() => {
                 settingsPanel.classList.add('show');
                 mainContent.classList.add('fade-out');
@@ -366,59 +225,36 @@
         }
     }
 
-    // URL'yi LocalStorage'a kaydet
     function saveUrls() {
         const inputVal = document.getElementById('baseUrlInput').value.trim();
-        if (inputVal && inputVal.startsWith('http')) {
+        if (inputVal.startsWith('http')) {
             baseUrl = inputVal;
             localStorage.setItem('macrodroid_base_url', baseUrl);
-            toggleSettings(); // Paneli kapat
-            showLog("URL Başarıyla Kaydedildi", "var(--cls-success)");
+            toggleSettings();
+            showLog("Settings Saved", "var(--cls-success)");
         } else {
-            showLog("Geçersiz URL Formatı!", "var(--cls-danger)");
-            // Input'u salla (Hata efekti)
-            const input = document.getElementById('baseUrlInput');
-            input.style.borderColor = 'var(--cls-danger)';
-            input.style.transform = 'translateX(5px)';
-            setTimeout(() => input.style.transform = 'translateX(-5px)', 100);
-            setTimeout(() => input.style.transform = 'translateX(0)', 200);
-            setTimeout(() => input.style.borderColor = 'rgba(255,255,255,0.08)', 1000);
+            showLog("Invalid URL!", "var(--cls-danger)");
         }
     }
 
-    // Durum çubuğuna mesaj yaz
     function showLog(message, color = "var(--cls-text-dim)") {
         const logElement = document.getElementById('log');
-        if (logElement) {
-            logElement.innerText = message.toUpperCase();
-            logElement.style.color = color;
-            // Eğer başarı veya hata ise, 3 saniye sonra normale döndür
-            if (color !== "var(--cls-text-dim)") {
-                setTimeout(() => showLog("SİSTEM HAZIR"), 3000);
-            }
+        logElement.innerText = message.toUpperCase();
+        logElement.style.color = color;
+        if (color !== "var(--cls-text-dim)") {
+            setTimeout(() => { logElement.innerText = "SYSTEM READY"; logElement.style.color = "var(--cls-text-dim)"; }, 3000);
         }
     }
 
-    // Komutu MacroDroid'e gönder
     function gonder(komut) {
-        if (!baseUrl) {
-            return showLog("HATA: URL Ayarlanmadı!", "var(--cls-danger)");
-        }
-
-        // İstek yapısı: baseUrl?title=media&body=komut
-        const finalUrl = `${baseUrl}?title=media&body=${komut}`;
+        if (!baseUrl) return showLog("URL Not Set!", "var(--cls-danger)");
         
-        showLog(`${komut} Komutu Gönderiliyor...`, "var(--cls-accent)");
+        const finalUrl = `${baseUrl}?title=media&body=${komut}`;
+        showLog(`Sending ${komut}...`, "var(--cls-accent)");
 
-        // Fetch isteği (mode: no-cors, MacroDroid genelde yanıt dönmez)
         fetch(finalUrl, { mode: 'no-cors', cache: 'no-cache' })
-            .then(() => {
-                showLog("KOMUT BAŞARILI", "var(--cls-success)");
-            })
-            .catch((error) => {
-                console.error('İstek Hatası:', error);
-                showLog("BAĞLANTI HATASI!", "var(--cls-danger)");
-            });
+            .then(() => showLog("Success", "var(--cls-success)"))
+            .catch(() => showLog("Error!", "var(--cls-danger)"));
     }
 </script>
 
