@@ -317,7 +317,7 @@ async function init() {
         const container = document.getElementById("project-container");
         container.innerHTML = "";
 
-        const projects = items.filter(i => i.type === "dir");
+        const projects = items.filter(i => i.type === "dir" && i.name !== "Cikma_Teklifi");
 
         projects.forEach(p => {
             const cleanName = p.name.replace(/_/g, " ");
