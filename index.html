@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cemal Evli | Portfolio & Games</title>
+    <title>Cemal Evli | My Website</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
         :root {
@@ -76,6 +76,18 @@
 
         .section-title.games { color: var(--game-accent); }
 
+        .back-btn {
+            background: var(--game-accent);
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: none;
+        }
+
         .controls { display: flex; gap: 10px; }
 
         input {
@@ -120,6 +132,7 @@
             gap: 16px;
             box-shadow: var(--shadow);
             backdrop-filter: blur(10px);
+            cursor: pointer;
         }
 
         .project-card:hover {
@@ -145,18 +158,19 @@
 
         .badge {
             margin-left: auto;
-            font-size: 0.65rem;
-            padding: 4px 10px;
+            font-size: 0.6rem;
+            padding: 4px 8px;
             border-radius: 20px;
             font-weight: bold;
-            background: var(--game-accent);
-            color: white;
+            text-transform: uppercase;
         }
+        .badge-folder { background: rgba(255,255,255,0.1); color: var(--text); }
+        .badge-download { background: var(--game-accent); color: white; }
 
-        .version-info {
-            font-size: 0.75rem;
-            opacity: 0.6;
-            margin-top: 4px;
+        .version-tag {
+            font-size: 0.7rem;
+            opacity: 0.5;
+            display: block;
         }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; }
@@ -173,7 +187,7 @@
 <header>
     <h1>🚀 Cemal Evli</h1>
     <div class="controls">
-        <input id="search" placeholder="🔍 Proje veya Oyun Ara...">
+        <input id="search" placeholder="🔍 Ara...">
         <button id="openNewsletter" class="tool-btn" title="Abone Ol">📧</button>
         <button id="themeToggle" class="tool-btn">🌙 / ☀️</button>
     </div>
@@ -185,7 +199,8 @@
 <div id="project-container" class="grid"><p>Yükleniyor...</p></div>
 
 <div class="section-header">
-    <h2 class="section-title games">🎮 Oyunlar</h2>
+    <h2 class="section-title games">🎮 Oyunlarım</h2>
+    <button id="back-to-releases" class="back-btn">⬅ Geri Dön</button>
 </div>
 <div id="game-container" class="grid"><p>Yükleniyor...</p></div>
 
@@ -197,7 +212,6 @@
             <input type="email" id="email-input" placeholder="E-posta adresini gir..." required style="width:100%;">
             <button type="submit" class="tool-btn" style="background:var(--accent); color:#0f172a;">Abone Ol</button>
         </form>
-        <div id="status-msg"></div>
     </div>
 </div>
 
@@ -210,14 +224,18 @@ const USERNAME = "cemal201138";
 const SITES_API = `https://api.github.com/repos/${USERNAME}/My_Netlify_SitesApps/contents/`;
 const RELEASES_API = `https://api.github.com/repos/${USERNAME}/games/releases`;
 
-// Tema ve Modal İşlemleri
+let allReleases = [];
+
+// Tema Ayarı
 if(localStorage.getItem("theme") === "light") document.body.classList.add("light");
 themeToggle.onclick = () => {
     document.body.classList.toggle("light");
     localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 };
-openNewsletter.onclick = () => { newsletterModal.classList.add('active'); document.body.style.overflow = 'hidden'; };
-closeNewsletter.onclick = () => { newsletterModal.classList.remove('active'); document.body.style.overflow = 'auto'; };
+
+// Modal Kontrolü
+openNewsletter.onclick = () => newsletterModal.classList.add('active');
+closeNewsletter.onclick = () => newsletterModal.classList.remove('active');
 
 const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
@@ -234,52 +252,79 @@ async function loadProjects() {
             card.href = p.path;
             card.target = "_blank";
             card.dataset.name = norm(p.name);
-            card.innerHTML = `
-                <div class="icon">📂</div>
-                <div class="name"><b>${p.name.replace(/_/g, " ")}</b></div>
-            `;
+            card.innerHTML = `<div class="icon">📂</div><div><b>${p.name.replace(/_/g, " ")}</b></div>`;
             container.appendChild(card);
         });
-    } catch (e) { document.getElementById("project-container").innerHTML = "Projeler yüklenemedi."; }
+    } catch (e) { document.getElementById("project-container").innerHTML = "Hata oluştu."; }
 }
 
 // --- OYUN RELEASES YÜKLE ---
-async function loadGames() {
+async function loadReleases() {
     try {
         const res = await fetch(RELEASES_API);
-        const releases = await res.json();
-        const container = document.getElementById("game-container");
-        container.innerHTML = "";
-
-        if (releases.length === 0) {
-            container.innerHTML = "<p>Henüz yayınlanmış bir sürüm bulunamadı.</p>";
-            return;
-        }
-
-        releases.forEach(rel => {
-            // Release içindeki ilk asset'i (exe/zip) al, yoksa release sayfasına yönlendir
-            const downloadUrl = rel.assets.length > 0 ? rel.assets[0].browser_download_url : rel.html_url;
-            
-            const card = document.createElement("a");
-            card.className = "project-card game-card";
-            card.href = downloadUrl;
-            card.target = "_blank";
-            card.dataset.name = norm(rel.name || rel.tag_name);
-            
-            card.innerHTML = `
-                <div class="icon">🎮</div>
-                <div class="info-group">
-                    <div class="name"><b>${rel.name || rel.tag_name}</b></div>
-                    <div class="version-info">${rel.tag_name}</div>
-                </div>
-                <span class="badge">İNDİR</span>
-            `;
-            container.appendChild(card);
-        });
+        allReleases = await res.json();
+        renderReleases();
     } catch (e) { document.getElementById("game-container").innerHTML = "Sürümler yüklenemedi."; }
 }
 
-// Arama Fonksiyonu
+function renderReleases() {
+    const container = document.getElementById("game-container");
+    container.innerHTML = "";
+    document.getElementById("back-to-releases").style.display = "none";
+
+    allReleases.forEach(rel => {
+        const card = document.createElement("div");
+        card.className = "project-card game-card";
+        card.dataset.name = norm(rel.name || rel.tag_name);
+        
+        card.innerHTML = `
+            <div class="icon">📁</div>
+            <div>
+                <b>${rel.name || rel.tag_name}</b>
+                <span class="version-tag">${rel.tag_name}</span>
+            </div>
+            <span class="badge badge-folder">AÇ</span>
+        `;
+        
+        card.onclick = () => renderAssets(rel);
+        container.appendChild(card);
+    });
+}
+
+function renderAssets(release) {
+    const container = document.getElementById("game-container");
+    container.innerHTML = "";
+    document.getElementById("back-to-releases").style.display = "block";
+
+    if (release.assets.length === 0) {
+        container.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Bu sürümde indirilebilir dosya bulunamadı.</p>";
+        return;
+    }
+
+    release.assets.forEach(asset => {
+        const card = document.createElement("a");
+        card.className = "project-card game-card";
+        card.href = asset.browser_download_url;
+        card.target = "_blank";
+        card.dataset.name = norm(asset.name);
+
+        // Dosya uzantısına göre ikon seçimi
+        let icon = "📄";
+        if (asset.name.endsWith(".exe")) icon = "🎮";
+        if (asset.name.endsWith(".zip") || asset.name.endsWith(".rar")) icon = "📦";
+
+        card.innerHTML = `
+            <div class="icon">${icon}</div>
+            <div><b>${asset.name}</b><br><small>${(asset.size / 1024 / 1024).toFixed(2)} MB</small></div>
+            <span class="badge badge-download">İNDİR</span>
+        `;
+        container.appendChild(card);
+    });
+}
+
+document.getElementById("back-to-releases").onclick = renderReleases;
+
+// Arama
 search.addEventListener("input", () => {
     const q = norm(search.value);
     document.querySelectorAll(".project-card").forEach(card => {
@@ -289,7 +334,7 @@ search.addEventListener("input", () => {
 
 // Başlat
 loadProjects();
-loadGames();
+loadReleases();
 </script>
 
 </body>
