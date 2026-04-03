@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cemal Evli | Portfolio & Games</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: rgba(30, 41, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f1f5f9;
+            --accent: #38bdf8;
+            --game-accent: #f472b6;
+            --hover: #1e293b;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        .light {
+            --bg: #f8fafc;
+            --card: rgba(255, 255, 255, 0.8);
+            --border: rgba(0, 0, 0, 0.05);
+            --text: #0f172a;
+            --accent: #0284c7;
+            --game-accent: #db2777;
+            --hover: #e2e8f0;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; transition: all 0.2s ease; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 50%);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        h1 { margin: 0; font-size: 1.8rem; letter-spacing: -1px; }
+
+        .section-header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 15px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+            margin: 0;
+        }
+
+        .section-title.games { color: var(--game-accent); }
+
+        .back-btn {
+            background: var(--game-accent);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: none;
+        }
+
+        .controls { display: flex; gap: 10px; }
+
+        input {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 12px 15px;
+            border-radius: 10px;
+            outline: none;
+            backdrop-filter: blur(5px);
+            width: 250px;
+        }
+
+        button.tool-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            font-weight: 600;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .project-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            background: var(--hover);
+        }
+
+        .project-card.game-card:hover { border-color: var(--game-accent); }
+
+        .icon {
+            font-size: 24px;
+            background: rgba(56, 189, 248, 0.1);
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        .game-card .icon { background: rgba(244, 114, 182, 0.1); }
+
+        .badge {
+            margin-left: auto;
+            font-size: 0.65rem;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .badge-folder { background: rgba(255,255,255,0.1); color: var(--text); }
+        .badge-download { background: var(--game-accent); color: white; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .newsletter-section { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px; text-align: center; width: 90%; max-width: 500px; position: relative; }
+        .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+        .hidden { display: none; }
+        footer { margin-top: auto; padding: 60px 0 20px; width: 100%; text-align: center; font-size: 0.9rem; opacity: 0.7; }
+        footer b { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🚀 Cemal Evli</h1>
+    <div class="controls">
+        <input id="search" placeholder="🔍 Ara...">
+        <button id="openNewsletter" class="tool-btn" title="Abone Ol">📧</button>
+        <button id="themeToggle" class="tool-btn">🌙 / ☀️</button>
+    </div>
+</header>
+
+<div class="section-header">
+    <h2 class="section-title">📂 Web Projelerim</h2>
+</div>
+<div id="project-container" class="grid"><p>Yükleniyor...</p></div>
+
+<div class="section-header">
+    <h2 class="section-title games">🎮 Oyunlarım</h2>
+    <button id="back-games" class="back-btn">⬅ Geri Dön</button>
+</div>
+<div id="game-container" class="grid"><p>Yükleniyor...</p></div>
+
+<div id="newsletterModal" class="modal-overlay">
+    <div class="newsletter-section">
+        <button class="close-modal" id="closeNewsletter">&times;</button>
+        <h2>📬 GitHub Bültenine Abone Ol</h2>
+        <form id="newsletter-form" style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+            <input type="email" id="email-input" placeholder="E-posta adresini gir..." required style="width:100%;">
+            <button type="submit" class="tool-btn" style="background:var(--accent); color:#0f172a;">Abone Ol</button>
+        </form>
+        <div id="status-msg"></div>
+    </div>
+</div>
+
+<footer>
+    <p>Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank" style="text-decoration:none; color:inherit;"><b>Cemal Evli</b></a></p>
+</footer>
+
+<script>
+const USERNAME = "cemal201138";
+const SITES_API = `https://api.github.com/repos/${USERNAME}/My_Netlify_SitesApps/contents/`;
+const GAMES_BASE_API = `https://api.github.com/repos/${USERNAME}/games/contents/`;
+
+let gamesHistory = []; // Klasör derinliğini takip etmek için
+
+// Tema Ayarı
+if(localStorage.getItem("theme") === "light") document.body.classList.add("light");
+themeToggle.onclick = () => {
+    document.body.classList.toggle("light");
+    localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+};
+
+// Modal Kontrolü
+openNewsletter.onclick = () => { newsletterModal.classList.add('active'); document.body.style.overflow = 'hidden'; };
+closeNewsletter.onclick = () => { newsletterModal.classList.remove('active'); document.body.style.overflow = 'auto'; };
+
+const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+// --- PROJE YÜKLEME (Klasik Yapı) ---
+async function loadProjects() {
+    try {
+        const res = await fetch(SITES_API);
+        const items = await res.json();
+        const container = document.getElementById("project-container");
+        container.innerHTML = "";
+        items.filter(i => i.name !== "Cikma_Teklifi" && i.type === "dir").forEach(p => {
+            const card = createCard(p, false);
+            container.appendChild(card);
+        });
+    } catch (e) { document.getElementById("project-container").innerHTML = "Hata oluştu."; }
+}
+
+// --- OYUN YÜKLEME (Dinamik Klasör Yapısı) ---
+async function loadGames(url = GAMES_BASE_API) {
+    try {
+        const res = await fetch(url);
+        const items = await res.json();
+        const container = document.getElementById("game-container");
+        container.innerHTML = "";
+
+        // Geri dön butonu görünürlüğü
+        document.getElementById("back-games").style.display = gamesHistory.length > 0 ? "block" : "none";
+
+        items.filter(i => i.name !== ".git" && i.name !== "README.md").forEach(p => {
+            const card = createCard(p, true);
+            
+            // Eğer bu bir klasörse, tıklandığında içeriğini yükle
+            if(p.type === "dir") {
+                card.onclick = (e) => {
+                    e.preventDefault();
+                    gamesHistory.push(url);
+                    loadGames(p.url);
+                };
+            }
+            container.appendChild(card);
+        });
+    } catch (e) { document.getElementById("game-container").innerHTML = "Oyunlar yüklenemedi."; }
+}
+
+// Geri Dön Butonu İşlemi
+document.getElementById("back-games").onclick = () => {
+    if(gamesHistory.length > 0) {
+        const lastUrl = gamesHistory.pop();
+        loadGames(lastUrl);
+    }
+};
+
+// Kart Oluşturma Yardımcısı
+function createCard(item, isGame) {
+    const cleanName = item.name.replace(/_/g, " ").replace(/\.[^/.]+$/, "");
+    const card = document.createElement(item.type === "dir" ? "div" : "a");
+    card.className = `project-card ${isGame ? 'game-card' : ''}`;
+    
+    if(item.type === "file") {
+        card.href = item.download_url || item.html_url;
+        card.target = "_blank";
+    }
+
+    card.dataset.name = norm(item.name);
+    
+    const icon = item.type === "dir" ? "📁" : (isGame ? "🎮" : "📄");
+    const badge = item.type === "dir" ? 
+        `<span class="badge badge-folder">AÇ</span>` : 
+        (isGame ? `<span class="badge badge-download">İNDİR</span>` : "");
+
+    card.innerHTML = `
+        <div class="icon">${icon}</div>
+        <div class="name"><b>${cleanName}</b></div>
+        ${badge}
+    `;
+    return card;
+}
+
+// Arama
+search.addEventListener("input", () => {
+    const q = norm(search.value);
+    document.querySelectorAll(".project-card").forEach(card => {
+        card.classList.toggle("hidden", !card.dataset.name.includes(q));
+    });
+});
+
+// Başlat
+loadProjects();
+loadGames();
+</script>
+
+</body>
+</html>
