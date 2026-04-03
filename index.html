@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cemal Evli | My Website</title>
+    <title>Cemal Evli | Portfolio & Games</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
         :root {
@@ -76,18 +76,6 @@
 
         .section-title.games { color: var(--game-accent); }
 
-        .back-btn {
-            background: var(--game-accent);
-            color: white;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: bold;
-            display: none;
-        }
-
         .controls { display: flex; gap: 10px; }
 
         input {
@@ -132,7 +120,6 @@
             gap: 16px;
             box-shadow: var(--shadow);
             backdrop-filter: blur(10px);
-            cursor: pointer;
         }
 
         .project-card:hover {
@@ -158,26 +145,40 @@
 
         .badge {
             margin-left: auto;
-            font-size: 0.6rem;
-            padding: 4px 8px;
+            font-size: 0.65rem;
+            padding: 4px 10px;
             border-radius: 20px;
             font-weight: bold;
-            text-transform: uppercase;
-        }
-        .badge-folder { background: rgba(255,255,255,0.1); color: var(--text); }
-        .badge-download { background: var(--game-accent); color: white; }
-
-        .version-tag {
-            font-size: 0.7rem;
-            opacity: 0.5;
-            display: block;
+            background: var(--game-accent);
+            color: white;
         }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; }
+        .version-info {
+            font-size: 0.75rem;
+            opacity: 0.6;
+            margin-top: 4px;
+        }
+
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); 
+            display: flex; align-items: center; justify-content: center; 
+            z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .newsletter-section { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px; text-align: center; width: 90%; max-width: 500px; position: relative; }
+        
+        .newsletter-section { 
+            background: var(--card); border: 1px solid var(--border); 
+            border-radius: 20px; padding: 30px; text-align: center; 
+            width: 90%; max-width: 500px; position: relative;
+            box-shadow: var(--shadow); border-bottom: 4px solid var(--accent);
+        }
+        
         .close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
         .hidden { display: none; }
+        
+        #status-msg { margin-top: 15px; font-weight: 600; font-size: 0.9rem; min-height: 20px; }
+
         footer { margin-top: auto; padding: 60px 0 20px; width: 100%; text-align: center; font-size: 0.9rem; opacity: 0.7; }
         footer b { color: var(--accent); }
     </style>
@@ -187,7 +188,7 @@
 <header>
     <h1>🚀 Cemal Evli</h1>
     <div class="controls">
-        <input id="search" placeholder="🔍 Ara...">
+        <input id="search" placeholder="🔍 Proje veya Oyun Ara...">
         <button id="openNewsletter" class="tool-btn" title="Abone Ol">📧</button>
         <button id="themeToggle" class="tool-btn">🌙 / ☀️</button>
     </div>
@@ -199,8 +200,7 @@
 <div id="project-container" class="grid"><p>Yükleniyor...</p></div>
 
 <div class="section-header">
-    <h2 class="section-title games">🎮 Oyunlarım</h2>
-    <button id="back-to-releases" class="back-btn">⬅ Geri Dön</button>
+    <h2 class="section-title games">🎮 Oyunlar</h2>
 </div>
 <div id="game-container" class="grid"><p>Yükleniyor...</p></div>
 
@@ -208,10 +208,12 @@
     <div class="newsletter-section">
         <button class="close-modal" id="closeNewsletter">&times;</button>
         <h2>📬 GitHub Bültenine Abone Ol</h2>
-        <form id="newsletter-form" style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+        <p style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 15px;">Yeni projelerden ve günlük GitHub özetlerinden haberdar ol.</p>
+        <form id="newsletter-form" style="display:flex; flex-direction:column; gap:10px;">
             <input type="email" id="email-input" placeholder="E-posta adresini gir..." required style="width:100%;">
-            <button type="submit" class="tool-btn" style="background:var(--accent); color:#0f172a;">Abone Ol</button>
+            <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;">Abone Ol</button>
         </form>
+        <div id="status-msg"></div>
     </div>
 </div>
 
@@ -223,19 +225,63 @@
 const USERNAME = "cemal201138";
 const SITES_API = `https://api.github.com/repos/${USERNAME}/My_Netlify_SitesApps/contents/`;
 const RELEASES_API = `https://api.github.com/repos/${USERNAME}/games/releases`;
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec"; 
 
-let allReleases = [];
-
-// Tema Ayarı
+// --- TEMA VE MODAL İŞLEMLERİ ---
 if(localStorage.getItem("theme") === "light") document.body.classList.add("light");
+
 themeToggle.onclick = () => {
     document.body.classList.toggle("light");
     localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 };
 
-// Modal Kontrolü
-openNewsletter.onclick = () => newsletterModal.classList.add('active');
-closeNewsletter.onclick = () => newsletterModal.classList.remove('active');
+const modal = document.getElementById('newsletterModal');
+const toggleModal = (show) => {
+    if(show) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    } else {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        document.getElementById('status-msg').innerText = "";
+    }
+};
+
+openNewsletter.onclick = () => toggleModal(true);
+closeNewsletter.onclick = () => toggleModal(false);
+window.onclick = (e) => { if(e.target === modal) toggleModal(false); };
+
+// --- ABONELİK SİSTEMİ (GOOGLE SCRIPTS) ---
+document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email-input').value;
+    const btn = document.getElementById('subscribe-btn');
+    const msg = document.getElementById('status-msg');
+
+    btn.disabled = true;
+    btn.innerText = "Kaydediliyor...";
+
+    try {
+        // mode: 'no-cors' Google Scripts yönlendirmeleri için gereklidir
+        await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(email)}`, { mode: 'no-cors' });
+        
+        msg.style.color = "#4ade80";
+        msg.innerText = "✅ Başarıyla abone oldun!";
+        
+        setTimeout(() => {
+            toggleModal(false);
+            document.getElementById('newsletter-form').reset();
+            btn.disabled = false;
+            btn.innerText = "Abone Ol";
+        }, 1500);
+
+    } catch (err) {
+        msg.style.color = "#f87171";
+        msg.innerText = "❌ Hata oluştu, tekrar dene.";
+        btn.disabled = false;
+        btn.innerText = "Abone Ol";
+    }
+});
 
 const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
@@ -252,79 +298,51 @@ async function loadProjects() {
             card.href = p.path;
             card.target = "_blank";
             card.dataset.name = norm(p.name);
-            card.innerHTML = `<div class="icon">📂</div><div><b>${p.name.replace(/_/g, " ")}</b></div>`;
+            card.innerHTML = `
+                <div class="icon">🌐</div>
+                <div class="name"><b>${p.name.replace(/_/g, " ")}</b></div>
+            `;
             container.appendChild(card);
         });
-    } catch (e) { document.getElementById("project-container").innerHTML = "Hata oluştu."; }
+    } catch (e) { document.getElementById("project-container").innerHTML = "Projeler yüklenemedi."; }
 }
 
 // --- OYUN RELEASES YÜKLE ---
-async function loadReleases() {
+async function loadGames() {
     try {
         const res = await fetch(RELEASES_API);
-        allReleases = await res.json();
-        renderReleases();
+        const releases = await res.json();
+        const container = document.getElementById("game-container");
+        container.innerHTML = "";
+
+        if (releases.length === 0) {
+            container.innerHTML = "<p>Henüz yayınlanmış bir sürüm bulunamadı.</p>";
+            return;
+        }
+
+        releases.forEach(rel => {
+            const downloadUrl = rel.assets.length > 0 ? rel.assets[0].browser_download_url : rel.html_url;
+            
+            const card = document.createElement("a");
+            card.className = "project-card game-card";
+            card.href = downloadUrl;
+            card.target = "_blank";
+            card.dataset.name = norm(rel.name || rel.tag_name);
+            
+            card.innerHTML = `
+                <div class="icon">🎮</div>
+                <div class="info-group">
+                    <div class="name"><b>${rel.name || rel.tag_name}</b></div>
+                    <div class="version-info">${rel.tag_name}</div>
+                </div>
+                <span class="badge">İNDİR</span>
+            `;
+            container.appendChild(card);
+        });
     } catch (e) { document.getElementById("game-container").innerHTML = "Sürümler yüklenemedi."; }
 }
 
-function renderReleases() {
-    const container = document.getElementById("game-container");
-    container.innerHTML = "";
-    document.getElementById("back-to-releases").style.display = "none";
-
-    allReleases.forEach(rel => {
-        const card = document.createElement("div");
-        card.className = "project-card game-card";
-        card.dataset.name = norm(rel.name || rel.tag_name);
-        
-        card.innerHTML = `
-            <div class="icon">📁</div>
-            <div>
-                <b>${rel.name || rel.tag_name}</b>
-                <span class="version-tag">${rel.tag_name}</span>
-            </div>
-            <span class="badge badge-folder">AÇ</span>
-        `;
-        
-        card.onclick = () => renderAssets(rel);
-        container.appendChild(card);
-    });
-}
-
-function renderAssets(release) {
-    const container = document.getElementById("game-container");
-    container.innerHTML = "";
-    document.getElementById("back-to-releases").style.display = "block";
-
-    if (release.assets.length === 0) {
-        container.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Bu sürümde indirilebilir dosya bulunamadı.</p>";
-        return;
-    }
-
-    release.assets.forEach(asset => {
-        const card = document.createElement("a");
-        card.className = "project-card game-card";
-        card.href = asset.browser_download_url;
-        card.target = "_blank";
-        card.dataset.name = norm(asset.name);
-
-        // Dosya uzantısına göre ikon seçimi
-        let icon = "📄";
-        if (asset.name.endsWith(".exe")) icon = "🎮";
-        if (asset.name.endsWith(".zip") || asset.name.endsWith(".rar")) icon = "📦";
-
-        card.innerHTML = `
-            <div class="icon">${icon}</div>
-            <div><b>${asset.name}</b><br><small>${(asset.size / 1024 / 1024).toFixed(2)} MB</small></div>
-            <span class="badge badge-download">İNDİR</span>
-        `;
-        container.appendChild(card);
-    });
-}
-
-document.getElementById("back-to-releases").onclick = renderReleases;
-
-// Arama
+// --- ARAMA FONKSİYONU ---
 search.addEventListener("input", () => {
     const q = norm(search.value);
     document.querySelectorAll(".project-card").forEach(card => {
@@ -334,7 +352,7 @@ search.addEventListener("input", () => {
 
 // Başlat
 loadProjects();
-loadReleases();
+loadGames();
 </script>
 
 </body>
