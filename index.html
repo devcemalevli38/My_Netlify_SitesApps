@@ -317,7 +317,7 @@ async function loadProjects() {
         const items = await res.json();
         const container = document.getElementById("project-container");
         container.innerHTML = "";
-        items.filter(i => i.name !== "Cikma_Teklifi" && i.type === "dir").forEach(p => {
+        items.filter(i => i.type === "dir").forEach(p => {
             const card = document.createElement("a");
             card.className = "project-card";
             card.href = p.path; card.target = "_blank";
