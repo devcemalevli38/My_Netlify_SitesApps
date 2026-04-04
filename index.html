@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -108,173 +108,82 @@
             white-space: nowrap;
         }
 
-        /* ===== DİL MENÜSÜ ===== */
-        .lang-wrapper {
+        /* ===== DİL SEÇİCİ ===== */
+        .lang-switcher {
             position: relative;
+            display: inline-block;
         }
 
         .lang-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
             display: flex;
             align-items: center;
-            gap: 5px;
-            background: rgba(30, 41, 59, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: var(--text);
-            padding: 9px 11px;
-            border-radius: 12px;
-            cursor: pointer;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            font-size: 0.9rem;
-            font-weight: 600;
-            white-space: nowrap;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.07);
-            transition: border-color 0.2s, background 0.2s;
-        }
-
-        .light .lang-btn {
-            background: rgba(255, 255, 255, 0.75);
-            border-color: rgba(0,0,0,0.1);
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+            gap: 6px;
+            transition: all 0.2s ease;
         }
 
         .lang-btn:hover {
-            border-color: rgba(255,255,255,0.3);
-            background: rgba(40, 55, 80, 0.85);
-        }
-
-        .light .lang-btn:hover {
-            border-color: rgba(0,0,0,0.2);
-            background: rgba(240,245,255,0.9);
-        }
-
-        .lang-btn .lang-icon {
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.03em;
-            line-height: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 26px;
-            height: 22px;
-            background: rgba(255,255,255,0.12);
-            border-radius: 6px;
-            border: 1px solid rgba(255,255,255,0.12);
-        }
-
-        .light .lang-btn .lang-icon {
-            background: rgba(0,0,0,0.06);
-            border-color: rgba(0,0,0,0.08);
-        }
-
-        .lang-btn .lang-arrow {
-            font-size: 0.6rem;
-            opacity: 0.55;
-            transition: transform 0.2s;
-        }
-
-        .lang-btn.open .lang-arrow {
-            transform: rotate(180deg);
+            border-color: var(--accent);
+            background: var(--hover);
         }
 
         .lang-dropdown {
             position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
-            background: rgba(18, 28, 48, 0.92);
-            border: 1px solid rgba(255, 255, 255, 0.13);
-            border-radius: 14px;
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.07);
-            min-width: 160px;
+            top: calc(100% + 6px);
+            left: 50%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
             overflow: hidden;
-            z-index: 500;
+            min-width: 130px;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(-6px) scale(0.97);
-            transform-origin: top right;
-            transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+            transform: translateX(-50%) translateY(-6px);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+            z-index: 999;
         }
 
-        .light .lang-dropdown {
-            background: rgba(248, 250, 255, 0.96);
-            border-color: rgba(0,0,0,0.1);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.9);
-        }
-
-        .lang-dropdown.open {
+        .lang-switcher.open .lang-dropdown {
             opacity: 1;
             visibility: visible;
-            transform: translateY(0) scale(1);
+            transform: translateX(-50%) translateY(0);
         }
 
         .lang-option {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 11px 16px;
+            gap: 8px;
+            padding: 10px 16px;
             cursor: pointer;
-            font-size: 0.88rem;
-            font-weight: 500;
+            font-size: 0.9rem;
+            font-weight: 600;
             color: var(--text);
-            transition: background 0.15s;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            transition: background 0.15s ease;
         }
 
-        .light .lang-option {
-            border-bottom-color: rgba(0,0,0,0.05);
-        }
+        .lang-option:hover { background: var(--hover); }
 
-        .lang-option:last-child { border-bottom: none; }
+        .lang-option.active { color: var(--accent); }
 
-        .lang-option:hover {
-            background: rgba(56, 189, 248, 0.12);
+        .lang-option:not(:last-child) {
+            border-bottom: 1px solid var(--border);
         }
-
-        .light .lang-option:hover {
-            background: rgba(2, 132, 199, 0.08);
-        }
-
-        .lang-option.active {
-            color: var(--accent);
-            background: rgba(56, 189, 248, 0.08);
-        }
-
-        .lang-option .opt-icon {
-            font-size: 0.68rem;
-            font-weight: 700;
-            letter-spacing: 0.03em;
-            width: 26px;
-            height: 22px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 6px;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .light .lang-option .opt-icon {
-            background: rgba(0,0,0,0.05);
-            border-color: rgba(0,0,0,0.08);
-        }
-
-        .lang-option .opt-label {
-            flex: 1;
-        }
-
-        .lang-option .opt-check {
-            font-size: 0.7rem;
-            opacity: 0;
-            color: var(--accent);
-        }
-
-        .lang-option.active .opt-check {
-            opacity: 1;
-        }
-        /* ===== /DİL MENÜSÜ ===== */
+        /* ====================== */
 
         .grid {
             display: grid;
@@ -332,7 +241,6 @@
             flex-shrink: 0;
         }
 
-        /* --- MODAL --- */
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); 
@@ -411,7 +319,6 @@
         }
         footer b { color: var(--accent); }
 
-        /* ===================== RESPONSIVE ===================== */
         @media (max-width: 600px) {
             body { padding: 24px 14px; }
             header { flex-direction: column; align-items: flex-start; gap: 10px; }
@@ -442,64 +349,56 @@
 <header>
     <h1>🚀 Cemal Evli</h1>
     <div class="controls">
-        <input id="search" placeholder="🔍 Proje veya Oyun Ara...">
-        <button id="openNewsletter" class="tool-btn" title="Abone Ol">📧</button>
-        <button id="themeToggle" class="tool-btn">🌙 / ☀️</button>
+        <input id="search" placeholder="">
+        <button id="openNewsletter" class="tool-btn">📧</button>
 
-        <!-- DİL MENÜSÜ -->
-        <div class="lang-wrapper">
-            <button class="lang-btn" id="langBtn" aria-label="Dil Seç">
-                <span class="lang-icon" id="langIcon">TR</span>
-                <span class="lang-arrow">▼</span>
-            </button>
-            <div class="lang-dropdown" id="langDropdown">
-                <div class="lang-option active" data-lang="tr" data-icon="TR" data-label="Türkçe">
-                    <span class="opt-icon">TR</span>
-                    <span class="opt-label">Türkçe</span>
-                    <span class="opt-check">✓</span>
-                </div>
-                <div class="lang-option" data-lang="en" data-icon="EN" data-label="English">
-                    <span class="opt-icon">EN</span>
-                    <span class="opt-label">English</span>
-                    <span class="opt-check">✓</span>
-                </div>
+        <!-- DİL SEÇİCİ -->
+        <div class="lang-switcher" id="langSwitcher">
+            <button class="lang-btn" id="langBtn">🌐 <span id="langLabel"></span> ▾</button>
+            <div class="lang-dropdown">
+                <button class="lang-option" data-lang="en">🇬🇧 English</button>
+                <button class="lang-option" data-lang="tr">🇹🇷 Türkçe</button>
             </div>
         </div>
+
+        <button id="themeToggle" class="tool-btn">🌙 / ☀️</button>
     </div>
 </header>
 
 <div class="section-header">
-    <h2 class="section-title" id="secProjects">📂 Web Projelerim</h2>
+    <h2 class="section-title" id="projectsTitle"></h2>
 </div>
-<div id="project-container" class="grid"><p>Yükleniyor...</p></div>
+<div id="project-container" class="grid"></div>
 
 <div class="section-header">
-    <h2 class="section-title games" id="secGames">🎮 Oyunlar</h2>
+    <h2 class="section-title games" id="gamesTitle"></h2>
 </div>
-<div id="game-container" class="grid"><p>Yükleniyor...</p></div>
+<div id="game-container" class="grid"></div>
 
+<!-- Newsletter Modal -->
 <div id="newsletterModal" class="modal-overlay">
     <div class="modal-content">
         <button class="close-modal" onclick="toggleModal('newsletterModal', false)">&times;</button>
-        <h2 id="modalNewsletterTitle">📬 GitHub Bültenine Abone Ol</h2>
+        <h2 id="newsletterTitle"></h2>
         <form id="newsletter-form" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-            <input type="email" id="email-input" placeholder="E-posta adresini gir..." required style="width:100%;">
-            <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;">Abone Ol</button>
+            <input type="email" id="email-input" required style="width:100%;">
+            <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;"></button>
         </form>
         <div id="status-msg"></div>
     </div>
 </div>
 
+<!-- Game Files Modal -->
 <div id="gameFilesModal" class="modal-overlay">
     <div class="modal-content">
         <button class="close-modal" onclick="toggleModal('gameFilesModal', false)">&times;</button>
-        <h2 id="modalGameName" style="margin:0; font-size:1.4rem;">🎮 Oyun Dosyaları</h2>
+        <h2 id="modalGameName" style="margin:0; font-size:1.4rem;"></h2>
         <div id="fileContainer" class="file-list"></div>
     </div>
 </div>
 
 <footer>
-    <p>Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank" style="text-decoration:none; color:inherit;"><b>Cemal Evli</b></a></p>
+    <p id="footerText"></p>
 </footer>
 
 <script>
@@ -508,129 +407,114 @@ const SITES_API = `https://api.github.com/repos/${USERNAME}/My_Netlify_SitesApps
 const RELEASES_API = `https://api.github.com/repos/${USERNAME}/games/releases`;
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec";
 
-/* ============ DİL SİSTEMİ ============ */
-const translations = {
-    tr: {
-        searchPlaceholder: "🔍 Proje veya Oyun Ara...",
-        secProjects: "📂 Web Projelerim",
-        secGames: "🎮 Oyunlar",
-        loading: "Yükleniyor...",
-        error: "Hata oluştu.",
-        noFiles: "Dosya bulunamadı.",
-        gameFiles: "🎮 Oyun Dosyaları",
-        newsletterTitle: "📬 GitHub Bültenine Abone Ol",
-        emailPlaceholder: "E-posta adresini gir...",
-        subscribing: "Kaydediliyor...",
-        subscribeBtn: "Abone Ol",
-        subscribeOk: "✅ Başarıyla abone oldun!",
-        subscribeErr: "❌ Hata oluştu.",
-        openBadge: "AÇ",
-        download: "İNDİR",
-    },
+// ===================== DİL SİSTEMİ =====================
+const TRANSLATIONS = {
     en: {
-        searchPlaceholder: "🔍 Search Project or Game...",
-        secProjects: "📂 My Web Projects",
-        secGames: "🎮 Games",
+        searchPlaceholder: "🔍 Search projects or games...",
+        newsletterBtnTitle: "Subscribe",
+        projectsTitle: "📂 My Web Projects",
+        gamesTitle: "🎮 Games",
         loading: "Loading...",
         error: "An error occurred.",
-        noFiles: "No files found.",
-        gameFiles: "🎮 Game Files",
         newsletterTitle: "📬 Subscribe to GitHub Newsletter",
         emailPlaceholder: "Enter your e-mail...",
-        subscribing: "Saving...",
         subscribeBtn: "Subscribe",
-        subscribeOk: "✅ Successfully subscribed!",
-        subscribeErr: "❌ An error occurred.",
+        subscribing: "Subscribing...",
+        subscribeSuccess: "✅ Successfully subscribed!",
+        subscribeError: "❌ An error occurred.",
+        noFiles: "No files found.",
         openBadge: "OPEN",
-        download: "DOWNLOAD",
+        downloadBtn: "DOWNLOAD",
+        footerText: 'All rights reserved. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank" style="text-decoration:none; color:inherit;"><b>Cemal Evli</b></a>',
+        langLabel: "English"
     },
-
+    tr: {
+        searchPlaceholder: "🔍 Proje veya Oyun Ara...",
+        newsletterBtnTitle: "Abone Ol",
+        projectsTitle: "📂 Web Projelerim",
+        gamesTitle: "🎮 Oyunlar",
+        loading: "Yükleniyor...",
+        error: "Hata oluştu.",
+        newsletterTitle: "📬 GitHub Bültenine Abone Ol",
+        emailPlaceholder: "E-posta adresini gir...",
+        subscribeBtn: "Abone Ol",
+        subscribing: "Kaydediliyor...",
+        subscribeSuccess: "✅ Başarıyla abone oldun!",
+        subscribeError: "❌ Hata oluştu.",
+        noFiles: "Dosya bulunamadı.",
+        openBadge: "AÇ",
+        downloadBtn: "İNDİR",
+        footerText: 'Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank" style="text-decoration:none; color:inherit;"><b>Cemal Evli</b></a>',
+        langLabel: "Türkçe"
+    }
 };
 
-let currentLang = localStorage.getItem("lang") || "tr";
+let currentLang = localStorage.getItem("lang") || "en";
 
-function applyLang(lang) {
-    const t = translations[lang];
-    document.getElementById("search").placeholder = t.searchPlaceholder;
-    document.getElementById("secProjects").textContent = t.secProjects;
-    document.getElementById("secGames").textContent = t.secGames;
-    document.getElementById("subscribe-btn").textContent = t.subscribeBtn;
-    document.getElementById("email-input").placeholder = t.emailPlaceholder;
-    document.getElementById("modalNewsletterTitle").textContent = t.newsletterTitle;
-    document.querySelectorAll(".badge").forEach(b => b.textContent = t.openBadge);
-    document.querySelectorAll(".download-link").forEach(a => a.textContent = t.download);
-    document.documentElement.lang = lang;
+function tr(key) {
+    return TRANSLATIONS[currentLang][key] || TRANSLATIONS["en"][key];
 }
 
-// Dil buton toggle
-const langBtn = document.getElementById("langBtn");
-const langDropdown = document.getElementById("langDropdown");
+function applyLanguage() {
+    document.documentElement.lang = currentLang;
+    document.getElementById("search").placeholder = tr("searchPlaceholder");
+    document.getElementById("openNewsletter").title = tr("newsletterBtnTitle");
+    document.getElementById("projectsTitle").textContent = tr("projectsTitle");
+    document.getElementById("gamesTitle").textContent = tr("gamesTitle");
+    document.getElementById("newsletterTitle").textContent = tr("newsletterTitle");
+    document.getElementById("email-input").placeholder = tr("emailPlaceholder");
+    document.getElementById("subscribe-btn").textContent = tr("subscribeBtn");
+    document.getElementById("footerText").innerHTML = tr("footerText");
+    document.getElementById("langLabel").textContent = tr("langLabel");
 
-langBtn.addEventListener("click", (e) => {
+    // Aktif seçenek işareti
+    document.querySelectorAll(".lang-option").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === currentLang);
+    });
+
+    // Dinamik kartlardaki badge ve download butonları
+    document.querySelectorAll(".badge").forEach(b => b.textContent = tr("openBadge"));
+    document.querySelectorAll(".download-link").forEach(a => a.textContent = tr("downloadBtn"));
+
+    // Yükleniyor yazısı (henüz içerik yoksa)
+    const pc = document.getElementById("project-container");
+    const gc = document.getElementById("game-container");
+    if (pc.querySelector("p")) pc.querySelector("p").textContent = tr("loading");
+    if (gc.querySelector("p")) gc.querySelector("p").textContent = tr("loading");
+}
+
+// Dil dropdown
+const langSwitcher = document.getElementById("langSwitcher");
+document.getElementById("langBtn").addEventListener("click", (e) => {
     e.stopPropagation();
-    const open = langDropdown.classList.toggle("open");
-    langBtn.classList.toggle("open", open);
+    langSwitcher.classList.toggle("open");
 });
-
-document.addEventListener("click", () => {
-    langDropdown.classList.remove("open");
-    langBtn.classList.remove("open");
-});
-
-langDropdown.addEventListener("click", (e) => e.stopPropagation());
-
-document.querySelectorAll(".lang-option").forEach(opt => {
-    opt.addEventListener("click", () => {
-        const lang = opt.dataset.lang;
-        currentLang = lang;
-        localStorage.setItem("lang", lang);
-        // buton güncelle
-        document.getElementById("langIcon").textContent = opt.dataset.icon;
-        // aktif işareti
-        document.querySelectorAll(".lang-option").forEach(o => o.classList.remove("active"));
-        opt.classList.add("active");
-        // dropdown kapat
-        langDropdown.classList.remove("open");
-        langBtn.classList.remove("open");
-        applyLang(lang);
+document.addEventListener("click", () => langSwitcher.classList.remove("open"));
+document.querySelectorAll(".lang-option").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        currentLang = btn.dataset.lang;
+        localStorage.setItem("lang", currentLang);
+        langSwitcher.classList.remove("open");
+        applyLanguage();
     });
 });
-
-// Başlangıçta kayıtlı dili uygula
-(function initLang() {
-    const saved = localStorage.getItem("lang") || "tr";
-    const opt = document.querySelector(`.lang-option[data-lang="${saved}"]`);
-    if (opt) {
-        document.getElementById("langIcon").textContent = opt.dataset.icon;
-        document.querySelectorAll(".lang-option").forEach(o => o.classList.remove("active"));
-        opt.classList.add("active");
-    }
-    applyLang(saved);
-})();
-/* ============ /DİL SİSTEMİ ============ */
+// ======================================================
 
 function getFileIcon(filename) {
     const ext = filename.split('.').pop().toLowerCase();
-    const icons = {
-        'zip': '📦', 'rar': '📦', '7z': '📦',
-        'exe': '⚙️', 'msi': '⚙️',
-        'apk': '🤖',
-        'pdf': '📕',
-        'jpg': '🖼️', 'png': '🖼️', 'gif': '🖼️',
-        'txt': '📄', 'md': '📝',
-        'mp4': '🎬', 'mp3': '🎵'
-    };
+    const icons = { 'zip':'📦','rar':'📦','7z':'📦','exe':'⚙️','msi':'⚙️','apk':'🤖','pdf':'📕','jpg':'🖼️','png':'🖼️','gif':'🖼️','txt':'📄','md':'📝','mp4':'🎬','mp3':'🎵' };
     return icons[ext] || '📄';
 }
 
 function toggleModal(id, show) {
     const m = document.getElementById(id);
-    if(show) { m.classList.add('active'); document.body.style.overflow = 'hidden'; }
+    if (show) { m.classList.add('active'); document.body.style.overflow = 'hidden'; }
     else { m.classList.remove('active'); document.body.style.overflow = 'auto'; }
 }
 
 // Tema
-if(localStorage.getItem("theme") === "light") document.body.classList.add("light");
+if (localStorage.getItem("theme") === "light") document.body.classList.add("light");
 document.getElementById('themeToggle').onclick = () => {
     document.body.classList.toggle("light");
     localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
@@ -642,23 +526,27 @@ document.getElementById('newsletter-form').addEventListener('submit', async (e) 
     e.preventDefault();
     const btn = document.getElementById('subscribe-btn');
     const msg = document.getElementById('status-msg');
-    const t = translations[currentLang];
-    btn.disabled = true; btn.innerText = t.subscribing;
+    btn.disabled = true;
+    btn.textContent = tr("subscribing");
     try {
         await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(document.getElementById('email-input').value)}`, { mode: 'no-cors' });
-        msg.innerHTML = `<span style='color:#4ade80'>${t.subscribeOk}</span>`;
-        setTimeout(() => { toggleModal('newsletterModal', false); btn.disabled = false; btn.innerText = t.subscribeBtn; }, 1500);
+        msg.innerHTML = `<span style='color:#4ade80'>${tr("subscribeSuccess")}</span>`;
+        setTimeout(() => {
+            toggleModal('newsletterModal', false);
+            btn.disabled = false;
+            btn.textContent = tr("subscribeBtn");
+        }, 1500);
     } catch (err) {
-        msg.innerHTML = `<span style='color:#f87171'>${t.subscribeErr}</span>`;
+        msg.innerHTML = `<span style='color:#f87171'>${tr("subscribeError")}</span>`;
         btn.disabled = false;
     }
 });
 
-const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 async function loadProjects() {
     const container = document.getElementById("project-container");
-    const t = translations[currentLang];
+    container.innerHTML = `<p>${tr("loading")}</p>`;
     try {
         const res = await fetch(SITES_API);
         const items = await res.json();
@@ -666,22 +554,24 @@ async function loadProjects() {
         items.filter(i => i.type === "dir").forEach(p => {
             const card = document.createElement("a");
             card.className = "project-card";
-            card.href = p.path; card.target = "_blank";
+            card.href = p.path;
+            card.target = "_blank";
             card.dataset.name = norm(p.name);
             card.innerHTML = `<div class="icon">🌐</div><div class="name"><b>${p.name.replace(/_/g, " ")}</b></div>`;
             container.appendChild(card);
         });
-    } catch (e) { container.innerHTML = `<p>${t.error}</p>`; }
+    } catch (e) {
+        container.innerHTML = `<p>${tr("error")}</p>`;
+    }
 }
 
 async function loadGames() {
     const container = document.getElementById("game-container");
-    const t = translations[currentLang];
+    container.innerHTML = `<p>${tr("loading")}</p>`;
     try {
         const res = await fetch(RELEASES_API);
         const releases = await res.json();
         container.innerHTML = "";
-
         releases.forEach(rel => {
             const card = document.createElement("div");
             card.className = "project-card game-card";
@@ -692,31 +582,28 @@ async function loadGames() {
                     <div class="name"><b>${rel.name || rel.tag_name}</b></div>
                     <div style="font-size:0.75rem; opacity:0.6;">${rel.tag_name}</div>
                 </div>
-                <span class="badge">${t.openBadge}</span>
+                <span class="badge">${tr("openBadge")}</span>
             `;
-            
             card.onclick = () => {
                 const fileContainer = document.getElementById("fileContainer");
-                document.getElementById("modalGameName").innerText = rel.name || rel.tag_name;
+                document.getElementById("modalGameName").textContent = rel.name || rel.tag_name;
                 fileContainer.innerHTML = "";
-
-                if(rel.assets.length === 0) {
-                    fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6;'>${t.noFiles}</p>`;
+                if (rel.assets.length === 0) {
+                    fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6;'>${tr("noFiles")}</p>`;
                 } else {
                     rel.assets.forEach(asset => {
                         const div = document.createElement("div");
                         div.className = "file-item";
                         const size = (asset.size / (1024 * 1024)).toFixed(2);
-                        const icon = getFileIcon(asset.name);
                         div.innerHTML = `
                             <div class="file-info">
-                                <div class="file-icon">${icon}</div>
+                                <div class="file-icon">${getFileIcon(asset.name)}</div>
                                 <div style="min-width:0;">
                                     <div style="font-weight:bold; font-size:0.85rem; word-break:break-all;">${asset.name}</div>
                                     <div style="font-size:0.7rem; opacity:0.6;">${size} MB</div>
                                 </div>
                             </div>
-                            <a href="${asset.browser_download_url}" class="download-link">${t.download}</a>
+                            <a href="${asset.browser_download_url}" class="download-link">${tr("downloadBtn")}</a>
                         `;
                         fileContainer.appendChild(div);
                     });
@@ -725,14 +612,20 @@ async function loadGames() {
             };
             container.appendChild(card);
         });
-    } catch (e) { container.innerHTML = `<p>${t.error}</p>`; }
+    } catch (e) {
+        container.innerHTML = `<p>${tr("error")}</p>`;
+    }
 }
 
-document.getElementById('search').addEventListener("input", function() {
+document.getElementById('search').addEventListener("input", function () {
     const q = norm(this.value);
-    document.querySelectorAll(".project-card").forEach(card => card.classList.toggle("hidden", !card.dataset.name.includes(q)));
+    document.querySelectorAll(".project-card").forEach(card => {
+        card.classList.toggle("hidden", !card.dataset.name.includes(q));
+    });
 });
 
+// Başlat
+applyLanguage();
 loadProjects();
 loadGames();
 </script>
