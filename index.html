@@ -43,7 +43,6 @@
             min-height: 100vh;
         }
 
-        /* Bilgilendirme Banner Stili */
         .info-banner {
             position: fixed;
             top: 0;
@@ -163,7 +162,6 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.2s ease;
         }
 
         .lang-btn:hover {
@@ -208,7 +206,6 @@
             background: none;
             width: 100%;
             text-align: left;
-            transition: background 0.15s ease;
         }
 
         .lang-option:hover { background: var(--hover); }
@@ -424,7 +421,7 @@
 </footer>
 
 <script>
-// ===== GITHUB ACTIONS ENTEGRASYONU (Statik Dosyalar) =====
+// ===== KONFİGÜRASYON =====
 const PROJECTS_DATA_URL = "projects.json"; 
 const GAMES_DATA_URL = "games.json";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec";
@@ -580,7 +577,7 @@ document.getElementById('newsletter-form').addEventListener('submit', async (e) 
     }
 });
 
-// ===== VERİ YÜKLEME (Yerel JSON Dosyalarından) =====
+// ===== VERİ YÜKLEME =====
 async function loadProjects() {
     const container = document.getElementById("project-container");
     container.innerHTML = `<p>${tr("loading")}</p>`;
@@ -588,7 +585,9 @@ async function loadProjects() {
         const res = await fetch(PROJECTS_DATA_URL);
         const items = await res.json();
         container.innerHTML = "";
-        items.filter(i => i.type === "dir").forEach(p => {
+        
+        // .github klasörünü gizlemek için filtre eklendi
+        items.filter(i => i.type === "dir" && i.name !== ".github").forEach(p => {
             const card = document.createElement("a");
             card.className = "project-card";
             card.href = p.path;
