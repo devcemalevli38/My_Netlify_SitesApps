@@ -3,336 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cemal Evli | My Website</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <title>Cemal Evli's Portfolio</title>
+    
+    <link rel="icon" type="image/png" href="https://wsrv.nl/?url=github.com/cemal201138.png&w=64&h=64&mask=circle&output=png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg: #0f172a;
-            --card: rgba(30, 41, 59, 0.7);
-            --border: rgba(255, 255, 255, 0.1);
-            --text: #f1f5f9;
+            --bg-color: #020617;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-dim: #94a3b8;
             --accent: #38bdf8;
-            --game-accent: #f472b6;
-            --hover: #1e293b;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-            --dropdown-bg: #1e293b;
-            --dropdown-hover: #38bdf8;
+            --neon-shadow: 0 0 10px rgba(56, 189, 248, 0.5), 0 0 20px rgba(56, 189, 248, 0.3);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-
-        .light {
-            --bg: #f8fafc;
-            --card: rgba(255, 255, 255, 0.8);
-            --border: rgba(0, 0, 0, 0.05);
-            --text: #0f172a;
-            --accent: #0284c7;
-            --game-accent: #db2777;
-            --hover: #e2e8f0;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            --dropdown-bg: #ffffff;
-            --dropdown-hover: #0284c7;
-        }
-
-        * { box-sizing: border-box; transition: all 0.2s ease; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            background-image: radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 50%);
-            color: var(--text);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1.6;
             margin: 0;
-            padding: 40px 20px;
+            padding: 0;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
-            align-items: center;
             min-height: 100vh;
         }
 
-        header {
-            width: 100%;
-            max-width: 900px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 12px;
+        /* Dil Menüsü Stilleri */
+        .lang-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
         }
 
-        h1 { margin: 0; font-size: 1.8rem; letter-spacing: -1px; }
-
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
-        }
-
-        /* --- YENİ DİL MENÜSÜ TASARIMI (Custom Dropdown) --- */
-        .custom-dropdown {
-            position: relative;
-            display: inline-block;
-            user-select: none;
-        }
-
-        .dropdown-trigger {
-            background: var(--card);
-            border: 1px solid var(--accent); /* Görseldeki mavi kenarlık */
-            color: var(--text);
-            padding: 8px 16px;
-            border-radius: 12px;
+        .lang-btn {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--accent);
+            padding: 8px 15px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: 600;
             font-size: 0.9rem;
             display: flex;
             align-items: center;
             gap: 8px;
-            backdrop-filter: blur(5px);
+            transition: var(--transition);
         }
 
-        .dropdown-menu {
+        .lang-btn:hover { box-shadow: var(--neon-shadow); }
+
+        .lang-dropdown {
             position: absolute;
-            top: calc(100% + 8px);
+            top: 45px;
             right: 0;
-            background: var(--dropdown-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            min-width: 140px;
+            background: var(--card-bg);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 8px;
+            display: none;
+            flex-direction: column;
+            min-width: 120px;
             overflow: hidden;
-            box-shadow: var(--shadow);
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
         }
 
-        .dropdown-menu.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
+        .lang-dropdown.active { display: flex; }
 
-        .dropdown-item {
-            padding: 12px 16px;
+        .lang-option {
+            padding: 10px;
             cursor: pointer;
-            font-size: 0.9rem;
-            color: var(--text);
-            transition: background 0.2s;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: 0.3s;
         }
 
-        .dropdown-item:hover {
-            background: var(--dropdown-hover); /* Görseldeki mavi hover efekti */
-            color: #fff;
+        .lang-option:hover { background: var(--accent); color: var(--bg-color); }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            flex: 1;
         }
 
-        /* Diğer Butonlar */
-        input {
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 10px 14px;
-            border-radius: 10px;
-            outline: none;
-            backdrop-filter: blur(5px);
-            width: 220px;
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .profile-img {
+            width: 150px !important;
+            height: 150px !important;
+            border-radius: 50% !important;
+            object-fit: cover !important;
+            aspect-ratio: 1 / 1 !important;
+            margin-bottom: 25px;
+            border: 3px solid var(--accent);
+            padding: 5px;
+            box-shadow: var(--neon-shadow);
+            transition: var(--transition);
+            background-color: var(--card-bg);
+            display: inline-block;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.05) rotate(5deg);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.8);
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            margin: 0 0 10px 0;
+            background: linear-gradient(90deg, #fff, var(--accent), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .subtitle {
+            color: var(--accent);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0;
+        }
+
+        .social-links {
+            margin-top: 35px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            color: var(--text-main);
+            font-size: 1.8rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover { transform: scale(1.2) translateY(-5px); }
+        .fa-github:hover { color: #fff; }
+        .fa-instagram:hover { color: #E1306C; }
+        .fa-facebook:hover { color: #1877F2; }
+        .fa-globe:hover { color: var(--accent); }
+        .fa-envelope:hover { color: var(--accent); }
+
+        .section-title {
+            border-left: 4px solid var(--accent);
+            padding-left: 15px;
+            margin: 60px 0 30px;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        .about-text {
+            color: var(--text-dim);
+            background: rgba(30, 41, 59, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+        }
+
+        .about-text a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .project-card {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--transition);
+        }
+
+        .project-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            background: rgba(30, 41, 59, 0.6);
+        }
+
+        .tag {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            margin-right: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 0 30px;
+            color: var(--text-dim);
+            border-top: 1px solid rgba(56, 189, 248, 0.1);
             font-size: 0.95rem;
+            opacity: 0.8;
+            width: 100%;
         }
 
-        .tool-btn {
-            background: var(--card);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 10px 16px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
+        footer b {
+            color: var(--accent);
+            font-weight: 700;
         }
 
-        .section-header { width: 100%; max-width: 900px; display: flex; justify-content: space-between; align-items: center; margin: 30px 0 15px; }
-        .section-title { font-size: 1.2rem; display: flex; align-items: center; gap: 10px; color: var(--accent); margin: 0; }
-        .section-title.games { color: var(--game-accent); }
+        footer a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; width: 100%; max-width: 900px; }
-        .project-card { background: var(--card); border: 1px solid var(--border); padding: 18px; border-radius: 16px; text-decoration: none; color: var(--text); display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow); backdrop-filter: blur(10px); cursor: pointer; }
-        .project-card:hover { transform: translateY(-4px); border-color: var(--accent); background: var(--hover); }
-        .icon { font-size: 22px; background: rgba(56, 189, 248, 0.1); width: 44px; height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
-        .badge { margin-left: auto; font-size: 0.65rem; padding: 4px 10px; border-radius: 20px; font-weight: bold; background: var(--game-accent); color: white; }
+        footer a:hover {
+            color: var(--accent);
+        }
 
-        /* --- MODAL VE FOOTER (Aynı) --- */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; width: 100%; max-width: 600px; position: relative; }
-        .file-list { max-height: 55vh; overflow-y: auto; margin-top: 20px; border-radius: 12px; background: rgba(0,0,0,0.2); }
-        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 14px; border-bottom: 1px solid var(--border); }
-        .download-link { background: var(--game-accent); color: white; padding: 6px 14px; border-radius: 8px; text-decoration: none; font-size: 0.75rem; font-weight: bold; }
-        .close-modal { position: absolute; top: 14px; right: 14px; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
-        .hidden { display: none; }
-        footer { margin-top: auto; padding: 60px 0 20px; text-align: center; font-size: 0.9rem; opacity: 0.7; }
-        footer b { color: var(--accent); }
-
-        @media (max-width: 600px) {
-            header { flex-direction: column; align-items: flex-start; }
-            .controls { width: 100%; }
-            input { flex: 1; }
+        footer p {
+            margin: 0;
         }
     </style>
 </head>
 <body>
 
-<header>
-    <h1 id="site-title">🚀 Cemal Evli</h1>
-    <div class="controls">
-        <input id="search" placeholder="🔍 Search Project or Game...">
-        <button id="openNewsletter" class="tool-btn" title="Subscribe">📧</button>
-        
-        <div class="custom-dropdown" id="langDropdown">
-            <div class="dropdown-trigger" id="currentLang">
-                <span>🔠</span> <span id="langText">English</span>
-            </div>
-            <div class="dropdown-menu" id="langMenu">
-                <div class="dropdown-item" data-value="tr">Türkçe</div>
-                <div class="dropdown-item" data-value="en">English</div>
-            </div>
+    <div class="lang-container">
+        <button class="lang-btn" onclick="toggleDropdown()">
+            <i class="fas fa-language"></i> <span id="btn-text">Language</span>
+        </button>
+        <div class="lang-dropdown" id="lang-dropdown">
+            <div class="lang-option" onclick="changeLanguage('tr')">Türkçe</div>
+            <div class="lang-option" onclick="changeLanguage('en')">English</div>
         </div>
-
-        <button id="themeToggle" class="tool-btn">🌙 / ☀️</button>
     </div>
-</header>
 
-<div class="section-header">
-    <h2 class="section-title" id="title-web">📂 My Web Projects</h2>
-</div>
-<div id="project-container" class="grid"></div>
+    <div class="container">
+        <header>
+            <img src="https://github.com/cemal201138.png" alt="Cemal Evli" class="profile-img">
+            <h1>Cemal Evli</h1>
+            <p class="subtitle" id="ui-subtitle">Student and Future Developer</p>
+            
+            <div class="social-links">
+                <a href="https://github.com/cemal201138" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=100076601840154" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/cemalevli38/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="mailto:mylab@cemalevli.qzz.io"><i class="fas fa-envelope"></i></a>
+                <a href="https://cemalevli.qzz.io" target="_blank" title="Web Sitem"><i class="fas fa-globe"></i></a>
+            </div>
+        </header>
 
-<div class="section-header">
-    <h2 class="section-title games" id="title-games">🎮 Games</h2>
-</div>
-<div id="game-container" class="grid"></div>
+        <section id="about">
+            <h2 class="section-title" id="ui-about-title">About Me</h2>
+            <p class="about-text" id="ui-about-text">
+                I am a student working with the goal of turning my curiosity for technology into tangible projects. 
+                I am developing myself in web technologies and Python. You can follow my projects and more at 
+                <a href="https://cemalevli.qzz.io" target="_blank">cemalevli.qzz.io</a>.
+            </p>
+        </section>
 
-<div id="newsletterModal" class="modal-overlay">
-    <div class="modal-content">
-        <button class="close-modal" onclick="toggleModal('newsletterModal', false)">&times;</button>
-        <h2 id="modal-news-title">📬 Subscribe</h2>
-        <form id="newsletter-form" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-            <input type="email" id="email-input" placeholder="Email..." required style="width:100%;">
-            <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;">Subscribe</button>
-        </form>
-        <div id="status-msg"></div>
+        <section id="projects">
+            <h2 class="section-title" id="ui-projects-title">My Projects</h2>
+            
+            <a href="https://github.com/cemal201138/Python-Hand-Mouse" class="project-card">
+                <h3>Python Hand Mouse</h3>
+                <p id="ui-p1-desc">Mouse control with hand gestures.</p>
+                <div>
+                    <span class="tag">Python</span>
+                    <span class="tag">OpenCV</span>
+                </div>
+            </a>
+
+            <a href="https://github.com/cemal201138/Python_Muzik_Calar" class="project-card">
+                <h3>Python Müzik Çalar</h3>
+                <p id="ui-p2-desc">Music player with advanced interface.</p>
+                <div>
+                    <span class="tag">Tkinter</span>
+                    <span class="tag">Pygame</span>
+                </div>
+            </a>
+        </section>
     </div>
-</div>
 
-<div id="gameFilesModal" class="modal-overlay">
-    <div class="modal-content">
-        <button class="close-modal" onclick="toggleModal('gameFilesModal', false)">&times;</button>
-        <h2 id="modalGameName">🎮 Game Files</h2>
-        <div id="fileContainer" class="file-list"></div>
-    </div>
-</div>
+    <footer>
+        <p><span id="ui-footer-text">All rights reserved.</span> &copy; 2026 <a href="https://github.com/cemal201138" target="_blank"><b>Cemal Evli</b></a></p>
+    </footer>
 
-<footer>
-    <p id="footer-text">All rights reserved. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank" style="text-decoration:none; color:inherit;"><b>Cemal Evli</b></a></p>
-</footer>
+    <script>
+        const translations = {
+            en: {
+                btnText: "English",
+                subtitle: "Student and Future Developer",
+                aboutTitle: "About Me",
+                aboutText: 'I am a student working with the goal of turning my curiosity for technology into tangible projects. I am developing myself in web technologies and Python. You can follow my projects and more at <a href="https://cemalevli.qzz.io" target="_blank">cemalevli.qzz.io</a>.',
+                projectsTitle: "My Projects",
+                p1Desc: "Mouse control with hand gestures.",
+                p2Desc: "Music player with advanced interface.",
+                footer: "All rights reserved."
+            },
+            tr: {
+                btnText: "Türkçe",
+                subtitle: "Öğrenci ve Geleceğin Yazılımcısı",
+                aboutTitle: "Hakkımda",
+                aboutText: 'Teknolojiye duyduğum merakı, somut projelere dönüştürme hedefiyle çalışan bir öğrenciyim. Web teknolojileri ve Python üzerine kendimi geliştiriyorum. Projelerimi ve daha fazlasını <a href="https://cemalevli.qzz.io" target="_blank">cemalevli.qzz.io</a> adresinden takip edebilirsiniz.',
+                projectsTitle: "Projelerim",
+                p1Desc: "El hareketleriyle fare kontrolü.",
+                p2Desc: "Gelişmiş arayüzlü müzik oynatıcı.",
+                footer: "Tüm hakları saklıdır."
+            }
+        };
 
-<script>
-const USERNAME = "cemal201138";
-const SITES_API = `https://api.github.com/repos/${USERNAME}/My_Netlify_SitesApps/contents/`;
-const RELEASES_API = `https://api.github.com/repos/${USERNAME}/games/releases`;
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec"; 
+        function toggleDropdown() {
+            document.getElementById('lang-dropdown').classList.toggle('active');
+        }
 
-const translations = {
-    en: { lang: "English", search: "🔍 Search Project or Game...", web: "📂 My Web Projects", games: "🎮 Games", badge: "OPEN", download: "DOWNLOAD", newsTitle: "📬 Newsletter", success: "✅ Subscribed!", footer: "All rights reserved." },
-    tr: { lang: "Türkçe", search: "🔍 Proje veya Oyun Ara...", web: "📂 Web Projelerim", games: "🎮 Oyunlar", badge: "AÇ", download: "İNDİR", newsTitle: "📬 Bülten", success: "✅ Abone Olundu!", footer: "Tüm hakları saklıdır." }
-};
+        function changeLanguage(lang) {
+            localStorage.setItem('preferredLang', lang);
+            updateUI(lang);
+            document.getElementById('lang-dropdown').classList.remove('active');
+        }
 
-// Dil Menüsü Mantığı
-const langDropdown = document.getElementById('langDropdown');
-const langMenu = document.getElementById('langMenu');
-const langText = document.getElementById('langText');
+        function updateUI(lang) {
+            const data = translations[lang];
+            document.getElementById('btn-text').innerText = data.btnText;
+            document.getElementById('ui-subtitle').innerText = data.subtitle;
+            document.getElementById('ui-about-title').innerText = data.aboutTitle;
+            document.getElementById('ui-about-text').innerHTML = data.aboutText;
+            document.getElementById('ui-projects-title').innerText = data.projectsTitle;
+            document.getElementById('ui-p1-desc').innerText = data.p1Desc;
+            document.getElementById('ui-p2-desc').innerText = data.p2Desc;
+            document.getElementById('ui-footer-text').innerText = data.footer;
+            document.documentElement.lang = lang;
+        }
 
-langDropdown.addEventListener('click', () => langMenu.classList.toggle('active'));
+        // Başlangıç Ayarı
+        window.onload = () => {
+            const savedLang = localStorage.getItem('preferredLang') || 'en';
+            updateUI(savedLang);
+        };
 
-document.querySelectorAll('.dropdown-item').forEach(item => {
-    item.addEventListener('click', (e) => {
-        const lang = e.target.dataset.value;
-        setLanguage(lang);
-    });
-});
+        // Dışarı tıklandığında menüyü kapat
+        window.onclick = function(event) {
+            if (!event.target.closest('.lang-container')) {
+                document.getElementById('lang-dropdown').classList.remove('active');
+            }
+        }
+    </script>
 
-// Dışarı tıklayınca menüyü kapat
-window.addEventListener('click', (e) => {
-    if (!langDropdown.contains(e.target)) langMenu.classList.remove('active');
-});
-
-function setLanguage(lang) {
-    localStorage.setItem("preferredLang", lang);
-    updateUI(lang);
-    loadProjects();
-    loadGames();
-}
-
-function updateUI(lang) {
-    const t = translations[lang];
-    langText.innerText = t.lang;
-    document.getElementById('search').placeholder = t.search;
-    document.getElementById('title-web').innerText = t.web;
-    document.getElementById('title-games').innerText = t.games;
-    document.getElementById('footer-text').childNodes[0].textContent = t.footer + " \u00A9 2026 ";
-}
-
-// Başlangıç
-const savedLang = localStorage.getItem("preferredLang") || "en";
-updateUI(savedLang);
-
-// Diğer Fonksiyonlar (Tema, Arama, Projeler)
-if(localStorage.getItem("theme") === "light") document.body.classList.add("light");
-document.getElementById('themeToggle').onclick = () => {
-    document.body.classList.toggle("light");
-    localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
-};
-
-function toggleModal(id, show) {
-    const m = document.getElementById(id);
-    m.classList.toggle('active', show);
-    document.body.style.overflow = show ? 'hidden' : 'auto';
-}
-
-document.getElementById('openNewsletter').onclick = () => toggleModal('newsletterModal', true);
-
-async function loadProjects() {
-    const container = document.getElementById("project-container");
-    try {
-        const res = await fetch(SITES_API);
-        const items = await res.json();
-        container.innerHTML = "";
-        items.filter(i => i.type === "dir").forEach(p => {
-            const card = document.createElement("a");
-            card.className = "project-card";
-            card.href = p.path; card.target = "_blank";
-            card.innerHTML = `<div class="icon">🌐</div><div class="name"><b>${p.name.replace(/_/g, " ")}</b></div>`;
-            container.appendChild(card);
-        });
-    } catch (e) { container.innerHTML = "Error loading projects."; }
-}
-
-async function loadGames() {
-    const lang = localStorage.getItem("preferredLang") || "en";
-    const container = document.getElementById("game-container");
-    try {
-        const res = await fetch(RELEASES_API);
-        const releases = await res.json();
-        container.innerHTML = "";
-        releases.forEach(rel => {
-            const card = document.createElement("div");
-            card.className = "project-card game-card";
-            card.innerHTML = `<div class="icon">🎮</div><div class="name"><b>${rel.name || rel.tag_name}</b></div><span class="badge">${translations[lang].badge}</span>`;
-            card.onclick = () => alert("Game files modal would open here.");
-            container.appendChild(card);
-        });
-    } catch (e) { container.innerHTML = "Error loading games."; }
-}
-
-loadProjects();
-loadGames();
-</script>
 </body>
 </html>
