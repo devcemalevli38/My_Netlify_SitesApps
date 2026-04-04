@@ -108,6 +108,174 @@
             white-space: nowrap;
         }
 
+        /* ===== DİL MENÜSÜ ===== */
+        .lang-wrapper {
+            position: relative;
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(30, 41, 59, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text);
+            padding: 9px 11px;
+            border-radius: 12px;
+            cursor: pointer;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            font-size: 0.9rem;
+            font-weight: 600;
+            white-space: nowrap;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.07);
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .light .lang-btn {
+            background: rgba(255, 255, 255, 0.75);
+            border-color: rgba(0,0,0,0.1);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+
+        .lang-btn:hover {
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(40, 55, 80, 0.85);
+        }
+
+        .light .lang-btn:hover {
+            border-color: rgba(0,0,0,0.2);
+            background: rgba(240,245,255,0.9);
+        }
+
+        .lang-btn .lang-icon {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 22px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .light .lang-btn .lang-icon {
+            background: rgba(0,0,0,0.06);
+            border-color: rgba(0,0,0,0.08);
+        }
+
+        .lang-btn .lang-arrow {
+            font-size: 0.6rem;
+            opacity: 0.55;
+            transition: transform 0.2s;
+        }
+
+        .lang-btn.open .lang-arrow {
+            transform: rotate(180deg);
+        }
+
+        .lang-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background: rgba(18, 28, 48, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            border-radius: 14px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.07);
+            min-width: 160px;
+            overflow: hidden;
+            z-index: 500;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-6px) scale(0.97);
+            transform-origin: top right;
+            transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+        }
+
+        .light .lang-dropdown {
+            background: rgba(248, 250, 255, 0.96);
+            border-color: rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.9);
+        }
+
+        .lang-dropdown.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--text);
+            transition: background 0.15s;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .light .lang-option {
+            border-bottom-color: rgba(0,0,0,0.05);
+        }
+
+        .lang-option:last-child { border-bottom: none; }
+
+        .lang-option:hover {
+            background: rgba(56, 189, 248, 0.12);
+        }
+
+        .light .lang-option:hover {
+            background: rgba(2, 132, 199, 0.08);
+        }
+
+        .lang-option.active {
+            color: var(--accent);
+            background: rgba(56, 189, 248, 0.08);
+        }
+
+        .lang-option .opt-icon {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            width: 26px;
+            height: 22px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .light .lang-option .opt-icon {
+            background: rgba(0,0,0,0.05);
+            border-color: rgba(0,0,0,0.08);
+        }
+
+        .lang-option .opt-label {
+            flex: 1;
+        }
+
+        .lang-option .opt-check {
+            font-size: 0.7rem;
+            opacity: 0;
+            color: var(--accent);
+        }
+
+        .lang-option.active .opt-check {
+            opacity: 1;
+        }
+        /* ===== /DİL MENÜSÜ ===== */
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -244,59 +412,26 @@
         footer b { color: var(--accent); }
 
         /* ===================== RESPONSIVE ===================== */
-
-        /* Tablet — 600px ve altı */
         @media (max-width: 600px) {
             body { padding: 24px 14px; }
-
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
+            header { flex-direction: column; align-items: flex-start; gap: 10px; }
             h1 { font-size: 1.4rem; }
-
-            .controls {
-                width: 100%;
-            }
-
-            input {
-                flex: 1;
-                width: auto;
-                min-width: 0;
-                font-size: 0.9rem;
-            }
-
-            button.tool-btn {
-                padding: 10px 12px;
-                font-size: 0.85rem;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
+            .controls { width: 100%; }
+            input { flex: 1; width: auto; min-width: 0; font-size: 0.9rem; }
+            button.tool-btn { padding: 10px 12px; font-size: 0.85rem; }
+            .grid { grid-template-columns: 1fr; gap: 12px; }
             .section-header { margin: 20px 0 10px; }
-
             .modal-content { padding: 20px; }
-
             .file-list { max-height: 60vh; }
-
             .file-item { padding: 12px 10px; }
         }
 
-        /* Küçük telefon — 380px altı */
         @media (max-width: 380px) {
             h1 { font-size: 1.2rem; }
-
             .project-card { padding: 14px; gap: 10px; }
-
             .icon { width: 38px; height: 38px; font-size: 18px; }
         }
 
-        /* Geniş ekran — 1200px üstü */
         @media (min-width: 1200px) {
             .grid { grid-template-columns: repeat(3, 1fr); }
         }
@@ -310,23 +445,43 @@
         <input id="search" placeholder="🔍 Proje veya Oyun Ara...">
         <button id="openNewsletter" class="tool-btn" title="Abone Ol">📧</button>
         <button id="themeToggle" class="tool-btn">🌙 / ☀️</button>
+
+        <!-- DİL MENÜSÜ -->
+        <div class="lang-wrapper">
+            <button class="lang-btn" id="langBtn" aria-label="Dil Seç">
+                <span class="lang-icon" id="langIcon">TR</span>
+                <span class="lang-arrow">▼</span>
+            </button>
+            <div class="lang-dropdown" id="langDropdown">
+                <div class="lang-option active" data-lang="tr" data-icon="TR" data-label="Türkçe">
+                    <span class="opt-icon">TR</span>
+                    <span class="opt-label">Türkçe</span>
+                    <span class="opt-check">✓</span>
+                </div>
+                <div class="lang-option" data-lang="en" data-icon="EN" data-label="English">
+                    <span class="opt-icon">EN</span>
+                    <span class="opt-label">English</span>
+                    <span class="opt-check">✓</span>
+                </div>
+            </div>
+        </div>
     </div>
 </header>
 
 <div class="section-header">
-    <h2 class="section-title">📂 Web Projelerim</h2>
+    <h2 class="section-title" id="secProjects">📂 Web Projelerim</h2>
 </div>
 <div id="project-container" class="grid"><p>Yükleniyor...</p></div>
 
 <div class="section-header">
-    <h2 class="section-title games">🎮 Oyunlar</h2>
+    <h2 class="section-title games" id="secGames">🎮 Oyunlar</h2>
 </div>
 <div id="game-container" class="grid"><p>Yükleniyor...</p></div>
 
 <div id="newsletterModal" class="modal-overlay">
     <div class="modal-content">
         <button class="close-modal" onclick="toggleModal('newsletterModal', false)">&times;</button>
-        <h2>📬 GitHub Bültenine Abone Ol</h2>
+        <h2 id="modalNewsletterTitle">📬 GitHub Bültenine Abone Ol</h2>
         <form id="newsletter-form" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
             <input type="email" id="email-input" placeholder="E-posta adresini gir..." required style="width:100%;">
             <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;">Abone Ol</button>
@@ -351,7 +506,108 @@
 const USERNAME = "cemal201138";
 const SITES_API = `https://api.github.com/repos/${USERNAME}/My_Netlify_SitesApps/contents/`;
 const RELEASES_API = `https://api.github.com/repos/${USERNAME}/games/releases`;
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec"; 
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec";
+
+/* ============ DİL SİSTEMİ ============ */
+const translations = {
+    tr: {
+        searchPlaceholder: "🔍 Proje veya Oyun Ara...",
+        secProjects: "📂 Web Projelerim",
+        secGames: "🎮 Oyunlar",
+        loading: "Yükleniyor...",
+        error: "Hata oluştu.",
+        noFiles: "Dosya bulunamadı.",
+        gameFiles: "🎮 Oyun Dosyaları",
+        newsletterTitle: "📬 GitHub Bültenine Abone Ol",
+        emailPlaceholder: "E-posta adresini gir...",
+        subscribing: "Kaydediliyor...",
+        subscribeBtn: "Abone Ol",
+        subscribeOk: "✅ Başarıyla abone oldun!",
+        subscribeErr: "❌ Hata oluştu.",
+        openBadge: "AÇ",
+        download: "İNDİR",
+    },
+    en: {
+        searchPlaceholder: "🔍 Search Project or Game...",
+        secProjects: "📂 My Web Projects",
+        secGames: "🎮 Games",
+        loading: "Loading...",
+        error: "An error occurred.",
+        noFiles: "No files found.",
+        gameFiles: "🎮 Game Files",
+        newsletterTitle: "📬 Subscribe to GitHub Newsletter",
+        emailPlaceholder: "Enter your e-mail...",
+        subscribing: "Saving...",
+        subscribeBtn: "Subscribe",
+        subscribeOk: "✅ Successfully subscribed!",
+        subscribeErr: "❌ An error occurred.",
+        openBadge: "OPEN",
+        download: "DOWNLOAD",
+    },
+
+};
+
+let currentLang = localStorage.getItem("lang") || "tr";
+
+function applyLang(lang) {
+    const t = translations[lang];
+    document.getElementById("search").placeholder = t.searchPlaceholder;
+    document.getElementById("secProjects").textContent = t.secProjects;
+    document.getElementById("secGames").textContent = t.secGames;
+    document.getElementById("subscribe-btn").textContent = t.subscribeBtn;
+    document.getElementById("email-input").placeholder = t.emailPlaceholder;
+    document.getElementById("modalNewsletterTitle").textContent = t.newsletterTitle;
+    document.querySelectorAll(".badge").forEach(b => b.textContent = t.openBadge);
+    document.querySelectorAll(".download-link").forEach(a => a.textContent = t.download);
+    document.documentElement.lang = lang;
+}
+
+// Dil buton toggle
+const langBtn = document.getElementById("langBtn");
+const langDropdown = document.getElementById("langDropdown");
+
+langBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = langDropdown.classList.toggle("open");
+    langBtn.classList.toggle("open", open);
+});
+
+document.addEventListener("click", () => {
+    langDropdown.classList.remove("open");
+    langBtn.classList.remove("open");
+});
+
+langDropdown.addEventListener("click", (e) => e.stopPropagation());
+
+document.querySelectorAll(".lang-option").forEach(opt => {
+    opt.addEventListener("click", () => {
+        const lang = opt.dataset.lang;
+        currentLang = lang;
+        localStorage.setItem("lang", lang);
+        // buton güncelle
+        document.getElementById("langIcon").textContent = opt.dataset.icon;
+        // aktif işareti
+        document.querySelectorAll(".lang-option").forEach(o => o.classList.remove("active"));
+        opt.classList.add("active");
+        // dropdown kapat
+        langDropdown.classList.remove("open");
+        langBtn.classList.remove("open");
+        applyLang(lang);
+    });
+});
+
+// Başlangıçta kayıtlı dili uygula
+(function initLang() {
+    const saved = localStorage.getItem("lang") || "tr";
+    const opt = document.querySelector(`.lang-option[data-lang="${saved}"]`);
+    if (opt) {
+        document.getElementById("langIcon").textContent = opt.dataset.icon;
+        document.querySelectorAll(".lang-option").forEach(o => o.classList.remove("active"));
+        opt.classList.add("active");
+    }
+    applyLang(saved);
+})();
+/* ============ /DİL SİSTEMİ ============ */
 
 function getFileIcon(filename) {
     const ext = filename.split('.').pop().toLowerCase();
@@ -386,18 +642,23 @@ document.getElementById('newsletter-form').addEventListener('submit', async (e) 
     e.preventDefault();
     const btn = document.getElementById('subscribe-btn');
     const msg = document.getElementById('status-msg');
-    btn.disabled = true; btn.innerText = "Kaydediliyor...";
+    const t = translations[currentLang];
+    btn.disabled = true; btn.innerText = t.subscribing;
     try {
         await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(document.getElementById('email-input').value)}`, { mode: 'no-cors' });
-        msg.innerHTML = "<span style='color:#4ade80'>✅ Başarıyla abone oldun!</span>";
-        setTimeout(() => { toggleModal('newsletterModal', false); btn.disabled = false; btn.innerText = "Abone Ol"; }, 1500);
-    } catch (err) { msg.innerHTML = "<span style='color:#f87171'>❌ Hata oluştu.</span>"; btn.disabled = false; }
+        msg.innerHTML = `<span style='color:#4ade80'>${t.subscribeOk}</span>`;
+        setTimeout(() => { toggleModal('newsletterModal', false); btn.disabled = false; btn.innerText = t.subscribeBtn; }, 1500);
+    } catch (err) {
+        msg.innerHTML = `<span style='color:#f87171'>${t.subscribeErr}</span>`;
+        btn.disabled = false;
+    }
 });
 
 const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 async function loadProjects() {
     const container = document.getElementById("project-container");
+    const t = translations[currentLang];
     try {
         const res = await fetch(SITES_API);
         const items = await res.json();
@@ -410,11 +671,12 @@ async function loadProjects() {
             card.innerHTML = `<div class="icon">🌐</div><div class="name"><b>${p.name.replace(/_/g, " ")}</b></div>`;
             container.appendChild(card);
         });
-    } catch (e) { container.innerHTML = "<p>Hata oluştu.</p>"; }
+    } catch (e) { container.innerHTML = `<p>${t.error}</p>`; }
 }
 
 async function loadGames() {
     const container = document.getElementById("game-container");
+    const t = translations[currentLang];
     try {
         const res = await fetch(RELEASES_API);
         const releases = await res.json();
@@ -430,7 +692,7 @@ async function loadGames() {
                     <div class="name"><b>${rel.name || rel.tag_name}</b></div>
                     <div style="font-size:0.75rem; opacity:0.6;">${rel.tag_name}</div>
                 </div>
-                <span class="badge">AÇ</span>
+                <span class="badge">${t.openBadge}</span>
             `;
             
             card.onclick = () => {
@@ -439,7 +701,7 @@ async function loadGames() {
                 fileContainer.innerHTML = "";
 
                 if(rel.assets.length === 0) {
-                    fileContainer.innerHTML = "<p style='padding:20px; opacity:0.6;'>Dosya bulunamadı.</p>";
+                    fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6;'>${t.noFiles}</p>`;
                 } else {
                     rel.assets.forEach(asset => {
                         const div = document.createElement("div");
@@ -454,7 +716,7 @@ async function loadGames() {
                                     <div style="font-size:0.7rem; opacity:0.6;">${size} MB</div>
                                 </div>
                             </div>
-                            <a href="${asset.browser_download_url}" class="download-link">İNDİR</a>
+                            <a href="${asset.browser_download_url}" class="download-link">${t.download}</a>
                         `;
                         fileContainer.appendChild(div);
                     });
@@ -463,7 +725,7 @@ async function loadGames() {
             };
             container.appendChild(card);
         });
-    } catch (e) { container.innerHTML = "<p>Hata oluştu.</p>"; }
+    } catch (e) { container.innerHTML = `<p>${t.error}</p>`; }
 }
 
 document.getElementById('search').addEventListener("input", function() {
