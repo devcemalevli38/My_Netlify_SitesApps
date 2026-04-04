@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,6 +30,57 @@
             flex-direction: column;
             min-height: 100vh;
         }
+
+        /* Dil Menüsü Stilleri */
+        .lang-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .lang-btn {
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--accent);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .lang-btn:hover { box-shadow: var(--neon-shadow); }
+
+        .lang-dropdown {
+            position: absolute;
+            top: 45px;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 8px;
+            display: none;
+            flex-direction: column;
+            min-width: 120px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        }
+
+        .lang-dropdown.active { display: flex; }
+
+        .lang-option {
+            padding: 10px;
+            cursor: pointer;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .lang-option:hover { background: var(--accent); color: var(--bg-color); }
 
         .container {
             max-width: 800px;
@@ -188,11 +239,21 @@
 </head>
 <body>
 
+    <div class="lang-container">
+        <button class="lang-btn" onclick="toggleDropdown()">
+            <i class="fas fa-language"></i> <span id="btn-text">Language</span>
+        </button>
+        <div class="lang-dropdown" id="lang-dropdown">
+            <div class="lang-option" onclick="changeLanguage('tr')">Türkçe</div>
+            <div class="lang-option" onclick="changeLanguage('en')">English</div>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <img src="https://github.com/cemal201138.png" alt="Cemal Evli" class="profile-img">
             <h1>Cemal Evli</h1>
-            <p class="subtitle">Öğrenci ve Geleceğin Yazılımcısı</p>
+            <p class="subtitle" id="ui-subtitle">Student and Future Developer</p>
             
             <div class="social-links">
                 <a href="https://github.com/cemal201138" target="_blank"><i class="fab fa-github"></i></a>
@@ -204,20 +265,20 @@
         </header>
 
         <section id="about">
-            <h2 class="section-title">Hakkımda</h2>
-            <p class="about-text">
-                Teknolojiye duyduğum merakı, somut projelere dönüştürme hedefiyle çalışan bir öğrenciyim. 
-                Web teknolojileri ve Python üzerine kendimi geliştiriyorum. Projelerimi ve daha fazlasını 
-                <a href="https://cemalevli.qzz.io" target="_blank">cemalevli.qzz.io</a> adresinden takip edebilirsiniz.
+            <h2 class="section-title" id="ui-about-title">About Me</h2>
+            <p class="about-text" id="ui-about-text">
+                I am a student working with the goal of turning my curiosity for technology into tangible projects. 
+                I am developing myself in web technologies and Python. You can follow my projects and more at 
+                <a href="https://cemalevli.qzz.io" target="_blank">cemalevli.qzz.io</a>.
             </p>
         </section>
 
         <section id="projects">
-            <h2 class="section-title">Projelerim</h2>
+            <h2 class="section-title" id="ui-projects-title">My Projects</h2>
             
             <a href="https://github.com/cemal201138/Python-Hand-Mouse" class="project-card">
                 <h3>Python Hand Mouse</h3>
-                <p>El hareketleriyle fare kontrolü.</p>
+                <p id="ui-p1-desc">Mouse control with hand gestures.</p>
                 <div>
                     <span class="tag">Python</span>
                     <span class="tag">OpenCV</span>
@@ -226,7 +287,7 @@
 
             <a href="https://github.com/cemal201138/Python_Muzik_Calar" class="project-card">
                 <h3>Python Müzik Çalar</h3>
-                <p>Gelişmiş arayüzlü müzik oynatıcı.</p>
+                <p id="ui-p2-desc">Music player with advanced interface.</p>
                 <div>
                     <span class="tag">Tkinter</span>
                     <span class="tag">Pygame</span>
@@ -236,10 +297,69 @@
     </div>
 
     <footer>
-        <p>Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank"><b>Cemal Evli</b></a></p>
+        <p><span id="ui-footer-text">All rights reserved.</span> &copy; 2026 <a href="https://github.com/cemal201138" target="_blank"><b>Cemal Evli</b></a></p>
     </footer>
 
+    <script>
+        const translations = {
+            en: {
+                btnText: "English",
+                subtitle: "Student and Future Developer",
+                aboutTitle: "About Me",
+                aboutText: 'I am a student working with the goal of turning my curiosity for technology into tangible projects. I am developing myself in web technologies and Python. You can follow my projects and more at <a href="https://cemalevli.qzz.io" target="_blank">cemalevli.qzz.io</a>.',
+                projectsTitle: "My Projects",
+                p1Desc: "Mouse control with hand gestures.",
+                p2Desc: "Music player with advanced interface.",
+                footer: "All rights reserved."
+            },
+            tr: {
+                btnText: "Türkçe",
+                subtitle: "Öğrenci ve Geleceğin Yazılımcısı",
+                aboutTitle: "Hakkımda",
+                aboutText: 'Teknolojiye duyduğum merakı, somut projelere dönüştürme hedefiyle çalışan bir öğrenciyim. Web teknolojileri ve Python üzerine kendimi geliştiriyorum. Projelerimi ve daha fazlasını <a href="https://cemalevli.qzz.io" target="_blank">cemalevli.qzz.io</a> adresinden takip edebilirsiniz.',
+                projectsTitle: "Projelerim",
+                p1Desc: "El hareketleriyle fare kontrolü.",
+                p2Desc: "Gelişmiş arayüzlü müzik oynatıcı.",
+                footer: "Tüm hakları saklıdır."
+            }
+        };
 
+        function toggleDropdown() {
+            document.getElementById('lang-dropdown').classList.toggle('active');
+        }
+
+        function changeLanguage(lang) {
+            localStorage.setItem('preferredLang', lang);
+            updateUI(lang);
+            document.getElementById('lang-dropdown').classList.remove('active');
+        }
+
+        function updateUI(lang) {
+            const data = translations[lang];
+            document.getElementById('btn-text').innerText = data.btnText;
+            document.getElementById('ui-subtitle').innerText = data.subtitle;
+            document.getElementById('ui-about-title').innerText = data.aboutTitle;
+            document.getElementById('ui-about-text').innerHTML = data.aboutText;
+            document.getElementById('ui-projects-title').innerText = data.projectsTitle;
+            document.getElementById('ui-p1-desc').innerText = data.p1Desc;
+            document.getElementById('ui-p2-desc').innerText = data.p2Desc;
+            document.getElementById('ui-footer-text').innerText = data.footer;
+            document.documentElement.lang = lang;
+        }
+
+        // Başlangıç Ayarı
+        window.onload = () => {
+            const savedLang = localStorage.getItem('preferredLang') || 'en';
+            updateUI(savedLang);
+        };
+
+        // Dışarı tıklandığında menüyü kapat
+        window.onclick = function(event) {
+            if (!event.target.closest('.lang-container')) {
+                document.getElementById('lang-dropdown').classList.remove('active');
+            }
+        }
+    </script>
 
 </body>
 </html>
