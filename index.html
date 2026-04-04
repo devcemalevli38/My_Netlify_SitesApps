@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cemal Evli | My Website</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
         :root {
             --bg: #0f172a;
@@ -15,7 +14,6 @@
             --game-accent: #f472b6;
             --hover: #1e293b;
             --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-            /* Dil Menüsü Renkleri */
             --dropdown-bg: #1e293b;
             --dropdown-hover: #38bdf8;
         }
@@ -61,25 +59,16 @@
 
         h1 { margin: 0; font-size: 1.8rem; letter-spacing: -1px; }
 
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
-        }
+        .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 
-        /* --- ÖZEL DİL MENÜSÜ TASARIMI --- */
-        .custom-dropdown {
-            position: relative;
-            display: inline-block;
-            user-select: none;
-        }
+        /* --- DİL MENÜSÜ TASARIMI --- */
+        .custom-dropdown { position: relative; display: inline-block; user-select: none; }
 
         .dropdown-trigger {
             background: var(--card);
-            border: 1px solid var(--accent); /* Görseldeki mavi kenarlık */
+            border: 1px solid var(--accent);
             color: var(--text);
-            padding: 9px 16px;
+            padding: 8px 14px;
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
@@ -97,14 +86,13 @@
             background: var(--dropdown-bg);
             border: 1px solid var(--border);
             border-radius: 12px;
-            min-width: 140px;
+            min-width: 150px;
             overflow: hidden;
             box-shadow: var(--shadow);
             z-index: 100;
             opacity: 0;
             visibility: hidden;
             transform: translateY(-10px);
-            transition: all 0.3s ease;
         }
 
         .dropdown-menu.active {
@@ -118,15 +106,15 @@
             cursor: pointer;
             font-size: 0.9rem;
             color: var(--text);
-            transition: background 0.2s, color 0.2s;
         }
 
-        .dropdown-item:hover {
-            background: var(--dropdown-hover); /* Üstüne gelince mavi */
+        /* Görseldeki Mavi Seçim Efekti */
+        .dropdown-item:hover, .dropdown-item.active-lang {
+            background: var(--dropdown-hover);
             color: white;
         }
 
-        /* Mevcut Buton ve Inputlar */
+        /* Proje Kartları */
         input {
             background: var(--card);
             border: 1px solid var(--border);
@@ -134,51 +122,64 @@
             padding: 10px 14px;
             border-radius: 10px;
             outline: none;
-            backdrop-filter: blur(5px);
             width: 220px;
-            font-size: 0.95rem;
         }
 
-        button.tool-btn {
+        .section-header { width: 100%; max-width: 900px; margin: 30px 0 15px; }
+        .section-title { font-size: 1.2rem; display: flex; align-items: center; gap: 10px; color: var(--accent); }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .project-card {
             background: var(--card);
             border: 1px solid var(--border);
+            padding: 16px;
+            border-radius: 16px;
+            text-decoration: none;
             color: var(--text);
-            padding: 10px 16px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: var(--shadow);
         }
 
-        .section-header { width: 100%; max-width: 900px; display: flex; justify-content: space-between; align-items: center; margin: 30px 0 15px; }
-        .section-title { font-size: 1.2rem; display: flex; align-items: center; gap: 10px; color: var(--accent); margin: 0; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; width: 100%; max-width: 900px; }
-        .project-card { background: var(--card); border: 1px solid var(--border); padding: 18px; border-radius: 16px; text-decoration: none; color: var(--text); display: flex; align-items: center; gap: 14px; backdrop-filter: blur(10px); }
-        .badge { margin-left: auto; font-size: 0.65rem; padding: 4px 10px; border-radius: 20px; font-weight: bold; background: var(--game-accent); color: white; }
-        
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-content { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; width: 100%; max-width: 600px; position: relative; }
-        .hidden { display: none; }
-        footer { margin-top: auto; padding: 60px 0 20px; text-align: center; font-size: 0.9rem; opacity: 0.7; }
+        .project-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+        .icon {
+            width: 40px; height: 40px;
+            background: rgba(56, 189, 248, 0.1);
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 10px; font-size: 1.2rem;
+        }
+
+        .badge { margin-left: auto; font-size: 0.7rem; padding: 4px 10px; border-radius: 8px; background: var(--game-accent); color: white; font-weight: bold; }
+
+        footer { margin-top: auto; padding: 40px 0; opacity: 0.7; font-size: 0.9rem; }
 
         @media (max-width: 600px) {
-            header { flex-direction: column; align-items: flex-start; }
-            .controls { width: 100%; }
-            input { flex: 1; }
+            header { flex-direction: column; align-items: stretch; }
+            input { width: 100%; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 id="site-title">🚀 Cemal Evli</h1>
+    <h1>🚀 Cemal Evli</h1>
     <div class="controls">
-        <input id="search" placeholder="🔍 Proje veya Oyun Ara...">
-        <button id="openNewsletter" class="tool-btn" title="Abone Ol">📧</button>
+        <input id="search" placeholder="🔍 Ara...">
+        <button id="openNewsletter" class="tool-btn" style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:8px 12px; cursor:pointer;">📧</button>
         
         <div class="custom-dropdown" id="langDropdown">
             <div class="dropdown-trigger">
-                <span>🔠</span> <span id="currentLangDisplay">Türkçe</span>
+                <span><img src="https://flagcdn.com/w20/tr.png" id="langIcon" style="width:18px;"></span> 
+                <span id="currentLangDisplay">Türkçe</span>
             </div>
             <div class="dropdown-menu" id="langMenu">
                 <div class="dropdown-item" data-lang="tr">Türkçe</div>
@@ -186,154 +187,145 @@
             </div>
         </div>
 
-        <button id="themeToggle" class="tool-btn">🌙 / ☀️</button>
+        <button id="themeToggle" style="background:var(--card); border:1px solid var(--border); border-radius:10px; padding:8px 12px; cursor:pointer;">🌙 / ☀️</button>
     </div>
 </header>
 
 <div class="section-header">
     <h2 class="section-title" id="title-web">📂 Web Projelerim</h2>
 </div>
-<div id="project-container" class="grid"><p>Yükleniyor...</p></div>
+<div id="project-container" class="grid"></div>
 
 <div class="section-header">
-    <h2 class="section-title games" id="title-games" style="color:var(--game-accent)">🎮 Oyunlar</h2>
+    <h2 class="section-title" id="title-games" style="color:var(--game-accent)">🎮 Oyunlar</h2>
 </div>
-<div id="game-container" class="grid"><p>Yükleniyor...</p></div>
-
-<div id="newsletterModal" class="modal-overlay">
-    <div class="modal-content">
-        <button class="close-modal" onclick="toggleModal('newsletterModal', false)" style="position:absolute; top:14px; right:14px; background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
-        <h2 id="news-title">📬 Bültene Abone Ol</h2>
-        <form id="newsletter-form" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-            <input type="email" id="email-input" placeholder="E-posta..." required style="width:100%;">
-            <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;">Abone Ol</button>
-        </form>
-        <div id="status-msg"></div>
-    </div>
-</div>
+<div id="game-container" class="grid"></div>
 
 <footer>
     <p id="footer-text">Tüm hakları saklıdır. &copy; 2026 <b>Cemal Evli</b></p>
 </footer>
 
 <script>
-const USERNAME = "cemal201138";
-const SITES_API = `https://api.github.com/repos/${USERNAME}/My_Netlify_SitesApps/contents/`;
-const RELEASES_API = `https://api.github.com/repos/${USERNAME}/games/releases`;
+// Veri önbelleği (API limitini aşmamak için)
+let cachedProjects = [];
+let cachedGames = [];
 
 const translations = {
     tr: {
         search: "🔍 Proje veya Oyun Ara...",
         web: "📂 Web Projelerim",
         games: "🎮 Oyunlar",
-        news: "📬 Bültene Abone Ol",
-        sub: "Abone Ol",
+        badge: "AÇ",
         footer: "Tüm hakları saklıdır.",
-        badge: "AÇ"
+        loading: "Yükleniyor..."
     },
     en: {
         search: "🔍 Search Project or Game...",
         web: "📂 My Web Projects",
         games: "🎮 Games",
-        news: "📬 Subscribe to Newsletter",
-        sub: "Subscribe",
+        badge: "OPEN",
         footer: "All rights reserved.",
-        badge: "OPEN"
+        loading: "Loading..."
     }
 };
 
-// Dil Değiştirme Mantığı
-const langDropdown = document.getElementById('langDropdown');
-const langMenu = document.getElementById('langMenu');
-const currentLangDisplay = document.getElementById('currentLangDisplay');
+// Dil ve UI Güncelleme
+function updateUI() {
+    const lang = localStorage.getItem("preferredLang") || "tr";
+    const t = translations[lang];
+    
+    document.getElementById('search').placeholder = t.search;
+    document.getElementById('title-web').innerText = t.web;
+    document.getElementById('title-games').innerText = t.games;
+    document.getElementById('footer-text').innerHTML = `${t.footer} &copy; 2026 <b>Cemal Evli</b>`;
+    document.getElementById('currentLangDisplay').innerText = lang === 'tr' ? 'Türkçe' : 'English';
+    document.getElementById('langIcon').src = lang === 'tr' ? 'https://flagcdn.com/w20/tr.png' : 'https://flagcdn.com/w20/us.png';
 
-langDropdown.onclick = (e) => {
+    // Menüdeki aktif dili işaretle
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.classList.toggle('active-lang', item.dataset.lang === lang);
+    });
+
+    renderData();
+}
+
+// Verileri Ekrana Basma (API çağırmadan sadece render)
+function renderData() {
+    const lang = localStorage.getItem("preferredLang") || "tr";
+    
+    // Web Projeleri
+    const pContainer = document.getElementById("project-container");
+    pContainer.innerHTML = cachedProjects.length ? "" : `<p>${translations[lang].loading}</p>`;
+    cachedProjects.forEach(p => {
+        const card = document.createElement("a");
+        card.className = "project-card";
+        card.href = `https://${USERNAME}.github.io/My_Netlify_SitesApps/${p.name}`;
+        card.target = "_blank";
+        card.innerHTML = `<div class="icon">🌐</div><div><b>${p.name.replace(/_/g, " ")}</b></div>`;
+        pContainer.appendChild(card);
+    });
+
+    // Oyunlar
+    const gContainer = document.getElementById("game-container");
+    gContainer.innerHTML = cachedGames.length ? "" : `<p>${translations[lang].loading}</p>`;
+    cachedGames.forEach(rel => {
+        const card = document.createElement("div");
+        card.className = "project-card";
+        card.innerHTML = `<div class="icon">🎮</div><div><b>${rel.name || rel.tag_name}</b></div><span class="badge">${translations[lang].badge}</span>`;
+        gContainer.appendChild(card);
+    });
+}
+
+// Verileri Sadece Bir Kez Çek
+async function fetchData() {
+    const USERNAME = "cemal201138";
+    try {
+        const [pRes, gRes] = await Promise.all([
+            fetch(`https://api.github.com/repos/${USERNAME}/My_Netlify_SitesApps/contents/`),
+            fetch(`https://api.github.com/repos/${USERNAME}/games/releases`)
+        ]);
+        
+        if (pRes.ok) cachedProjects = (await pRes.json()).filter(i => i.type === "dir");
+        if (gRes.ok) cachedGames = await gRes.json();
+        
+        renderData();
+    } catch (e) {
+        console.error("API Error");
+    }
+}
+
+// Event Listeners
+document.getElementById('langDropdown').onclick = (e) => {
     e.stopPropagation();
-    langMenu.classList.toggle('active');
+    document.getElementById('langMenu').classList.toggle('active');
 };
 
 document.querySelectorAll('.dropdown-item').forEach(item => {
     item.onclick = (e) => {
-        const selectedLang = e.target.getAttribute('data-lang');
-        setLanguage(selectedLang);
+        localStorage.setItem("preferredLang", e.target.dataset.lang);
+        updateUI();
     };
 });
 
-window.onclick = () => langMenu.classList.remove('active');
+window.onclick = () => document.getElementById('langMenu').classList.remove('active');
 
-function setLanguage(lang) {
-    localStorage.setItem("preferredLang", lang);
-    currentLangDisplay.innerText = lang === 'tr' ? 'Türkçe' : 'English';
-    
-    const t = translations[lang];
-    document.getElementById('search').placeholder = t.search;
-    document.getElementById('title-web').innerText = t.web;
-    document.getElementById('title-games').innerText = t.games;
-    document.getElementById('news-title').innerText = t.news;
-    document.getElementById('subscribe-btn').innerText = t.sub;
-    document.getElementById('footer-text').innerHTML = `${t.footer} &copy; 2026 <b>Cemal Evli</b>`;
-    
-    loadProjects();
-    loadGames();
-}
-
-// Başlangıç Ayarları
-const savedLang = localStorage.getItem("preferredLang") || "tr";
-setLanguage(savedLang);
-
-// Tema Ayarı
-if(localStorage.getItem("theme") === "light") document.body.classList.add("light");
 document.getElementById('themeToggle').onclick = () => {
     document.body.classList.toggle("light");
     localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 };
 
-function toggleModal(id, show) {
-    document.getElementById(id).classList.toggle('active', show);
-    document.body.style.overflow = show ? 'hidden' : 'auto';
-}
-
-document.getElementById('openNewsletter').onclick = () => toggleModal('newsletterModal', true);
-
-// GitHub Yüklemeleri (Basitleştirilmiş)
-async function loadProjects() {
-    const container = document.getElementById("project-container");
-    try {
-        const res = await fetch(SITES_API);
-        const items = await res.json();
-        container.innerHTML = "";
-        items.filter(i => i.type === "dir").forEach(p => {
-            const card = document.createElement("a");
-            card.className = "project-card";
-            card.href = p.path; card.target = "_blank";
-            card.innerHTML = `<div class="icon">🌐</div><div><b>${p.name.replace(/_/g, " ")}</b></div>`;
-            container.appendChild(card);
-        });
-    } catch (e) { container.innerHTML = "Error."; }
-}
-
-async function loadGames() {
-    const container = document.getElementById("game-container");
-    const lang = localStorage.getItem("preferredLang") || "tr";
-    try {
-        const res = await fetch(RELEASES_API);
-        const releases = await res.json();
-        container.innerHTML = "";
-        releases.forEach(rel => {
-            const card = document.createElement("div");
-            card.className = "project-card";
-            card.innerHTML = `<div class="icon">🎮</div><div><b>${rel.name || rel.tag_name}</b></div><span class="badge">${translations[lang].badge}</span>`;
-            container.appendChild(card);
-        });
-    } catch (e) { container.innerHTML = "Error."; }
-}
-
+// Arama
 document.getElementById('search').oninput = function() {
     const q = this.value.toLowerCase();
     document.querySelectorAll(".project-card").forEach(c => {
         c.style.display = c.innerText.toLowerCase().includes(q) ? "flex" : "none";
     });
 };
+
+// Başlat
+if(localStorage.getItem("theme") === "light") document.body.classList.add("light");
+updateUI();
+fetchData(); // Sadece bir kez çalışır
 </script>
 </body>
 </html>
