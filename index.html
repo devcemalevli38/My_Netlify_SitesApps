@@ -43,6 +43,42 @@
             min-height: 100vh;
         }
 
+        /* Bilgilendirme Banner Stili */
+        .info-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--accent);
+            color: #0f172a;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            z-index: 2000;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .info-banner.show { transform: translateY(0); }
+
+        .info-banner button {
+            background: rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            padding: 5px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        .info-banner button:hover { background: rgba(0,0,0,0.25); }
+
         header {
             width: 100%;
             max-width: 900px;
@@ -108,7 +144,6 @@
             white-space: nowrap;
         }
 
-        /* ===== DİL SEÇİCİ ===== */
         .lang-switcher {
             position: relative;
             display: inline-block;
@@ -177,13 +212,8 @@
         }
 
         .lang-option:hover { background: var(--hover); }
-
         .lang-option.active { color: var(--accent); }
-
-        .lang-option:not(:last-child) {
-            border-bottom: 1px solid var(--border);
-        }
-        /* ====================== */
+        .lang-option:not(:last-child) { border-bottom: 1px solid var(--border); }
 
         .grid {
             display: grid;
@@ -332,19 +362,14 @@
             .file-list { max-height: 60vh; }
             .file-item { padding: 12px 10px; }
         }
-
-        @media (max-width: 380px) {
-            h1 { font-size: 1.2rem; }
-            .project-card { padding: 14px; gap: 10px; }
-            .icon { width: 38px; height: 38px; font-size: 18px; }
-        }
-
-        @media (min-width: 1200px) {
-            .grid { grid-template-columns: repeat(3, 1fr); }
-        }
     </style>
 </head>
 <body>
+
+<div id="infoBanner" class="info-banner">
+    <span id="bannerText"></span>
+    <button id="bannerBtn" onclick="closeBanner()">Tamam</button>
+</div>
 
 <header>
     <h1>🚀 Cemal Evli</h1>
@@ -352,7 +377,6 @@
         <input id="search" placeholder="">
         <button id="openNewsletter" class="tool-btn">📧</button>
 
-        <!-- DİL SEÇİCİ -->
         <div class="lang-switcher" id="langSwitcher">
             <button class="lang-btn" id="langBtn">🌐 <span id="langLabel"></span> ▾</button>
             <div class="lang-dropdown">
@@ -375,7 +399,6 @@
 </div>
 <div id="game-container" class="grid"></div>
 
-<!-- Newsletter Modal -->
 <div id="newsletterModal" class="modal-overlay">
     <div class="modal-content">
         <button class="close-modal" onclick="toggleModal('newsletterModal', false)">&times;</button>
@@ -388,7 +411,6 @@
     </div>
 </div>
 
-<!-- Game Files Modal -->
 <div id="gameFilesModal" class="modal-overlay">
     <div class="modal-content">
         <button class="close-modal" onclick="toggleModal('gameFilesModal', false)">&times;</button>
@@ -402,9 +424,9 @@
 </footer>
 
 <script>
-const USERNAME = "cemal201138";
-const SITES_API = `https://api.github.com/repos/${USERNAME}/My_Netlify_SitesApps/contents/`;
-const RELEASES_API = `https://api.github.com/repos/${USERNAME}/games/releases`;
+// ===== GITHUB ACTIONS ENTEGRASYONU (Statik Dosyalar) =====
+const PROJECTS_DATA_URL = "projects.json"; 
+const GAMES_DATA_URL = "games.json";
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec";
 
 // ===================== DİL SİSTEMİ =====================
@@ -415,7 +437,7 @@ const TRANSLATIONS = {
         projectsTitle: "📂 My Web Projects",
         gamesTitle: "🎮 Games",
         loading: "Loading...",
-        error: "An error occurred.",
+        error: "Data is not ready yet.",
         newsletterTitle: "📬 Subscribe to GitHub Newsletter",
         emailPlaceholder: "Enter your e-mail...",
         subscribeBtn: "Subscribe",
@@ -426,7 +448,9 @@ const TRANSLATIONS = {
         openBadge: "OPEN",
         downloadBtn: "DOWNLOAD",
         footerText: 'All rights reserved. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank" style="text-decoration:none; color:inherit;"><b>Cemal Evli</b></a>',
-        langLabel: "English"
+        langLabel: "English",
+        updateNotice: "🔄 Note: Data on this site is updated every hour.",
+        bannerConfirm: "Got it!"
     },
     tr: {
         searchPlaceholder: "🔍 Proje veya Oyun Ara...",
@@ -434,7 +458,7 @@ const TRANSLATIONS = {
         projectsTitle: "📂 Web Projelerim",
         gamesTitle: "🎮 Oyunlar",
         loading: "Yükleniyor...",
-        error: "Hata oluştu.",
+        error: "Veriler henüz hazır değil.",
         newsletterTitle: "📬 GitHub Bültenine Abone Ol",
         emailPlaceholder: "E-posta adresini gir...",
         subscribeBtn: "Abone Ol",
@@ -445,7 +469,9 @@ const TRANSLATIONS = {
         openBadge: "AÇ",
         downloadBtn: "İNDİR",
         footerText: 'Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank" style="text-decoration:none; color:inherit;"><b>Cemal Evli</b></a>',
-        langLabel: "Türkçe"
+        langLabel: "Türkçe",
+        updateNotice: "🔄 Bilgi: Sitedeki veriler her saat başı otomatik olarak güncellenmektedir.",
+        bannerConfirm: "Tamam"
     }
 };
 
@@ -466,24 +492,32 @@ function applyLanguage() {
     document.getElementById("subscribe-btn").textContent = tr("subscribeBtn");
     document.getElementById("footerText").innerHTML = tr("footerText");
     document.getElementById("langLabel").textContent = tr("langLabel");
+    document.getElementById("bannerText").textContent = tr("updateNotice");
+    document.getElementById("bannerBtn").textContent = tr("bannerConfirm");
 
-    // Aktif seçenek işareti
     document.querySelectorAll(".lang-option").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.lang === currentLang);
     });
 
-    // Dinamik kartlardaki badge ve download butonları
     document.querySelectorAll(".badge").forEach(b => b.textContent = tr("openBadge"));
     document.querySelectorAll(".download-link").forEach(a => a.textContent = tr("downloadBtn"));
-
-    // Yükleniyor yazısı (henüz içerik yoksa)
-    const pc = document.getElementById("project-container");
-    const gc = document.getElementById("game-container");
-    if (pc.querySelector("p")) pc.querySelector("p").textContent = tr("loading");
-    if (gc.querySelector("p")) gc.querySelector("p").textContent = tr("loading");
 }
 
-// Dil dropdown
+// Banner Mantığı
+function checkBanner() {
+    if (!localStorage.getItem("bannerClosed")) {
+        setTimeout(() => {
+            document.getElementById("infoBanner").classList.add("show");
+        }, 800);
+    }
+}
+
+function closeBanner() {
+    document.getElementById("infoBanner").classList.remove("show");
+    localStorage.setItem("bannerClosed", "true");
+}
+
+// Dil Kontrolleri
 const langSwitcher = document.getElementById("langSwitcher");
 document.getElementById("langBtn").addEventListener("click", (e) => {
     e.stopPropagation();
@@ -499,8 +533,8 @@ document.querySelectorAll(".lang-option").forEach(btn => {
         applyLanguage();
     });
 });
-// ======================================================
 
+// Yardımcı Fonksiyonlar
 function getFileIcon(filename) {
     const ext = filename.split('.').pop().toLowerCase();
     const icons = { 'zip':'📦','rar':'📦','7z':'📦','exe':'⚙️','msi':'⚙️','apk':'🤖','pdf':'📕','jpg':'🖼️','png':'🖼️','gif':'🖼️','txt':'📄','md':'📝','mp4':'🎬','mp3':'🎵' };
@@ -513,7 +547,9 @@ function toggleModal(id, show) {
     else { m.classList.remove('active'); document.body.style.overflow = 'auto'; }
 }
 
-// Tema
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+// Tema Sistemi
 if (localStorage.getItem("theme") === "light") document.body.classList.add("light");
 document.getElementById('themeToggle').onclick = () => {
     document.body.classList.toggle("light");
@@ -522,6 +558,7 @@ document.getElementById('themeToggle').onclick = () => {
 
 document.getElementById('openNewsletter').onclick = () => toggleModal('newsletterModal', true);
 
+// Newsletter Formu
 document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('subscribe-btn');
@@ -535,6 +572,7 @@ document.getElementById('newsletter-form').addEventListener('submit', async (e) 
             toggleModal('newsletterModal', false);
             btn.disabled = false;
             btn.textContent = tr("subscribeBtn");
+            msg.innerHTML = "";
         }, 1500);
     } catch (err) {
         msg.innerHTML = `<span style='color:#f87171'>${tr("subscribeError")}</span>`;
@@ -542,13 +580,12 @@ document.getElementById('newsletter-form').addEventListener('submit', async (e) 
     }
 });
 
-const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
+// ===== VERİ YÜKLEME (Yerel JSON Dosyalarından) =====
 async function loadProjects() {
     const container = document.getElementById("project-container");
     container.innerHTML = `<p>${tr("loading")}</p>`;
     try {
-        const res = await fetch(SITES_API);
+        const res = await fetch(PROJECTS_DATA_URL);
         const items = await res.json();
         container.innerHTML = "";
         items.filter(i => i.type === "dir").forEach(p => {
@@ -561,7 +598,7 @@ async function loadProjects() {
             container.appendChild(card);
         });
     } catch (e) {
-        container.innerHTML = `<p>${tr("error")}</p>`;
+        container.innerHTML = `<p style="opacity:0.6;">${tr("error")}</p>`;
     }
 }
 
@@ -569,7 +606,7 @@ async function loadGames() {
     const container = document.getElementById("game-container");
     container.innerHTML = `<p>${tr("loading")}</p>`;
     try {
-        const res = await fetch(RELEASES_API);
+        const res = await fetch(GAMES_DATA_URL);
         const releases = await res.json();
         container.innerHTML = "";
         releases.forEach(rel => {
@@ -588,7 +625,7 @@ async function loadGames() {
                 const fileContainer = document.getElementById("fileContainer");
                 document.getElementById("modalGameName").textContent = rel.name || rel.tag_name;
                 fileContainer.innerHTML = "";
-                if (rel.assets.length === 0) {
+                if (!rel.assets || rel.assets.length === 0) {
                     fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6;'>${tr("noFiles")}</p>`;
                 } else {
                     rel.assets.forEach(asset => {
@@ -613,10 +650,11 @@ async function loadGames() {
             container.appendChild(card);
         });
     } catch (e) {
-        container.innerHTML = `<p>${tr("error")}</p>`;
+        container.innerHTML = `<p style="opacity:0.6;">${tr("error")}</p>`;
     }
 }
 
+// Arama Motoru
 document.getElementById('search').addEventListener("input", function () {
     const q = norm(this.value);
     document.querySelectorAll(".project-card").forEach(card => {
@@ -624,10 +662,11 @@ document.getElementById('search').addEventListener("input", function () {
     });
 });
 
-// Başlat
+// Uygulamayı Başlat
 applyLanguage();
 loadProjects();
 loadGames();
+checkBanner();
 </script>
 </body>
 </html>
