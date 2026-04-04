@@ -1,0 +1,32 @@
+name: Hourly Data Update
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Her saatin başında (13:00, 14:00 vb.) otomatik çalışır
+  workflow_dispatch: # İstediğinde manuel çalıştırmak için buton ekler
+  push:
+    branches: [ main ] # Kodda bir değişiklik yapıp pushladığında da çalışır
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Dosyaları depona geri yazabilmesi için şart
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Fetch Projects and Games
+        run: |
+          # Projeleri çek (Hata almamak için -L yönlendirmesini ekledik)
+          curl -sL "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/" > projects.json
+          # Oyunları çek
+          curl -sL "https://api.github.com/repos/cemal201138/games/releases" > games.json
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add projects.json games.json
+          # Sadece değişiklik varsa commit at, yoksa hata verme
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Hourly auto-update: $(date)" && git push)
