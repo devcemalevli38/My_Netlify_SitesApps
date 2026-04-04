@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +15,7 @@
             --game-accent: #f472b6;
             --hover: #1e293b;
             --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            /* Dil Menüsü Renkleri */
             --dropdown-bg: #1e293b;
             --dropdown-hover: #38bdf8;
         }
@@ -67,7 +68,7 @@
             align-items: center;
         }
 
-        /* --- YENİ DİL MENÜSÜ TASARIMI (Custom Dropdown) --- */
+        /* --- ÖZEL DİL MENÜSÜ TASARIMI --- */
         .custom-dropdown {
             position: relative;
             display: inline-block;
@@ -78,7 +79,7 @@
             background: var(--card);
             border: 1px solid var(--accent); /* Görseldeki mavi kenarlık */
             color: var(--text);
-            padding: 8px 16px;
+            padding: 9px 16px;
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
@@ -117,15 +118,15 @@
             cursor: pointer;
             font-size: 0.9rem;
             color: var(--text);
-            transition: background 0.2s;
+            transition: background 0.2s, color 0.2s;
         }
 
         .dropdown-item:hover {
-            background: var(--dropdown-hover); /* Görseldeki mavi hover efekti */
-            color: #fff;
+            background: var(--dropdown-hover); /* Üstüne gelince mavi */
+            color: white;
         }
 
-        /* Diğer Butonlar */
+        /* Mevcut Buton ve Inputlar */
         input {
             background: var(--card);
             border: 1px solid var(--border);
@@ -138,7 +139,7 @@
             font-size: 0.95rem;
         }
 
-        .tool-btn {
+        button.tool-btn {
             background: var(--card);
             border: 1px solid var(--border);
             color: var(--text);
@@ -150,25 +151,15 @@
 
         .section-header { width: 100%; max-width: 900px; display: flex; justify-content: space-between; align-items: center; margin: 30px 0 15px; }
         .section-title { font-size: 1.2rem; display: flex; align-items: center; gap: 10px; color: var(--accent); margin: 0; }
-        .section-title.games { color: var(--game-accent); }
-
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; width: 100%; max-width: 900px; }
-        .project-card { background: var(--card); border: 1px solid var(--border); padding: 18px; border-radius: 16px; text-decoration: none; color: var(--text); display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow); backdrop-filter: blur(10px); cursor: pointer; }
-        .project-card:hover { transform: translateY(-4px); border-color: var(--accent); background: var(--hover); }
-        .icon { font-size: 22px; background: rgba(56, 189, 248, 0.1); width: 44px; height: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+        .project-card { background: var(--card); border: 1px solid var(--border); padding: 18px; border-radius: 16px; text-decoration: none; color: var(--text); display: flex; align-items: center; gap: 14px; backdrop-filter: blur(10px); }
         .badge { margin-left: auto; font-size: 0.65rem; padding: 4px 10px; border-radius: 20px; font-weight: bold; background: var(--game-accent); color: white; }
-
-        /* --- MODAL VE FOOTER (Aynı) --- */
+        
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 28px; width: 100%; max-width: 600px; position: relative; }
-        .file-list { max-height: 55vh; overflow-y: auto; margin-top: 20px; border-radius: 12px; background: rgba(0,0,0,0.2); }
-        .file-item { display: flex; justify-content: space-between; align-items: center; padding: 14px; border-bottom: 1px solid var(--border); }
-        .download-link { background: var(--game-accent); color: white; padding: 6px 14px; border-radius: 8px; text-decoration: none; font-size: 0.75rem; font-weight: bold; }
-        .close-modal { position: absolute; top: 14px; right: 14px; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
         .hidden { display: none; }
         footer { margin-top: auto; padding: 60px 0 20px; text-align: center; font-size: 0.9rem; opacity: 0.7; }
-        footer b { color: var(--accent); }
 
         @media (max-width: 600px) {
             header { flex-direction: column; align-items: flex-start; }
@@ -182,16 +173,16 @@
 <header>
     <h1 id="site-title">🚀 Cemal Evli</h1>
     <div class="controls">
-        <input id="search" placeholder="🔍 Search Project or Game...">
-        <button id="openNewsletter" class="tool-btn" title="Subscribe">📧</button>
+        <input id="search" placeholder="🔍 Proje veya Oyun Ara...">
+        <button id="openNewsletter" class="tool-btn" title="Abone Ol">📧</button>
         
         <div class="custom-dropdown" id="langDropdown">
-            <div class="dropdown-trigger" id="currentLang">
-                <span>🔠</span> <span id="langText">English</span>
+            <div class="dropdown-trigger">
+                <span>🔠</span> <span id="currentLangDisplay">Türkçe</span>
             </div>
             <div class="dropdown-menu" id="langMenu">
-                <div class="dropdown-item" data-value="tr">Türkçe</div>
-                <div class="dropdown-item" data-value="en">English</div>
+                <div class="dropdown-item" data-lang="tr">Türkçe</div>
+                <div class="dropdown-item" data-lang="en">English</div>
             </div>
         </div>
 
@@ -200,90 +191,97 @@
 </header>
 
 <div class="section-header">
-    <h2 class="section-title" id="title-web">📂 My Web Projects</h2>
+    <h2 class="section-title" id="title-web">📂 Web Projelerim</h2>
 </div>
-<div id="project-container" class="grid"></div>
+<div id="project-container" class="grid"><p>Yükleniyor...</p></div>
 
 <div class="section-header">
-    <h2 class="section-title games" id="title-games">🎮 Games</h2>
+    <h2 class="section-title games" id="title-games" style="color:var(--game-accent)">🎮 Oyunlar</h2>
 </div>
-<div id="game-container" class="grid"></div>
+<div id="game-container" class="grid"><p>Yükleniyor...</p></div>
 
 <div id="newsletterModal" class="modal-overlay">
     <div class="modal-content">
-        <button class="close-modal" onclick="toggleModal('newsletterModal', false)">&times;</button>
-        <h2 id="modal-news-title">📬 Subscribe</h2>
+        <button class="close-modal" onclick="toggleModal('newsletterModal', false)" style="position:absolute; top:14px; right:14px; background:none; border:none; color:var(--text); font-size:1.5rem; cursor:pointer;">&times;</button>
+        <h2 id="news-title">📬 Bültene Abone Ol</h2>
         <form id="newsletter-form" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-            <input type="email" id="email-input" placeholder="Email..." required style="width:100%;">
-            <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;">Subscribe</button>
+            <input type="email" id="email-input" placeholder="E-posta..." required style="width:100%;">
+            <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;">Abone Ol</button>
         </form>
         <div id="status-msg"></div>
     </div>
 </div>
 
-<div id="gameFilesModal" class="modal-overlay">
-    <div class="modal-content">
-        <button class="close-modal" onclick="toggleModal('gameFilesModal', false)">&times;</button>
-        <h2 id="modalGameName">🎮 Game Files</h2>
-        <div id="fileContainer" class="file-list"></div>
-    </div>
-</div>
-
 <footer>
-    <p id="footer-text">All rights reserved. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank" style="text-decoration:none; color:inherit;"><b>Cemal Evli</b></a></p>
+    <p id="footer-text">Tüm hakları saklıdır. &copy; 2026 <b>Cemal Evli</b></p>
 </footer>
 
 <script>
 const USERNAME = "cemal201138";
 const SITES_API = `https://api.github.com/repos/${USERNAME}/My_Netlify_SitesApps/contents/`;
 const RELEASES_API = `https://api.github.com/repos/${USERNAME}/games/releases`;
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec"; 
 
 const translations = {
-    en: { lang: "English", search: "🔍 Search Project or Game...", web: "📂 My Web Projects", games: "🎮 Games", badge: "OPEN", download: "DOWNLOAD", newsTitle: "📬 Newsletter", success: "✅ Subscribed!", footer: "All rights reserved." },
-    tr: { lang: "Türkçe", search: "🔍 Proje veya Oyun Ara...", web: "📂 Web Projelerim", games: "🎮 Oyunlar", badge: "AÇ", download: "İNDİR", newsTitle: "📬 Bülten", success: "✅ Abone Olundu!", footer: "Tüm hakları saklıdır." }
+    tr: {
+        search: "🔍 Proje veya Oyun Ara...",
+        web: "📂 Web Projelerim",
+        games: "🎮 Oyunlar",
+        news: "📬 Bültene Abone Ol",
+        sub: "Abone Ol",
+        footer: "Tüm hakları saklıdır.",
+        badge: "AÇ"
+    },
+    en: {
+        search: "🔍 Search Project or Game...",
+        web: "📂 My Web Projects",
+        games: "🎮 Games",
+        news: "📬 Subscribe to Newsletter",
+        sub: "Subscribe",
+        footer: "All rights reserved.",
+        badge: "OPEN"
+    }
 };
 
-// Dil Menüsü Mantığı
+// Dil Değiştirme Mantığı
 const langDropdown = document.getElementById('langDropdown');
 const langMenu = document.getElementById('langMenu');
-const langText = document.getElementById('langText');
+const currentLangDisplay = document.getElementById('currentLangDisplay');
 
-langDropdown.addEventListener('click', () => langMenu.classList.toggle('active'));
+langDropdown.onclick = (e) => {
+    e.stopPropagation();
+    langMenu.classList.toggle('active');
+};
 
 document.querySelectorAll('.dropdown-item').forEach(item => {
-    item.addEventListener('click', (e) => {
-        const lang = e.target.dataset.value;
-        setLanguage(lang);
-    });
+    item.onclick = (e) => {
+        const selectedLang = e.target.getAttribute('data-lang');
+        setLanguage(selectedLang);
+    };
 });
 
-// Dışarı tıklayınca menüyü kapat
-window.addEventListener('click', (e) => {
-    if (!langDropdown.contains(e.target)) langMenu.classList.remove('active');
-});
+window.onclick = () => langMenu.classList.remove('active');
 
 function setLanguage(lang) {
     localStorage.setItem("preferredLang", lang);
-    updateUI(lang);
+    currentLangDisplay.innerText = lang === 'tr' ? 'Türkçe' : 'English';
+    
+    const t = translations[lang];
+    document.getElementById('search').placeholder = t.search;
+    document.getElementById('title-web').innerText = t.web;
+    document.getElementById('title-games').innerText = t.games;
+    document.getElementById('news-title').innerText = t.news;
+    document.getElementById('subscribe-btn').innerText = t.sub;
+    document.getElementById('footer-text').innerHTML = `${t.footer} &copy; 2026 <b>Cemal Evli</b>`;
+    
     loadProjects();
     loadGames();
 }
 
-function updateUI(lang) {
-    const t = translations[lang];
-    langText.innerText = t.lang;
-    document.getElementById('search').placeholder = t.search;
-    document.getElementById('title-web').innerText = t.web;
-    document.getElementById('title-games').innerText = t.games;
-    document.getElementById('footer-text').childNodes[0].textContent = t.footer + " \u00A9 2026 ";
-}
+// Başlangıç Ayarları
+const savedLang = localStorage.getItem("preferredLang") || "tr";
+setLanguage(savedLang);
 
-// Başlangıç
-const savedLang = localStorage.getItem("preferredLang") || "en";
-updateUI(savedLang);
-
-// Diğer Fonksiyonlar (Tema, Arama, Projeler)
+// Tema Ayarı
 if(localStorage.getItem("theme") === "light") document.body.classList.add("light");
 document.getElementById('themeToggle').onclick = () => {
     document.body.classList.toggle("light");
@@ -291,13 +289,13 @@ document.getElementById('themeToggle').onclick = () => {
 };
 
 function toggleModal(id, show) {
-    const m = document.getElementById(id);
-    m.classList.toggle('active', show);
+    document.getElementById(id).classList.toggle('active', show);
     document.body.style.overflow = show ? 'hidden' : 'auto';
 }
 
 document.getElementById('openNewsletter').onclick = () => toggleModal('newsletterModal', true);
 
+// GitHub Yüklemeleri (Basitleştirilmiş)
 async function loadProjects() {
     const container = document.getElementById("project-container");
     try {
@@ -308,31 +306,34 @@ async function loadProjects() {
             const card = document.createElement("a");
             card.className = "project-card";
             card.href = p.path; card.target = "_blank";
-            card.innerHTML = `<div class="icon">🌐</div><div class="name"><b>${p.name.replace(/_/g, " ")}</b></div>`;
+            card.innerHTML = `<div class="icon">🌐</div><div><b>${p.name.replace(/_/g, " ")}</b></div>`;
             container.appendChild(card);
         });
-    } catch (e) { container.innerHTML = "Error loading projects."; }
+    } catch (e) { container.innerHTML = "Error."; }
 }
 
 async function loadGames() {
-    const lang = localStorage.getItem("preferredLang") || "en";
     const container = document.getElementById("game-container");
+    const lang = localStorage.getItem("preferredLang") || "tr";
     try {
         const res = await fetch(RELEASES_API);
         const releases = await res.json();
         container.innerHTML = "";
         releases.forEach(rel => {
             const card = document.createElement("div");
-            card.className = "project-card game-card";
-            card.innerHTML = `<div class="icon">🎮</div><div class="name"><b>${rel.name || rel.tag_name}</b></div><span class="badge">${translations[lang].badge}</span>`;
-            card.onclick = () => alert("Game files modal would open here.");
+            card.className = "project-card";
+            card.innerHTML = `<div class="icon">🎮</div><div><b>${rel.name || rel.tag_name}</b></div><span class="badge">${translations[lang].badge}</span>`;
             container.appendChild(card);
         });
-    } catch (e) { container.innerHTML = "Error loading games."; }
+    } catch (e) { container.innerHTML = "Error."; }
 }
 
-loadProjects();
-loadGames();
+document.getElementById('search').oninput = function() {
+    const q = this.value.toLowerCase();
+    document.querySelectorAll(".project-card").forEach(c => {
+        c.style.display = c.innerText.toLowerCase().includes(q) ? "flex" : "none";
+    });
+};
 </script>
 </body>
 </html>
