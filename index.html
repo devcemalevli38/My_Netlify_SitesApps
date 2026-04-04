@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -95,7 +95,7 @@
             font-size: 0.95rem;
         }
 
-        button.tool-btn {
+        button.tool-btn, select.tool-btn {
             background: var(--card);
             border: 1px solid var(--border);
             color: var(--text);
@@ -106,6 +106,14 @@
             font-weight: 600;
             font-size: 0.9rem;
             white-space: nowrap;
+        }
+        
+        select.tool-btn {
+            padding: 10px 8px;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            text-align: center;
         }
 
         .grid {
@@ -243,60 +251,26 @@
         }
         footer b { color: var(--accent); }
 
-        /* ===================== RESPONSIVE ===================== */
-
-        /* Tablet — 600px ve altı */
         @media (max-width: 600px) {
             body { padding: 24px 14px; }
-
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
+            header { flex-direction: column; align-items: flex-start; gap: 10px; }
             h1 { font-size: 1.4rem; }
-
-            .controls {
-                width: 100%;
-            }
-
-            input {
-                flex: 1;
-                width: auto;
-                min-width: 0;
-                font-size: 0.9rem;
-            }
-
-            button.tool-btn {
-                padding: 10px 12px;
-                font-size: 0.85rem;
-            }
-
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
+            .controls { width: 100%; }
+            input { flex: 1; width: auto; min-width: 0; font-size: 0.9rem; }
+            button.tool-btn, select.tool-btn { padding: 10px 12px; font-size: 0.85rem; }
+            .grid { grid-template-columns: 1fr; gap: 12px; }
             .section-header { margin: 20px 0 10px; }
-
             .modal-content { padding: 20px; }
-
             .file-list { max-height: 60vh; }
-
             .file-item { padding: 12px 10px; }
         }
 
-        /* Küçük telefon — 380px altı */
         @media (max-width: 380px) {
             h1 { font-size: 1.2rem; }
-
             .project-card { padding: 14px; gap: 10px; }
-
             .icon { width: 38px; height: 38px; font-size: 18px; }
         }
 
-        /* Geniş ekran — 1200px üstü */
         @media (min-width: 1200px) {
             .grid { grid-template-columns: repeat(3, 1fr); }
         }
@@ -305,31 +279,37 @@
 <body>
 
 <header>
-    <h1>🚀 Cemal Evli</h1>
+    <h1 id="site-title">🚀 Cemal Evli</h1>
     <div class="controls">
-        <input id="search" placeholder="🔍 Proje veya Oyun Ara...">
-        <button id="openNewsletter" class="tool-btn" title="Abone Ol">📧</button>
+        <input id="search" placeholder="🔍 Search Project or Game...">
+        <button id="openNewsletter" class="tool-btn" title="Subscribe">📧</button>
+        
+        <select id="langSelect" class="tool-btn">
+            <option value="en">English</option>
+            <option value="tr">Türkçe</option>
+        </select>
+
         <button id="themeToggle" class="tool-btn">🌙 / ☀️</button>
     </div>
 </header>
 
 <div class="section-header">
-    <h2 class="section-title">📂 Web Projelerim</h2>
+    <h2 class="section-title" id="title-web">📂 My Web Projects</h2>
 </div>
-<div id="project-container" class="grid"><p>Yükleniyor...</p></div>
+<div id="project-container" class="grid"><p class="loading-msg">Loading...</p></div>
 
 <div class="section-header">
-    <h2 class="section-title games">🎮 Oyunlar</h2>
+    <h2 class="section-title games" id="title-games">🎮 Games</h2>
 </div>
-<div id="game-container" class="grid"><p>Yükleniyor...</p></div>
+<div id="game-container" class="grid"><p class="loading-msg">Loading...</p></div>
 
 <div id="newsletterModal" class="modal-overlay">
     <div class="modal-content">
         <button class="close-modal" onclick="toggleModal('newsletterModal', false)">&times;</button>
-        <h2>📬 GitHub Bültenine Abone Ol</h2>
+        <h2 id="modal-news-title">📬 Subscribe to GitHub Newsletter</h2>
         <form id="newsletter-form" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
-            <input type="email" id="email-input" placeholder="E-posta adresini gir..." required style="width:100%;">
-            <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;">Abone Ol</button>
+            <input type="email" id="email-input" placeholder="Enter your email..." required style="width:100%;">
+            <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;">Subscribe</button>
         </form>
         <div id="status-msg"></div>
     </div>
@@ -338,13 +318,13 @@
 <div id="gameFilesModal" class="modal-overlay">
     <div class="modal-content">
         <button class="close-modal" onclick="toggleModal('gameFilesModal', false)">&times;</button>
-        <h2 id="modalGameName" style="margin:0; font-size:1.4rem;">🎮 Oyun Dosyaları</h2>
+        <h2 id="modalGameName" style="margin:0; font-size:1.4rem;">🎮 Game Files</h2>
         <div id="fileContainer" class="file-list"></div>
     </div>
 </div>
 
 <footer>
-    <p>Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank" style="text-decoration:none; color:inherit;"><b>Cemal Evli</b></a></p>
+    <p id="footer-text">All rights reserved. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank" style="text-decoration:none; color:inherit;"><b>Cemal Evli</b></a></p>
 </footer>
 
 <script>
@@ -353,16 +333,78 @@ const SITES_API = `https://api.github.com/repos/${USERNAME}/My_Netlify_SitesApps
 const RELEASES_API = `https://api.github.com/repos/${USERNAME}/games/releases`;
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec"; 
 
+const translations = {
+    en: {
+        search: "🔍 Search Project or Game...",
+        web: "📂 My Web Projects",
+        games: "🎮 Games",
+        loading: "Loading...",
+        error: "An error occurred.",
+        noFiles: "No files found.",
+        newsTitle: "📬 Subscribe to GitHub Newsletter",
+        emailPlh: "Enter your email...",
+        subBtn: "Subscribe",
+        saving: "Saving...",
+        success: "✅ Subscribed successfully!",
+        errSub: "❌ Error occurred.",
+        footer: "All rights reserved.",
+        badge: "OPEN",
+        download: "DOWNLOAD",
+        gameFiles: "🎮 Game Files"
+    },
+    tr: {
+        search: "🔍 Proje veya Oyun Ara...",
+        web: "📂 Web Projelerim",
+        games: "🎮 Oyunlar",
+        loading: "Yükleniyor...",
+        error: "Hata oluştu.",
+        noFiles: "Dosya bulunamadı.",
+        newsTitle: "📬 GitHub Bültenine Abone Ol",
+        emailPlh: "E-posta adresini gir...",
+        subBtn: "Abone Ol",
+        saving: "Kaydediliyor...",
+        success: "✅ Başarıyla abone oldun!",
+        errSub: "❌ Hata oluştu.",
+        footer: "Tüm hakları saklıdır.",
+        badge: "AÇ",
+        download: "İNDİR",
+        gameFiles: "🎮 Oyun Dosyaları"
+    }
+};
+
+function updateUI(lang) {
+    const t = translations[lang];
+    document.getElementById('search').placeholder = t.search;
+    document.getElementById('title-web').innerText = t.web;
+    document.getElementById('title-games').innerText = t.games;
+    document.getElementById('modal-news-title').innerText = t.newsTitle;
+    document.getElementById('email-input').placeholder = t.emailPlh;
+    document.getElementById('subscribe-btn').innerText = t.subBtn;
+    document.getElementById('footer-text').childNodes[0].textContent = t.footer + " \u00A9 2026 ";
+    document.querySelectorAll('.loading-msg').forEach(el => el.innerText = t.loading);
+}
+
+const langSelect = document.getElementById('langSelect');
+langSelect.addEventListener('change', (e) => {
+    const newLang = e.target.value;
+    localStorage.setItem("preferredLang", newLang);
+    updateUI(newLang);
+    loadProjects();
+    loadGames();
+});
+
+// Başlangıç Ayarı
+const savedLang = localStorage.getItem("preferredLang") || "en";
+langSelect.value = savedLang;
+updateUI(savedLang);
+
 function getFileIcon(filename) {
     const ext = filename.split('.').pop().toLowerCase();
     const icons = {
         'zip': '📦', 'rar': '📦', '7z': '📦',
-        'exe': '⚙️', 'msi': '⚙️',
-        'apk': '🤖',
-        'pdf': '📕',
-        'jpg': '🖼️', 'png': '🖼️', 'gif': '🖼️',
-        'txt': '📄', 'md': '📝',
-        'mp4': '🎬', 'mp3': '🎵'
+        'exe': '⚙️', 'msi': '⚙️', 'apk': '🤖',
+        'pdf': '📕', 'jpg': '🖼️', 'png': '🖼️', 'gif': '🖼️',
+        'txt': '📄', 'md': '📝', 'mp4': '🎬', 'mp3': '🎵'
     };
     return icons[ext] || '📄';
 }
@@ -373,7 +415,6 @@ function toggleModal(id, show) {
     else { m.classList.remove('active'); document.body.style.overflow = 'auto'; }
 }
 
-// Tema
 if(localStorage.getItem("theme") === "light") document.body.classList.add("light");
 document.getElementById('themeToggle').onclick = () => {
     document.body.classList.toggle("light");
@@ -384,19 +425,21 @@ document.getElementById('openNewsletter').onclick = () => toggleModal('newslette
 
 document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const lang = langSelect.value;
     const btn = document.getElementById('subscribe-btn');
     const msg = document.getElementById('status-msg');
-    btn.disabled = true; btn.innerText = "Kaydediliyor...";
+    btn.disabled = true; btn.innerText = translations[lang].saving;
     try {
         await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(document.getElementById('email-input').value)}`, { mode: 'no-cors' });
-        msg.innerHTML = "<span style='color:#4ade80'>✅ Başarıyla abone oldun!</span>";
-        setTimeout(() => { toggleModal('newsletterModal', false); btn.disabled = false; btn.innerText = "Abone Ol"; }, 1500);
-    } catch (err) { msg.innerHTML = "<span style='color:#f87171'>❌ Hata oluştu.</span>"; btn.disabled = false; }
+        msg.innerHTML = `<span style='color:#4ade80'>${translations[lang].success}</span>`;
+        setTimeout(() => { toggleModal('newsletterModal', false); btn.disabled = false; btn.innerText = translations[lang].subBtn; msg.innerHTML = ""; }, 1500);
+    } catch (err) { msg.innerHTML = `<span style='color:#f87171'>${translations[lang].errSub}</span>`; btn.disabled = false; }
 });
 
 const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 async function loadProjects() {
+    const lang = langSelect.value;
     const container = document.getElementById("project-container");
     try {
         const res = await fetch(SITES_API);
@@ -410,10 +453,11 @@ async function loadProjects() {
             card.innerHTML = `<div class="icon">🌐</div><div class="name"><b>${p.name.replace(/_/g, " ")}</b></div>`;
             container.appendChild(card);
         });
-    } catch (e) { container.innerHTML = "<p>Hata oluştu.</p>"; }
+    } catch (e) { container.innerHTML = `<p>${translations[lang].error}</p>`; }
 }
 
 async function loadGames() {
+    const lang = langSelect.value;
     const container = document.getElementById("game-container");
     try {
         const res = await fetch(RELEASES_API);
@@ -430,7 +474,7 @@ async function loadGames() {
                     <div class="name"><b>${rel.name || rel.tag_name}</b></div>
                     <div style="font-size:0.75rem; opacity:0.6;">${rel.tag_name}</div>
                 </div>
-                <span class="badge">AÇ</span>
+                <span class="badge">${translations[lang].badge}</span>
             `;
             
             card.onclick = () => {
@@ -439,7 +483,7 @@ async function loadGames() {
                 fileContainer.innerHTML = "";
 
                 if(rel.assets.length === 0) {
-                    fileContainer.innerHTML = "<p style='padding:20px; opacity:0.6;'>Dosya bulunamadı.</p>";
+                    fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6;'>${translations[lang].noFiles}</p>`;
                 } else {
                     rel.assets.forEach(asset => {
                         const div = document.createElement("div");
@@ -454,7 +498,7 @@ async function loadGames() {
                                     <div style="font-size:0.7rem; opacity:0.6;">${size} MB</div>
                                 </div>
                             </div>
-                            <a href="${asset.browser_download_url}" class="download-link">İNDİR</a>
+                            <a href="${asset.browser_download_url}" class="download-link">${translations[lang].download}</a>
                         `;
                         fileContainer.appendChild(div);
                     });
@@ -463,7 +507,7 @@ async function loadGames() {
             };
             container.appendChild(card);
         });
-    } catch (e) { container.innerHTML = "<p>Hata oluştu.</p>"; }
+    } catch (e) { container.innerHTML = `<p>${translations[lang].error}</p>`; }
 }
 
 document.getElementById('search').addEventListener("input", function() {
