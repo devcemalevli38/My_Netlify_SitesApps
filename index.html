@@ -95,6 +95,7 @@
             font-size: 0.95rem;
         }
 
+        /* --- TEMA UYUMLU DİL VE ARAÇ BUTONLARI --- */
         button.tool-btn, select.tool-btn {
             background: var(--card);
             border: 1px solid var(--border);
@@ -106,14 +107,28 @@
             font-weight: 600;
             font-size: 0.9rem;
             white-space: nowrap;
-        }
-        
-        select.tool-btn {
-            padding: 10px 8px;
             outline: none;
+        }
+
+        button.tool-btn:hover, select.tool-btn:hover {
+            background: var(--hover);
+            border-color: var(--accent);
+        }
+
+        /* Select özel ayarları */
+        select.tool-btn {
+            padding: 10px 12px;
             appearance: none;
             -webkit-appearance: none;
             text-align: center;
+            cursor: pointer;
+        }
+
+        /* Dropdown menüsünün içindeki seçeneklerin teması */
+        select.tool-btn option {
+            background-color: var(--bg); /* Menü açıldığında arka plan rengi */
+            color: var(--text);
+            padding: 10px;
         }
 
         .grid {
@@ -393,7 +408,6 @@ langSelect.addEventListener('change', (e) => {
     loadGames();
 });
 
-// Başlangıç Ayarı
 const savedLang = localStorage.getItem("preferredLang") || "en";
 langSelect.value = savedLang;
 updateUI(savedLang);
