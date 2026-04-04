@@ -1,0 +1,210 @@
+[
+  {
+    "name": ".github",
+    "path": ".github",
+    "sha": "15c0c7ecce6a3cddb7b06399c719d49b3e325de6",
+    "size": 0,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/.github?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/.github",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/15c0c7ecce6a3cddb7b06399c719d49b3e325de6",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/.github?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/15c0c7ecce6a3cddb7b06399c719d49b3e325de6",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/.github"
+    }
+  },
+  {
+    "name": "CNAME",
+    "path": "CNAME",
+    "sha": "46fb7d1837d7ed0341f6d3d4288c0ce48adff159",
+    "size": 16,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/CNAME?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/CNAME",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/46fb7d1837d7ed0341f6d3d4288c0ce48adff159",
+    "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/CNAME",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/CNAME?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/46fb7d1837d7ed0341f6d3d4288c0ce48adff159",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/CNAME"
+    }
+  },
+  {
+    "name": "Cikma_Teklifi",
+    "path": "Cikma_Teklifi",
+    "sha": "266a33e8f45dcc24b47ed9e1f4383496e8dd2308",
+    "size": 0,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Cikma_Teklifi?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/Cikma_Teklifi",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/266a33e8f45dcc24b47ed9e1f4383496e8dd2308",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Cikma_Teklifi?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/266a33e8f45dcc24b47ed9e1f4383496e8dd2308",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/Cikma_Teklifi"
+    }
+  },
+  {
+    "name": "MacroDroid_Media_Control",
+    "path": "MacroDroid_Media_Control",
+    "sha": "d2cab721a5e4db0e542bb4eeb0b5cacbd1313e87",
+    "size": 0,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/MacroDroid_Media_Control?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/MacroDroid_Media_Control",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/d2cab721a5e4db0e542bb4eeb0b5cacbd1313e87",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/MacroDroid_Media_Control?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/d2cab721a5e4db0e542bb4eeb0b5cacbd1313e87",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/MacroDroid_Media_Control"
+    }
+  },
+  {
+    "name": "Müzik_Kontrol",
+    "path": "Müzik_Kontrol",
+    "sha": "483632e01f89632a3550b9928a63e6ee74f2bd8b",
+    "size": 0,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/M%C3%BCzik_Kontrol?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/M%C3%BCzik_Kontrol",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/483632e01f89632a3550b9928a63e6ee74f2bd8b",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/M%C3%BCzik_Kontrol?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/483632e01f89632a3550b9928a63e6ee74f2bd8b",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/M%C3%BCzik_Kontrol"
+    }
+  },
+  {
+    "name": "Portfolio_Site",
+    "path": "Portfolio_Site",
+    "sha": "4a775246473f781d23995b70a0e532c77ed81a67",
+    "size": 0,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Portfolio_Site?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/Portfolio_Site",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/4a775246473f781d23995b70a0e532c77ed81a67",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Portfolio_Site?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/4a775246473f781d23995b70a0e532c77ed81a67",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/Portfolio_Site"
+    }
+  },
+  {
+    "name": "README.md",
+    "path": "README.md",
+    "sha": "e2cc64d99d4085c78caceed278400a77ea5a90e6",
+    "size": 1160,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/README.md?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/README.md",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/e2cc64d99d4085c78caceed278400a77ea5a90e6",
+    "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/README.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/README.md?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/e2cc64d99d4085c78caceed278400a77ea5a90e6",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/README.md"
+    }
+  },
+  {
+    "name": "Spotify_Calınıyor",
+    "path": "Spotify_Calınıyor",
+    "sha": "a6f1f3335f61cdbc640fe9ac8b4514931e6d5f8a",
+    "size": 0,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Spotify_Cal%C4%B1n%C4%B1yor?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/Spotify_Cal%C4%B1n%C4%B1yor",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/a6f1f3335f61cdbc640fe9ac8b4514931e6d5f8a",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Spotify_Cal%C4%B1n%C4%B1yor?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/a6f1f3335f61cdbc640fe9ac8b4514931e6d5f8a",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/Spotify_Cal%C4%B1n%C4%B1yor"
+    }
+  },
+  {
+    "name": "favicon.ico",
+    "path": "favicon.ico",
+    "sha": "a6c4c5173226795a98278aa7b1ec32f1f381363d",
+    "size": 4286,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/favicon.ico?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/favicon.ico",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/a6c4c5173226795a98278aa7b1ec32f1f381363d",
+    "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/favicon.ico",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/favicon.ico?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/a6c4c5173226795a98278aa7b1ec32f1f381363d",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/favicon.ico"
+    }
+  },
+  {
+    "name": "index.html",
+    "path": "index.html",
+    "sha": "96289411ad783b7120ba64688995fd2a52a5c8c3",
+    "size": 22350,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/index.html?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/index.html",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/96289411ad783b7120ba64688995fd2a52a5c8c3",
+    "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/index.html",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/index.html?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/96289411ad783b7120ba64688995fd2a52a5c8c3",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/index.html"
+    }
+  },
+  {
+    "name": "index1.html",
+    "path": "index1.html",
+    "sha": "5f220d1ec08dd4bb428841e6114c419e586042a3",
+    "size": 10900,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/index1.html?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/index1.html",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/5f220d1ec08dd4bb428841e6114c419e586042a3",
+    "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/index1.html",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/index1.html?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/5f220d1ec08dd4bb428841e6114c419e586042a3",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/index1.html"
+    }
+  },
+  {
+    "name": "index2.html",
+    "path": "index2.html",
+    "sha": "d127c2f4df6492d9c6f36cf0af159714b0e8505f",
+    "size": 16126,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/index2.html?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/index2.html",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/d127c2f4df6492d9c6f36cf0af159714b0e8505f",
+    "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/index2.html",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/index2.html?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/d127c2f4df6492d9c6f36cf0af159714b0e8505f",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/index2.html"
+    }
+  },
+  {
+    "name": "Şifre_Çöz",
+    "path": "Şifre_Çöz",
+    "sha": "191ae207ca8d94abe393dd74fe0da27f87fe85a8",
+    "size": 0,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/%C5%9Eifre_%C3%87%C3%B6z?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/%C5%9Eifre_%C3%87%C3%B6z",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/191ae207ca8d94abe393dd74fe0da27f87fe85a8",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/%C5%9Eifre_%C3%87%C3%B6z?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/191ae207ca8d94abe393dd74fe0da27f87fe85a8",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/%C5%9Eifre_%C3%87%C3%B6z"
+    }
+  }
+]
