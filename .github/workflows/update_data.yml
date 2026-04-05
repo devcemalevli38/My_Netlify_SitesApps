@@ -25,8 +25,9 @@ jobs:
 
       - name: Commit and Push Changes
         run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          # Senin kimlik bilgilerinle yapılandırma
+          git config --local user.name "cemal201138"
+          git config --local user.email "cemal201138@users.noreply.github.com"
           git add projects.json games.json
           # Sadece değişiklik varsa commit at, yoksa hata verme
           git diff --quiet && git diff --staged --quiet || (git commit -m "Hourly auto-update: $(date)" && git push)
