@@ -221,7 +221,7 @@
     <h1>🚀 Cemal Evli</h1>
     <div class="controls">
         <input id="search" placeholder="">
-        <button id="openNewsletter" class="tool-btn">📧</button>
+        <button id="openNewsletter" class="tool-btn" onclick="toggleModal('newsletterModal', true)">📧</button>
         <div class="lang-switcher" id="langSwitcher">
             <button class="lang-btn" id="langBtn">🌐 <span id="langLabel"></span> ▾</button>
             <div class="lang-dropdown">
@@ -265,7 +265,7 @@
             <input type="email" id="email-input" required style="width:100%;">
             <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;"></button>
         </form>
-        <div id="status-msg"></div>
+        <div id="status-msg" style="margin-top: 10px; text-align: center; font-weight: bold;"></div>
     </div>
 </div>
 
@@ -274,26 +274,9 @@
 </footer>
 
 <script>
-// --- OTOMATİK HARD REFRESH SİSTEMİ (Her 5 Dakikada Bir) ---
-function setupAutoRefresh() {
-    setInterval(() => {
-        const now = new Date();
-        const minutes = now.getMinutes();
-        const seconds = now.getSeconds();
-
-        // Eğer dakika 5'in katıysa ve saniye tam 00 ise yenile
-        // Örn: 16:00:00, 16:05:00, 16:10:00 ...
-        if (minutes % 5 === 0 && seconds === 0) {
-            console.log("5 dakikalık periyot geldi. Sayfa yenileniyor...");
-            // location.reload(true) Ctrl+F5 etkisi yaratır (önbelleği temizleyerek yükler)
-            window.location.reload(true);
-        }
-    }, 1000); // Her saniye kontrol et
-}
-setupAutoRefresh();
-
 const PROJECTS_DATA_URL = "projects.json"; 
 const GAMES_DATA_URL = "games.json";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec";
 
 const TRANSLATIONS = {
     en: {
@@ -361,8 +344,11 @@ function applyLanguage() {
     document.getElementById("bannerText").textContent = tr("updateNotice");
     document.getElementById("bannerBtn").textContent = tr("bannerConfirm");
     document.getElementById("altTitle").textContent = tr("altTitle");
+
+    document.querySelectorAll(".lang-option").forEach(btn => btn.classList.toggle("active", btn.dataset.lang === currentLang));
 }
 
+// Banner & Dil Kontrolleri
 function checkBanner() { if (!localStorage.getItem("bannerClosed")) setTimeout(() => document.getElementById("infoBanner").classList.add("show"), 800); }
 function closeBanner() { document.getElementById("infoBanner").classList.remove("show"); localStorage.setItem("bannerClosed", "true"); }
 
@@ -375,6 +361,36 @@ document.querySelectorAll(".lang-option").forEach(btn => {
         localStorage.setItem("lang", currentLang);
         applyLanguage();
     });
+});
+
+// --- ABONELİK SİSTEMİ ENTEGRASYONU ---
+document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('subscribe-btn');
+    const msg = document.getElementById('status-msg');
+    const email = document.getElementById('email-input').value;
+
+    btn.disabled = true; 
+    btn.innerText = tr("subscribing");
+
+    try {
+        // index21'deki aynı Google Script mantığı
+        await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(email)}`, { mode: 'no-cors' });
+        
+        msg.innerHTML = `<span style="color:#4ade80">${tr("subscribeSuccess")}</span>`;
+        
+        setTimeout(() => { 
+            toggleModal('newsletterModal', false); 
+            btn.disabled = false; 
+            btn.innerText = tr("subscribeBtn");
+            msg.innerHTML = "";
+            document.getElementById('email-input').value = "";
+        }, 2000);
+    } catch (err) { 
+        msg.innerHTML = `<span style="color:#f87171">${tr("subscribeError")}</span>`; 
+        btn.disabled = false;
+        btn.innerText = tr("subscribeBtn");
+    }
 });
 
 function getFileIcon(filename) {
@@ -391,12 +407,14 @@ function toggleModal(id, show) {
 
 const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
+// Tema
 if (localStorage.getItem("theme") === "light") document.body.classList.add("light");
 document.getElementById('themeToggle').onclick = () => {
     document.body.classList.toggle("light");
     localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 };
 
+// --- VERİ YÜKLEME ---
 async function loadProjects() {
     const container = document.getElementById("project-container");
     try {
@@ -467,10 +485,12 @@ async function loadGames() {
                 if (rel.body) {
                     const urlRegex = /(https?:\/\/[^\s]+)/g;
                     const links = rel.body.match(urlRegex);
+                    
                     if (links && links.length > 0) {
                         altContainer.classList.remove("hidden");
                         links.forEach((link, index) => {
                             if(link.includes("/releases/download/")) return;
+
                             const altDiv = document.createElement("div");
                             altDiv.className = "alt-link-item";
                             const cleanLink = link.replace(/[()]/g, '');
@@ -483,6 +503,7 @@ async function loadGames() {
                         if(altList.innerHTML === "") altContainer.classList.add("hidden");
                     }
                 }
+
                 toggleModal('gameFilesModal', true);
             };
             container.appendChild(card);
