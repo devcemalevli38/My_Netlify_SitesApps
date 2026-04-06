@@ -247,9 +247,7 @@
     <div class="modal-content">
         <button class="close-modal" onclick="toggleModal('gameFilesModal', false)">&times;</button>
         <h2 id="modalGameName" style="margin:0; font-size:1.4rem;"></h2>
-        
         <div id="fileContainer" class="file-list"></div>
-
         <div id="altLinksContainer" class="alt-links-section hidden">
             <div style="font-weight: bold; font-size: 0.8rem; color: var(--accent); margin-bottom: 5px;" id="altTitle">🔗 ALTERNATİF LİNKLER</div>
             <div id="altLinksList"></div>
@@ -344,41 +342,51 @@ function applyLanguage() {
     document.getElementById("bannerText").textContent = tr("updateNotice");
     document.getElementById("bannerBtn").textContent = tr("bannerConfirm");
     document.getElementById("altTitle").textContent = tr("altTitle");
-
-    document.querySelectorAll(".lang-option").forEach(btn => btn.classList.toggle("active", btn.dataset.lang === currentLang));
 }
 
-// Banner & Dil Kontrolleri
+// Banner
 function checkBanner() { if (!localStorage.getItem("bannerClosed")) setTimeout(() => document.getElementById("infoBanner").classList.add("show"), 800); }
 function closeBanner() { document.getElementById("infoBanner").classList.remove("show"); localStorage.setItem("bannerClosed", "true"); }
 
+// Dil Seçici
 const langSwitcher = document.getElementById("langSwitcher");
-document.getElementById("langBtn").addEventListener("click", (e) => { e.stopPropagation(); langSwitcher.classList.toggle("open"); });
-document.addEventListener("click", () => langSwitcher.classList.remove("open"));
+document.getElementById("langBtn").addEventListener("click", (e) => { 
+    e.stopPropagation(); 
+    langSwitcher.classList.toggle("open"); 
+});
+
+// --- GENEL TIKLAMA TAKİBİ (Dışarıya Tıklayınca Kapatma) ---
+document.addEventListener("click", (e) => {
+    // Dil menüsünü kapat
+    if (!langSwitcher.contains(e.target)) {
+        langSwitcher.classList.remove("open");
+    }
+
+    // Modalları kapat (Eğer tıklanan yer modal-overlay ise yani içeriğin dışıysa)
+    if (e.target.classList.contains('modal-overlay')) {
+        toggleModal(e.target.id, false);
+    }
+});
+
 document.querySelectorAll(".lang-option").forEach(btn => {
-    btn.addEventListener("click", (e) => {
+    btn.addEventListener("click", () => {
         currentLang = btn.dataset.lang;
         localStorage.setItem("lang", currentLang);
         applyLanguage();
     });
 });
 
-// --- ABONELİK SİSTEMİ ENTEGRASYONU ---
+// Abonelik Sistemi
 document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('subscribe-btn');
     const msg = document.getElementById('status-msg');
     const email = document.getElementById('email-input').value;
-
     btn.disabled = true; 
     btn.innerText = tr("subscribing");
-
     try {
-        // index21'deki aynı Google Script mantığı
         await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(email)}`, { mode: 'no-cors' });
-        
         msg.innerHTML = `<span style="color:#4ade80">${tr("subscribeSuccess")}</span>`;
-        
         setTimeout(() => { 
             toggleModal('newsletterModal', false); 
             btn.disabled = false; 
@@ -401,6 +409,7 @@ function getFileIcon(filename) {
 
 function toggleModal(id, show) {
     const m = document.getElementById(id);
+    if (!m) return;
     m.classList.toggle('active', show);
     document.body.style.overflow = show ? 'hidden' : 'auto';
 }
@@ -414,7 +423,7 @@ document.getElementById('themeToggle').onclick = () => {
     localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 };
 
-// --- VERİ YÜKLEME ---
+// Veri Yükleme
 async function loadProjects() {
     const container = document.getElementById("project-container");
     try {
@@ -451,11 +460,11 @@ async function loadGames() {
                 </div>
                 <span class="badge">${tr("openBadge")}</span>
             `;
-            card.onclick = () => {
+            card.onclick = (e) => {
+                e.stopPropagation(); // Kart tıklamasının body'ye yayılmasını engelle
                 const fileContainer = document.getElementById("fileContainer");
                 const altContainer = document.getElementById("altLinksContainer");
                 const altList = document.getElementById("altLinksList");
-                
                 document.getElementById("modalGameName").textContent = rel.name || rel.tag_name;
                 fileContainer.innerHTML = "";
                 altList.innerHTML = "";
@@ -485,12 +494,10 @@ async function loadGames() {
                 if (rel.body) {
                     const urlRegex = /(https?:\/\/[^\s]+)/g;
                     const links = rel.body.match(urlRegex);
-                    
                     if (links && links.length > 0) {
                         altContainer.classList.remove("hidden");
                         links.forEach((link, index) => {
                             if(link.includes("/releases/download/")) return;
-
                             const altDiv = document.createElement("div");
                             altDiv.className = "alt-link-item";
                             const cleanLink = link.replace(/[()]/g, '');
@@ -503,7 +510,6 @@ async function loadGames() {
                         if(altList.innerHTML === "") altContainer.classList.add("hidden");
                     }
                 }
-
                 toggleModal('gameFilesModal', true);
             };
             container.appendChild(card);
