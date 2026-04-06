@@ -170,7 +170,6 @@
             padding: 14px; border-bottom: 1px solid var(--border); gap: 12px;
         }
 
-        /* Yeni Alternatif Linkler Alanı */
         .alt-links-section {
             margin-top: 15px;
             padding: 12px;
@@ -275,9 +274,26 @@
 </footer>
 
 <script>
+// --- OTOMATİK HARD REFRESH SİSTEMİ (Her 5 Dakikada Bir) ---
+function setupAutoRefresh() {
+    setInterval(() => {
+        const now = new Date();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+
+        // Eğer dakika 5'in katıysa ve saniye tam 00 ise yenile
+        // Örn: 16:00:00, 16:05:00, 16:10:00 ...
+        if (minutes % 5 === 0 && seconds === 0) {
+            console.log("5 dakikalık periyot geldi. Sayfa yenileniyor...");
+            // location.reload(true) Ctrl+F5 etkisi yaratır (önbelleği temizleyerek yükler)
+            window.location.reload(true);
+        }
+    }, 1000); // Her saniye kontrol et
+}
+setupAutoRefresh();
+
 const PROJECTS_DATA_URL = "projects.json"; 
 const GAMES_DATA_URL = "games.json";
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec";
 
 const TRANSLATIONS = {
     en: {
@@ -345,11 +361,8 @@ function applyLanguage() {
     document.getElementById("bannerText").textContent = tr("updateNotice");
     document.getElementById("bannerBtn").textContent = tr("bannerConfirm");
     document.getElementById("altTitle").textContent = tr("altTitle");
-
-    document.querySelectorAll(".lang-option").forEach(btn => btn.classList.toggle("active", btn.dataset.lang === currentLang));
 }
 
-// Banner & Dil Kontrolleri
 function checkBanner() { if (!localStorage.getItem("bannerClosed")) setTimeout(() => document.getElementById("infoBanner").classList.add("show"), 800); }
 function closeBanner() { document.getElementById("infoBanner").classList.remove("show"); localStorage.setItem("bannerClosed", "true"); }
 
@@ -378,14 +391,12 @@ function toggleModal(id, show) {
 
 const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-// Tema
 if (localStorage.getItem("theme") === "light") document.body.classList.add("light");
 document.getElementById('themeToggle').onclick = () => {
     document.body.classList.toggle("light");
     localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 };
 
-// --- VERİ YÜKLEME ---
 async function loadProjects() {
     const container = document.getElementById("project-container");
     try {
@@ -432,7 +443,6 @@ async function loadGames() {
                 altList.innerHTML = "";
                 altContainer.classList.add("hidden");
 
-                // 1. Dosyaları (Assets) Yükle
                 if (rel.assets && rel.assets.length > 0) {
                     rel.assets.forEach(asset => {
                         const div = document.createElement("div");
@@ -454,31 +464,25 @@ async function loadGames() {
                     fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6;'>${tr("noFiles")}</p>`;
                 }
 
-                // 2. Body içindeki Linkleri (Alternatif) Yakala
                 if (rel.body) {
                     const urlRegex = /(https?:\/\/[^\s]+)/g;
                     const links = rel.body.match(urlRegex);
-                    
                     if (links && links.length > 0) {
                         altContainer.classList.remove("hidden");
                         links.forEach((link, index) => {
-                            // GitHub'ın kendi asset linklerini tekrar gösterme
                             if(link.includes("/releases/download/")) return;
-
                             const altDiv = document.createElement("div");
                             altDiv.className = "alt-link-item";
-                            const cleanLink = link.replace(/[()]/g, ''); // Markdown parantezlerini temizle
+                            const cleanLink = link.replace(/[()]/g, '');
                             altDiv.innerHTML = `
                                 <span style="opacity:0.8; font-size:0.75rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:200px;">Link #${index+1}</span>
                                 <a href="${cleanLink}" class="download-link alt-btn" target="_blank">${tr("altLinkBtn")}</a>
                             `;
                             altList.appendChild(altDiv);
                         });
-                        // Eğer hiç dış link yoksa tekrar gizle
                         if(altList.innerHTML === "") altContainer.classList.add("hidden");
                     }
                 }
-
                 toggleModal('gameFilesModal', true);
             };
             container.appendChild(card);
