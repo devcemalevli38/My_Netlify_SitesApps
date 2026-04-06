@@ -18,9 +18,9 @@ jobs:
 
       - name: Fetch Projects and Games
         run: |
-          # Projeleri çek
+          # Projeleri çek (Hata almamak için -L yönlendirmesini ekledik)
           curl -sL "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/" > projects.json
-          # Oyunları ve Release Note'larını (body alanını) içeren tüm release verisini çek
+          # Oyunları çek
           curl -sL "https://api.github.com/repos/cemal201138/games/releases" > games.json
 
       - name: Commit and Push Changes
