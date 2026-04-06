@@ -3,31 +3,41 @@ name: Hourly Data Update
 on:
   schedule:
     - cron: '0 * * * *' # Her saatin başında (13:00, 14:00 vb.) otomatik çalışır
-  workflow_dispatch: # İstediğinde manuel çalıştırmak için buton ekler
+  workflow_dispatch: # Manuel çalıştırma butonu
   push:
-    branches: [ main ] # Kodda bir değişiklik yapıp pushladığında da çalışır
+    branches: [ main ] # Main dalına push yapıldığında çalışır
 
 jobs:
   update-json:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Dosyaları depona geri yazabilmesi için şart
+      contents: write # Dosyaları depoya geri yazabilmesi için gerekli
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
       - name: Fetch Projects and Games
         run: |
-          # Projeleri çek (Hata almamak için -L yönlendirmesini ekledik)
+          # Projeleri çek (İçerik listesi)
           curl -sL "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/" > projects.json
-          # Oyunları çek
+          
+          # Oyunları ve Sürüm Notlarını (Release Notes) çek
+          # Bu endpoint sürüm notlarını 'body' alanı altında getirir
           curl -sL "https://api.github.com/repos/cemal201138/games/releases" > games.json
 
       - name: Commit and Push Changes
         run: |
-          # Senin kimlik bilgilerinle yapılandırma
+          # Git kimlik yapılandırması
           git config --local user.name "cemal201138"
           git config --local user.email "cemal201138@users.noreply.github.com"
+          
+          # Dosyaları sahneye al
           git add projects.json games.json
-          # Sadece değişiklik varsa commit at, yoksa hata verme
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Hourly auto-update: $(date)" && git push)
+          
+          # Sadece değişiklik varsa commit at, yoksa işlemi sessizce bitir
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git commit -m "Hourly auto-update (including release notes): $(date)"
+            git push
+          else
+            echo "Herhangi bir değişiklik saptanmadı, atlanıyor."
+          fi
