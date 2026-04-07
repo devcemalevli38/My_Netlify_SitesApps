@@ -362,7 +362,7 @@ document.addEventListener("click", (e) => {
         langSwitcher.classList.remove("open");
     }
 
-    // Modalları kapat (Eğer tıklanan yer modal-overlay ise yani içeriğin dışıysa)
+    // Modalları kapat
     if (e.target.classList.contains('modal-overlay')) {
         toggleModal(e.target.id, false);
     }
@@ -414,7 +414,20 @@ function toggleModal(id, show) {
     document.body.style.overflow = show ? 'hidden' : 'auto';
 }
 
-const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+// Gelişmiş Normalizasyon Fonksiyonu (Türkçe karakterleri ve sembolleri temizler)
+const norm = s => {
+    if (!s) return "";
+    return s.toLowerCase()
+        .replace(/ı/g, 'i')
+        .replace(/ğ/g, 'g')
+        .replace(/ü/g, 'u')
+        .replace(/ş/g, 's')
+        .replace(/ö/g, 'o')
+        .replace(/ç/g, 'c')
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") // Diğer aksanları temizle
+        .replace(/[_\s-]/g, ""); // Alt tire, boşluk ve tire işaretlerini kaldır
+};
 
 // Tema
 if (localStorage.getItem("theme") === "light") document.body.classList.add("light");
@@ -435,7 +448,7 @@ async function loadProjects() {
             card.className = "project-card";
             card.href = p.path;
             card.target = "_blank";
-            card.dataset.name = norm(p.name);
+            card.dataset.searchName = norm(p.name); // Arama için normalize edilmiş isim
             card.innerHTML = `<div class="icon">🌐</div><div class="name"><b>${p.name.replace(/_/g, " ")}</b></div>`;
             container.appendChild(card);
         });
@@ -451,7 +464,7 @@ async function loadGames() {
         releases.forEach(rel => {
             const card = document.createElement("div");
             card.className = "project-card game-card";
-            card.dataset.name = norm(rel.name || rel.tag_name);
+            card.dataset.searchName = norm(rel.name || rel.tag_name); // Arama için normalize edilmiş isim
             card.innerHTML = `
                 <div class="icon">🎮</div>
                 <div class="info-group">
@@ -461,7 +474,7 @@ async function loadGames() {
                 <span class="badge">${tr("openBadge")}</span>
             `;
             card.onclick = (e) => {
-                e.stopPropagation(); // Kart tıklamasının body'ye yayılmasını engelle
+                e.stopPropagation();
                 const fileContainer = document.getElementById("fileContainer");
                 const altContainer = document.getElementById("altLinksContainer");
                 const altList = document.getElementById("altLinksList");
@@ -517,9 +530,13 @@ async function loadGames() {
     } catch (e) { container.innerHTML = `<p>${tr("error")}</p>`; }
 }
 
+// Arama kutusu olayı
 document.getElementById('search').addEventListener("input", function () {
-    const q = norm(this.value);
-    document.querySelectorAll(".project-card").forEach(card => card.classList.toggle("hidden", !card.dataset.name.includes(q)));
+    const q = norm(this.value); // Arama terimini normalize et (şifre çöz -> sifrecoz)
+    document.querySelectorAll(".project-card").forEach(card => {
+        const name = card.dataset.searchName; // Kartın normalize edilmiş adı
+        card.classList.toggle("hidden", !name.includes(q));
+    });
 });
 
 applyLanguage();
