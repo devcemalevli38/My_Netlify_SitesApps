@@ -98,16 +98,16 @@
   {
     "name": "README.md",
     "path": "README.md",
-    "sha": "e2cc64d99d4085c78caceed278400a77ea5a90e6",
-    "size": 1160,
+    "sha": "017cda0138818f60b74ee3a5b8b017a39e7cf413",
+    "size": 1144,
     "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/README.md?ref=main",
     "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/README.md",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/e2cc64d99d4085c78caceed278400a77ea5a90e6",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/017cda0138818f60b74ee3a5b8b017a39e7cf413",
     "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/README.md",
     "type": "file",
     "_links": {
       "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/README.md?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/e2cc64d99d4085c78caceed278400a77ea5a90e6",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/017cda0138818f60b74ee3a5b8b017a39e7cf413",
       "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/README.md"
     }
   },
@@ -210,16 +210,16 @@
   {
     "name": "projects.json",
     "path": "projects.json",
-    "sha": "383399eacf8cd793b496238212279c0e45ba7554",
+    "sha": "ef3f5d6d9222b869a464d54cc02ed1cca79ed1d8",
     "size": 13752,
     "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/projects.json?ref=main",
     "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/projects.json",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/383399eacf8cd793b496238212279c0e45ba7554",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/ef3f5d6d9222b869a464d54cc02ed1cca79ed1d8",
     "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/projects.json",
     "type": "file",
     "_links": {
       "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/projects.json?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/383399eacf8cd793b496238212279c0e45ba7554",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/ef3f5d6d9222b869a464d54cc02ed1cca79ed1d8",
       "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/projects.json"
     }
   },
