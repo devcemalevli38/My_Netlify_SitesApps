@@ -4,9 +4,7 @@ on:
   schedule:
     - cron: '0 * * * *' # Her saatin başında (13:00, 14:00 vb.) otomatik çalışır
   workflow_dispatch: # İstediğinde manuel çalıştırmak için buton ekler
-  push:
-    branches: [ main ] # Kodda bir değişiklik yapıp pushladığında da çalışır
-
+  
 jobs:
   update-json:
     runs-on: ubuntu-latest
