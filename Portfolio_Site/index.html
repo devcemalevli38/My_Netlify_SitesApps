@@ -16,6 +16,7 @@
             --accent: #38bdf8;
             --neon-shadow: 0 0 10px rgba(56, 189, 248, 0.5), 0 0 20px rgba(56, 189, 248, 0.3);
             --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --navbar-height: 64px;
         }
 
         body {
@@ -31,10 +32,86 @@
             min-height: 100vh;
         }
 
-        /* Dil Menüsü Stilleri */
+        /* ─── NAVBAR ─── */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            height: var(--navbar-height);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 24px;
+            background: rgba(2, 6, 23, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.08);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .navbar.scrolled {
+            background: rgba(2, 6, 23, 0.92);
+            border-color: rgba(56, 189, 248, 0.18);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            position: relative;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: color 0.25s, background 0.25s;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 20px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 2px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-main);
+            background: rgba(56, 189, 248, 0.08);
+        }
+
+        .nav-links a.active::after,
+        .nav-links a:hover::after {
+            transform: translateX(-50%) scaleX(1);
+        }
+
+        .nav-links a.active {
+            color: var(--accent);
+        }
+
+        /* ─── DİL MENÜSÜ ─── */
         .lang-container {
             position: fixed;
-            top: 20px;
+            top: 12px;
             right: 20px;
             z-index: 1000;
         }
@@ -82,10 +159,12 @@
 
         .lang-option:hover { background: var(--accent); color: var(--bg-color); }
 
+        /* ─── MAIN CONTENT ─── */
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 60px 20px;
+            padding-top: calc(var(--navbar-height) + 60px);
             flex: 1;
         }
 
@@ -217,28 +296,34 @@
             width: 100%;
         }
 
-        footer b {
-            color: var(--accent);
-            font-weight: 700;
-        }
+        footer b { color: var(--accent); font-weight: 700; }
+        footer a { text-decoration: none; color: inherit; transition: color 0.3s ease; }
+        footer a:hover { color: var(--accent); }
+        footer p { margin: 0; }
 
-        footer a {
-            text-decoration: none;
-            color: inherit;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: var(--accent);
-        }
-
-        footer p {
-            margin: 0;
+        /* ─── MOBİL ─── */
+        @media (max-width: 540px) {
+            .nav-links a {
+                font-size: 0.78rem;
+                padding: 7px 10px;
+            }
+            .lang-container { top: 14px; right: 10px; }
+            .lang-btn { padding: 6px 10px; font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- ─── NAVBAR ─── -->
+    <nav class="navbar" id="navbar">
+        <ul class="nav-links">
+            <li><a data-section="hero" id="nav-home" class="active">Home</a></li>
+            <li><a data-section="about" id="nav-about">About</a></li>
+            <li><a data-section="projects" id="nav-projects">Projects</a></li>
+        </ul>
+    </nav>
+
+    <!-- ─── DİL MENÜSÜ ─── -->
     <div class="lang-container">
         <button class="lang-btn" onclick="toggleDropdown()">
             <i class="fas fa-language"></i> <span id="btn-text">Language</span>
@@ -250,19 +335,21 @@
     </div>
 
     <div class="container">
-        <header>
-            <img src="https://github.com/cemal201138.png" alt="Cemal Evli" class="profile-img">
-            <h1>Cemal Evli</h1>
-            <p class="subtitle" id="ui-subtitle">Student and Future Developer</p>
-            
-            <div class="social-links">
-                <a href="https://github.com/cemal201138" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="https://www.facebook.com/profile.php?id=100076601840154" target="_blank"><i class="fab fa-facebook"></i></a>
-                <a href="https://www.instagram.com/cemalevli38/" target="_blank"><i class="fab fa-instagram"></i></a>
-                <a href="mailto:mylab@cemalevli.qzz.io"><i class="fas fa-envelope"></i></a>
-                <a href="https://cemalevli.qzz.io" target="_blank" title="Web Sitem"><i class="fas fa-globe"></i></a>
-            </div>
-        </header>
+        <section id="hero">
+            <header>
+                <img src="https://github.com/cemal201138.png" alt="Cemal Evli" class="profile-img">
+                <h1>Cemal Evli</h1>
+                <p class="subtitle" id="ui-subtitle">Student and Future Developer</p>
+                
+                <div class="social-links">
+                    <a href="https://github.com/cemal201138" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://www.facebook.com/profile.php?id=100076601840154" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="https://www.instagram.com/cemalevli38/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="mailto:mylab@cemalevli.qzz.io"><i class="fas fa-envelope"></i></a>
+                    <a href="https://cemalevli.qzz.io" target="_blank" title="Web Sitem"><i class="fas fa-globe"></i></a>
+                </div>
+            </header>
+        </section>
 
         <section id="about">
             <h2 class="section-title" id="ui-about-title">About Me</h2>
@@ -301,6 +388,7 @@
     </footer>
 
     <script>
+        // ─── ÇEVİRİLER ───
         const translations = {
             en: {
                 btnText: "English",
@@ -310,7 +398,10 @@
                 projectsTitle: "My Projects",
                 p1Desc: "Mouse control with hand gestures.",
                 p2Desc: "Music player with advanced interface.",
-                footer: "All rights reserved."
+                footer: "All rights reserved.",
+                navHome: "Home",
+                navAbout: "About",
+                navProjects: "Projects"
             },
             tr: {
                 btnText: "Türkçe",
@@ -320,7 +411,10 @@
                 projectsTitle: "Projelerim",
                 p1Desc: "El hareketleriyle fare kontrolü.",
                 p2Desc: "Gelişmiş arayüzlü müzik oynatıcı.",
-                footer: "Tüm hakları saklıdır."
+                footer: "Tüm hakları saklıdır.",
+                navHome: "Ana Sayfa",
+                navAbout: "Hakkımda",
+                navProjects: "Projeler"
             }
         };
 
@@ -344,21 +438,67 @@
             document.getElementById('ui-p1-desc').innerText = data.p1Desc;
             document.getElementById('ui-p2-desc').innerText = data.p2Desc;
             document.getElementById('ui-footer-text').innerText = data.footer;
+            document.getElementById('nav-home').innerText = data.navHome;
+            document.getElementById('nav-about').innerText = data.navAbout;
+            document.getElementById('nav-projects').innerText = data.navProjects;
             document.documentElement.lang = lang;
         }
 
-        // Başlangıç Ayarı
+        // ─── SMOOTH SCROLL ───
+        // getBoundingClientRect + scrollY ile navbar yüksekliğini kesin hesapla
+        const NAVBAR_H = 64;
+        const SCROLL_OFFSET = 20;
+
+        function scrollToSection(sectionId) {
+            const el = document.getElementById(sectionId);
+            if (!el) return;
+            const targetY = el.getBoundingClientRect().top + window.scrollY - NAVBAR_H - SCROLL_OFFSET;
+            window.scrollTo({ top: targetY, behavior: 'smooth' });
+        }
+
+        // ─── NAV LINK TIKLAMA ───
+        const navLinks = document.querySelectorAll('.nav-links a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                scrollToSection(link.dataset.section);
+            });
+        });
+
+        // ─── NAVBAR SCROLL + AKTİF LİNK ───
+        const navbar = document.getElementById('navbar');
+        const sectionIds = ['hero', 'about', 'projects'];
+
+        function updateActiveNav() {
+            const scrollMid = window.scrollY + NAVBAR_H + SCROLL_OFFSET + 10;
+            let current = 'hero';
+            sectionIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && el.offsetTop <= scrollMid) current = id;
+            });
+            navLinks.forEach(link => {
+                link.classList.toggle('active', link.dataset.section === current);
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 20);
+            updateActiveNav();
+        }, { passive: true });
+
+        // ─── BAŞLANGIÇ ───
         window.onload = () => {
             const savedLang = localStorage.getItem('preferredLang') || 'en';
             updateUI(savedLang);
+            updateActiveNav();
         };
 
-        // Dışarı tıklandığında menüyü kapat
+        // Dışarı tıklandığında dil menüsünü kapat
         window.onclick = function(event) {
             if (!event.target.closest('.lang-container')) {
                 document.getElementById('lang-dropdown').classList.remove('active');
             }
-        }
+        };
     </script>
 
 </body>
