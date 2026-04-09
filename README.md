@@ -12,16 +12,16 @@ Aşağıda bu repo içinde bulunan ve Netlify’da çalışan projeler yer almak
 
 ### 🔹 Proje Listesi
 - 📄 **Şifre Çöz**  
-  👉 Link: https://sifrecoz.netlify.app/  |  https://cemalevli.qzz.io/Şifre_Çöz/
+  👉 Link: https://cemalevli.qzz.io/Şifre_Çöz/
   
 - 📄 **Portfolyom**  
-  👉 Link: "Şu an mevcut değil."  |  https://cemalevli.qzz.io/Portfolio_Site/
+  👉 Link: https://cemalevli.qzz.io/Portfolio_Site/
 
 - 📄 **Müzik Kontrol**  
-  👉 Link: https://muzikkontrol.netlify.app/  |  https://cemalevli.qzz.io/Müzik_Kontrol/
+  👉 Link: https://cemalevli.qzz.io/Müzik_Kontrol/
 
 - 📄 **MacroDroid Media Control**  
-  👉 Link: "Şu an mevcut değil."  |  https://cemalevli.qzz.io/MacroDroid_Media_Control/
+  👉 Link: https://cemalevli.qzz.io/MacroDroid_Media_Control/
 
 - **!Diğer projeler test aşamasındadır. Listeye eklenmemiştirler!**
 
