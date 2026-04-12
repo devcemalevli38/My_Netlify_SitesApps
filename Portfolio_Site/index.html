@@ -197,12 +197,15 @@
             margin-top: 0;
         }
 
+        /* ─── SOCIAL LINKS ─── */
         .social-links {
             margin-top: 35px;
             display: flex;
             justify-content: center;
             gap: 20px;
             flex-wrap: wrap;
+            min-height: 2.5rem;
+            transition: opacity 0.3s;
         }
 
         .social-links a {
@@ -213,13 +216,43 @@
         }
 
         .social-links a:hover { transform: scale(1.2) translateY(-5px); }
-        .fa-github:hover    { color: #fff; }
-        .fa-instagram:hover { color: #E1306C; }
-        .fa-facebook:hover  { color: #1877F2; }
-        .fa-globe:hover     { color: var(--accent); }
-        .fa-envelope:hover  { color: var(--accent); }
-        .fa-tree:hover      { color: #43d854; }
 
+        /* İkon renkleri — her açılışta dinamik ikonlar için de çalışır */
+        .social-links a:hover .fa-github    { color: #fff; }
+        .social-links a:hover .fa-instagram { color: #E1306C; }
+        .social-links a:hover .fa-facebook  { color: #1877F2; }
+        .social-links a:hover .fa-globe     { color: var(--accent); }
+        .social-links a:hover .fa-envelope  { color: var(--accent); }
+        .social-links a:hover .fa-tree      { color: #43d854; }
+        .social-links a:hover .fa-twitter   { color: #1DA1F2; }
+        .social-links a:hover .fa-youtube   { color: #FF0000; }
+        .social-links a:hover .fa-linkedin  { color: #0A66C2; }
+        .social-links a:hover .fa-telegram  { color: #2AABEE; }
+        .social-links a:hover .fa-discord   { color: #5865F2; }
+        .social-links a:hover .fa-twitch    { color: #9146FF; }
+        .social-links a:hover i { transition: color 0.25s; }
+
+        /* Değişiklik flash efekti — social links için */
+        @keyframes social-flash {
+            0%   { opacity: 0; transform: scale(0.85); }
+            60%  { opacity: 1; transform: scale(1.06); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .social-links.updated a {
+            animation: social-flash 0.5s ease-out both;
+        }
+
+        .social-links.updated a:nth-child(1) { animation-delay: 0.00s; }
+        .social-links.updated a:nth-child(2) { animation-delay: 0.06s; }
+        .social-links.updated a:nth-child(3) { animation-delay: 0.12s; }
+        .social-links.updated a:nth-child(4) { animation-delay: 0.18s; }
+        .social-links.updated a:nth-child(5) { animation-delay: 0.24s; }
+        .social-links.updated a:nth-child(6) { animation-delay: 0.30s; }
+        .social-links.updated a:nth-child(7) { animation-delay: 0.36s; }
+        .social-links.updated a:nth-child(8) { animation-delay: 0.42s; }
+
+        /* ─── ABOUT TEXT ─── */
         .section-title {
             border-left: 4px solid var(--accent);
             padding-left: 15px;
@@ -244,7 +277,6 @@
             font-style: italic;
         }
 
-        /* Değişiklik algılandığında kısa bir parlama efekti */
         @keyframes updated-flash {
             0%   { border-color: var(--accent); box-shadow: var(--neon-shadow); }
             100% { border-color: rgba(56, 189, 248, 0.1); box-shadow: none; }
@@ -260,6 +292,7 @@
             font-weight: bold;
         }
 
+        /* ─── PROJECT CARDS ─── */
         .project-card {
             background: var(--card-bg);
             padding: 25px;
@@ -338,15 +371,9 @@
                 <img src="https://github.com/cemal201138.png" alt="Cemal Evli" class="profile-img">
                 <h1>Cemal Evli</h1>
                 <p class="subtitle" id="ui-subtitle">Student and Future Developer</p>
-                
-                <div class="social-links">
-                    <a href="https://github.com/cemal201138" target="_blank"><i class="fab fa-github"></i></a>
-                    <a href="https://www.facebook.com/profile.php?id=100076601840154" target="_blank"><i class="fab fa-facebook"></i></a>
-                    <a href="https://www.instagram.com/cemalevli38/" target="_blank"><i class="fab fa-instagram"></i></a>
-                    <a href="mailto:mylab@cemalevli.qzz.io"><i class="fas fa-envelope"></i></a>
-                    <a href="https://cemalevli.qzz.io" target="_blank" title="Web Sitem"><i class="fas fa-globe"></i></a>
-                    <a href="https://linktr.ee/CemalEvli" target="_blank" title="Linktree"><i class="fas fa-tree"></i></a>
-                </div>
+
+                <!-- Sosyal linkler buraya dinamik olarak yazılır -->
+                <div class="social-links" id="social-links"></div>
             </header>
         </section>
 
@@ -383,7 +410,10 @@
     </footer>
 
     <script>
-        // ─── ABOUT ME KAYNAKLARI ───
+        // ════════════════════════════════════════
+        //  KAYNAK TANIMLARI
+        // ════════════════════════════════════════
+
         const ABOUT_SOURCES = {
             en: {
                 url: 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/Portfolio_Site/aboutme_eng',
@@ -397,90 +427,123 @@
             }
         };
 
-        // ─── LINKIFY ───
-        // Dosyadaki "https://..." tırnaklı URL'leri <a> etiketine çevir
+        const SOCIAL_SOURCE = {
+            url: 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/Portfolio_Site/social-links',
+            cacheKey: 'social_links',
+            fallback: JSON.stringify([
+                {"icon": "fab fa-github",    "url": "https://github.com/cemal201138",                              "title": "GitHub"},
+                {"icon": "fab fa-facebook",  "url": "https://www.facebook.com/profile.php?id=100076601840154",     "title": "Facebook"},
+                {"icon": "fab fa-instagram", "url": "https://www.instagram.com/cemalevli38/",                      "title": "Instagram"},
+                {"icon": "fas fa-envelope",  "url": "mailto:mylab@cemalevli.qzz.io",                               "title": "E-posta"},
+                {"icon": "fas fa-globe",     "url": "https://cemalevli.qzz.io",                                    "title": "Web Sitem"},
+                {"icon": "fas fa-tree",      "url": "https://linktr.ee/CemalEvli",                                 "title": "Linktree"}
+            ])
+        };
+
+        // ════════════════════════════════════════
+        //  GENEL FETCH + DEĞİŞİKLİK TESPİTİ
+        // ════════════════════════════════════════
+
+        // Herhangi bir kaynak için: çek, cache ile karşılaştır, değişmişse kaydet
+        async function fetchOne(url, cacheKey, fallback) {
+            const oldText = localStorage.getItem(cacheKey);
+            try {
+                const res = await fetch(url, { cache: 'no-store' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const newText = (await res.text()).trim();
+                const changed = newText !== oldText;
+                if (changed) localStorage.setItem(cacheKey, newText);
+                return { text: newText, changed };
+            } catch (err) {
+                console.warn('[fetch] hata —', cacheKey, err);
+                return { text: oldText || fallback, changed: false };
+            }
+        }
+
+        // ════════════════════════════════════════
+        //  ABOUT TEXT
+        // ════════════════════════════════════════
+
         function linkify(text) {
             return text.replace(/"(https?:\/\/[^"]+)"/g,
                 '<a href="$1" target="_blank">$1</a>');
         }
 
-        // ─── FETCH + DEĞİŞİKLİK TESPİTİ ───
-        // Her iki dil dosyasını her açılışta GitHub'dan çeker.
-        // Eski cache ile karşılaştırır; farklıysa günceller ve
-        // aktif dil etkilendiyse sayfayı yeniden çizer.
-        async function fetchAndDetectChanges() {
-            const results = await Promise.allSettled([
-                fetchOne('en'),
-                fetchOne('tr')
-            ]);
-
-            // Aktif dilin metni değiştiyse sayfayı güncelle
-            const activeLangResult = results[currentLang === 'tr' ? 1 : 0];
-            if (activeLangResult.status === 'fulfilled' && activeLangResult.value.changed) {
-                renderAbout(activeLangResult.value.text);
-            }
-        }
-
-        // Tek bir dil için GitHub'dan çek, cache ile karşılaştır
-        async function fetchOne(lang) {
-            const src = ABOUT_SOURCES[lang];
-            const oldText = localStorage.getItem(src.cacheKey);
-
-            try {
-                const res = await fetch(src.url, { cache: 'no-store' });
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const newText = (await res.text()).trim();
-
-                const changed = newText !== oldText;
-                if (changed) {
-                    localStorage.setItem(src.cacheKey, newText);
-                }
-                return { text: newText, changed };
-            } catch (err) {
-                console.warn('[About] fetch başarısız (' + lang + '):', err);
-                // Hata durumunda mevcut cache'i koru, değişiklik yok say
-                return { text: oldText || src.fallback, changed: false };
-            }
-        }
-
-        // About kutusunu ekrana yaz; değişiklik olduysa parlama efekti
         function renderAbout(text, flash = true) {
             const el = document.getElementById('ui-about-text');
             el.classList.remove('loading', 'updated');
             el.innerHTML = linkify(text);
-            if (flash) {
-                // Animasyonu yeniden tetiklemek için void trick
-                void el.offsetWidth;
-                el.classList.add('updated');
+            if (flash) { void el.offsetWidth; el.classList.add('updated'); }
+        }
+
+        // ════════════════════════════════════════
+        //  SOCIAL LINKS
+        // ════════════════════════════════════════
+
+        function renderSocialLinks(jsonText, flash = false) {
+            const container = document.getElementById('social-links');
+            let links;
+            try {
+                links = JSON.parse(jsonText);
+            } catch (e) {
+                console.warn('[Social] JSON parse hatası:', e);
+                return;
+            }
+
+            container.classList.remove('updated');
+            container.innerHTML = links.map(link => {
+                // mailto adresleri için target="_blank" gerekmez
+                const target = link.url.startsWith('mailto:') ? '' : 'target="_blank"';
+                return `<a href="${link.url}" ${target} title="${link.title}"><i class="${link.icon}"></i></a>`;
+            }).join('');
+
+            if (flash) { void container.offsetWidth; container.classList.add('updated'); }
+        }
+
+        // ════════════════════════════════════════
+        //  ANA FETCH DÖNGÜSÜ
+        // ════════════════════════════════════════
+
+        async function fetchAndDetectChanges() {
+            const [engResult, trResult, socialResult] = await Promise.allSettled([
+                fetchOne(ABOUT_SOURCES.en.url, ABOUT_SOURCES.en.cacheKey, ABOUT_SOURCES.en.fallback),
+                fetchOne(ABOUT_SOURCES.tr.url,  ABOUT_SOURCES.tr.cacheKey,  ABOUT_SOURCES.tr.fallback),
+                fetchOne(SOCIAL_SOURCE.url,      SOCIAL_SOURCE.cacheKey,     SOCIAL_SOURCE.fallback)
+            ]);
+
+            // About — sadece aktif dilin değişip değişmediğine bak
+            const aboutResult = currentLang === 'tr' ? trResult : engResult;
+            if (aboutResult.status === 'fulfilled' && aboutResult.value.changed) {
+                renderAbout(aboutResult.value.text, true);
+            }
+
+            // Social links — değişiklik algılanırsa yeniden çiz + flash
+            if (socialResult.status === 'fulfilled' && socialResult.value.changed) {
+                renderSocialLinks(socialResult.value.text, true);
             }
         }
 
-        // ─── ÇEVİRİLER ───
+        // ════════════════════════════════════════
+        //  ÇEVİRİLER
+        // ════════════════════════════════════════
+
         const translations = {
             en: {
-                btnText: "English",
-                subtitle: "Student and Future Developer",
-                aboutTitle: "About Me",
-                projectsTitle: "My Projects",
+                btnText: "English", subtitle: "Student and Future Developer",
+                aboutTitle: "About Me", projectsTitle: "My Projects",
                 p1Desc: "Mouse control with hand gestures.",
                 p2Desc: "Music player with advanced interface.",
                 footer: "All rights reserved.",
-                navHome: "Home",
-                navAbout: "About",
-                navProjects: "Projects",
+                navHome: "Home", navAbout: "About", navProjects: "Projects",
                 loading: "Loading..."
             },
             tr: {
-                btnText: "Türkçe",
-                subtitle: "Öğrenci ve Geleceğin Yazılımcısı",
-                aboutTitle: "Hakkımda",
-                projectsTitle: "Projelerim",
+                btnText: "Türkçe", subtitle: "Öğrenci ve Geleceğin Yazılımcısı",
+                aboutTitle: "Hakkımda", projectsTitle: "Projelerim",
                 p1Desc: "El hareketleriyle fare kontrolü.",
                 p2Desc: "Gelişmiş arayüzlü müzik oynatıcı.",
                 footer: "Tüm hakları saklıdır.",
-                navHome: "Ana Sayfa",
-                navAbout: "Hakkımda",
-                navProjects: "Projeler",
+                navHome: "Ana Sayfa", navAbout: "Hakkımda", navProjects: "Projeler",
                 loading: "Yükleniyor..."
             }
         };
@@ -512,42 +575,42 @@
             document.getElementById('nav-projects').innerText      = d.navProjects;
             document.documentElement.lang = lang;
 
-            // Cache'deki metni anında göster (fetch sonucu bekleme)
+            // About — cache varsa anında göster
             const cached = localStorage.getItem(ABOUT_SOURCES[lang].cacheKey);
             const el = document.getElementById('ui-about-text');
             if (cached) {
-                renderAbout(cached, false);   // dil değişiminde flash yok
+                renderAbout(cached, false);
             } else {
                 el.classList.add('loading');
                 el.textContent = d.loading;
             }
         }
 
-        // ─── SMOOTH SCROLL ───
-        const NAVBAR_H = 64;
-        const SCROLL_OFFSET = 20;
+        // ════════════════════════════════════════
+        //  SMOOTH SCROLL + ACTIVE NAV
+        // ════════════════════════════════════════
+
+        const NAVBAR_H = 64, SCROLL_OFFSET = 20;
 
         function scrollToSection(sectionId) {
             const el = document.getElementById(sectionId);
             if (!el) return;
-            const targetY = el.getBoundingClientRect().top + window.scrollY - NAVBAR_H - SCROLL_OFFSET;
-            window.scrollTo({ top: targetY, behavior: 'smooth' });
+            window.scrollTo({
+                top: el.getBoundingClientRect().top + window.scrollY - NAVBAR_H - SCROLL_OFFSET,
+                behavior: 'smooth'
+            });
         }
 
         document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', e => {
-                e.preventDefault();
-                scrollToSection(link.dataset.section);
-            });
+            link.addEventListener('click', e => { e.preventDefault(); scrollToSection(link.dataset.section); });
         });
 
         const navbar = document.getElementById('navbar');
-        const sectionIds = ['hero', 'about', 'projects'];
 
         function updateActiveNav() {
             const scrollMid = window.scrollY + NAVBAR_H + SCROLL_OFFSET + 10;
             let current = 'hero';
-            sectionIds.forEach(id => {
+            ['hero','about','projects'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el && el.offsetTop <= scrollMid) current = id;
             });
@@ -561,17 +624,23 @@
             updateActiveNav();
         }, { passive: true });
 
-        // ─── BAŞLANGIÇ ───
+        // ════════════════════════════════════════
+        //  BAŞLANGIÇ
+        // ════════════════════════════════════════
+
         window.onload = async () => {
             currentLang = localStorage.getItem('preferredLang') || 'en';
-            updateUI(currentLang);   // cache varsa anında göster
+            updateUI(currentLang);
             updateActiveNav();
 
-            // Her açılışta GitHub'dan çek, değişiklik varsa güncelle
+            // Social links — cache varsa hemen göster, fetch bekleme
+            const cachedSocial = localStorage.getItem(SOCIAL_SOURCE.cacheKey);
+            renderSocialLinks(cachedSocial || SOCIAL_SOURCE.fallback, false);
+
+            // Her açılışta her üç dosyayı da çek; değişiklik varsa güncelle
             await fetchAndDetectChanges();
         };
 
-        // Dışarı tıklandığında dil menüsünü kapat
         window.onclick = function(e) {
             if (!e.target.closest('.lang-container')) {
                 document.getElementById('lang-dropdown').classList.remove('active');
