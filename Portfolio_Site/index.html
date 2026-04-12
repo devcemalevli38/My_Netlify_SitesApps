@@ -24,8 +24,7 @@
             color: var(--text-main);
             font-family: 'Inter', -apple-system, sans-serif;
             line-height: 1.6;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             overflow-x: hidden;
             display: flex;
             flex-direction: column;
@@ -214,7 +213,7 @@
         }
 
         .social-links a:hover { transform: scale(1.2) translateY(-5px); }
-        .fa-github:hover   { color: #fff; }
+        .fa-github:hover    { color: #fff; }
         .fa-instagram:hover { color: #E1306C; }
         .fa-facebook:hover  { color: #1877F2; }
         .fa-globe:hover     { color: var(--accent); }
@@ -243,6 +242,16 @@
         .about-text.loading {
             opacity: 0.45;
             font-style: italic;
+        }
+
+        /* Değişiklik algılandığında kısa bir parlama efekti */
+        @keyframes updated-flash {
+            0%   { border-color: var(--accent); box-shadow: var(--neon-shadow); }
+            100% { border-color: rgba(56, 189, 248, 0.1); box-shadow: none; }
+        }
+
+        .about-text.updated {
+            animation: updated-flash 1.5s ease-out forwards;
         }
 
         .about-text a {
@@ -379,65 +388,74 @@
             en: {
                 url: 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/Portfolio_Site/aboutme_eng',
                 cacheKey: 'aboutme_eng',
-                tsKey: 'aboutme_eng_ts',
                 fallback: 'I am a student working with the goal of turning my curiosity for technology into tangible projects. I am developing myself in web technologies and Python. You can follow my projects and more at "https://cemalevli.qzz.io".'
             },
             tr: {
                 url: 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/Portfolio_Site/aboutme_tr',
                 cacheKey: 'aboutme_tr',
-                tsKey: 'aboutme_tr_ts',
                 fallback: 'Teknolojiye duyduğum merakı, somut projelere dönüştürme hedefiyle çalışan bir öğrenciyim. Web teknolojileri ve Python üzerine kendimi geliştiriyorum. Projelerimi ve daha fazlasını "https://cemalevli.qzz.io" adresinden takip edebilirsiniz.'
             }
         };
 
-        // 1 saat = 3 600 000 ms
-        const CACHE_TTL = 60 * 60 * 1000;
-
-        // Dosyadaki "url" string'lerini tıklanabilir <a>'ya çevir
+        // ─── LINKIFY ───
+        // Dosyadaki "https://..." tırnaklı URL'leri <a> etiketine çevir
         function linkify(text) {
             return text.replace(/"(https?:\/\/[^"]+)"/g,
                 '<a href="$1" target="_blank">$1</a>');
         }
 
-        // Tek bir dil için fetch + cache mantığı
-        async function fetchAbout(lang) {
-            const src = ABOUT_SOURCES[lang];
-            const now = Date.now();
-            const cached = localStorage.getItem(src.cacheKey);
-            const cachedTs = parseInt(localStorage.getItem(src.tsKey) || '0');
+        // ─── FETCH + DEĞİŞİKLİK TESPİTİ ───
+        // Her iki dil dosyasını her açılışta GitHub'dan çeker.
+        // Eski cache ile karşılaştırır; farklıysa günceller ve
+        // aktif dil etkilendiyse sayfayı yeniden çizer.
+        async function fetchAndDetectChanges() {
+            const results = await Promise.allSettled([
+                fetchOne('en'),
+                fetchOne('tr')
+            ]);
 
-            // Geçerli cache varsa ağa gitme
-            if (cached && (now - cachedTs) < CACHE_TTL) {
-                return cached;
+            // Aktif dilin metni değiştiyse sayfayı güncelle
+            const activeLangResult = results[currentLang === 'tr' ? 1 : 0];
+            if (activeLangResult.status === 'fulfilled' && activeLangResult.value.changed) {
+                renderAbout(activeLangResult.value.text);
             }
+        }
+
+        // Tek bir dil için GitHub'dan çek, cache ile karşılaştır
+        async function fetchOne(lang) {
+            const src = ABOUT_SOURCES[lang];
+            const oldText = localStorage.getItem(src.cacheKey);
 
             try {
                 const res = await fetch(src.url, { cache: 'no-store' });
                 if (!res.ok) throw new Error('HTTP ' + res.status);
-                const text = (await res.text()).trim();
-                localStorage.setItem(src.cacheKey, text);
-                localStorage.setItem(src.tsKey, String(now));
-                return text;
+                const newText = (await res.text()).trim();
+
+                const changed = newText !== oldText;
+                if (changed) {
+                    localStorage.setItem(src.cacheKey, newText);
+                }
+                return { text: newText, changed };
             } catch (err) {
                 console.warn('[About] fetch başarısız (' + lang + '):', err);
-                return cached || src.fallback;
+                // Hata durumunda mevcut cache'i koru, değişiklik yok say
+                return { text: oldText || src.fallback, changed: false };
             }
         }
 
-        // Her iki dili paralel çek; aktif dili sayfaya yaz
-        async function refreshAbout() {
-            const [engText, trText] = await Promise.all([
-                fetchAbout('en'),
-                fetchAbout('tr')
-            ]);
-
-            const activeText = currentLang === 'tr' ? trText : engText;
+        // About kutusunu ekrana yaz; değişiklik olduysa parlama efekti
+        function renderAbout(text, flash = true) {
             const el = document.getElementById('ui-about-text');
-            el.classList.remove('loading');
-            el.innerHTML = linkify(activeText);
+            el.classList.remove('loading', 'updated');
+            el.innerHTML = linkify(text);
+            if (flash) {
+                // Animasyonu yeniden tetiklemek için void trick
+                void el.offsetWidth;
+                el.classList.add('updated');
+            }
         }
 
-        // ─── ÇEVİRİLER (about text hariç) ───
+        // ─── ÇEVİRİLER ───
         const translations = {
             en: {
                 btnText: "English",
@@ -494,13 +512,11 @@
             document.getElementById('nav-projects').innerText      = d.navProjects;
             document.documentElement.lang = lang;
 
-            // Cache'de metin varsa anında göster; yoksa "Loading..." yaz
-            const src = ABOUT_SOURCES[lang];
-            const cached = localStorage.getItem(src.cacheKey);
+            // Cache'deki metni anında göster (fetch sonucu bekleme)
+            const cached = localStorage.getItem(ABOUT_SOURCES[lang].cacheKey);
             const el = document.getElementById('ui-about-text');
             if (cached) {
-                el.classList.remove('loading');
-                el.innerHTML = linkify(cached);
+                renderAbout(cached, false);   // dil değişiminde flash yok
             } else {
                 el.classList.add('loading');
                 el.textContent = d.loading;
@@ -548,19 +564,11 @@
         // ─── BAŞLANGIÇ ───
         window.onload = async () => {
             currentLang = localStorage.getItem('preferredLang') || 'en';
-            updateUI(currentLang);
+            updateUI(currentLang);   // cache varsa anında göster
             updateActiveNav();
 
-            // İlk yükleme: fetch yap
-            await refreshAbout();
-
-            // Her saat cache'i sıfırlayıp yeniden çek
-            setInterval(async () => {
-                Object.values(ABOUT_SOURCES).forEach(src => {
-                    localStorage.removeItem(src.tsKey); // timestamp'i sil → fetchAbout yeniden çeker
-                });
-                await refreshAbout();
-            }, CACHE_TTL);
+            // Her açılışta GitHub'dan çek, değişiklik varsa güncelle
+            await fetchAndDetectChanges();
         };
 
         // Dışarı tıklandığında dil menüsünü kapat
