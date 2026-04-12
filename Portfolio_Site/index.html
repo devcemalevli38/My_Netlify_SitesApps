@@ -35,9 +35,7 @@
         /* ─── NAVBAR ─── */
         .navbar {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             z-index: 999;
             height: var(--navbar-height);
             display: flex;
@@ -61,8 +59,7 @@
             align-items: center;
             gap: 8px;
             list-style: none;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
         }
 
         .nav-links a {
@@ -83,36 +80,29 @@
         .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: 4px;
-            left: 50%;
+            bottom: 4px; left: 50%;
             transform: translateX(-50%) scaleX(0);
-            width: 20px;
-            height: 2px;
+            width: 20px; height: 2px;
             background: var(--accent);
             border-radius: 2px;
             transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .nav-links a:hover,
-        .nav-links a.active {
+        .nav-links a:hover, .nav-links a.active {
             color: var(--text-main);
             background: rgba(56, 189, 248, 0.08);
         }
 
-        .nav-links a.active::after,
-        .nav-links a:hover::after {
+        .nav-links a.active::after, .nav-links a:hover::after {
             transform: translateX(-50%) scaleX(1);
         }
 
-        .nav-links a.active {
-            color: var(--accent);
-        }
+        .nav-links a.active { color: var(--accent); }
 
         /* ─── DİL MENÜSÜ ─── */
         .lang-container {
             position: fixed;
-            top: 12px;
-            right: 20px;
+            top: 12px; right: 20px;
             z-index: 1000;
         }
 
@@ -134,8 +124,7 @@
 
         .lang-dropdown {
             position: absolute;
-            top: 45px;
-            right: 0;
+            top: 45px; right: 0;
             background: var(--card-bg);
             border: 1px solid rgba(56, 189, 248, 0.2);
             border-radius: 8px;
@@ -152,7 +141,6 @@
             padding: 10px;
             cursor: pointer;
             color: var(--text-main);
-            text-decoration: none;
             font-size: 0.85rem;
             transition: 0.3s;
         }
@@ -168,10 +156,7 @@
             flex: 1;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 80px;
-        }
+        header { text-align: center; margin-bottom: 80px; }
 
         .profile-img {
             width: 150px !important;
@@ -203,9 +188,7 @@
             animation: shine 3s linear infinite;
         }
 
-        @keyframes shine {
-            to { background-position: 200% center; }
-        }
+        @keyframes shine { to { background-position: 200% center; } }
 
         .subtitle {
             color: var(--accent);
@@ -231,11 +214,12 @@
         }
 
         .social-links a:hover { transform: scale(1.2) translateY(-5px); }
-        .fa-github:hover { color: #fff; }
+        .fa-github:hover   { color: #fff; }
         .fa-instagram:hover { color: #E1306C; }
-        .fa-facebook:hover { color: #1877F2; }
-        .fa-globe:hover { color: var(--accent); }
-        .fa-envelope:hover { color: var(--accent); }
+        .fa-facebook:hover  { color: #1877F2; }
+        .fa-globe:hover     { color: var(--accent); }
+        .fa-envelope:hover  { color: var(--accent); }
+        .fa-tree:hover      { color: #43d854; }
 
         .section-title {
             border-left: 4px solid var(--accent);
@@ -251,6 +235,14 @@
             padding: 20px;
             border-radius: 12px;
             border: 1px solid rgba(56, 189, 248, 0.1);
+            white-space: pre-wrap;
+            min-height: 60px;
+            transition: opacity 0.3s;
+        }
+
+        .about-text.loading {
+            opacity: 0.45;
+            font-style: italic;
         }
 
         .about-text a {
@@ -303,10 +295,7 @@
 
         /* ─── MOBİL ─── */
         @media (max-width: 540px) {
-            .nav-links a {
-                font-size: 0.78rem;
-                padding: 7px 10px;
-            }
+            .nav-links a { font-size: 0.78rem; padding: 7px 10px; }
             .lang-container { top: 14px; right: 10px; }
             .lang-btn { padding: 6px 10px; font-size: 0.8rem; }
         }
@@ -317,8 +306,8 @@
     <!-- ─── NAVBAR ─── -->
     <nav class="navbar" id="navbar">
         <ul class="nav-links">
-            <li><a data-section="hero" id="nav-home" class="active">Home</a></li>
-            <li><a data-section="about" id="nav-about">About</a></li>
+            <li><a data-section="hero"     id="nav-home"     class="active">Home</a></li>
+            <li><a data-section="about"    id="nav-about">About</a></li>
             <li><a data-section="projects" id="nav-projects">Projects</a></li>
         </ul>
     </nav>
@@ -347,17 +336,14 @@
                     <a href="https://www.instagram.com/cemalevli38/" target="_blank"><i class="fab fa-instagram"></i></a>
                     <a href="mailto:mylab@cemalevli.qzz.io"><i class="fas fa-envelope"></i></a>
                     <a href="https://cemalevli.qzz.io" target="_blank" title="Web Sitem"><i class="fas fa-globe"></i></a>
+                    <a href="https://linktr.ee/CemalEvli" target="_blank" title="Linktree"><i class="fas fa-tree"></i></a>
                 </div>
             </header>
         </section>
 
         <section id="about">
             <h2 class="section-title" id="ui-about-title">About Me</h2>
-            <p class="about-text" id="ui-about-text">
-                I am a student working with the goal of turning my curiosity for technology into tangible projects. 
-                I am developing myself in web technologies and Python. You can follow my projects and more at 
-                <a href="https://cemalevli.qzz.io" target="_blank">cemalevli.qzz.io</a>.
-            </p>
+            <p class="about-text loading" id="ui-about-text">Loading...</p>
         </section>
 
         <section id="projects">
@@ -388,64 +374,140 @@
     </footer>
 
     <script>
-        // ─── ÇEVİRİLER ───
+        // ─── ABOUT ME KAYNAKLARI ───
+        const ABOUT_SOURCES = {
+            en: {
+                url: 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/Portfolio_Site/aboutme_eng',
+                cacheKey: 'aboutme_eng',
+                tsKey: 'aboutme_eng_ts',
+                fallback: 'I am a student working with the goal of turning my curiosity for technology into tangible projects. I am developing myself in web technologies and Python. You can follow my projects and more at "https://cemalevli.qzz.io".'
+            },
+            tr: {
+                url: 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/Portfolio_Site/aboutme_tr',
+                cacheKey: 'aboutme_tr',
+                tsKey: 'aboutme_tr_ts',
+                fallback: 'Teknolojiye duyduğum merakı, somut projelere dönüştürme hedefiyle çalışan bir öğrenciyim. Web teknolojileri ve Python üzerine kendimi geliştiriyorum. Projelerimi ve daha fazlasını "https://cemalevli.qzz.io" adresinden takip edebilirsiniz.'
+            }
+        };
+
+        // 1 saat = 3 600 000 ms
+        const CACHE_TTL = 60 * 60 * 1000;
+
+        // Dosyadaki "url" string'lerini tıklanabilir <a>'ya çevir
+        function linkify(text) {
+            return text.replace(/"(https?:\/\/[^"]+)"/g,
+                '<a href="$1" target="_blank">$1</a>');
+        }
+
+        // Tek bir dil için fetch + cache mantığı
+        async function fetchAbout(lang) {
+            const src = ABOUT_SOURCES[lang];
+            const now = Date.now();
+            const cached = localStorage.getItem(src.cacheKey);
+            const cachedTs = parseInt(localStorage.getItem(src.tsKey) || '0');
+
+            // Geçerli cache varsa ağa gitme
+            if (cached && (now - cachedTs) < CACHE_TTL) {
+                return cached;
+            }
+
+            try {
+                const res = await fetch(src.url, { cache: 'no-store' });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const text = (await res.text()).trim();
+                localStorage.setItem(src.cacheKey, text);
+                localStorage.setItem(src.tsKey, String(now));
+                return text;
+            } catch (err) {
+                console.warn('[About] fetch başarısız (' + lang + '):', err);
+                return cached || src.fallback;
+            }
+        }
+
+        // Her iki dili paralel çek; aktif dili sayfaya yaz
+        async function refreshAbout() {
+            const [engText, trText] = await Promise.all([
+                fetchAbout('en'),
+                fetchAbout('tr')
+            ]);
+
+            const activeText = currentLang === 'tr' ? trText : engText;
+            const el = document.getElementById('ui-about-text');
+            el.classList.remove('loading');
+            el.innerHTML = linkify(activeText);
+        }
+
+        // ─── ÇEVİRİLER (about text hariç) ───
         const translations = {
             en: {
                 btnText: "English",
                 subtitle: "Student and Future Developer",
                 aboutTitle: "About Me",
-                aboutText: 'I am a student working with the goal of turning my curiosity for technology into tangible projects. I am developing myself in web technologies and Python. You can follow my projects and more at <a href="https://cemalevli.qzz.io" target="_blank">cemalevli.qzz.io</a>.',
                 projectsTitle: "My Projects",
                 p1Desc: "Mouse control with hand gestures.",
                 p2Desc: "Music player with advanced interface.",
                 footer: "All rights reserved.",
                 navHome: "Home",
                 navAbout: "About",
-                navProjects: "Projects"
+                navProjects: "Projects",
+                loading: "Loading..."
             },
             tr: {
                 btnText: "Türkçe",
                 subtitle: "Öğrenci ve Geleceğin Yazılımcısı",
                 aboutTitle: "Hakkımda",
-                aboutText: 'Teknolojiye duyduğum merakı, somut projelere dönüştürme hedefiyle çalışan bir öğrenciyim. Web teknolojileri ve Python üzerine kendimi geliştiriyorum. Projelerimi ve daha fazlasını <a href="https://cemalevli.qzz.io" target="_blank">cemalevli.qzz.io</a> adresinden takip edebilirsiniz.',
                 projectsTitle: "Projelerim",
                 p1Desc: "El hareketleriyle fare kontrolü.",
                 p2Desc: "Gelişmiş arayüzlü müzik oynatıcı.",
                 footer: "Tüm hakları saklıdır.",
                 navHome: "Ana Sayfa",
                 navAbout: "Hakkımda",
-                navProjects: "Projeler"
+                navProjects: "Projeler",
+                loading: "Yükleniyor..."
             }
         };
+
+        let currentLang = 'en';
 
         function toggleDropdown() {
             document.getElementById('lang-dropdown').classList.toggle('active');
         }
 
         function changeLanguage(lang) {
+            currentLang = lang;
             localStorage.setItem('preferredLang', lang);
             updateUI(lang);
             document.getElementById('lang-dropdown').classList.remove('active');
         }
 
         function updateUI(lang) {
-            const data = translations[lang];
-            document.getElementById('btn-text').innerText = data.btnText;
-            document.getElementById('ui-subtitle').innerText = data.subtitle;
-            document.getElementById('ui-about-title').innerText = data.aboutTitle;
-            document.getElementById('ui-about-text').innerHTML = data.aboutText;
-            document.getElementById('ui-projects-title').innerText = data.projectsTitle;
-            document.getElementById('ui-p1-desc').innerText = data.p1Desc;
-            document.getElementById('ui-p2-desc').innerText = data.p2Desc;
-            document.getElementById('ui-footer-text').innerText = data.footer;
-            document.getElementById('nav-home').innerText = data.navHome;
-            document.getElementById('nav-about').innerText = data.navAbout;
-            document.getElementById('nav-projects').innerText = data.navProjects;
+            const d = translations[lang];
+            document.getElementById('btn-text').innerText          = d.btnText;
+            document.getElementById('ui-subtitle').innerText       = d.subtitle;
+            document.getElementById('ui-about-title').innerText    = d.aboutTitle;
+            document.getElementById('ui-projects-title').innerText = d.projectsTitle;
+            document.getElementById('ui-p1-desc').innerText        = d.p1Desc;
+            document.getElementById('ui-p2-desc').innerText        = d.p2Desc;
+            document.getElementById('ui-footer-text').innerText    = d.footer;
+            document.getElementById('nav-home').innerText          = d.navHome;
+            document.getElementById('nav-about').innerText         = d.navAbout;
+            document.getElementById('nav-projects').innerText      = d.navProjects;
             document.documentElement.lang = lang;
+
+            // Cache'de metin varsa anında göster; yoksa "Loading..." yaz
+            const src = ABOUT_SOURCES[lang];
+            const cached = localStorage.getItem(src.cacheKey);
+            const el = document.getElementById('ui-about-text');
+            if (cached) {
+                el.classList.remove('loading');
+                el.innerHTML = linkify(cached);
+            } else {
+                el.classList.add('loading');
+                el.textContent = d.loading;
+            }
         }
 
         // ─── SMOOTH SCROLL ───
-        // getBoundingClientRect + scrollY ile navbar yüksekliğini kesin hesapla
         const NAVBAR_H = 64;
         const SCROLL_OFFSET = 20;
 
@@ -456,16 +518,13 @@
             window.scrollTo({ top: targetY, behavior: 'smooth' });
         }
 
-        // ─── NAV LINK TIKLAMA ───
-        const navLinks = document.querySelectorAll('.nav-links a');
-        navLinks.forEach(link => {
+        document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', e => {
                 e.preventDefault();
                 scrollToSection(link.dataset.section);
             });
         });
 
-        // ─── NAVBAR SCROLL + AKTİF LİNK ───
         const navbar = document.getElementById('navbar');
         const sectionIds = ['hero', 'about', 'projects'];
 
@@ -476,7 +535,7 @@
                 const el = document.getElementById(id);
                 if (el && el.offsetTop <= scrollMid) current = id;
             });
-            navLinks.forEach(link => {
+            document.querySelectorAll('.nav-links a').forEach(link => {
                 link.classList.toggle('active', link.dataset.section === current);
             });
         }
@@ -487,15 +546,26 @@
         }, { passive: true });
 
         // ─── BAŞLANGIÇ ───
-        window.onload = () => {
-            const savedLang = localStorage.getItem('preferredLang') || 'en';
-            updateUI(savedLang);
+        window.onload = async () => {
+            currentLang = localStorage.getItem('preferredLang') || 'en';
+            updateUI(currentLang);
             updateActiveNav();
+
+            // İlk yükleme: fetch yap
+            await refreshAbout();
+
+            // Her saat cache'i sıfırlayıp yeniden çek
+            setInterval(async () => {
+                Object.values(ABOUT_SOURCES).forEach(src => {
+                    localStorage.removeItem(src.tsKey); // timestamp'i sil → fetchAbout yeniden çeker
+                });
+                await refreshAbout();
+            }, CACHE_TTL);
         };
 
         // Dışarı tıklandığında dil menüsünü kapat
-        window.onclick = function(event) {
-            if (!event.target.closest('.lang-container')) {
+        window.onclick = function(e) {
+            if (!e.target.closest('.lang-container')) {
                 document.getElementById('lang-dropdown').classList.remove('active');
             }
         };
