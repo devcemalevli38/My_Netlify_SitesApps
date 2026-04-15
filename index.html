@@ -125,7 +125,7 @@
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 16px; width: 100%; max-width: 900px;
-            justify-content: start; /* Kartları soldan hizalar */
+            justify-content: start;
         }
 
         .project-card {
@@ -134,7 +134,7 @@
             color: var(--text); display: flex; align-items: center;
             gap: 14px; box-shadow: var(--shadow); backdrop-filter: blur(10px);
             cursor: pointer; min-height: 85px;
-            width: 100%; /* Grid içinde tam genişlik */
+            width: 100%;
         }
         .project-card:hover { transform: translateY(-4px); border-color: var(--accent); background: var(--hover); }
         .project-card.game-card:hover { border-color: var(--game-accent); }
@@ -406,6 +406,35 @@ function toggleModal(id, show) {
         document.body.style.overflow = show ? 'hidden' : 'auto';
     }
 }
+
+// --- ABONELİK SİSTEMİ MANTIĞI ---
+document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('subscribe-btn');
+    const msg = document.getElementById('status-msg');
+    const email = document.getElementById('email-input').value;
+    
+    btn.disabled = true; 
+    btn.innerText = tr("subscribing");
+    
+    try {
+        // index.html'den gelen Google Script entegrasyonu
+        await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(email)}`, { mode: 'no-cors' });
+        msg.innerHTML = `<span style="color:#4ade80">${tr("subscribeSuccess")}</span>`;
+        
+        setTimeout(() => { 
+            toggleModal('newsletterModal', false); 
+            btn.disabled = false; 
+            btn.innerText = tr("subscribeBtn");
+            msg.innerHTML = "";
+            document.getElementById('email-input').value = "";
+        }, 2000);
+    } catch (err) { 
+        msg.innerHTML = `<span style="color:#f87171">${tr("subscribeError")}</span>`; 
+        btn.disabled = false;
+        btn.innerText = tr("subscribeBtn");
+    }
+});
 
 async function loadProjects() {
     const container = document.getElementById("project-container");
