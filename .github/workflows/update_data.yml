@@ -19,7 +19,7 @@ jobs:
           # Projeleri çek (Hata almamak için -L yönlendirmesini ekledik)
           curl -sL "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/" > projects.json
           # Oyunları çek
-          curl -sL "https://api.github.com/repos/cemal201138-files/games/releases" > games.json
+          curl -sL "https://api.github.com/repos/cemal201138-file-user/games/releases" > games.json
 
       - name: Commit and Push Changes
         run: |
