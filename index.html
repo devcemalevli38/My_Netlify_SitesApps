@@ -126,16 +126,23 @@
             gap: 16px; width: 100%; max-width: 900px;
         }
 
+        /* DÜZELTİLMİŞ KART YAPISI */
         .project-card {
             background: var(--card); border: 1px solid var(--border);
             padding: 18px; border-radius: 16px; text-decoration: none;
             color: var(--text); display: flex; align-items: center;
             gap: 14px; box-shadow: var(--shadow); backdrop-filter: blur(10px);
-            cursor: pointer;
+            cursor: pointer; min-height: 85px; /* Hizalama için sabit min-height */
         }
         .project-card:hover { transform: translateY(-4px); border-color: var(--accent); background: var(--hover); }
         .project-card.game-card:hover { border-color: var(--game-accent); }
         .project-card.file-card:hover { border-color: var(--file-accent); }
+
+        .info-group {
+            flex: 1; /* Metin alanını esnek yaparak butonu sağa yaslar */
+            display: flex; flex-direction: column; justify-content: center;
+            min-width: 0;
+        }
 
         .icon {
             font-size: 22px; background: rgba(56, 189, 248, 0.1);
@@ -145,12 +152,15 @@
         .game-card .icon { background: rgba(244, 114, 182, 0.1); }
         .file-card .icon { background: rgba(167, 139, 250, 0.1); color: var(--file-accent); }
 
+        /* DÜZELTİLMİŞ BUTON (BADGE) */
         .badge {
-            margin-left: auto; font-size: 0.65rem; padding: 4px 10px;
-            border-radius: 20px; font-weight: bold;
+            margin-left: auto; font-size: 0.7rem; padding: 6px 14px;
+            border-radius: 10px; font-weight: bold;
             background: var(--game-accent); color: white; flex-shrink: 0;
+            text-align: center; min-width: 55px;
         }
         .file-card .badge { background: var(--file-accent); }
+        .project-card:not(.game-card):not(.file-card) .badge { background: var(--accent); }
 
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -405,7 +415,14 @@ async function loadProjects() {
             card.href = p.path;
             card.target = "_blank";
             card.dataset.searchName = norm(p.name);
-            card.innerHTML = `<div class="icon">🌐</div><div class="name"><b>${p.name.replace(/_/g, " ")}</b></div>`;
+            // DÜZELTİLDİ: info-group ve badge eklendi
+            card.innerHTML = `
+                <div class="icon">🌐</div>
+                <div class="info-group">
+                    <div class="name"><b>${p.name.replace(/_/g, " ")}</b></div>
+                </div>
+                <span class="badge">${tr("openBadge")}</span>
+            `;
             container.appendChild(card);
         });
     } catch (e) { section.classList.add("hidden"); }
