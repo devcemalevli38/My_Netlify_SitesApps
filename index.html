@@ -122,26 +122,35 @@
         .lang-option:hover { background: var(--hover); }
 
         .grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 16px; width: 100%; max-width: 900px;
+            justify-content: start; /* Kartları soldan hizalar */
         }
 
-        /* DÜZELTİLMİŞ KART YAPISI */
         .project-card {
             background: var(--card); border: 1px solid var(--border);
             padding: 18px; border-radius: 16px; text-decoration: none;
             color: var(--text); display: flex; align-items: center;
             gap: 14px; box-shadow: var(--shadow); backdrop-filter: blur(10px);
-            cursor: pointer; min-height: 85px; /* Hizalama için sabit min-height */
+            cursor: pointer; min-height: 85px;
+            width: 100%; /* Grid içinde tam genişlik */
         }
         .project-card:hover { transform: translateY(-4px); border-color: var(--accent); background: var(--hover); }
         .project-card.game-card:hover { border-color: var(--game-accent); }
         .project-card.file-card:hover { border-color: var(--file-accent); }
 
         .info-group {
-            flex: 1; /* Metin alanını esnek yaparak butonu sağa yaslar */
+            flex: 1;
             display: flex; flex-direction: column; justify-content: center;
             min-width: 0;
+        }
+
+        .name {
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .icon {
@@ -152,9 +161,8 @@
         .game-card .icon { background: rgba(244, 114, 182, 0.1); }
         .file-card .icon { background: rgba(167, 139, 250, 0.1); color: var(--file-accent); }
 
-        /* DÜZELTİLMİŞ BUTON (BADGE) */
         .badge {
-            margin-left: auto; font-size: 0.7rem; padding: 6px 14px;
+            margin-left: 8px; font-size: 0.7rem; padding: 6px 14px;
             border-radius: 10px; font-weight: bold;
             background: var(--game-accent); color: white; flex-shrink: 0;
             text-align: center; min-width: 55px;
@@ -221,8 +229,11 @@
         footer b { color: var(--accent); }
 
         @media (max-width: 600px) {
-            header { flex-direction: column; align-items: flex-start; }
+            header { flex-direction: column; align-items: center; text-align: center; }
+            .controls { justify-content: center; width: 100%; }
             input { width: 100%; }
+            .grid { grid-template-columns: 1fr; }
+            .section-header { justify-content: center; }
         }
     </style>
 </head>
@@ -249,21 +260,21 @@
     </div>
 </header>
 
-<div id="projects-section">
+<div id="projects-section" style="width: 100%; max-width: 900px;">
     <div class="section-header">
         <h2 class="section-title" id="projectsTitle"></h2>
     </div>
     <div id="project-container" class="grid"></div>
 </div>
 
-<div id="games-section" class="hidden">
+<div id="games-section" class="hidden" style="width: 100%; max-width: 900px;">
     <div class="section-header">
         <h2 class="section-title games" id="gamesTitle"></h2>
     </div>
     <div id="game-container" class="grid"></div>
 </div>
 
-<div id="files-section" class="hidden">
+<div id="files-section" class="hidden" style="width: 100%; max-width: 900px;">
     <div class="section-header">
         <h2 class="section-title files" id="filesTitle"></h2>
     </div>
@@ -378,7 +389,6 @@ function applyLanguage() {
     loadFiles();
 }
 
-// Banner & Theme
 function checkBanner() { if (!localStorage.getItem("bannerClosed")) setTimeout(() => document.getElementById("infoBanner").classList.add("show"), 800); }
 function closeBanner() { document.getElementById("infoBanner").classList.remove("show"); localStorage.setItem("bannerClosed", "true"); }
 if (localStorage.getItem("theme") === "light") document.body.classList.add("light");
@@ -387,7 +397,6 @@ document.getElementById('themeToggle').onclick = () => {
     localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
 };
 
-// Utils
 const norm = s => !s ? "" : s.toLowerCase().replace(/ı/g, 'i').replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's').replace(/ö/g, 'o').replace(/ç/g, 'c').normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[_\s-]/g, "");
 
 function toggleModal(id, show) {
@@ -398,7 +407,6 @@ function toggleModal(id, show) {
     }
 }
 
-// Data Loaders
 async function loadProjects() {
     const container = document.getElementById("project-container");
     const section = document.getElementById("projects-section");
@@ -415,7 +423,6 @@ async function loadProjects() {
             card.href = p.path;
             card.target = "_blank";
             card.dataset.searchName = norm(p.name);
-            // DÜZELTİLDİ: info-group ve badge eklendi
             card.innerHTML = `
                 <div class="icon">🌐</div>
                 <div class="info-group">
@@ -433,9 +440,7 @@ async function loadGames() {
     const section = document.getElementById("games-section");
     try {
         const res = await fetch(GAMES_DATA_URL);
-        if (!res.ok) throw new Error();
         const releases = await res.json();
-        
         if(!releases || releases.length === 0) { section.classList.add("hidden"); return; }
 
         section.classList.remove("hidden");
@@ -463,9 +468,7 @@ async function loadFiles() {
     const section = document.getElementById("files-section");
     try {
         const res = await fetch(FILES_DATA_URL);
-        if (!res.ok) throw new Error();
         const files = await res.json();
-        
         if(!files || files.length === 0) { section.classList.add("hidden"); return; }
 
         section.classList.remove("hidden");
@@ -503,9 +506,9 @@ function openGameModal(rel) {
             div.className = "file-item";
             const size = (asset.size / (1024 * 1024)).toFixed(2);
             div.innerHTML = `
-                <div class="file-info" style="display:flex; gap:10px; align-items:center;">
+                <div class="file-info" style="display:flex; gap:10px; align-items:center; min-width:0;">
                     <div class="file-icon" style="font-size:1.2rem;">${getFileIcon(asset.name)}</div>
-                    <div style="min-width:0;">
+                    <div style="min-width:0; flex:1;">
                         <div style="font-weight:bold; font-size:0.85rem; word-break:break-all;">${asset.name}</div>
                         <div style="font-size:0.7rem; opacity:0.6;">${size} MB</div>
                     </div>
@@ -517,27 +520,6 @@ function openGameModal(rel) {
     } else {
         fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6; text-align:center;'>${tr("noFiles")}</p>`;
     }
-
-    if (rel.body) {
-        const urlRegex = /(https?:\/\/[^\s]+)/g;
-        const links = rel.body.match(urlRegex);
-        if (links && links.length > 0) {
-            let hasAlt = false;
-            links.forEach((link, index) => {
-                if(link.includes("/releases/download/")) return;
-                hasAlt = true;
-                const altDiv = document.createElement("div");
-                altDiv.className = "alt-link-item";
-                const cleanLink = link.replace(/[()]/g, '');
-                altDiv.innerHTML = `
-                    <span style="opacity:0.8; font-size:0.75rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:200px;">Link #${index+1}</span>
-                    <a href="${cleanLink}" class="download-link alt-btn" target="_blank">${tr("altLinkBtn")}</a>
-                `;
-                altList.appendChild(altDiv);
-            });
-            if(hasAlt) altContainer.classList.remove("hidden");
-        }
-    }
     toggleModal('gameFilesModal', true);
 }
 
@@ -546,7 +528,6 @@ function getFileIcon(fn) {
     return { 'zip':'📦','rar':'📦','apk':'🤖','exe':'⚙️','pdf':'📕','mp4':'🎬','mp3':'🎵' }[ext] || '📄';
 }
 
-// Event Listeners
 document.getElementById('search').addEventListener("input", function () {
     const q = norm(this.value);
     document.querySelectorAll(".project-card").forEach(card => {
@@ -573,7 +554,6 @@ window.onclick = (e) => {
     if (!document.getElementById("langSwitcher").contains(e.target)) document.getElementById("langSwitcher").classList.remove("open");
 };
 
-// Initial Load
 applyLanguage();
 checkBanner();
 </script>
