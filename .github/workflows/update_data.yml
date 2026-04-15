@@ -2,33 +2,48 @@ name: Hourly Data Update
 
 on:
   schedule:
-    - cron: '0 * * * *' # Her saatin başında (13:00, 14:00 vb.) otomatik çalışır
+    - cron: '0 * * * *' # Her saatin başında otomatik çalışır
   workflow_dispatch: # İstediğinde manuel çalıştırmak için buton ekler
-  
+
 jobs:
   update-json:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Dosyaları depona geri yazabilmesi için şart
+      contents: write # Dosyaları depoya geri yazabilmesi için şart
+
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Tüm geçmişi çekerek rebase hatalarını önler
 
       - name: Fetch Projects and Games
         run: |
-          # Projeleri çek (Hata almamak için -L yönlendirmesini ekledik)
+          # Projeleri çek
           curl -sL "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/" > projects.json
           # Oyunları çek
           curl -sL "https://api.github.com/repos/cemal201138-file-user/games/releases" > games.json
-          # dosyaları Çek
+          # Dosyaları çek
           curl -sL "https://api.github.com/repos/cemal201138-file-user/files/releases" > files.json
-          
 
       - name: Commit and Push Changes
         run: |
-          # Senin kimlik bilgilerinle yapılandırma
+          # Git kimlik yapılandırması
           git config --local user.name "cemal201138"
           git config --local user.email "cemal201138@users.noreply.github.com"
+          
+          # Dosyaları takibe al
           git add projects.json games.json files.json
-          # Sadece değişiklik varsa commit at, yoksa hata verme
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Hourly auto-update: $(date)" && git push)
+          
+          # Eğer değişiklik varsa işlemleri yap
+          if [ -n "$(git status --porcelain)" ]; then
+            git commit -m "Hourly auto-update: $(date)"
+            
+            # Uzak depodaki (GitHub) değişiklikleri al ve üstüne ekle (Conflict önleyici)
+            git pull --rebase origin main
+            
+            # Güncel halini geri gönder
+            git push origin main
+          else
+            echo "Herhangi bir değişiklik yok, commit atılmadı."
+          fi
