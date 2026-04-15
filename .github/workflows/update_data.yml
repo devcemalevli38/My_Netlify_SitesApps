@@ -29,6 +29,6 @@ jobs:
           # Senin kimlik bilgilerinle yapılandırma
           git config --local user.name "cemal201138"
           git config --local user.email "cemal201138@users.noreply.github.com"
-          git add projects.json games.json
+          git add projects.json games.json files.json
           # Sadece değişiklik varsa commit at, yoksa hata verme
           git diff --quiet && git diff --staged --quiet || (git commit -m "Hourly auto-update: $(date)" && git push)
