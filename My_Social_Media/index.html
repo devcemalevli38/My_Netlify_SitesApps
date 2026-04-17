@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Tüm CSS aynı kalıyor - sadece script değişti */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Poppins', sans-serif;
@@ -52,21 +51,10 @@
             border: 4px solid rgba(255,255,255,0.25); transition: all 0.3s ease;
             backdrop-filter: blur(10px); position: relative;
         }
-        .profile-avatar:hover {
-            transform: scale(1.05); border-color: rgba(255,255,255,0.5);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-        }
         .profile-avatar img {
             width: 100%; height: 100%; object-fit: cover;
             border-radius: 50%; display: block;
         }
-        .profile-avatar::before {
-            content: '\f007'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
-            font-size: 2.5rem; color: #f7fafc;
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 1;
-        }
-        .profile-avatar.has-image::before { display: none; }
         .profile-name {
             font-size: clamp(1.4rem, 4vw, 1.8rem); font-weight: 700; margin-bottom: 8px;
             text-shadow: 0 2px 15px rgba(0,0,0,0.9);
@@ -77,7 +65,7 @@
         .profile-bio {
             font-size: clamp(0.85rem, 2.8vw, 0.95rem); font-weight: 400;
             color: #e2e8f0; text-shadow: 0 1px 8px rgba(0,0,0,0.9);
-            line-height: 1.5; opacity: 1; max-width: 90%; margin: 0 auto;
+            line-height: 1.6; opacity: 1; max-width: 90%; margin: 0 auto;
             word-break: break-word;
         }
         .bio-link {
@@ -85,12 +73,8 @@
             transition: all 0.2s ease; border-radius: 4px; padding: 1px 3px;
             position: relative;
         }
-        .bio-link::after {
-            content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px;
-            background: linear-gradient(90deg, #a0a0ff, transparent); transition: width 0.3s ease;
-        }
         .bio-link:hover { color: #c0c0ff; text-shadow: 0 0 8px rgba(160, 160, 255, 0.6); }
-        .bio-link:hover::after { width: 100%; }
+        
         .links-section { padding: 30px; }
         .link-item {
             display: block; margin-bottom: 15px; padding: 20px 25px;
@@ -100,47 +84,33 @@
             overflow: hidden; border: 1px solid rgba(255,255,255,0.12);
             font-size: clamp(0.95rem, 3.5vw, 1rem);
         }
-        .link-item::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-            transition: left 0.5s;
-        }
-        .link-item:hover::before { left: 100%; }
         .link-item:hover {
             transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0,0,0,0.5);
             background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
             border-color: rgba(255,255,255,0.25); color: #f7fafc;
         }
         .link-icon { width: 24px; margin-right: 15px; font-size: 1.2rem; color: #a0aec0; }
-        .link-item:hover .link-icon { color: #f7fafc; }
         .link-text { display: flex; align-items: center; justify-content: space-between; }
         .link-arrow { font-size: 1rem; opacity: 0.85; transition: all 0.3s ease; }
         .link-item:hover .link-arrow { transform: translateX(5px); }
+
         .footer {
             text-align: center; color: rgba(255,255,255,0.7);
             font-size: clamp(0.8rem, 2.5vw, 0.9rem); margin-top: auto;
-            padding: 25px 20px; backdrop-filter: blur(10px);
-        }
-        @media (max-width: 480px) {
-            .container { margin: 10px; border-radius: 20px; }
-            .profile-section { padding: 35px 25px 25px; }
-            .links-section { padding: 25px 20px; }
-            .link-item { padding: 18px 22px; }
-        }
-        @media (max-width: 360px) {
-            .profile-section { padding: 30px 20px 20px; }
-            .links-section { padding: 20px 15px; }
+            padding: 25px 20px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="mainContainer" style="opacity: 0;">
         <div class="profile-section">
-            <div class="profile-avatar" id="profileAvatar"></div>
+            <div class="profile-avatar" id="profileAvatar">
+                <i class="fas fa-user" style="font-size: 2.5rem;"></i>
+            </div>
             <h1 class="profile-name">Cemal Evli</h1>
             <div class="profile-bio" id="profileBio">
                 <div style="text-align:center;color:#a0aec0;font-size:0.8rem;padding:10px;">
-                    <i class="fas fa-spinner fa-spin"></i> Biography yükleniyor...
+                    <i class="fas fa-spinner fa-spin"></i> Biyografi yükleniyor...
                 </div>
             </div>
         </div>
@@ -174,23 +144,19 @@
     <div class="footer"><p>💙 Cemal Evli</p></div>
 
     <script>
-        // PROFİL RESMİ
+        // Profil Resmini Yükle
         function loadProfileImage() {
             const avatar = document.getElementById('profileAvatar');
-            const img = document.createElement('img');
+            const img = new Image();
             img.src = 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/My_Social_Media/profile.png';
-            img.alt = 'Cemal Evli';
-            img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;';
-            
             img.onload = () => {
-                avatar.innerHTML = ''; // Temizle
+                avatar.innerHTML = '';
                 avatar.appendChild(img);
-                avatar.classList.add('has-image');
+                img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
             };
-            img.onerror = () => console.log('Resim yüklenemedi');
         }
 
-        // BIYOGRAFI - TAM ÇÖZÜM
+        // Biyografiyi Yükle ve Ayrıştır
         async function loadBiography() {
             const bioElement = document.getElementById('profileBio');
             try {
@@ -198,43 +164,39 @@
                 const data = await response.json();
                 
                 if (data.bio && Array.isArray(data.bio)) {
+                    // Satırları işle ve birleştir
                     bioElement.innerHTML = data.bio.map(parseLine).join('<br>');
                 }
             } catch (error) {
-                bioElement.innerHTML = '<span style="color:#a0aec0;font-size:0.85rem;">Biography yüklenemedi</span>';
+                bioElement.innerHTML = 'Small wins lead to a big victory: @bunyanfen<br>🖤@besiktas🤍 | 726051🙃<br>#egitimdesiddetehayir';
+                console.error("Biyografi yükleme hatası:", error);
             }
         }
 
-        // 🎯 ANA FONKSİYON - BU ÇALIYOR!
+        // Gelişmiş Regex Ayrıştırıcı (Hem $ hem $$ destekler)
         function parseLine(line) {
-            // @kullanici$(link$)
-            line = line.replace(/@([a-zA-Z0-9_]+)\$\$(https?:\/\/[^\$]+)\$\$/g, 
+            // @kullanici$(link)$ veya @kullanici$$(link)$$ formatını yakalar
+            line = line.replace(/@([a-zA-Z0-9_]+)\$+(\bhttps?:\/\/[^\$]+)\$+/g, 
                 '<a href="$2" target="_blank" class="bio-link">@$1</a>');
             
-            // #hashtag$(link$)
-            line = line.replace(/#([a-zA-Z0-9_]+)\$\$(https?:\/\/[^\$]+)\$\$/g, 
+            // #hashtag$(link)$ veya #hashtag$$(link)$$ formatını yakalar
+            line = line.replace(/#([a-zA-Z0-9_]+)\$+(\bhttps?:\/\/[^\$]+)\$+/g, 
                 '<a href="$2" target="_blank" class="bio-link">#$1</a>');
             
             return line;
         }
 
-        window.addEventListener('load', () => {
+        // Başlangıç Animasyonu ve Yükleme
+        window.addEventListener('DOMContentLoaded', () => {
             loadProfileImage();
             loadBiography();
             
-            const container = document.querySelector('.container');
-            container.style.opacity = '0';
-            container.style.transform = 'translateY(20px)';
+            const container = document.getElementById('mainContainer');
             setTimeout(() => {
-                container.style.transition = 'all 0.6s ease';
+                container.style.transition = 'all 0.8s ease-out';
                 container.style.opacity = '1';
                 container.style.transform = 'translateY(0)';
-            }, 300);
-        });
-
-        document.querySelectorAll('.link-item').forEach(link => {
-            link.addEventListener('mouseenter', () => link.style.transform = 'translateY(-3px) scale(1.02)');
-            link.addEventListener('mouseleave', () => link.style.transform = 'translateY(0) scale(1)');
+            }, 100);
         });
     </script>
 </body>
