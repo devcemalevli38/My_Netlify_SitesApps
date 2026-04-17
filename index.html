@@ -528,12 +528,11 @@ function openGameModal(rel) {
     const altContainer = document.getElementById("altLinksContainer");
     const altList = document.getElementById("altLinksList");
     document.getElementById("modalGameName").textContent = rel.name || rel.tag_name;
-    
     fileContainer.innerHTML = "";
     altList.innerHTML = "";
     altContainer.classList.add("hidden");
 
-    // GitHub Assets (Dosyalar)
+    // Ana Dosyalar (GitHub Assets)
     if (rel.assets && rel.assets.length > 0) {
         rel.assets.forEach(asset => {
             const div = document.createElement("div");
@@ -555,14 +554,14 @@ function openGameModal(rel) {
         fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6; text-align:center;'>${tr("noFiles")}</p>`;
     }
 
-    // Alternatif Linkler (anahtml.html'den gelen mekanik)
+    // Alternatif Linkler (JSON içinde "alt_links" alanı varsa)
     if (rel.alt_links && rel.alt_links.length > 0) {
         altContainer.classList.remove("hidden");
         rel.alt_links.forEach(link => {
             const div = document.createElement("div");
             div.className = "alt-link-item";
             div.innerHTML = `
-                <span style="font-weight:600; opacity:0.8;">${link.name}</span>
+                <span style="font-weight:bold; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:180px;">${link.name}</span>
                 <a href="${link.url}" class="download-link alt-btn" target="_blank">${tr("altLinkBtn")}</a>
             `;
             altList.appendChild(div);
