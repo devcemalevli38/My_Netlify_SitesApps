@@ -418,7 +418,6 @@ document.getElementById('newsletter-form').addEventListener('submit', async (e) 
     btn.innerText = tr("subscribing");
     
     try {
-        // index.html'den gelen Google Script entegrasyonu
         await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(email)}`, { mode: 'no-cors' });
         msg.innerHTML = `<span style="color:#4ade80">${tr("subscribeSuccess")}</span>`;
         
@@ -436,9 +435,14 @@ document.getElementById('newsletter-form').addEventListener('submit', async (e) 
     }
 });
 
+// --- PROJE YÜKLEME VE FİLTRELEME ---
 async function loadProjects() {
     const container = document.getElementById("project-container");
     const section = document.getElementById("projects-section");
+    
+    // Gizlemek istediğin tüm klasör adlarını buraya ekleyebilirsin
+    const hiddenFolders = [".github", "My_Social_Media", "Test_Project"];
+
     try {
         const res = await fetch(PROJECTS_DATA_URL);
         const items = await res.json();
@@ -446,7 +450,9 @@ async function loadProjects() {
         
         section.classList.remove("hidden");
         container.innerHTML = "";
-        items.filter(i => i.type === "dir" && i.name !== ".github").forEach(p => {
+        
+        // Klasörleri filtrele ve listele
+        items.filter(i => i.type === "dir" && !hiddenFolders.includes(i.name)).forEach(p => {
             const card = document.createElement("a");
             card.className = "project-card";
             card.href = p.path;
