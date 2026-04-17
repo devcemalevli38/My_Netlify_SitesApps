@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cemal Evli - Linklerim</title>
-    <link id="favicon" rel="icon" type="image/png" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/My_Social_Media/profile.png">
+    <link id="favicon" rel="icon" type="image/png" href="https://wsrv.nl/?url=github.com/cemal201138.png&w=64&h=64&mask=circle&output=png">
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -147,10 +147,9 @@
     <div class="footer"><p>💙 Cemal Evli</p></div>
 
     <script>
-        // Profil Resmini Yükle ve Favicon'u Güncelle
+        // Profil Resmini Yükle
         function loadProfileImage() {
             const avatar = document.getElementById('profileAvatar');
-            const favicon = document.getElementById('favicon');
             const imgUrl = 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/My_Social_Media/profile.png';
             
             const img = new Image();
@@ -159,8 +158,6 @@
                 avatar.innerHTML = '';
                 avatar.appendChild(img);
                 img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
-                // Favicon'u dinamik olarak tekrar onayla
-                favicon.href = imgUrl;
             };
         }
 
