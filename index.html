@@ -418,6 +418,7 @@ document.getElementById('newsletter-form').addEventListener('submit', async (e) 
     btn.innerText = tr("subscribing");
     
     try {
+        // index.html'den gelen Google Script entegrasyonu
         await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(email)}`, { mode: 'no-cors' });
         msg.innerHTML = `<span style="color:#4ade80">${tr("subscribeSuccess")}</span>`;
         
@@ -435,12 +436,9 @@ document.getElementById('newsletter-form').addEventListener('submit', async (e) 
     }
 });
 
-// --- PROJE YÜKLEME VE FİLTRELEME ---
 async function loadProjects() {
     const container = document.getElementById("project-container");
     const section = document.getElementById("projects-section");
-    const hiddenFolders = [".github", "My_Social_Media", "Test_Project"];
-
     try {
         const res = await fetch(PROJECTS_DATA_URL);
         const items = await res.json();
@@ -448,8 +446,7 @@ async function loadProjects() {
         
         section.classList.remove("hidden");
         container.innerHTML = "";
-        
-        items.filter(i => i.type === "dir" && !hiddenFolders.includes(i.name)).forEach(p => {
+        items.filter(i => i.type === "dir" && i.name !== ".github" && i.name !== "My_Social_Media").forEach(p => {
             const card = document.createElement("a");
             card.className = "project-card";
             card.href = p.path;
@@ -532,7 +529,6 @@ function openGameModal(rel) {
     altList.innerHTML = "";
     altContainer.classList.add("hidden");
 
-    // Ana Dosyalar (GitHub Assets)
     if (rel.assets && rel.assets.length > 0) {
         rel.assets.forEach(asset => {
             const div = document.createElement("div");
@@ -553,21 +549,6 @@ function openGameModal(rel) {
     } else {
         fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6; text-align:center;'>${tr("noFiles")}</p>`;
     }
-
-    // Alternatif Linkler (JSON içinde "alt_links" alanı varsa)
-    if (rel.alt_links && rel.alt_links.length > 0) {
-        altContainer.classList.remove("hidden");
-        rel.alt_links.forEach(link => {
-            const div = document.createElement("div");
-            div.className = "alt-link-item";
-            div.innerHTML = `
-                <span style="font-weight:bold; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:180px;">${link.name}</span>
-                <a href="${link.url}" class="download-link alt-btn" target="_blank">${tr("altLinkBtn")}</a>
-            `;
-            altList.appendChild(div);
-        });
-    }
-
     toggleModal('gameFilesModal', true);
 }
 
