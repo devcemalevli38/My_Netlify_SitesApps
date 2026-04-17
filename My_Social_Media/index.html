@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 70%, #16213e 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -26,10 +26,11 @@
         .container {
             max-width: 450px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(20, 20, 35, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 25px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
             overflow: hidden;
             margin-bottom: 20px;
         }
@@ -37,7 +38,7 @@
         .profile-section {
             text-align: center;
             padding: 40px 30px 20px;
-            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             color: white;
         }
 
@@ -45,25 +46,60 @@
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.3);
             margin: 0 auto 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
-            color: white;
+            background: rgba(255,255,255,0.2);
+            overflow: hidden;
+            border: 4px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .profile-avatar.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            margin: -15px 0 0 -15px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .profile-name {
             font-size: 1.8rem;
             font-weight: 700;
             margin-bottom: 5px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         .profile-bio {
             font-size: 1rem;
-            opacity: 0.9;
+            opacity: 0.95;
             font-weight: 300;
+            text-shadow: 0 1px 5px rgba(0,0,0,0.5);
         }
 
         .links-section {
@@ -74,14 +110,15 @@
             display: block;
             margin-bottom: 15px;
             padding: 18px 25px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
+            background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+            color: #e2e8f0;
             text-decoration: none;
             border-radius: 15px;
             font-weight: 500;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .link-item::before {
@@ -91,7 +128,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transition: left 0.5s;
         }
 
@@ -101,14 +138,21 @@
 
         .link-item:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
+            border-color: rgba(255,255,255,0.2);
+            color: white;
         }
 
         .link-icon {
             width: 24px;
             margin-right: 15px;
             font-size: 1.2rem;
+            color: #a0aec0;
+        }
+
+        .link-item:hover .link-icon {
+            color: white;
         }
 
         .link-text {
@@ -120,14 +164,20 @@
         .link-arrow {
             font-size: 1rem;
             opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .link-item:hover .link-arrow {
+            transform: translateX(5px);
         }
 
         .footer {
             text-align: center;
-            color: rgba(255,255,255,0.8);
+            color: rgba(255,255,255,0.6);
             font-size: 0.9rem;
             margin-top: auto;
             padding: 20px;
+            backdrop-filter: blur(10px);
         }
 
         @media (max-width: 480px) {
@@ -149,8 +199,8 @@
 <body>
     <div class="container">
         <div class="profile-section">
-            <div class="profile-avatar">
-                <i class="fas fa-user"></i>
+            <div class="profile-avatar" id="profileAvatar">
+                <!-- Resim JavaScript ile yüklenecek -->
             </div>
             <h1 class="profile-name">Cemal Evli</h1>
             <p class="profile-bio">Web Geliştirici</p>
@@ -204,7 +254,49 @@
     </div>
 
     <script>
-        // Animasyon efektleri
+        // Profil resmini dinamik olarak yükle
+        function loadProfileImage() {
+            const avatar = document.getElementById('profileAvatar');
+            const img = document.createElement('img');
+            
+            // GitHub raw URL'si
+            const imageUrl = 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/My_Social_Media/profile.png';
+            
+            img.src = imageUrl;
+            img.alt = 'Cemal Evli';
+            img.onerror = function() {
+                // Resim yüklenemezse fallback ikon göster
+                avatar.innerHTML = '<i class="fas fa-user" style="font-size: 2.5rem; color: white;"></i>';
+                avatar.classList.remove('loading');
+            };
+            
+            img.onload = function() {
+                avatar.innerHTML = '';
+                avatar.appendChild(img);
+                avatar.classList.remove('loading');
+            };
+            
+            // Loading durumu
+            avatar.classList.add('loading');
+        }
+
+        // Sayfa yüklendiğinde profil resmini yükle
+        window.addEventListener('load', () => {
+            loadProfileImage();
+            
+            // Container animasyonu
+            const container = document.querySelector('.container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'all 0.6s ease';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 200);
+        });
+
+        // Link hover animasyonları
         document.querySelectorAll('.link-item').forEach(link => {
             link.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-3px) scale(1.02)';
@@ -213,18 +305,6 @@
             link.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0) scale(1)';
             });
-        });
-
-        // Sayfa yüklendiğinde animasyon
-        window.addEventListener('load', () => {
-            document.querySelector('.container').style.opacity = '0';
-            document.querySelector('.container').style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                document.querySelector('.container').style.transition = 'all 0.6s ease';
-                document.querySelector('.container').style.opacity = '1';
-                document.querySelector('.container').style.transform = 'translateY(0)';
-            }, 100);
         });
     </script>
 </body>
