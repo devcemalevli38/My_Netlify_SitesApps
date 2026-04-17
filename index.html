@@ -26,7 +26,6 @@
             --accent: #0284c7;
             --game-accent: #db2777;
             --file-accent: #7c3aed;
-            --hover: #e2e8f0;
             --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
@@ -45,6 +44,7 @@
             min-height: 100vh;
         }
 
+        /* Banner & Header Styles */
         .info-banner {
             position: fixed; top: 0; left: 0; right: 0;
             background: var(--accent); color: #0f172a;
@@ -121,6 +121,7 @@
         }
         .lang-option:hover { background: var(--hover); }
 
+        /* Grid & Cards */
         .grid {
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -133,25 +134,11 @@
             padding: 18px; border-radius: 16px; text-decoration: none;
             color: var(--text); display: flex; align-items: center;
             gap: 14px; box-shadow: var(--shadow); backdrop-filter: blur(10px);
-            cursor: pointer; min-height: 85px;
-            width: 100%;
+            cursor: pointer; min-height: 85px; width: 100%;
         }
         .project-card:hover { transform: translateY(-4px); border-color: var(--accent); background: var(--hover); }
         .project-card.game-card:hover { border-color: var(--game-accent); }
         .project-card.file-card:hover { border-color: var(--file-accent); }
-
-        .info-group {
-            flex: 1;
-            display: flex; flex-direction: column; justify-content: center;
-            min-width: 0;
-        }
-
-        .name {
-            font-size: 0.95rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
 
         .icon {
             font-size: 22px; background: rgba(56, 189, 248, 0.1);
@@ -161,15 +148,17 @@
         .game-card .icon { background: rgba(244, 114, 182, 0.1); }
         .file-card .icon { background: rgba(167, 139, 250, 0.1); color: var(--file-accent); }
 
+        .info-group { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+        .name { font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
         .badge {
             margin-left: 8px; font-size: 0.7rem; padding: 6px 14px;
             border-radius: 10px; font-weight: bold;
             background: var(--game-accent); color: white; flex-shrink: 0;
             text-align: center; min-width: 55px;
         }
-        .file-card .badge { background: var(--file-accent); }
-        .project-card:not(.game-card):not(.file-card) .badge { background: var(--accent); }
 
+        /* Modal Styles */
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); 
@@ -181,7 +170,7 @@
         .modal-content { 
             background: var(--card); border: 1px solid var(--border); 
             border-radius: 20px; padding: 28px; width: 100%; max-width: 600px; 
-            position: relative; box-shadow: var(--shadow);
+            position: relative; box-shadow: var(--shadow); color: var(--text);
         }
 
         .file-list {
@@ -194,6 +183,13 @@
             padding: 14px; border-bottom: 1px solid var(--border); gap: 12px;
         }
 
+        .download-link {
+            background: var(--game-accent); color: white;
+            padding: 6px 14px; border-radius: 8px; text-decoration: none;
+            font-size: 0.75rem; font-weight: bold; white-space: nowrap;
+        }
+
+        /* Alternatif Link Alanı (Eksik Olan Kısım) */
         .alt-links-section {
             margin-top: 15px;
             padding: 12px;
@@ -205,13 +201,6 @@
             display: flex; align-items: center; justify-content: space-between;
             margin-top: 8px; font-size: 0.85rem;
         }
-
-        .download-link {
-            background: var(--game-accent); color: white;
-            padding: 6px 14px; border-radius: 8px; text-decoration: none;
-            font-size: 0.75rem; font-weight: bold; white-space: nowrap;
-        }
-
         .alt-btn { background: var(--accent) !important; }
 
         .close-modal {
@@ -230,10 +219,8 @@
 
         @media (max-width: 600px) {
             header { flex-direction: column; align-items: center; text-align: center; }
-            .controls { justify-content: center; width: 100%; }
             input { width: 100%; }
             .grid { grid-template-columns: 1fr; }
-            .section-header { justify-content: center; }
         }
     </style>
 </head>
@@ -261,23 +248,17 @@
 </header>
 
 <div id="projects-section" style="width: 100%; max-width: 900px;">
-    <div class="section-header">
-        <h2 class="section-title" id="projectsTitle"></h2>
-    </div>
+    <div class="section-header"><h2 class="section-title" id="projectsTitle"></h2></div>
     <div id="project-container" class="grid"></div>
 </div>
 
 <div id="games-section" class="hidden" style="width: 100%; max-width: 900px;">
-    <div class="section-header">
-        <h2 class="section-title games" id="gamesTitle"></h2>
-    </div>
+    <div class="section-header"><h2 class="section-title games" id="gamesTitle"></h2></div>
     <div id="game-container" class="grid"></div>
 </div>
 
 <div id="files-section" class="hidden" style="width: 100%; max-width: 900px;">
-    <div class="section-header">
-        <h2 class="section-title files" id="filesTitle"></h2>
-    </div>
+    <div class="section-header"><h2 class="section-title files" id="filesTitle"></h2></div>
     <div id="files-container" class="grid"></div>
 </div>
 
@@ -286,6 +267,7 @@
         <button class="close-modal" onclick="toggleModal('gameFilesModal', false)">&times;</button>
         <h2 id="modalGameName" style="margin:0; font-size:1.4rem;"></h2>
         <div id="fileContainer" class="file-list"></div>
+        
         <div id="altLinksContainer" class="alt-links-section hidden">
             <div style="font-weight: bold; font-size: 0.8rem; color: var(--accent); margin-bottom: 5px;" id="altTitle">🔗 ALTERNATİF LİNKLER</div>
             <div id="altLinksList"></div>
@@ -305,9 +287,7 @@
     </div>
 </div>
 
-<footer>
-    <p id="footerText"></p>
-</footer>
+<footer><p id="footerText"></p></footer>
 
 <script>
 const PROJECTS_DATA_URL = "projects.json"; 
@@ -318,12 +298,9 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuI
 const TRANSLATIONS = {
     en: {
         searchPlaceholder: "🔍 Search projects or games...",
-        newsletterBtnTitle: "Subscribe",
         projectsTitle: "📂 My Web Projects",
         gamesTitle: "🎮 Games",
         filesTitle: "📁 Files",
-        loading: "Loading...",
-        error: "Data is not ready yet.",
         newsletterTitle: "📬 Subscribe to GitHub Newsletter",
         emailPlaceholder: "Enter your e-mail...",
         subscribeBtn: "Subscribe",
@@ -342,12 +319,9 @@ const TRANSLATIONS = {
     },
     tr: {
         searchPlaceholder: "🔍 Proje veya Oyun Ara...",
-        newsletterBtnTitle: "Abone Ol",
         projectsTitle: "📂 Web Projelerim",
         gamesTitle: "🎮 Oyunlar",
         filesTitle: "📁 Dosyalar",
-        loading: "Yükleniyor...",
-        error: "Veriler henüz hazır değil.",
         newsletterTitle: "📬 GitHub Bültenine Abone Ol",
         emailPlaceholder: "E-posta adresini gir...",
         subscribeBtn: "Abone Ol",
@@ -407,35 +381,6 @@ function toggleModal(id, show) {
     }
 }
 
-// --- ABONELİK SİSTEMİ MANTIĞI ---
-document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('subscribe-btn');
-    const msg = document.getElementById('status-msg');
-    const email = document.getElementById('email-input').value;
-    
-    btn.disabled = true; 
-    btn.innerText = tr("subscribing");
-    
-    try {
-        // index.html'den gelen Google Script entegrasyonu
-        await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(email)}`, { mode: 'no-cors' });
-        msg.innerHTML = `<span style="color:#4ade80">${tr("subscribeSuccess")}</span>`;
-        
-        setTimeout(() => { 
-            toggleModal('newsletterModal', false); 
-            btn.disabled = false; 
-            btn.innerText = tr("subscribeBtn");
-            msg.innerHTML = "";
-            document.getElementById('email-input').value = "";
-        }, 2000);
-    } catch (err) { 
-        msg.innerHTML = `<span style="color:#f87171">${tr("subscribeError")}</span>`; 
-        btn.disabled = false;
-        btn.innerText = tr("subscribeBtn");
-    }
-});
-
 async function loadProjects() {
     const container = document.getElementById("project-container");
     const section = document.getElementById("projects-section");
@@ -443,22 +388,15 @@ async function loadProjects() {
         const res = await fetch(PROJECTS_DATA_URL);
         const items = await res.json();
         if(!items || items.length === 0) { section.classList.add("hidden"); return; }
-        
         section.classList.remove("hidden");
         container.innerHTML = "";
-        items.filter(i => i.type === "dir" && i.name !== ".github" && i.name !== "My_Social_Media").forEach(p => {
+        items.filter(i => i.type === "dir" && ![".github", "My_Social_Media", "Test_Project"].includes(i.name)).forEach(p => {
             const card = document.createElement("a");
             card.className = "project-card";
             card.href = p.path;
             card.target = "_blank";
             card.dataset.searchName = norm(p.name);
-            card.innerHTML = `
-                <div class="icon">🌐</div>
-                <div class="info-group">
-                    <div class="name"><b>${p.name.replace(/_/g, " ")}</b></div>
-                </div>
-                <span class="badge">${tr("openBadge")}</span>
-            `;
+            card.innerHTML = `<div class="icon">🌐</div><div class="info-group"><div class="name"><b>${p.name.replace(/_/g, " ")}</b></div></div><span class="badge">${tr("openBadge")}</span>`;
             container.appendChild(card);
         });
     } catch (e) { section.classList.add("hidden"); }
@@ -471,21 +409,13 @@ async function loadGames() {
         const res = await fetch(GAMES_DATA_URL);
         const releases = await res.json();
         if(!releases || releases.length === 0) { section.classList.add("hidden"); return; }
-
         section.classList.remove("hidden");
         container.innerHTML = "";
         releases.forEach(rel => {
             const card = document.createElement("div");
             card.className = "project-card game-card";
             card.dataset.searchName = norm(rel.name || rel.tag_name);
-            card.innerHTML = `
-                <div class="icon">🎮</div>
-                <div class="info-group">
-                    <div class="name"><b>${rel.name || rel.tag_name}</b></div>
-                    <div style="font-size:0.75rem; opacity:0.6;">${rel.tag_name}</div>
-                </div>
-                <span class="badge">${tr("openBadge")}</span>
-            `;
+            card.innerHTML = `<div class="icon">🎮</div><div class="info-group"><div class="name"><b>${rel.name || rel.tag_name}</b></div><div style="font-size:0.75rem; opacity:0.6;">${rel.tag_name}</div></div><span class="badge">${tr("openBadge")}</span>`;
             card.onclick = () => openGameModal(rel);
             container.appendChild(card);
         });
@@ -499,21 +429,13 @@ async function loadFiles() {
         const res = await fetch(FILES_DATA_URL);
         const files = await res.json();
         if(!files || files.length === 0) { section.classList.add("hidden"); return; }
-
         section.classList.remove("hidden");
         container.innerHTML = "";
         files.forEach(file => {
             const card = document.createElement("div");
             card.className = "project-card file-card";
             card.dataset.searchName = norm(file.name || file.tag_name);
-            card.innerHTML = `
-                <div class="icon">📁</div>
-                <div class="info-group">
-                    <div class="name"><b>${file.name || file.tag_name}</b></div>
-                    <div style="font-size:0.75rem; opacity:0.6;">${file.tag_name}</div>
-                </div>
-                <span class="badge">${tr("openBadge")}</span>
-            `;
+            card.innerHTML = `<div class="icon">📁</div><div class="info-group"><div class="name"><b>${file.name || file.tag_name}</b></div><div style="font-size:0.75rem; opacity:0.6;">${file.tag_name}</div></div><span class="badge">${tr("openBadge")}</span>`;
             card.onclick = () => openGameModal(file);
             container.appendChild(card);
         });
@@ -524,11 +446,13 @@ function openGameModal(rel) {
     const fileContainer = document.getElementById("fileContainer");
     const altContainer = document.getElementById("altLinksContainer");
     const altList = document.getElementById("altLinksList");
+    
     document.getElementById("modalGameName").textContent = rel.name || rel.tag_name;
     fileContainer.innerHTML = "";
     altList.innerHTML = "";
     altContainer.classList.add("hidden");
 
+    // GitHub Assets
     if (rel.assets && rel.assets.length > 0) {
         rel.assets.forEach(asset => {
             const div = document.createElement("div");
@@ -542,13 +466,26 @@ function openGameModal(rel) {
                         <div style="font-size:0.7rem; opacity:0.6;">${size} MB</div>
                     </div>
                 </div>
-                <a href="${asset.browser_download_url}" class="download-link" target="_blank">${tr("downloadBtn")}</a>
-            `;
+                <a href="${asset.browser_download_url}" class="download-link" target="_blank">${tr("downloadBtn")}</a>`;
             fileContainer.appendChild(div);
         });
     } else {
         fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6; text-align:center;'>${tr("noFiles")}</p>`;
     }
+
+    // Alternatif Linkler Entegrasyonu
+    if (rel.alt_links && rel.alt_links.length > 0) {
+        altContainer.classList.remove("hidden");
+        rel.alt_links.forEach(link => {
+            const div = document.createElement("div");
+            div.className = "alt-link-item";
+            div.innerHTML = `
+                <span style="font-weight:600; opacity:0.8;">${link.name}</span>
+                <a href="${link.url}" class="download-link alt-btn" target="_blank">${tr("altLinkBtn")}</a>`;
+            altList.appendChild(div);
+        });
+    }
+
     toggleModal('gameFilesModal', true);
 }
 
@@ -557,17 +494,12 @@ function getFileIcon(fn) {
     return { 'zip':'📦','rar':'📦','apk':'🤖','exe':'⚙️','pdf':'📕','mp4':'🎬','mp3':'🎵' }[ext] || '📄';
 }
 
-document.getElementById('search').addEventListener("input", function () {
+document.getElementById('search').oninput = function () {
     const q = norm(this.value);
-    document.querySelectorAll(".project-card").forEach(card => {
-        card.classList.toggle("hidden", !card.dataset.searchName.includes(q));
-    });
-});
-
-document.getElementById("langBtn").onclick = (e) => { 
-    e.stopPropagation(); 
-    document.getElementById("langSwitcher").classList.toggle("open"); 
+    document.querySelectorAll(".project-card").forEach(card => card.classList.toggle("hidden", !card.dataset.searchName.includes(q)));
 };
+
+document.getElementById("langBtn").onclick = (e) => { e.stopPropagation(); document.getElementById("langSwitcher").classList.toggle("open"); };
 
 document.querySelectorAll(".lang-option").forEach(btn => {
     btn.onclick = () => {
