@@ -518,7 +518,7 @@ async function loadFiles() {
     } catch (e) { section.classList.add("hidden"); }
 }
 
-// --- DÜZELTİLEN FONKSİYON ---
+// --- DÜZELTİLEN VE ENTEGRE EDİLEN MODAL FONKSİYONU ---
 function openGameModal(rel) {
     const fileContainer = document.getElementById("fileContainer");
     const altContainer = document.getElementById("altLinksContainer");
@@ -526,12 +526,11 @@ function openGameModal(rel) {
     
     document.getElementById("modalGameName").textContent = rel.name || rel.tag_name;
     
-    // Temizlik
     fileContainer.innerHTML = "";
     altList.innerHTML = "";
     altContainer.classList.add("hidden");
 
-    // 1. GitHub Assets (Dosyalar)
+    // 1. GitHub Assets (Ana Dosyalar)
     if (rel.assets && rel.assets.length > 0) {
         rel.assets.forEach(asset => {
             const div = document.createElement("div");
@@ -553,18 +552,29 @@ function openGameModal(rel) {
         fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6; text-align:center;'>${tr("noFiles")}</p>`;
     }
 
-    // 2. ALTERNATİF LİNKLER (DÜZELTME BURADA)
+    // 2. ALTERNATİF LİNKLERİN ENTEGRASYONU
+    
+    // Durum A: JSON'da 'alt_links' dizisi (Array) varsa
     if (rel.alt_links && rel.alt_links.length > 0) {
         altContainer.classList.remove("hidden");
         rel.alt_links.forEach(link => {
-            const div = document.createElement("div");
-            div.className = "alt-link-item";
-            div.innerHTML = `
-                <span style="font-weight:600; opacity:0.8;">${link.name}</span>
-                <a href="${link.url}" class="download-link alt-btn" target="_blank">${tr("altLinkBtn")}</a>
-            `;
-            altList.appendChild(div);
+            addAltLinkRow(link.name, link.url);
         });
+    } 
+    // Durum B: JSON'da 'body' içinde metin olarak link varsa (Senin games.json dosyan için)
+    else if (rel.body && rel.body.trim().startsWith("http")) {
+        altContainer.classList.remove("hidden");
+        addAltLinkRow("Google Drive / Cloud", rel.body.trim());
+    }
+
+    function addAltLinkRow(label, url) {
+        const div = document.createElement("div");
+        div.className = "alt-link-item";
+        div.innerHTML = `
+            <span style="font-weight:600; opacity:0.8;">${label}</span>
+            <a href="${url}" class="download-link alt-btn" target="_blank">${tr("altLinkBtn")}</a>
+        `;
+        altList.appendChild(div);
     }
 
     toggleModal('gameFilesModal', true);
