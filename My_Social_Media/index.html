@@ -27,6 +27,7 @@
             border: 1px solid rgba(255,255,255,0.1);
             overflow: hidden;
             margin-bottom: 20px;
+            transform: translateY(20px);
         }
         .profile-section {
             text-align: center;
@@ -168,19 +169,20 @@
                     bioElement.innerHTML = data.bio.map(parseLine).join('<br>');
                 }
             } catch (error) {
+                // Hata durumunda veya dosya bulunamazsa varsayılan metin
                 bioElement.innerHTML = 'Small wins lead to a big victory: @bunyanfen<br>🖤@besiktas🤍 | 726051🙃<br>#egitimdesiddetehayir';
                 console.error("Biyografi yükleme hatası:", error);
             }
         }
 
-        // Gelişmiş Regex Ayrıştırıcı (Hem $ hem $$ destekler)
+        // Gelişmiş Regex Ayrıştırıcı
         function parseLine(line) {
-            // @kullanici$(link)$ veya @kullanici$$(link)$$ formatını yakalar
-            line = line.replace(/@([a-zA-Z0-9_]+)\$+(\bhttps?:\/\/[^\$]+)\$+/g, 
+            // @kullanici$$(link)$$ formatı için: Parantez içindeki URL'yi alır, $$ işaretlerini temizler
+            line = line.replace(/@([a-zA-Z0-9_]+)\$+\((https?:\/\/[^\$)]+)\)\$+/g, 
                 '<a href="$2" target="_blank" class="bio-link">@$1</a>');
             
-            // #hashtag$(link)$ veya #hashtag$$(link)$$ formatını yakalar
-            line = line.replace(/#([a-zA-Z0-9_]+)\$+(\bhttps?:\/\/[^\$]+)\$+/g, 
+            // #hashtag$$(link)$$ formatı için
+            line = line.replace(/#([a-zA-Z0-9_]+)\$+\((https?:\/\/[^\$)]+)\)\$+/g, 
                 '<a href="$2" target="_blank" class="bio-link">#$1</a>');
             
             return line;
