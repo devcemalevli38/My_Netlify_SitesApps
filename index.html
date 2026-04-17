@@ -439,8 +439,6 @@ document.getElementById('newsletter-form').addEventListener('submit', async (e) 
 async function loadProjects() {
     const container = document.getElementById("project-container");
     const section = document.getElementById("projects-section");
-    
-    // Gizlemek istediğin tüm klasör adlarını buraya ekleyebilirsin
     const hiddenFolders = [".github", "My_Social_Media", "Test_Project"];
 
     try {
@@ -451,7 +449,6 @@ async function loadProjects() {
         section.classList.remove("hidden");
         container.innerHTML = "";
         
-        // Klasörleri filtrele ve listele
         items.filter(i => i.type === "dir" && !hiddenFolders.includes(i.name)).forEach(p => {
             const card = document.createElement("a");
             card.className = "project-card";
@@ -531,10 +528,12 @@ function openGameModal(rel) {
     const altContainer = document.getElementById("altLinksContainer");
     const altList = document.getElementById("altLinksList");
     document.getElementById("modalGameName").textContent = rel.name || rel.tag_name;
+    
     fileContainer.innerHTML = "";
     altList.innerHTML = "";
     altContainer.classList.add("hidden");
 
+    // GitHub Assets (Dosyalar)
     if (rel.assets && rel.assets.length > 0) {
         rel.assets.forEach(asset => {
             const div = document.createElement("div");
@@ -555,6 +554,21 @@ function openGameModal(rel) {
     } else {
         fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6; text-align:center;'>${tr("noFiles")}</p>`;
     }
+
+    // Alternatif Linkler (anahtml.html'den gelen mekanik)
+    if (rel.alt_links && rel.alt_links.length > 0) {
+        altContainer.classList.remove("hidden");
+        rel.alt_links.forEach(link => {
+            const div = document.createElement("div");
+            div.className = "alt-link-item";
+            div.innerHTML = `
+                <span style="font-weight:600; opacity:0.8;">${link.name}</span>
+                <a href="${link.url}" class="download-link alt-btn" target="_blank">${tr("altLinkBtn")}</a>
+            `;
+            altList.appendChild(div);
+        });
+    }
+
     toggleModal('gameFilesModal', true);
 }
 
