@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cemal Evli - Linklerim</title>
+    <link id="favicon" rel="icon" type="image/png" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/My_Social_Media/profile.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -145,15 +147,20 @@
     <div class="footer"><p>💙 Cemal Evli</p></div>
 
     <script>
-        // Profil Resmini Yükle
+        // Profil Resmini Yükle ve Favicon'u Güncelle
         function loadProfileImage() {
             const avatar = document.getElementById('profileAvatar');
+            const favicon = document.getElementById('favicon');
+            const imgUrl = 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/My_Social_Media/profile.png';
+            
             const img = new Image();
-            img.src = 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/My_Social_Media/profile.png';
+            img.src = imgUrl;
             img.onload = () => {
                 avatar.innerHTML = '';
                 avatar.appendChild(img);
                 img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
+                // Favicon'u dinamik olarak tekrar onayla
+                favicon.href = imgUrl;
             };
         }
 
@@ -165,11 +172,9 @@
                 const data = await response.json();
                 
                 if (data.bio && Array.isArray(data.bio)) {
-                    // Satırları işle ve birleştir
                     bioElement.innerHTML = data.bio.map(parseLine).join('<br>');
                 }
             } catch (error) {
-                // Hata durumunda veya dosya bulunamazsa varsayılan metin
                 bioElement.innerHTML = 'Small wins lead to a big victory: @bunyanfen<br>🖤@besiktas🤍 | 726051🙃<br>#egitimdesiddetehayir';
                 console.error("Biyografi yükleme hatası:", error);
             }
@@ -177,14 +182,10 @@
 
         // Gelişmiş Regex Ayrıştırıcı
         function parseLine(line) {
-            // @kullanici$$(link)$$ formatı için: Parantez içindeki URL'yi alır, $$ işaretlerini temizler
             line = line.replace(/@([a-zA-Z0-9_]+)\$+\((https?:\/\/[^\$)]+)\)\$+/g, 
                 '<a href="$2" target="_blank" class="bio-link">@$1</a>');
-            
-            // #hashtag$$(link)$$ formatı için
             line = line.replace(/#([a-zA-Z0-9_]+)\$+\((https?:\/\/[^\$)]+)\)\$+/g, 
                 '<a href="$2" target="_blank" class="bio-link">#$1</a>');
-            
             return line;
         }
 
