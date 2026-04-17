@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cemal Evli - Linklerim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .profile-section {
+            text-align: center;
+            padding: 40px 30px 20px;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .profile-bio {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .links-section {
+            padding: 30px;
+        }
+
+        .link-item {
+            display: block;
+            margin-bottom: 15px;
+            padding: 18px 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .link-item:hover::before {
+            left: 100%;
+        }
+
+        .link-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+        }
+
+        .link-icon {
+            width: 24px;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .link-text {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .link-arrow {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            margin-top: auto;
+            padding: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+                border-radius: 20px;
+            }
+            
+            .profile-section {
+                padding: 30px 20px 15px;
+            }
+            
+            .links-section {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-section">
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <h1 class="profile-name">Cemal Evli</h1>
+            <p class="profile-bio">Web Geliştirici</p>
+        </div>
+
+        <div class="links-section">
+            <a href="https://www.instagram.com/imcemalevli/" class="link-item" target="_blank">
+                <div class="link-text">
+                    <span>
+                        <i class="fab fa-instagram link-icon"></i>
+                        Instagram
+                    </span>
+                    <i class="fas fa-arrow-right link-arrow"></i>
+                </div>
+            </a>
+
+            <a href="https://www.facebook.com/profile.php?id=100076601840154" class="link-item" target="_blank">
+                <div class="link-text">
+                    <span>
+                        <i class="fab fa-facebook link-icon"></i>
+                        Facebook
+                    </span>
+                    <i class="fas fa-arrow-right link-arrow"></i>
+                </div>
+            </a>
+
+            <a href="https://github.com/cemal201138" class="link-item" target="_blank">
+                <div class="link-text">
+                    <span>
+                        <i class="fab fa-github link-icon"></i>
+                        GitHub
+                    </span>
+                    <i class="fas fa-arrow-right link-arrow"></i>
+                </div>
+            </a>
+
+            <a href="https://cemalevli.qzz.io/Portfolio_Site/" class="link-item" target="_blank">
+                <div class="link-text">
+                    <span>
+                        <i class="fas fa-globe link-icon"></i>
+                        Portfolio
+                    </span>
+                    <i class="fas fa-arrow-right link-arrow"></i>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>💙 Cemal Evli</p>
+    </div>
+
+    <script>
+        // Animasyon efektleri
+        document.querySelectorAll('.link-item').forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+            });
+            
+            link.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Sayfa yüklendiğinde animasyon
+        window.addEventListener('load', () => {
+            document.querySelector('.container').style.opacity = '0';
+            document.querySelector('.container').style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                document.querySelector('.container').style.transition = 'all 0.6s ease';
+                document.querySelector('.container').style.opacity = '1';
+                document.querySelector('.container').style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
