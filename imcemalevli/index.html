@@ -75,10 +75,10 @@
         .bio-line {
             display: block;
             padding: 2px 0;
-            white-space: nowrap;
+            white-space: nowrap; /* Satırın kırılmasını engeller, sığmazsa taşar */
         }
         @media (max-width: 400px) {
-            .bio-line { white-space: normal; }
+            .bio-line { white-space: normal; } /* Çok küçük ekranlarda okunabilirlik için kırılsın */
         }
         .bio-link {
             color: #a0a0ff; text-decoration: none; font-weight: 600;
@@ -189,7 +189,7 @@
     <script>
         async function loadProfileImage() {
             const avatar = document.getElementById('profileAvatar');
-            const imgUrl = 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/profile.png?t=' + new Date().getTime();
+            const imgUrl = 'https://wsrv.nl/?url=https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/profile.png&w=200&h=200&mask=circle&t=' + new Date().getTime();
             
             return new Promise((resolve) => {
                 const img = new Image();
@@ -210,28 +210,25 @@
         async function loadBiography() {
             const bioElement = document.getElementById('profileBio');
             try {
-                const response = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/biography?t=' + new Date().getTime());
+                const response = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemo38/biography?t=' + new Date().getTime());
                 const data = await response.json();
                 
                 if (data.bio && Array.isArray(data.bio)) {
+                    // Her bir bio satırını bir span içinde döndürüyoruz
                     bioElement.innerHTML = data.bio.map(line => `<span class="bio-line">${parseLine(line)}</span>`).join('');
                 }
             } catch (error) {
-                bioElement.innerHTML = '<span class="bio-line">Biyografi yüklenemedi.</span>';
+                bioElement.innerHTML = '<span class="bio-line">Small wins lead to a big victory: @bunyanfen</span><span class="bio-line">🖤@besiktas🤍 | 726051🙃</span><span class="bio-line">#egitimdesiddetehayir</span>';
                 console.error("Biyografi yükleme hatası:", error);
             }
         }
 
         function parseLine(line) {
-            // Düzenlenmiş Regex: @etiket veya #hashtag ile başlayan ve $$(link)$$ ile devam eden yapıyı yakalar
-            // Önce @mentions + linkler
-            line = line.replace(/(@[a-zA-Z0-9_.]+)\s*\$\$(https?:\/\/[^)]+)\$\$/g, 
-                '<a href="$2" target="_blank" class="bio-link">$1</a>');
-            
-            // Sonra #hashtags + linkler
-            line = line.replace(/(#[a-zA-Z0-9_.]+)\s*\$\$(https?:\/\/[^)]+)\$\$/g, 
-                '<a href="$2" target="_blank" class="bio-link">$1</a>');
-            
+            // @mention ve #hashtag için regex, $$(url)$$ formatını linke dönüştürür
+            line = line.replace(/@([a-zA-Z0-9_]+)\$+\((https?:\/\/[^\$)]+)\)\$+/g, 
+                '<a href="$2" target="_blank" class="bio-link">@$1</a>');
+            line = line.replace(/#([a-zA-Z0-9_]+)\$+\((https?:\/\/[^\$)]+)\)\$+/g, 
+                '<a href="$2" target="_blank" class="bio-link">#$1</a>');
             return line;
         }
 
