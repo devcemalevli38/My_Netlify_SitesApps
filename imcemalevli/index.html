@@ -210,7 +210,7 @@
         async function loadBiography() {
             const bioElement = document.getElementById('profileBio');
             try {
-                const response = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/My_Social_Media/biography?t=' + new Date().getTime());
+                const response = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/biography?t=' + new Date().getTime());
                 const data = await response.json();
                 
                 if (data.bio && Array.isArray(data.bio)) {
