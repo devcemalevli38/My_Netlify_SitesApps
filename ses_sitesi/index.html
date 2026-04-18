@@ -6,7 +6,7 @@
     
     <title>Ses Paneli | MyInstants</title>
 
-    <link rel="icon" type="image/png" href="https://img.icons8.com/neon-blue/64/speaker.png">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🔊</text></svg>">
 
     <style>
         :root {
@@ -244,7 +244,7 @@
       a.currentTime = 0;
     });
     document.querySelectorAll('.gui-button').forEach(b => b.classList.remove('playing'));
-    document.title = DEFAULT_TITLE; // Başlığı sıfırla
+    document.title = DEFAULT_TITLE;
   }
 
   function playSound(audioId, event) {
@@ -256,11 +256,11 @@
     if (target) {
       target.play();
       btn.classList.add('playing');
-      document.title = "▶️ " + soundName; // Tarayıcı sekmesinde ses ismini göster
+      document.title = "▶️ " + soundName;
       
       target.onended = () => {
           btn.classList.remove('playing');
-          document.title = DEFAULT_TITLE; // Bitince geri al
+          document.title = DEFAULT_TITLE;
       };
     }
   }
