@@ -176,6 +176,7 @@
 <script>
     const JSON_URL = 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/refs/heads/main/ses_sitesi/sounds.json';
     const DEFAULT_TITLE = "Ses Paneli";
+    let allSounds = []; // Ses verilerini globalde tutalım
 
     async function loadSounds() {
         const buttonGrid = document.getElementById('buttonGrid');
@@ -185,10 +186,10 @@
         
         try {
             const response = await fetch(JSON_URL);
-            const sounds = await response.json();
+            allSounds = await response.json();
             buttonGrid.innerHTML = ''; 
 
-            sounds.forEach(sound => {
+            allSounds.forEach(sound => {
                 const audio = document.createElement('audio');
                 audio.id = sound.id;
                 audio.src = sound.url;
@@ -203,7 +204,7 @@
                 buttonGrid.appendChild(button);
             });
 
-            // API Parametre Kontrolü (?ses=sorgu)
+            // Yönlendirme ve Parametre Kontrolü
             checkUrlParams();
 
         } catch (error) {
@@ -214,13 +215,25 @@
     function checkUrlParams() {
         const urlParams = new URLSearchParams(window.location.search);
         const query = urlParams.get('ses');
+        
         if (query) {
-            const searchBox = document.getElementById('searchInput');
-            searchBox.value = query;
-            filterSounds();
-            // İlk sonucu otomatik çal
-            const firstBtn = document.querySelector('.gui-button:not(.hidden)');
-            if (firstBtn) firstBtn.click();
+            const lowerQuery = query.toLowerCase();
+            
+            // 1. Önce tam eşleşme var mı bak (Doğrudan URL'ye yönlendir)
+            const exactMatch = allSounds.find(s => s.searchName.toLowerCase() === lowerQuery);
+            
+            if (exactMatch) {
+                // Eğer tam eşleşme varsa doğrudan .mp3 linkine git
+                window.location.href = exactMatch.url;
+            } else {
+                // 2. Tam eşleşme yoksa panelde ara ve filtrele
+                const searchBox = document.getElementById('searchInput');
+                searchBox.value = query;
+                filterSounds();
+                
+                const firstBtn = document.querySelector('.gui-button:not(.hidden)');
+                if (firstBtn) firstBtn.click();
+            }
         }
     }
 
