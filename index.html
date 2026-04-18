@@ -444,7 +444,7 @@ async function loadProjects() {
         
         section.classList.remove("hidden");
         container.innerHTML = "";
-        items.filter(i => i.type === "dir" && i.name !== ".github" && i.name !== "My_Social_Media").forEach(p => {
+        items.filter(i => i.type === "dir" && i.name !== ".github" && i.name !== "My_Social_Media" && i.name !== "imcemo38" ).forEach(p => {
             const card = document.createElement("a");
             card.className = "project-card";
             card.href = p.path;
