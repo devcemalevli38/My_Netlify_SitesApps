@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ses Yönlendiriliyor...</title>
+</head>
+<body>
+    <p>Ses dosyası aranıyor, lütfen bekleyin...</p>
+    <script>
+        const JSON_URL = 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/refs/heads/main/ses_sitesi/sounds.json';
+        
+        // URL'den sorguyu al (Örn: /ses_sitesi/korna -> "korna")
+        const path = window.location.pathname;
+        const segments = path.split('/').filter(Boolean);
+        const searchQuery = segments[segments.length - 1].toLowerCase();
+
+        async function redirectToSound() {
+            try {
+                const response = await fetch(JSON_URL);
+                const sounds = await response.json();
+                
+                // JSON içinde searchName veya id ile eşleşme ara
+                const sound = sounds.find(s => 
+                    s.searchName.toLowerCase().includes(searchQuery) || 
+                    s.id.toLowerCase() === searchQuery
+                );
+
+                if (sound) {
+                    // Ses dosyasına yönlendir
+                    window.location.href = sound.url;
+                } else {
+                    // Bulunamazsa ana sayfaya dön
+                    document.body.innerHTML = "Ses bulunamadı. Ana sayfaya yönlendiriliyorsunuz...";
+                    setTimeout(() => { window.location.href = '/ses_sitesi/'; }, 2000);
+                }
+            } catch (error) {
+                window.location.href = '/ses_sitesi/';
+            }
+        }
+
+        redirectToSound();
+    </script>
+</body>
+</html>
