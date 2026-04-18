@@ -226,32 +226,32 @@
   {
     "name": "projects.json",
     "path": "projects.json",
-    "sha": "699bfda34f6dc0f00f09f65f57632abd59c0b935",
-    "size": 14494,
+    "sha": "faf20cf13663d3957461edf999f1c9785b0bd8c6",
+    "size": 15346,
     "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/projects.json?ref=main",
     "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/projects.json",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/699bfda34f6dc0f00f09f65f57632abd59c0b935",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/faf20cf13663d3957461edf999f1c9785b0bd8c6",
     "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/projects.json",
     "type": "file",
     "_links": {
       "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/projects.json?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/699bfda34f6dc0f00f09f65f57632abd59c0b935",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/faf20cf13663d3957461edf999f1c9785b0bd8c6",
       "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/projects.json"
     }
   },
   {
     "name": "ses_sitesi",
     "path": "ses_sitesi",
-    "sha": "df3b16b0ea4e5ff56c9f493053c5295e44141a08",
+    "sha": "d7f0f13e78d75fd14205fadd7a1744a07d60c04b",
     "size": 0,
     "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/ses_sitesi?ref=main",
     "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/ses_sitesi",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/df3b16b0ea4e5ff56c9f493053c5295e44141a08",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/d7f0f13e78d75fd14205fadd7a1744a07d60c04b",
     "download_url": null,
     "type": "dir",
     "_links": {
       "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/ses_sitesi?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/df3b16b0ea4e5ff56c9f493053c5295e44141a08",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/d7f0f13e78d75fd14205fadd7a1744a07d60c04b",
       "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/ses_sitesi"
     }
   },
