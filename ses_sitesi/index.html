@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Ses Paneli</title>
-
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>🔊</text></svg>">
 
     <style>
@@ -94,6 +92,7 @@
             color: #fff; 
             margin-bottom: 30px; 
             font-size: 16px;
+            box-sizing: border-box;
         }
 
         .button-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; justify-items: center; }
@@ -147,23 +146,8 @@
             background: rgba(10, 14, 23, 0.5);
         }
 
-        .site-footer p {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.6);
-            letter-spacing: 0.5px;
-        }
-
-        .site-footer a {
-            color: var(--neon-blue);
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .site-footer a:hover {
-            text-shadow: 0 0 8px var(--neon-blue-glow);
-            text-decoration: underline;
-        }
+        .site-footer p { font-size: 12px; color: rgba(255, 255, 255, 0.6); }
+        .site-footer a { color: var(--neon-blue); text-decoration: none; font-weight: bold; }
 
         .hidden { display: none !important; }
     </style>
@@ -174,107 +158,102 @@
 
 <div class="sticky-header">
   <div class="header-controls">
-    <button onclick="stopAllSounds()" class="stop-button">
-      <span class="stop-icon">🛑</span> DURDUR
-    </button>
-    <button onclick="loadSounds()" class="refresh-button">
-      <span class="refresh-icon">🔄</span> YENİLE
-    </button>
+    <button onclick="stopAllSounds()" class="stop-button">🛑 DURDUR</button>
+    <button onclick="loadSounds()" class="refresh-button">🔄 YENİLE</button>
   </div>
 </div>
 
 <div class="sound-board">
   <h2 class="board-title">Ses Paneli</h2>
-  
-  <div class="search-container">
-    <input type="text" id="searchInput" onkeyup="filterSounds()" placeholder="Ses ismi yazın..." autocomplete="off">
-  </div>
-  
-  <div class="button-grid" id="buttonGrid">
-  </div>
+  <input type="text" id="searchInput" onkeyup="filterSounds()" placeholder="Ses ismi yazın..." autocomplete="off">
+  <div class="button-grid" id="buttonGrid"></div>
 </div>
 
 <footer class="site-footer">
-  <p>Ses içerikleri için <a href="https://www.myinstants.com" target="_blank">myinstants.com</a> kaynaklarından faydalanılmıştır.</p>
+  <p>Sesler: <a href="https://www.myinstants.com" target="_blank">myinstants.com</a></p>
 </footer>
 
 <script>
-  const JSON_URL = 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/refs/heads/main/ses_sitesi/sounds.json';
-  const DEFAULT_TITLE = "Ses Paneli";
+    const JSON_URL = 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/refs/heads/main/ses_sitesi/sounds.json';
+    const DEFAULT_TITLE = "Ses Paneli";
 
-  async function loadSounds() {
-    const buttonGrid = document.getElementById('buttonGrid');
-    const audioContainer = document.getElementById('audio-container');
-    
-    buttonGrid.innerHTML = '<p style="color:var(--neon-blue); font-weight:bold;">Sesler yükleniyor...</p>';
-    audioContainer.innerHTML = '';
-    
-    try {
-      const response = await fetch(JSON_URL);
-      const sounds = await response.json();
-      
-      buttonGrid.innerHTML = ''; 
-
-      sounds.forEach(sound => {
-        const audio = document.createElement('audio');
-        audio.id = sound.id;
-        audio.src = sound.url;
-        audio.preload = "auto";
-        audioContainer.appendChild(audio);
-
-        const button = document.createElement('button');
-        button.className = 'gui-button';
-        button.setAttribute('data-name', sound.searchName.toLowerCase());
-        button.onclick = (event) => playSound(sound.id, event);
+    async function loadSounds() {
+        const buttonGrid = document.getElementById('buttonGrid');
+        const audioContainer = document.getElementById('audio-container');
+        buttonGrid.innerHTML = '<p style="color:var(--neon-blue);">Yükleniyor...</p>';
+        audioContainer.innerHTML = '';
         
-        button.innerHTML = `
-          <div class="icon-circle">🔊</div>
-          <span>${sound.name}</span>
-        `;
-        buttonGrid.appendChild(button);
-      });
-    } catch (error) {
-      buttonGrid.innerHTML = '<p style="color:red; font-weight:bold;">Hata! JSON çekilemedi.</p>';
+        try {
+            const response = await fetch(JSON_URL);
+            const sounds = await response.json();
+            buttonGrid.innerHTML = ''; 
+
+            sounds.forEach(sound => {
+                const audio = document.createElement('audio');
+                audio.id = sound.id;
+                audio.src = sound.url;
+                audio.preload = "auto";
+                audioContainer.appendChild(audio);
+
+                const button = document.createElement('button');
+                button.className = 'gui-button';
+                button.setAttribute('data-name', sound.searchName.toLowerCase());
+                button.onclick = (event) => playSound(sound.id, event);
+                button.innerHTML = `<div class="icon-circle">🔊</div><span>${sound.name}</span>`;
+                buttonGrid.appendChild(button);
+            });
+
+            // API Parametre Kontrolü (?ses=sorgu)
+            checkUrlParams();
+
+        } catch (error) {
+            buttonGrid.innerHTML = '<p style="color:red;">JSON Hatası!</p>';
+        }
     }
-  }
 
-  function stopAllSounds() {
-    document.querySelectorAll('audio').forEach(a => {
-      a.pause();
-      a.currentTime = 0;
-    });
-    document.querySelectorAll('.gui-button').forEach(b => b.classList.remove('playing'));
-    document.title = DEFAULT_TITLE;
-  }
-
-  function playSound(audioId, event) {
-    stopAllSounds();
-    const target = document.getElementById(audioId);
-    const btn = event.currentTarget;
-    const soundName = btn.querySelector('span').innerText;
-
-    if (target) {
-      target.play();
-      btn.classList.add('playing');
-      document.title = "▶️ " + soundName;
-      
-      target.onended = () => {
-          btn.classList.remove('playing');
-          document.title = DEFAULT_TITLE;
-      };
+    function checkUrlParams() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const query = urlParams.get('ses');
+        if (query) {
+            const searchBox = document.getElementById('searchInput');
+            searchBox.value = query;
+            filterSounds();
+            // İlk sonucu otomatik çal
+            const firstBtn = document.querySelector('.gui-button:not(.hidden)');
+            if (firstBtn) firstBtn.click();
+        }
     }
-  }
 
-  function filterSounds() {
-    const input = document.getElementById('searchInput').value.toLowerCase();
-    document.querySelectorAll('.gui-button').forEach(button => {
-      const name = button.getAttribute('data-name');
-      button.classList.toggle('hidden', !name.includes(input));
-    });
-  }
+    function stopAllSounds() {
+        document.querySelectorAll('audio').forEach(a => { a.pause(); a.currentTime = 0; });
+        document.querySelectorAll('.gui-button').forEach(b => b.classList.remove('playing'));
+        document.title = DEFAULT_TITLE;
+    }
 
-  window.onload = loadSounds;
+    function playSound(audioId, event) {
+        stopAllSounds();
+        const target = document.getElementById(audioId);
+        const btn = event.currentTarget;
+        if (target) {
+            target.play();
+            btn.classList.add('playing');
+            document.title = "▶️ " + btn.querySelector('span').innerText;
+            target.onended = () => {
+                btn.classList.remove('playing');
+                document.title = DEFAULT_TITLE;
+            };
+        }
+    }
+
+    function filterSounds() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        document.querySelectorAll('.gui-button').forEach(button => {
+            const name = button.getAttribute('data-name');
+            button.classList.toggle('hidden', !name.includes(input));
+        });
+    }
+
+    window.onload = loadSounds;
 </script>
-
 </body>
 </html>
