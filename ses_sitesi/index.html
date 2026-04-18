@@ -22,12 +22,16 @@
   </div>
 </div>
 
+<footer class="site-footer">
+  <p>Ses içerikleri için <a href="https://www.myinstants.com" target="_blank">myinstants.com</a> kaynaklarından faydalanılmıştır.</p>
+</footer>
+
 <style>
   :root {
     --bg-color: #0a0e17;
     --panel-bg: rgba(20, 26, 39, 0.95);
     --button-bg: #1e293b;
-    --text-primary: #ffffff; /* Ana metin rengi beyaz */
+    --text-primary: #ffffff;
     --neon-blue: #00f2fe;
     --neon-blue-glow: rgba(0, 242, 254, 0.4);
     --neon-green: #39ff14;
@@ -44,6 +48,7 @@
     display: flex; 
     flex-direction: column; 
     align-items: center; 
+    min-height: 100vh;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -61,10 +66,7 @@
     border-bottom: 2px solid var(--border-color); 
   }
 
-  .header-controls {
-    display: flex;
-    gap: 15px;
-  }
+  .header-controls { display: flex; gap: 15px; }
 
   .stop-button, .refresh-button { 
     background: #000; 
@@ -88,7 +90,17 @@
   .refresh-button { border-color: var(--neon-blue); }
   .refresh-button:hover { background: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
 
-  .sound-board { max-width: 700px; width: 90%; padding: 35px; background: var(--panel-bg); border-radius: 24px; border: 1px solid var(--border-color); text-align: center; }
+  .sound-board { 
+    max-width: 700px; 
+    width: 90%; 
+    padding: 35px; 
+    background: var(--panel-bg); 
+    border-radius: 24px; 
+    border: 1px solid var(--border-color); 
+    text-align: center; 
+    margin-bottom: 40px; /* Footer için boşluk */
+  }
+
   .board-title { margin-bottom: 25px; font-weight: 900; font-size: 2.2rem; }
   
   #searchInput { 
@@ -120,14 +132,13 @@
     padding: 10px;
   }
 
-  /* SES İSİMLERİ BURADA BEYAZ YAPILDI */
   .gui-button span { 
     font-weight: 900; 
     font-size: 13px; 
-    color: #ffffff !important; /* Kesin beyaz renk */
+    color: #ffffff !important; 
     text-transform: uppercase; 
     letter-spacing: 0.8px; 
-    text-shadow: 1px 1px 3px rgba(0,0,0,1); /* Okunabilirlik için gölge */
+    text-shadow: 1px 1px 3px rgba(0,0,0,1); 
     text-align: center;
     line-height: 1.2;
   }
@@ -138,27 +149,39 @@
     box-shadow: 0 5px 15px var(--neon-blue-glow);
   }
 
-  .icon-circle { 
-    width: 50px; 
-    height: 50px; 
-    background: rgba(0,0,0,0.3); 
-    border-radius: 50%; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    border: 1px solid var(--border-color); 
-  }
-
   .playing { 
     border-color: var(--neon-green) !important; 
     background: rgba(57, 255, 20, 0.1) !important; 
-    box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
   }
 
-  /* Çalma sırasında yazı rengi görsel geri bildirim için yeşil olur */
-  .playing span { 
-    color: var(--neon-green) !important; 
-    text-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
+  .playing span { color: var(--neon-green) !important; }
+
+  /* FOOTER STİLLERİ */
+  .site-footer {
+    width: 100%;
+    padding: 20px 0;
+    margin-top: auto; /* Sayfanın en altına iter */
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    background: rgba(10, 14, 23, 0.5);
+  }
+
+  .site-footer p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.5px;
+  }
+
+  .site-footer a {
+    color: var(--neon-blue);
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  .site-footer a:hover {
+    text-shadow: 0 0 8px var(--neon-blue-glow);
+    text-decoration: underline;
   }
 
   .hidden { display: none !important; }
@@ -184,7 +207,7 @@
         const audio = document.createElement('audio');
         audio.id = sound.id;
         audio.src = sound.url;
-        audio.preload = "auto"; // Daha hızlı tepki için ön yükleme
+        audio.preload = "auto";
         audioContainer.appendChild(audio);
 
         const button = document.createElement('button');
@@ -199,8 +222,7 @@
         buttonGrid.appendChild(button);
       });
     } catch (error) {
-      buttonGrid.innerHTML = '<p style="color:red; font-weight:bold;">Sesler çekilemedi. Bağlantınızı veya JSON dosyasını kontrol edin.</p>';
-      console.error("Hata:", error);
+      buttonGrid.innerHTML = '<p style="color:red; font-weight:bold;">Hata! JSON çekilemedi.</p>';
     }
   }
 
