@@ -368,7 +368,7 @@
         async function loadBiography() {
             const bio = document.getElementById('lpBio');
             try {
-                const r = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemo38/biography?t=' + Date.now());
+                const r = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/biography?t' + Date.now());
                 const d = await r.json();
                 if (d.bio && Array.isArray(d.bio)) {
                     bio.innerHTML = d.bio.map(l => `<span style="display:block">${parseLine(l)}</span>`).join('');
