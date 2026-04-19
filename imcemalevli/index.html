@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cemo38 - Linklerim</title>
+    <link id="favicon" rel="icon" type="image/png" href="https://wsrv.nl/?url=https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/profile.png&w=64&h=64&mask=circle&output=png&n=1">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f0eff4;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 16px 48px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body { background: #111113; }
+        }
+
+        .lp-wrap {
+            max-width: 420px;
+            width: 100%;
+        }
+
+        .lp-card {
+            background: #ffffff;
+            border: 0.5px solid rgba(0,0,0,0.1);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .lp-card {
+                background: #1c1c1e;
+                border-color: rgba(255,255,255,0.08);
+            }
+        }
+
+        .lp-header {
+            padding: 36px 28px 24px;
+            text-align: center;
+            border-bottom: 0.5px solid rgba(0,0,0,0.08);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .lp-header { border-bottom-color: rgba(255,255,255,0.06); }
+        }
+
+        .lp-avatar-ring {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            padding: 3px;
+            background: linear-gradient(135deg, #7F77DD 0%, #D4537E 50%, #BA7517 100%);
+        }
+
+        .lp-avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #e5e5ea;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .lp-avatar-inner { background: #2c2c2e; }
+        }
+
+        .lp-avatar-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .lp-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .lp-name { color: #f2f2f7; }
+        }
+
+        .lp-bio {
+            font-size: 0.82rem;
+            color: #6e6e73;
+            line-height: 1.75;
+            min-height: 36px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .lp-bio { color: #aeaeb2; }
+        }
+
+        .lp-bio-link {
+            color: #534AB7;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .lp-bio-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .lp-bio-link { color: #AFA9EC; }
+        }
+
+        /* Links */
+        .lp-links {
+            padding: 20px 20px 8px;
+        }
+
+        .lp-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 13px 16px;
+            margin-bottom: 10px;
+            border-radius: 13px;
+            background: #f2f2f7;
+            border: 0.5px solid rgba(0,0,0,0.06);
+            text-decoration: none;
+            color: #1c1c1e;
+            font-size: 0.88rem;
+            font-weight: 500;
+            transition: background 0.2s, transform 0.15s, border-color 0.2s;
+        }
+
+        .lp-link:hover {
+            background: #e5e5ea;
+            transform: translateY(-2px);
+            border-color: rgba(0,0,0,0.1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .lp-link {
+                background: #2c2c2e;
+                border-color: rgba(255,255,255,0.06);
+                color: #f2f2f7;
+            }
+            .lp-link:hover {
+                background: #3a3a3c;
+                border-color: rgba(255,255,255,0.1);
+            }
+        }
+
+        .lp-link-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lp-icon-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .ic-purple { background: #EEEDFE; color: #534AB7; }
+        .ic-pink   { background: #FBEAF0; color: #993556; }
+        .ic-teal   { background: #E1F5EE; color: #0F6E56; }
+        .ic-green  { background: #EAF3DE; color: #3B6D11; }
+        .ic-red    { background: #FCEBEB; color: #A32D2D; }
+
+        @media (prefers-color-scheme: dark) {
+            .ic-purple { background: #3C3489; color: #CECBF6; }
+            .ic-pink   { background: #72243E; color: #F4C0D1; }
+            .ic-teal   { background: #085041; color: #9FE1CB; }
+            .ic-green  { background: #27500A; color: #C0DD97; }
+            .ic-red    { background: #791F1F; color: #F7C1C1; }
+        }
+
+        .lp-arrow {
+            color: #aeaeb2;
+            font-size: 12px;
+            transition: transform 0.2s;
+        }
+
+        .lp-link:hover .lp-arrow {
+            transform: translateX(3px);
+        }
+
+        /* Footer */
+        .lp-divider {
+            height: 0.5px;
+            background: rgba(0,0,0,0.07);
+            margin: 0 20px 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .lp-divider { background: rgba(255,255,255,0.06); }
+        }
+
+        .lp-footer {
+            font-size: 0.78rem;
+            color: #6e6e73;
+            padding: 0 20px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .lp-footer { color: #aeaeb2; }
+        }
+
+        .lp-refresh {
+            background: transparent;
+            border: 0.5px solid rgba(0,0,0,0.15);
+            color: #6e6e73;
+            padding: 6px 14px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.74rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: border-color 0.2s, color 0.2s;
+        }
+
+        .lp-refresh:hover {
+            border-color: rgba(0,0,0,0.3);
+            color: #1c1c1e;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .lp-refresh {
+                border-color: rgba(255,255,255,0.12);
+                color: #aeaeb2;
+            }
+            .lp-refresh:hover {
+                border-color: rgba(255,255,255,0.25);
+                color: #f2f2f7;
+            }
+        }
+
+        .rotating { animation: lp-spin 0.8s linear infinite; }
+        @keyframes lp-spin { 100% { transform: rotate(360deg); } }
+
+        /* Fade in */
+        .lp-wrap {
+            opacity: 0;
+            transform: translateY(16px);
+            animation: lp-fadein 0.6s ease-out 0.1s forwards;
+        }
+
+        @keyframes lp-fadein {
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lp-wrap">
+        <div class="lp-card">
+
+            <div class="lp-header">
+                <div class="lp-avatar-ring">
+                    <div class="lp-avatar-inner" id="lpAvatarInner">
+                        <i class="fas fa-user" style="font-size:1.8rem;color:#aeaeb2"></i>
+                    </div>
+                </div>
+                <div class="lp-name">Cemal Evli</div>
+                <div class="lp-bio" id="lpBio">
+                    <i class="fas fa-spinner fa-spin" style="font-size:11px"></i>
+                </div>
+            </div>
+
+            <div class="lp-links">
+
+                <a href="https://www.instagram.com/imcemalevli/" class="lp-link" target="_blank">
+                    <div class="lp-link-left">
+                        <div class="lp-icon-box ic-pink"><i class="fab fa-instagram"></i></div>
+                        <span>Instagram</span>
+                    </div>
+                    <i class="fas fa-arrow-right lp-arrow"></i>
+                </a>
+
+                <a href="https://www.facebook.com/profile.php?id=100076601840154" class="lp-link" target="_blank">
+                    <div class="lp-link-left">
+                        <div class="lp-icon-box ic-purple"><i class="fab fa-facebook"></i></div>
+                        <span>Facebook</span>
+                    </div>
+                    <i class="fas fa-arrow-right lp-arrow"></i>
+                </a>
+
+                <a href="https://github.com/cemal201138" class="lp-link" target="_blank">
+                    <div class="lp-link-left">
+                        <div class="lp-icon-box ic-teal"><i class="fab fa-github"></i></div>
+                        <span>GitHub</span>
+                    </div>
+                    <i class="fas fa-arrow-right lp-arrow"></i>
+                </a>
+
+                <a href="https://cemalevli.qzz.io/Portfolio_Site/" class="lp-link" target="_blank">
+                    <div class="lp-link-left">
+                        <div class="lp-icon-box ic-green"><i class="fas fa-globe"></i></div>
+                        <span>Portfolio</span>
+                    </div>
+                    <i class="fas fa-arrow-right lp-arrow"></i>
+                </a>
+
+            </div>
+
+            <div class="lp-divider"></div>
+
+            <div class="lp-footer">
+                <span>💙 Cemal Evli</span>
+                <button class="lp-refresh" onclick="refreshData()" id="refreshBtn">
+                    <i class="fas fa-sync-alt" id="refreshIcon"></i> Verileri Yenile
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        async function loadProfileImage() {
+            const inner = document.getElementById('lpAvatarInner');
+            const url = 'https://wsrv.nl/?url=https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/profile.png&w=200&h=200&mask=circle&t=' + Date.now();
+            return new Promise(res => {
+                const img = new Image();
+                img.src = url;
+                img.onload = () => {
+                    inner.innerHTML = '';
+                    img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
+                    inner.appendChild(img);
+                    res();
+                };
+                img.onerror = () => {
+                    inner.innerHTML = '<i class="fas fa-user" style="font-size:1.8rem;color:#aeaeb2"></i>';
+                    res();
+                };
+            });
+        }
+
+        function parseLine(line) {
+            line = line.replace(/@([a-zA-Z0-9_]+)\$+\((https?:\/\/[^)]+)\)\$+/g,
+                '<a href="$2" target="_blank" class="lp-bio-link">@$1</a>');
+            line = line.replace(/#([a-zA-Z0-9_]+)\$+\((https?:\/\/[^)]+)\)\$+/g,
+                '<a href="$2" target="_blank" class="lp-bio-link">#$1</a>');
+            return line;
+        }
+
+        async function loadBiography() {
+            const bio = document.getElementById('lpBio');
+            try {
+                const r = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemo38/biography?t=' + Date.now());
+                const d = await r.json();
+                if (d.bio && Array.isArray(d.bio)) {
+                    bio.innerHTML = d.bio.map(l => `<span style="display:block">${parseLine(l)}</span>`).join('');
+                }
+            } catch (e) {
+                bio.innerHTML = '<span style="display:block">| Cemal Evli\'nin Mekanı 👨🏻‍💻 | <a href="https://www.instagram.com/besiktas/" target="_blank" class="lp-bio-link">@besiktas</a> |</span>';
+                console.error('Biyografi yükleme hatası:', e);
+            }
+        }
+
+        async function refreshData() {
+            const btn = document.getElementById('refreshBtn');
+            const icon = document.getElementById('refreshIcon');
+            const bio = document.getElementById('lpBio');
+            const inner = document.getElementById('lpAvatarInner');
+
+            btn.disabled = true;
+            icon.classList.add('rotating');
+            bio.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size:11px"></i>';
+            inner.innerHTML = '<i class="fas fa-circle-notch fa-spin" style="font-size:1.5rem;color:#aeaeb2"></i>';
+
+            await Promise.all([loadProfileImage(), loadBiography()]);
+
+            setTimeout(() => {
+                icon.classList.remove('rotating');
+                btn.disabled = false;
+            }, 400);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProfileImage();
+            loadBiography();
+        });
+    </script>
+</body>
+</html>
