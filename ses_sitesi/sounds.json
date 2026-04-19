@@ -34,5 +34,23 @@
     "name": "erzurumlu niloya 1",
     "url": "https://github.com/cemal201138/My_Netlify_SitesApps/raw/refs/heads/main/ses_sitesi/sounds/erzurumlu_niloya.mp3",
     "searchName": "erzurumlu niloya 1"
+  },
+  {
+    "id": "audio7",
+    "name": "RACAP TAYİP ERDOĞAN",
+    "url": "https://www.myinstants.com/media/sounds/racap-tayip-erdogan.mp3",
+    "searchName": "RACAP TAYİP ERDOĞAN"
+  },
+  {
+    "id": "audio8",
+    "name": "aynen",
+    "url": "https://www.myinstants.com/media/sounds/aynen.mp3",
+    "searchName": "aynen"
+  },
+  {
+    "id": "audio9",
+    "name": "Vallahi bastım",
+    "url": "https://www.myinstants.com/media/sounds/vallahi-bastim-vallahi-bastim-kac-kac.mp3",
+    "searchName": "Vallahi bastım"
   }
 ]
