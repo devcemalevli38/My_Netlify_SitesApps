@@ -102,6 +102,7 @@
             color: #6e6e73;
             line-height: 1.75;
             min-height: 36px;
+            overflow: hidden;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -367,14 +368,19 @@
 
         async function loadBiography() {
             const bio = document.getElementById('lpBio');
+            const fallback = [
+                '| Small wins lead to a big victory: @bunyanfen$$(https://www.instagram.com/bunyanfen/)$$ |',
+                '| 🖤@besiktas$$(https://www.instagram.com/besiktas/)$$ 🤍 | 726051🙃 |',
+                '| #egitimdesiddetehayir$$(https://www.instagram.com/explore/tags/egitimdesiddetehayir/)$$ |'
+            ];
             try {
-                const r = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/biography?t' + Date.now());
+                const r = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/biography?t=' + Date.now());
                 const d = await r.json();
                 if (d.bio && Array.isArray(d.bio)) {
-                    bio.innerHTML = d.bio.map(l => `<span style="display:block">${parseLine(l)}</span>`).join('');
+                    bio.innerHTML = d.bio.map(l => `<span style="display:block;white-space:nowrap">${parseLine(l)}</span>`).join('');
                 }
             } catch (e) {
-                bio.innerHTML = '<span style="display:block">| Cemal Evli\'nin Mekanı 👨🏻‍💻 | <a href="https://www.instagram.com/besiktas/" target="_blank" class="lp-bio-link">@besiktas</a> |</span>';
+                bio.innerHTML = fallback.map(l => `<span style="display:block;white-space:nowrap">${parseLine(l)}</span>`).join('');
                 console.error('Biyografi yükleme hatası:', e);
             }
         }
