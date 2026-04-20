@@ -112,7 +112,6 @@
             gap: 10px; 
             transition: 0.3s; 
             padding: 15px 10px;
-            position: relative;
         }
 
         .gui-button span { 
@@ -141,11 +140,12 @@
             border-radius: 8px;
             font-size: 11px;
             font-weight: bold;
-            text-decoration: none;
+            cursor: pointer;
             transition: 0.2s;
             display: flex;
             align-items: center;
             gap: 5px;
+            z-index: 5;
         }
 
         .download-btn:hover {
@@ -249,9 +249,8 @@
         button.className = 'gui-button';
         button.setAttribute('data-name', sound.searchName.toLowerCase());
         
-        // Ses çalma tetikleyicisi
         button.onclick = (event) => {
-            // Eğer tıklanan şey indir butonu değilse sesi çal
+            // İndir butonuna basılmışsa sesi çalma
             if (!event.target.closest('.download-btn')) {
                 playSound(sound.id, event);
             }
@@ -260,18 +259,37 @@
         button.innerHTML = `
           <div class="icon-circle">🔊</div>
           <span>${sound.name}</span>
-          <a href="${sound.url}" 
-             download="${sound.name}.mp3" 
-             class="download-btn" 
-             target="_blank" 
-             onclick="event.stopPropagation();">
+          <div class="download-btn" onclick="downloadAudio('${sound.url}', '${sound.name}')">
              📥 İNDİR
-          </a>
+          </div>
         `;
         buttonGrid.appendChild(button);
       });
     } catch (error) {
       buttonGrid.innerHTML = '<p style="color:red; font-weight:bold;">Hata! JSON çekilemedi.</p>';
+    }
+  }
+
+  // Güvenli İndirme Fonksiyonu (Blob Yöntemi)
+  async function downloadAudio(url, filename) {
+    try {
+        const response = await fetch(url);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename + ".mp3";
+        document.body.appendChild(a);
+        a.click();
+        
+        // Temizlik
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+        console.error("İndirme hatası:", error);
+        // Hata durumunda (CORS engeli vb.) dosyayı yeni sekmede aç
+        window.open(url, '_blank');
     }
   }
 
