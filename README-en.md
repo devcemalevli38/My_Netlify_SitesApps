@@ -12,15 +12,25 @@ Below is the list of active projects currently deployed on Netlify:
 
 ### 🔹 Project List
 
-- 📄 **Password Decryptor (Şifre Çöz)** 👉 Link: [https://cemalevli.qzz.io/Şifre_Çöz/](https://cemalevli.qzz.io/Şifre_Çöz/)
+- 📄 **Password Decryptor (Şifre Çöz)**
+
+  👉 Link: https://cemalevli.qzz.io/Şifre_Çöz/
   
-- 📄 **Personal Portfolio** 👉 Link: [https://cemalevli.qzz.io/Portfolio_Site/](https://cemalevli.qzz.io/Portfolio_Site/)
+- 📄 **Personal Portfolio**
+  
+  👉 Link: https://cemalevli.qzz.io/Portfolio_Site/
 
-- 📄 **Music Control** 👉 Link: [https://cemalevli.qzz.io/Müzik_Kontrol/](https://cemalevli.qzz.io/Müzik_Kontrol/)
+- 📄 **Music Control**
+  
+  👉 Link: https://cemalevli.qzz.io/Müzik_Kontrol/
 
-- 📄 **MacroDroid Media Control** 👉 Link: [https://cemalevli.qzz.io/MacroDroid_Media_Control/](https://cemalevli.qzz.io/MacroDroid_Media_Control/)
+- 📄 **MacroDroid Media Control**
+ 
+  👉 Link: https://cemalevli.qzz.io/MacroDroid_Media_Control/
 
-- 📄 **Audio Hub (Ses Sitesi)** 👉 Link: [https://cemalevli.qzz.io/ses_sitesi/](https://cemalevli.qzz.io/ses_sitesi/)
+- 📄 **Audio Hub (Ses Sitesi)**
+  
+  👉 Link: https://cemalevli.qzz.io/ses_sitesi/
 
 - **! Other projects are currently in the testing phase and are not yet listed !**
 
