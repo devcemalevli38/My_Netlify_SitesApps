@@ -94,7 +94,6 @@
             color: #fff; 
             margin-bottom: 30px; 
             font-size: 16px;
-            box-sizing: border-box;
         }
 
         .button-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 15px; justify-items: center; }
@@ -113,6 +112,7 @@
             gap: 10px; 
             transition: 0.3s; 
             padding: 15px 10px;
+            position: relative;
         }
 
         .gui-button span { 
@@ -141,13 +141,11 @@
             border-radius: 8px;
             font-size: 11px;
             font-weight: bold;
-            cursor: pointer;
+            text-decoration: none;
             transition: 0.2s;
             display: flex;
             align-items: center;
             gap: 5px;
-            z-index: 5;
-            text-decoration: none;
         }
 
         .download-btn:hover {
@@ -191,22 +189,6 @@
         }
 
         .hidden { display: none !important; }
-
-        /* İndirme durumu göstergesi */
-        .download-btn.loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-        .download-btn.success {
-            background: var(--neon-green);
-            color: #000;
-            border-color: var(--neon-green);
-        }
-        .download-btn.error {
-            background: var(--neon-red);
-            color: #fff;
-            border-color: var(--neon-red);
-        }
     </style>
 </head>
 <body>
@@ -261,105 +243,35 @@
         audio.id = sound.id;
         audio.src = sound.url;
         audio.preload = "auto";
-        audio.crossOrigin = "anonymous";
         audioContainer.appendChild(audio);
 
         const button = document.createElement('button');
         button.className = 'gui-button';
         button.setAttribute('data-name', sound.searchName.toLowerCase());
         
+        // Ses çalma tetikleyicisi
         button.onclick = (event) => {
-          if (!event.target.closest('.download-btn')) {
-            playSound(sound.id, event);
-          }
+            // Eğer tıklanan şey indir butonu değilse sesi çal
+            if (!event.target.closest('.download-btn')) {
+                playSound(sound.id, event);
+            }
         };
         
-        // İndirme butonu: önce blob dener, CORS engeli varsa yeni sekmede açar
-        const dlBtn = document.createElement('a');
-        dlBtn.className = 'download-btn';
-        dlBtn.textContent = '📥 İNDİR';
-        dlBtn.setAttribute('data-url', sound.url);
-        dlBtn.setAttribute('data-name', sound.name);
-        dlBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          downloadAudio(this.getAttribute('data-url'), this.getAttribute('data-name'), this);
-        });
-
-        const icon = document.createElement('div');
-        icon.className = 'icon-circle';
-        icon.textContent = '🔊';
-
-        const nameSpan = document.createElement('span');
-        nameSpan.textContent = sound.name;
-
-        button.appendChild(icon);
-        button.appendChild(nameSpan);
-        button.appendChild(dlBtn);
+        button.innerHTML = `
+          <div class="icon-circle">🔊</div>
+          <span>${sound.name}</span>
+          <a href="${sound.url}" 
+             download="${sound.name}.mp3" 
+             class="download-btn" 
+             target="_blank" 
+             onclick="event.stopPropagation();">
+             📥 İNDİR
+          </a>
+        `;
         buttonGrid.appendChild(button);
       });
     } catch (error) {
       buttonGrid.innerHTML = '<p style="color:red; font-weight:bold;">Hata! JSON çekilemedi.</p>';
-    }
-  }
-
-  // İndirme fonksiyonu: önce blob, olmazsa yeni sekme
-  async function downloadAudio(url, filename, btnEl) {
-    btnEl.classList.add('loading');
-    btnEl.textContent = '⏳ Bekleniyor...';
-
-    try {
-      const response = await fetch(url, { mode: 'cors' });
-
-      if (!response.ok) throw new Error('Sunucu hatası: ' + response.status);
-
-      const blob = await response.blob();
-
-      // MIME tipi kontrolü – ses değilse reddet
-      if (!blob.type.startsWith('audio/') && blob.type !== 'application/octet-stream' && blob.type !== '') {
-        throw new Error('Ses dosyası değil');
-      }
-
-      const blobUrl = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = blobUrl;
-      a.download = filename.replace(/[/\\?%*:|"<>]/g, '_') + '.mp3';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-
-      setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
-
-      btnEl.classList.remove('loading');
-      btnEl.classList.add('success');
-      btnEl.textContent = '✅ İndirildi';
-      setTimeout(() => {
-        btnEl.classList.remove('success');
-        btnEl.textContent = '📥 İNDİR';
-      }, 2500);
-
-    } catch (err) {
-      // CORS engeli veya başka hata → yeni sekmede aç, kullanıcı oradan kaydedebilir
-      btnEl.classList.remove('loading');
-      btnEl.classList.add('error');
-      btnEl.textContent = '↗ Aç & Kaydet';
-
-      btnEl.onclick = function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        window.open(url, '_blank');
-      };
-
-      setTimeout(() => {
-        btnEl.classList.remove('error');
-        btnEl.textContent = '📥 İNDİR';
-        // Orijinal click handler'ı geri al
-        btnEl.onclick = function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          downloadAudio(url, filename, btnEl);
-        };
-      }, 4000);
     }
   }
 
@@ -384,8 +296,8 @@
       document.title = "▶️ " + soundName;
       
       target.onended = () => {
-        btn.classList.remove('playing');
-        document.title = DEFAULT_TITLE;
+          btn.classList.remove('playing');
+          document.title = DEFAULT_TITLE;
       };
     }
   }
