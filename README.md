@@ -20,8 +20,11 @@ Aşağıda bu repo içinde bulunan ve Netlify’da çalışan projeler yer almak
 - 📄 **Müzik Kontrol**  
   👉 Link: https://cemalevli.qzz.io/Müzik_Kontrol/
 
-- 📄 **MacroDroid Media Control**  
+- 📄 **MacroDroid Media Kontrol**  
   👉 Link: https://cemalevli.qzz.io/MacroDroid_Media_Control/
+
+- 📄 **Ses Sitesi**  
+  👉 Link: https://cemalevli.qzz.io/ses_sitesi/
 
 - **!Diğer projeler test aşamasındadır. Listeye eklenmemiştirler!**
 
