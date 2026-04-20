@@ -1,5 +1,7 @@
 # 🌐 My Netlify Sites & Apps
 
+❗[English README.md file](https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/README-en.md)❗
+
 Bu repo, Netlify üzerinde yayınladığım HTML / CSS / JavaScript tabanlı küçük web uygulamaları ve demo projelerini içerir.
 
 Her proje kendi klasörü içinde yer alır ve Netlify üzerinden ayrı ayrı yayınlanmıştır.
