@@ -1,5 +1,7 @@
 # 🌐 My Netlify Sites & Apps
 
+❗[Türkçe README.md dosyası](https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/README.md)❗
+
 This repository contains a collection of lightweight web applications and demo projects built with **HTML, CSS, and JavaScript**, all hosted on Netlify.
 
 Each project is organized within its own directory and deployed independently.
