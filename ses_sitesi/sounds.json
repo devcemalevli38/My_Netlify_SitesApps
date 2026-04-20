@@ -64,5 +64,23 @@
     "name": "Kurdish 50 cent",
     "url": "https://www.myinstants.com/media/sounds/kurdish-50-cent.mp3",
     "searchName": "Kurdish 50 cent"
+  },
+  {
+    "id": "audio13",
+    "name": "15 temmuz gecesi savaşan Yiğitler",
+    "url": "https://www.myinstants.com/media/sounds/15-temmuz-gecesi-savasan-yigitler.mp3",
+    "searchName": "15 temmuz gecesi savaşan Yiğitler"
+  },
+  {
+    "id": "audio14",
+    "name": "HARAMBALL",
+    "url": "https://www.myinstants.com/media/sounds/haramball_ZFfRyh2.mp3",
+    "searchName": "HARAMBALL"
+  },
+  {
+    "id": "audio15",
+    "name": "Allahumme Yarab",
+    "url": "https://www.myinstants.com/media/sounds/allahumme-yarab.mp3",
+    "searchName": "Allahumme Yarab"
   }
 ]
