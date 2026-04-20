@@ -96,18 +96,34 @@
     }
   },
   {
+    "name": "README-en.md",
+    "path": "README-en.md",
+    "sha": "7553c73b948c5a9422f259e95285c5443f37eada",
+    "size": 1381,
+    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/README-en.md?ref=main",
+    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/README-en.md",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/7553c73b948c5a9422f259e95285c5443f37eada",
+    "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/README-en.md",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/README-en.md?ref=main",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/7553c73b948c5a9422f259e95285c5443f37eada",
+      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/README-en.md"
+    }
+  },
+  {
     "name": "README.md",
     "path": "README.md",
-    "sha": "65b1b440e6f2e70516b314993582552676a96a37",
-    "size": 988,
+    "sha": "f82c46c4451b799d943ae66b9cc3f698da9967b3",
+    "size": 1171,
     "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/README.md?ref=main",
     "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/README.md",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/65b1b440e6f2e70516b314993582552676a96a37",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/f82c46c4451b799d943ae66b9cc3f698da9967b3",
     "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/README.md",
     "type": "file",
     "_links": {
       "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/README.md?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/65b1b440e6f2e70516b314993582552676a96a37",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/f82c46c4451b799d943ae66b9cc3f698da9967b3",
       "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/README.md"
     }
   },
@@ -226,32 +242,32 @@
   {
     "name": "projects.json",
     "path": "projects.json",
-    "sha": "22878d0a647760283629c9ca9c24f886ef419a78",
+    "sha": "e22938f85b5e41db6f17848f6bc2bc63d41e4653",
     "size": 15346,
     "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/projects.json?ref=main",
     "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/projects.json",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/22878d0a647760283629c9ca9c24f886ef419a78",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/e22938f85b5e41db6f17848f6bc2bc63d41e4653",
     "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/projects.json",
     "type": "file",
     "_links": {
       "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/projects.json?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/22878d0a647760283629c9ca9c24f886ef419a78",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/e22938f85b5e41db6f17848f6bc2bc63d41e4653",
       "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/projects.json"
     }
   },
   {
     "name": "ses_sitesi",
     "path": "ses_sitesi",
-    "sha": "0a73ba286f77dbbdc77e2bc46465a8c66a71e43a",
+    "sha": "449220ffd66742a1d3f8e28f81f09730fa06f489",
     "size": 0,
     "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/ses_sitesi?ref=main",
     "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/ses_sitesi",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/0a73ba286f77dbbdc77e2bc46465a8c66a71e43a",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/449220ffd66742a1d3f8e28f81f09730fa06f489",
     "download_url": null,
     "type": "dir",
     "_links": {
       "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/ses_sitesi?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/0a73ba286f77dbbdc77e2bc46465a8c66a71e43a",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/449220ffd66742a1d3f8e28f81f09730fa06f489",
       "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/ses_sitesi"
     }
   },
