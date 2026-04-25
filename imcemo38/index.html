@@ -8,49 +8,41 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Ana Renkler ve Genel Ayarlar - Koyu Tema Varsayılan */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f0eff4;
+            background: #111113; /* Koyu arka plan */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 24px 16px 48px;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            body { background: #111113; }
+            color: #f2f2f7;
         }
 
         .lp-wrap {
             max-width: 420px;
             width: 100%;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: lp-fadein 0.6s ease-out 0.1s forwards;
         }
 
         .lp-card {
-            background: #ffffff;
-            border: 0.5px solid rgba(0,0,0,0.1);
+            background: #1c1c1e; /* Koyu kart rengi */
+            border: 0.5px solid rgba(255,255,255,0.08);
             border-radius: 20px;
             overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        @media (prefers-color-scheme: dark) {
-            .lp-card {
-                background: #1c1c1e;
-                border-color: rgba(255,255,255,0.08);
-            }
-        }
-
+        /* Header Bölümü */
         .lp-header {
             padding: 36px 28px 24px;
             text-align: center;
-            border-bottom: 0.5px solid rgba(0,0,0,0.08);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .lp-header { border-bottom-color: rgba(255,255,255,0.06); }
+            border-bottom: 0.5px solid rgba(255,255,255,0.06);
         }
 
         .lp-avatar-ring {
@@ -66,15 +58,11 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: #e5e5ea;
+            background: #2c2c2e;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .lp-avatar-inner { background: #2c2c2e; }
         }
 
         .lp-avatar-inner img {
@@ -88,29 +76,20 @@
         .lp-name {
             font-size: 1.3rem;
             font-weight: 600;
-            color: #1c1c1e;
+            color: #f2f2f7;
             margin-bottom: 6px;
             letter-spacing: -0.3px;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .lp-name { color: #f2f2f7; }
-        }
-
         .lp-bio {
             font-size: 0.82rem;
-            color: #6e6e73;
+            color: #aeaeb2;
             line-height: 1.75;
             min-height: 36px;
-            overflow: hidden;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .lp-bio { color: #aeaeb2; }
         }
 
         .lp-bio-link {
-            color: #534AB7;
+            color: #AFA9EC;
             text-decoration: none;
             font-weight: 500;
         }
@@ -119,11 +98,7 @@
             text-decoration: underline;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .lp-bio-link { color: #AFA9EC; }
-        }
-
-        /* Links */
+        /* Link Listesi */
         .lp-links {
             padding: 20px 20px 8px;
         }
@@ -133,33 +108,21 @@
             align-items: center;
             justify-content: space-between;
             padding: 13px 16px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             border-radius: 13px;
-            background: #f2f2f7;
-            border: 0.5px solid rgba(0,0,0,0.06);
+            background: #2c2c2e;
+            border: 0.5px solid rgba(255,255,255,0.06);
             text-decoration: none;
-            color: #1c1c1e;
+            color: #f2f2f7;
             font-size: 0.88rem;
             font-weight: 500;
-            transition: background 0.2s, transform 0.15s, border-color 0.2s;
+            transition: all 0.2s ease;
         }
 
         .lp-link:hover {
-            background: #e5e5ea;
+            background: #3a3a3c;
             transform: translateY(-2px);
-            border-color: rgba(0,0,0,0.1);
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .lp-link {
-                background: #2c2c2e;
-                border-color: rgba(255,255,255,0.06);
-                color: #f2f2f7;
-            }
-            .lp-link:hover {
-                background: #3a3a3c;
-                border-color: rgba(255,255,255,0.1);
-            }
+            border-color: rgba(255,255,255,0.15);
         }
 
         .lp-link-left {
@@ -179,61 +142,45 @@
             flex-shrink: 0;
         }
 
-        .ic-purple   { background: #EEEDFE; color: #534AB7; }
-        .ic-pink     { background: #FBEAF0; color: #993556; }
-        .ic-teal     { background: #E1F5EE; color: #0F6E56; }
-        .ic-green    { background: #EAF3DE; color: #3B6D11; }
-        .ic-red      { background: #FCEBEB; color: #A32D2D; }
-        .ic-black  { background: #E6E6E6; color: #000000; }
-        
-
-        @media (prefers-color-scheme: dark) {
-            .ic-purple   { background: #3C3489; color: #CECBF6; }
-            .ic-pink     { background: #72243E; color: #F4C0D1; }
-            .ic-teal     { background: #085041; color: #9FE1CB; }
-            .ic-green    { background: #27500A; color: #C0DD97; }
-            .ic-red      { background: #791F1F; color: #F7C1C1; }
-            .ic-black    { background: #000000; color: #ffffff; }
-        }
+        /* İkon Renkleri (Koyu Tema Uyumlu) */
+        .ic-purple   { background: #3C3489; color: #CECBF6; }
+        .ic-pink     { background: #72243E; color: #F4C0D1; }
+        .ic-teal     { background: #085041; color: #9FE1CB; }
+        .ic-green    { background: #27500A; color: #C0DD97; }
+        .ic-red      { background: #791F1F; color: #F7C1C1; }
+        .ic-black    { background: #000000; color: #ffffff; border: 0.5px solid #333; }
 
         .lp-arrow {
-            color: #aeaeb2;
+            color: #636366;
             font-size: 12px;
             transition: transform 0.2s;
         }
 
         .lp-link:hover .lp-arrow {
             transform: translateX(3px);
+            color: #aeaeb2;
         }
 
-        /* Footer */
+        /* Footer Bölümü */
         .lp-divider {
             height: 0.5px;
-            background: rgba(0,0,0,0.07);
+            background: rgba(255,255,255,0.06);
             margin: 0 20px 16px;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .lp-divider { background: rgba(255,255,255,0.06); }
         }
 
         .lp-footer {
             font-size: 0.78rem;
-            color: #6e6e73;
+            color: #aeaeb2;
             padding: 0 20px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        @media (prefers-color-scheme: dark) {
-            .lp-footer { color: #aeaeb2; }
-        }
-
         .lp-refresh {
             background: transparent;
-            border: 0.5px solid rgba(0,0,0,0.15);
-            color: #6e6e73;
+            border: 0.5px solid rgba(255,255,255,0.12);
+            color: #aeaeb2;
             padding: 6px 14px;
             border-radius: 50px;
             cursor: pointer;
@@ -242,34 +189,17 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: border-color 0.2s, color 0.2s;
+            transition: all 0.2s;
         }
 
         .lp-refresh:hover {
-            border-color: rgba(0,0,0,0.3);
-            color: #1c1c1e;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .lp-refresh {
-                border-color: rgba(255,255,255,0.12);
-                color: #aeaeb2;
-            }
-            .lp-refresh:hover {
-                border-color: rgba(255,255,255,0.25);
-                color: #f2f2f7;
-            }
+            border-color: rgba(255,255,255,0.25);
+            color: #f2f2f7;
+            background: rgba(255,255,255,0.05);
         }
 
         .rotating { animation: lp-spin 0.8s linear infinite; }
         @keyframes lp-spin { 100% { transform: rotate(360deg); } }
-
-        /* Fade in */
-        .lp-wrap {
-            opacity: 0;
-            transform: translateY(16px);
-            animation: lp-fadein 0.6s ease-out 0.1s forwards;
-        }
 
         @keyframes lp-fadein {
             to { opacity: 1; transform: translateY(0); }
@@ -284,7 +214,7 @@
             <div class="lp-header">
                 <div class="lp-avatar-ring">
                     <div class="lp-avatar-inner" id="lpAvatarInner">
-                        <i class="fas fa-user" style="font-size:1.8rem;color:#aeaeb2"></i>
+                        <i class="fas fa-user" style="font-size:1.8rem;color:#636366"></i>
                     </div>
                 </div>
                 <div class="lp-name">Cemal Evli</div>
@@ -371,7 +301,7 @@
                     res();
                 };
                 img.onerror = () => {
-                    inner.innerHTML = '<i class="fas fa-user" style="font-size:1.8rem;color:#aeaeb2"></i>';
+                    inner.innerHTML = '<i class="fas fa-user" style="font-size:1.8rem;color:#636366"></i>';
                     res();
                 };
             });
@@ -400,7 +330,6 @@
                 }
             } catch (e) {
                 bio.innerHTML = fallback.map(l => `<span style="display:block;white-space:nowrap">${parseLine(l)}</span>`).join('');
-                console.error('Biyografi yükleme hatası:', e);
             }
         }
 
