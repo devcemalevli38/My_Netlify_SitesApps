@@ -168,7 +168,7 @@ h1 { font-family:'Cormorant Garamond',serif; font-size:1.85rem; color:var(--whit
 <div id="auth-overlay">
   <div class="input-box">
     <div class="input-title">Şifre nedir sence? ✨</div>
-    <input type="text" id="passInput" class="custom-input" placeholder="Örn: 1 ocak 2024">
+    <input type="text" id="passInput" class="custom-input" placeholder="İpucu: Doğum Tarihi <3">
     <button class="custom-btn" onclick="checkAuth()">Giriş Yap</button>
     <div id="auth-error" style="color: #e07090; margin-top: 15px; font-size: 0.85rem; display: none;">Tarih hatalı, tekrar dene. 🌙</div>
   </div>
@@ -224,13 +224,21 @@ h1 { font-family:'Cormorant Garamond',serif; font-size:1.85rem; color:var(--whit
 </div>
 
 <script>
-const FORMSPREE_URL = "https://formspree.io/f/xwvwnqbn"; // Kendi linkini buraya yapıştır
-const CORRECT_PASS = "24 ağustos 2011";
+const FORMSPREE_URL = "https://formspree.io/f/xwvwnqbn"; 
+const TARGET_PASS_NORM = "2482011"; // Normalize edilmiş hedef şifre
 
-// 1. ŞİFRE KONTROLÜ
+// 1. ŞİFRE KONTROLÜ (GELİŞMİŞ)
 function checkAuth() {
-  const input = document.getElementById('passInput').value.toLowerCase().trim();
-  if (input === CORRECT_PASS) {
+  let input = document.getElementById('passInput').value.toLowerCase().trim();
+  
+  // Normalizasyon: "ağustos" kelimesini "8" yap, noktaları/slashları sil, boşlukları kaldır
+  let normalizedInput = input
+    .replace(/ağustos/g, "8")
+    .replace(/08/g, "8")
+    .replace(/[^0-9a-z]/gi, '') // Sayı ve harf dışındaki her şeyi (nokta, tire, slash vb.) siler
+    .replace(/\s+/g, '');       // Tüm boşlukları siler
+
+  if (normalizedInput === TARGET_PASS_NORM) {
     document.getElementById('auth-overlay').style.opacity = '0';
     setTimeout(() => {
       document.getElementById('auth-overlay').style.visibility = 'hidden';
@@ -241,6 +249,11 @@ function checkAuth() {
     }, 800);
   } else {
     document.getElementById('auth-error').style.display = 'block';
+    // Hatalı girişte inputu hafifçe salla (opsiyonel görsel geri bildirim)
+    const box = document.querySelector('#auth-overlay .input-box');
+    box.style.transform = 'translateX(10px)';
+    setTimeout(() => box.style.transform = 'translateX(-10px)', 100);
+    setTimeout(() => box.style.transform = 'translateX(0)', 200);
   }
 }
 
@@ -261,7 +274,6 @@ function submitFinal() {
     document.getElementById('yesScreen').classList.add('show');
     document.getElementById('celebrationTitle').textContent = `Harika, ${name}! ✨`;
     
-    // Formspree Gönderimi
     fetch(FORMSPREE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
