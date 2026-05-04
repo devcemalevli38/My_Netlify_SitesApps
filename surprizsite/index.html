@@ -232,11 +232,13 @@ function checkAuth() {
   let input = document.getElementById('passInput').value.toLowerCase().trim();
   
   // Normalizasyon: "ağustos" kelimesini "8" yap, noktaları/slashları sil, boşlukları kaldır
-  let normalizedInput = input
-    .replace(/ağustos/g, "8")
-    .replace(/08/g, "8")
-    .replace(/[^0-9a-z]/gi, '') // Sayı ve harf dışındaki her şeyi (nokta, tire, slash vb.) siler
-    .replace(/\s+/g, '');       // Tüm boşlukları siler
+   let normalizedInput = input
+    .replace(/mart/g, "3")        // "mart" kelimesini "3" yapar
+    .replace(/ağustos/g, "8")     // "ağustos" kelimesini "8" yapar (eski şifren için gerekliyse kalabilir)
+    .replace(/[^0-9a-z]/gi, '')   // Nokta, slash, tire gibi tüm özel karakterleri SİLER
+    .replace(/\s+/g, '')          // Tüm boşlukları SİLER
+    .replace(/^0+/, '')           // En baştaki '0'ı siler (Örn: 08 -> 8)
+    .replace(/0(?=[0-9])/g, '');  // Sayıların arasındaki '0'ları siler (Örn: 803 -> 83)
 
   if (normalizedInput === TARGET_PASS_NORM) {
     document.getElementById('auth-overlay').style.opacity = '0';
