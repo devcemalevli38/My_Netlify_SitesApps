@@ -32,6 +32,83 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative; /* QR butonu için gerekli */
+        }
+
+        /* QR Butonu Stili */
+        .qr-trigger {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            color: #aeaeb2;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .qr-trigger:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+
+        /* QR Modal (Açılır Pencere) */
+        .qr-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            display: none; /* JS ile açılacak */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .qr-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .qr-content {
+            background: #1c1c1e;
+            padding: 24px;
+            border-radius: 24px;
+            border: 0.5px solid rgba(255,255,255,0.1);
+            text-align: center;
+            max-width: 280px;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .qr-modal.active .qr-content {
+            transform: scale(1);
+        }
+
+        .qr-content img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .qr-close {
+            color: #8e8e93;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: underline;
         }
 
         .lp-header {
@@ -138,12 +215,9 @@
             flex-shrink: 0;
         }
 
-        /* Koyu Tema İkon Renkleri */
         .ic-purple { background: #3C3489; color: #CECBF6; }
         .ic-pink   { background: #72243E; color: #F4C0D1; }
         .ic-teal   { background: #085041; color: #9FE1CB; }
-        .ic-green  { background: #27500A; color: #C0DD97; }
-        .ic-red    { background: #791F1F; color: #F7C1C1; }
 
         .lp-arrow {
             color: #636366;
@@ -156,7 +230,6 @@
             color: #aeaeb2;
         }
 
-        /* Footer */
         .lp-divider {
             height: 0.5px;
             background: rgba(255,255,255,0.06);
@@ -196,7 +269,6 @@
         .rotating { animation: lp-spin 0.8s linear infinite; }
         @keyframes lp-spin { 100% { transform: rotate(360deg); } }
 
-        /* Fade in */
         .lp-wrap {
             opacity: 0;
             transform: translateY(16px);
@@ -212,6 +284,11 @@
 
     <div class="lp-wrap">
         <div class="lp-card">
+            
+            <!-- QR Simge Butonu -->
+            <div class="qr-trigger" onclick="toggleQR()" title="QR Kodu Göster">
+                <i class="fas fa-qrcode"></i>
+            </div>
 
             <div class="lp-header">
                 <div class="lp-avatar-ring">
@@ -265,7 +342,28 @@
         </div>
     </div>
 
+    <!-- QR Modal Yapısı -->
+    <div class="qr-modal" id="qrModal" onclick="toggleQR()">
+        <div class="qr-content" onclick="event.stopPropagation()">
+            <img src="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/imcemalevli_qr.png" alt="QR Code">
+            <p style="font-size: 0.9rem; margin-bottom: 12px; color: #fff;">Profilimi Paylaş</p>
+            <div class="qr-close" onclick="toggleQR()">Kapat</div>
+        </div>
+    </div>
+
     <script>
+        // QR Modal Yönetimi
+        function toggleQR() {
+            const modal = document.getElementById('qrModal');
+            if (modal.classList.contains('active')) {
+                modal.classList.remove('active');
+                setTimeout(() => modal.style.display = 'none', 300);
+            } else {
+                modal.style.display = 'flex';
+                setTimeout(() => modal.classList.add('active'), 10);
+            }
+        }
+
         async function loadProfileImage() {
             const inner = document.getElementById('lpAvatarInner');
             const url = 'https://wsrv.nl/?url=https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/profile.png&w=200&h=200&mask=circle&t=' + Date.now();
@@ -297,7 +395,7 @@
             const bio = document.getElementById('lpBio');
             const fallback = [
                 '| Small wins lead to a big victory: @bunyanfen$$(https://www.instagram.com/bunyanfen/)$$ |',
-                '| 🖤@besiktas$$(https://www.instagram.com/besiktas/)$$ 🤍 | 👆🏻⚽🤍🌹 | ;)'
+                '| 🖤@besiktas$$(https://www.instagram.com/besiktas/)$$ 🤍 | ;)'
             ];
             try {
                 const r = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/biography?t=' + Date.now());
