@@ -10,7 +10,6 @@ jobs:
   update-json:
     runs-on: ubuntu-latest
     
-    # Yazma yetkisini garanti altına alalım
     permissions:
       contents: write
     
@@ -18,32 +17,43 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Tüm geçmişi çekmek rebase için önemlidir
+          fetch-depth: 0
 
       - name: Fetch and Process Repository Data
         env:
           GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
         run: |
-          # 1. projects.json dosyasından repo isimlerini oku[cite: 1]
+          # 1. projects.json dosyasından repo isimlerini oku
           REPOS=$(jq -r '.repositories[]' myprojects/projects.json)
           
-          # 2. Geçici bir dosya oluştur
+          # 2. Geçici bir JSON dizisi oluştur
           echo "[" > temp_contents.json
           
           FIRST=true
           for REPO in $REPOS; do
             if [ "$FIRST" = false ]; then echo "," >> temp_contents.json; fi
             
-            # GitHub API'den repo bilgilerini çek
-            curl -s -H "Authorization: token $GH_TOKEN" \
-                 "https://api.github.com/repos/cemal201138/$REPO" >> temp_contents.json
+            echo "Processing: $REPO"
+            
+            # Repo genel bilgilerini çek
+            REPO_INFO=$(curl -s -H "Authorization: token $GH_TOKEN" \
+              "https://api.github.com/repos/cemal201138/$REPO")
+            
+            # En son Release (Sürüm) bilgilerini çek
+            RELEASE_INFO=$(curl -s -H "Authorization: token $GH_TOKEN" \
+              "https://api.github.com/repos/cemal201138/$REPO/releases/latest")
+            
+            # İki JSON'u birleştir: latest_release alanı altına sürüm bilgilerini ekle
+            # Eğer release yoksa (404 dönerse) bu alan null veya hata mesajı içerir.
+            echo "$REPO_INFO" | jq --argjson rel "$RELEASE_INFO" '. + {latest_release: $rel}' >> temp_contents.json
             
             FIRST=false
           done
           
           echo "]" >> temp_contents.json
           
-          # 3. Çıktıyı hedef dosyaya taşı
+          # 3. Sonucu hedef dosyaya taşı
+          mkdir -p myprojects
           mv temp_contents.json myprojects/projectscontents.json
 
       - name: Commit and Push Changes
@@ -53,11 +63,9 @@ jobs:
           
           git add myprojects/projectscontents.json
           
-          # Eğer değişiklik yoksa hata vermeden çık, varsa commit yap
-          git commit -m "Auto-update projectscontents.json [$(date)]" || exit 0
+          # Değişiklik yoksa çık, varsa commit yap
+          git commit -m "Auto-update projectscontents.json with release info [$(date)]" || exit 0
           
-          # HATA ÇÖZÜMÜ: Önce uzak sunucudaki (remote) değişiklikleri çek ve üzerine ekle
+          # Çakışmaları önlemek için rebase ile çek ve pushla
           git pull --rebase origin main
-          
-          # Şimdi güvenle pushla
           git push origin main
