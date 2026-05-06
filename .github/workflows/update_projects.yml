@@ -1,25 +1,4 @@
-name: Update Projects Contents
-
-on:
-  schedule:
-    # Her gün saat 19:00 UTC (Türkiye saati ile 22:00)
-    - cron: '0 19 * * *'
-  workflow_dispatch: # Manuel olarak başlatmak istersen
-
-jobs:
-  update-json:
-    runs-on: ubuntu-latest
-    
-    permissions:
-      contents: write
-    
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Fetch and Process Repository Data
+- name: Fetch and Process Repository Data
         env:
           GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
         run: |
@@ -43,9 +22,18 @@ jobs:
             RELEASE_INFO=$(curl -s -H "Authorization: token $GH_TOKEN" \
               "https://api.github.com/repos/cemal201138/$REPO/releases/latest")
             
-            # İki JSON'u birleştir: latest_release alanı altına sürüm bilgilerini ekle
-            # Eğer release yoksa (404 dönerse) bu alan null veya hata mesajı içerir.
-            echo "$REPO_INFO" | jq --argjson rel "$RELEASE_INFO" '. + {latest_release: $rel}' >> temp_contents.json
+            # Dinamik Release ZIP linkini al (Eğer release yoksa boş döner)
+            # release içindeki zipball_url'i doğrudan kullanıyoruz
+            LATEST_ZIP_URL=$(echo "$RELEASE_INFO" | jq -r '.zipball_url // empty')
+            
+            # Eğer release yoksa yedek olarak main branch linkini koymak istersen:
+            if [ -z "$LATEST_ZIP_URL" ]; then
+              LATEST_ZIP_URL="https://github.com/cemal201138/$REPO/archive/refs/heads/main.zip"
+            fi
+            
+            # JSON'u birleştir: latest_release ve main_download_url alanlarını ekle
+            echo "$REPO_INFO" | jq --argjson rel "$RELEASE_INFO" --arg latest_zip "$LATEST_ZIP_URL" \
+              '. + {latest_release: $rel, main_download_url: $latest_zip}' >> temp_contents.json
             
             FIRST=false
           done
@@ -55,17 +43,3 @@ jobs:
           # 3. Sonucu hedef dosyaya taşı
           mkdir -p myprojects
           mv temp_contents.json myprojects/projectscontents.json
-
-      - name: Commit and Push Changes
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          
-          git add myprojects/projectscontents.json
-          
-          # Değişiklik yoksa çık, varsa commit yap
-          git commit -m "Auto-update projectscontents.json with release info [$(date)]" || exit 0
-          
-          # Çakışmaları önlemek için rebase ile çek ve pushla
-          git pull --rebase origin main
-          git push origin main
