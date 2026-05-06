@@ -1,0 +1,50 @@
+name: Update Projects Contents
+
+on:
+  schedule:
+    # Her gün saat 19:00 UTC (Türkiye saati ile 22:00)
+    - cron: '0 19 * * *'
+  workflow_dispatch: # Manuel olarak başlatmak istersen
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Fetch and Process Repository Data
+        env:
+          GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+        run: |
+          # 1. projects.json dosyasından repo isimlerini oku
+          # Not: Dosya yolunun myprojects/projects.json olduğunu varsayıyoruz
+          REPOS=$(jq -r '.repositories[]' myprojects/projects.json)
+          
+          # 2. Geçici bir dosya oluştur
+          echo "[" > temp_contents.json
+          
+          FIRST=true
+          for REPO in $REPOS; do
+            if [ "$FIRST" = false ]; then echo "," >> temp_contents.json; fi
+            
+            # GitHub API'den repo bilgilerini çek (kullanıcı adın: cemal201138)
+            curl -s -H "Authorization: token $GH_TOKEN" \
+                 "https://api.github.com/repos/cemal201138/$REPO" >> temp_contents.json
+            
+            FIRST=false
+          done
+          
+          echo "]" >> temp_contents.json
+          
+          # 3. Çıktıyı hedef dosyaya taşı
+          mv temp_contents.json myprojects/projectscontents.json
+
+      - name: Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add myprojects/projectscontents.json
+          git commit -m "Auto-update projectscontents.json [$(date)]" || exit 0
+          git push
