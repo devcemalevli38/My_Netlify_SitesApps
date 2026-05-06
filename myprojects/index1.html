@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cemal Evli | My Projects</title>
+    <link rel="icon" type="image/x-icon" href="myprojects.ico">
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: rgba(30, 41, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f1f5f9;
+            --accent: #38bdf8;
+            --hover: #1e293b;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 50%);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Dil Değiştirme Butonu */
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: #0f172a;
+            border-color: var(--accent);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #search-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 99px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+            outline: none;
+        }
+
+        #search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .project-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            background: var(--hover);
+        }
+
+        .project-info h3 {
+            margin-top: 0;
+            color: var(--accent);
+            font-size: 1.3rem;
+        }
+
+        .project-desc {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .project-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85rem;
+            opacity: 0.6;
+            margin-bottom: 20px;
+        }
+
+        .view-btn {
+            display: inline-block;
+            text-align: center;
+            padding: 10px 20px;
+            background: var(--accent);
+            color: #0f172a;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+
+        .view-btn:hover {
+            opacity: 0.9;
+        }
+
+        .loading { font-size: 1.2rem; opacity: 0.7; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="lang-switcher">
+        <button class="lang-btn" onclick="setLanguage('tr')" id="btn-tr">TR</button>
+        <button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+    </div>
+
+    <div class="header">
+        <h1 id="main-title">Cemal Evli - GitHub Projeleri</h1>
+        <p id="main-subtitle">Otomatik olarak güncellenen proje listem</p>
+    </div>
+
+    <div id="search-container">
+        <input type="text" id="search-input" placeholder="Projelerde ara...">
+    </div>
+
+    <div id="loading" class="loading">Projeler yükleniyor...</div>
+    <div class="project-grid" id="project-grid"></div>
+
+    <script>
+        const jsonUrl = "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/myprojects/projectscontents.json";
+        const projectGrid = document.getElementById('project-grid');
+        const loadingText = document.getElementById('loading');
+        const searchInput = document.getElementById('search-input');
+        
+        // Dil Sözlüğü
+        const translations = {
+            tr: {
+                title: "Cemal Evli - GitHub Projeleri",
+                subtitle: "Otomatik olarak güncellenen proje listem",
+                searchPlaceholder: "Projelerde ara",
+                loading: "Projeler yükleniyor...",
+                error: "Projeler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
+                viewBtn: "GitHub'da Görüntüle",
+                noDesc: "Bu proje için açıklama bulunmuyor.",
+                langCode: "tr"
+            },
+            en: {
+                title: "Cemal Evli - GitHub Projects",
+                subtitle: "My automatically updated project list",
+                searchPlaceholder: "Search projects",
+                loading: "Loading projects...",
+                error: "Failed to load projects. Please try again later.",
+                viewBtn: "View on GitHub",
+                noDesc: "No description available for this project.",
+                langCode: "en"
+            }
+        };
+
+        let currentLang = localStorage.getItem('selectedLang') || 'tr';
+        let allProjects = [];
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('selectedLang', lang);
+            
+            // Statik metinleri güncelle
+            document.getElementById('main-title').innerText = translations[lang].title;
+            document.getElementById('main-subtitle').innerText = translations[lang].subtitle;
+            document.getElementById('search-input').placeholder = translations[lang].searchPlaceholder;
+            if (!loadingText.classList.contains('hidden')) {
+                loadingText.innerText = translations[lang].loading;
+            }
+
+            // Buton aktiflik durumunu güncelle
+            document.getElementById('btn-tr').classList.toggle('active', lang === 'tr');
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.documentElement.lang = lang;
+
+            // Eğer projeler önceden yüklendiyse, kartları yeni dille tekrar çiz
+            if (allProjects.length > 0) {
+                renderProjects(allProjects);
+            }
+        }
+
+        async function fetchProjects() {
+            try {
+                const response = await fetch(jsonUrl);
+                allProjects = await response.json();
+                renderProjects(allProjects);
+                loadingText.classList.add('hidden');
+            } catch (error) {
+                console.error("Veri çekme hatası:", error);
+                loadingText.innerText = translations[currentLang].error;
+            }
+        }
+
+        function renderProjects(projects) {
+            projectGrid.innerHTML = "";
+            projects.forEach(repo => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.dataset.name = repo.name.toLowerCase();
+
+                card.innerHTML = `
+                    <div class="project-info">
+                        <h3>${repo.name.replace(/_/g, ' ')}</h3>
+                        <p class="project-desc">${repo.description || translations[currentLang].noDesc}</p>
+                        <div class="project-meta">
+                            <span>⭐ ${repo.stargazers_count}</span>
+                            <span>🍴 ${repo.forks_count}</span>
+                            
+                        </div>
+                    </div>
+                    <a href="${repo.html_url}" target="_blank" class="view-btn">${translations[currentLang].viewBtn}</a>
+                `;
+                projectGrid.appendChild(card);
+            });
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.project-card');
+            
+            cards.forEach(card => {
+                const originalName = card.dataset.name;
+                const nameWithSpaces = originalName.replace(/_/g, ' ');
+                
+                if (originalName.includes(term) || nameWithSpaces.includes(term)) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        });
+
+        // Sayfa ilk açıldığında dili uygula ve projeleri çek
+        setLanguage(currentLang);
+        fetchProjects();
+    </script>
+</body>
+</html>
