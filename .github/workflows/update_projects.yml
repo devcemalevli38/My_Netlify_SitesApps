@@ -10,16 +10,22 @@ jobs:
   update-json:
     runs-on: ubuntu-latest
     
+    # Yazma izinlerini garanti altına alalım
+    permissions:
+      contents: write
+    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Tüm geçmişi çekerek rebase işlemini kolaylaştırır
 
       - name: Fetch and Process Repository Data
         env:
           GH_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
         run: |
-          # 1. projects.json dosyasından repo isimlerini oku
-          # Not: Dosya yolunun myprojects/projects.json olduğunu varsayıyoruz
+          # 1. projects.json dosyasından repo isimlerini oku[cite: 1]
+          # Dosya yolunun myprojects/projects.json olduğunu varsayıyoruz
           REPOS=$(jq -r '.repositories[]' myprojects/projects.json)
           
           # 2. Geçici bir dosya oluştur
@@ -29,7 +35,7 @@ jobs:
           for REPO in $REPOS; do
             if [ "$FIRST" = false ]; then echo "," >> temp_contents.json; fi
             
-            # GitHub API'den repo bilgilerini çek (kullanıcı adın: cemal201138)
+            # GitHub API'den repo bilgilerini çek (Kullanıcı: cemal201138)
             curl -s -H "Authorization: token $GH_TOKEN" \
                  "https://api.github.com/repos/cemal201138/$REPO" >> temp_contents.json
             
@@ -45,6 +51,15 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          
+          # Değişiklikleri sahnele
           git add myprojects/projectscontents.json
+          
+          # Eğer değişiklik yoksa hata vermeden çık, varsa commit yap
           git commit -m "Auto-update projectscontents.json [$(date)]" || exit 0
-          git push
+          
+          # Hata aldığın noktayı düzelten kısım: Çakışmaları önlemek için önce çek
+          git pull --rebase origin main
+          
+          # Güncel halini gönder
+          git push origin main
