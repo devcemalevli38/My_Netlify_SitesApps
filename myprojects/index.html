@@ -14,6 +14,7 @@
             --accent: #38bdf8;
             --hover: #1e293b;
             --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            --download: #10b981; /* İndirme butonu için yeşil tonu */
         }
 
         body {
@@ -29,7 +30,6 @@
             min-height: 100vh;
         }
 
-        /* Dil Değiştirme Butonu */
         .lang-switcher {
             position: absolute;
             top: 20px;
@@ -94,7 +94,7 @@
 
         .project-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 25px;
             width: 100%;
             max-width: 1200px;
@@ -139,20 +139,37 @@
             margin-bottom: 20px;
         }
 
-        .view-btn {
+        /* Buton Grubu Konteynırı */
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .view-btn, .download-btn {
+            flex: 1;
             display: inline-block;
             text-align: center;
-            padding: 10px 20px;
-            background: var(--accent);
-            color: #0f172a;
+            padding: 10px 5px;
             text-decoration: none;
             border-radius: 10px;
             font-weight: 600;
+            font-size: 0.9rem;
             transition: opacity 0.2s;
         }
 
-        .view-btn:hover {
-            opacity: 0.9;
+        .view-btn {
+            background: var(--accent);
+            color: #0f172a;
+        }
+
+        .download-btn {
+            background: var(--download);
+            color: #ffffff;
+        }
+
+        .view-btn:hover, .download-btn:hover {
+            opacity: 0.8;
         }
 
         .loading { font-size: 1.2rem; opacity: 0.7; }
@@ -184,7 +201,7 @@
         const loadingText = document.getElementById('loading');
         const searchInput = document.getElementById('search-input');
         
-        // Dil Sözlüğü
+        // Dil Sözlüğü (İndirme butonu eklendi)
         const translations = {
             tr: {
                 title: "Cemal Evli - GitHub Projeleri",
@@ -192,7 +209,8 @@
                 searchPlaceholder: "Projelerde ara",
                 loading: "Projeler yükleniyor...",
                 error: "Projeler yüklenemedi. Lütfen daha sonra tekrar deneyin.",
-                viewBtn: "GitHub'da Görüntüle",
+                viewBtn: "GitHub",
+                downloadBtn: "Dosyaları İndir",
                 noDesc: "Bu proje için açıklama bulunmuyor.",
                 langCode: "tr"
             },
@@ -202,7 +220,8 @@
                 searchPlaceholder: "Search projects",
                 loading: "Loading projects...",
                 error: "Failed to load projects. Please try again later.",
-                viewBtn: "View on GitHub",
+                viewBtn: "GitHub",
+                downloadBtn: "Download Files",
                 noDesc: "No description available for this project.",
                 langCode: "en"
             }
@@ -215,7 +234,6 @@
             currentLang = lang;
             localStorage.setItem('selectedLang', lang);
             
-            // Statik metinleri güncelle
             document.getElementById('main-title').innerText = translations[lang].title;
             document.getElementById('main-subtitle').innerText = translations[lang].subtitle;
             document.getElementById('search-input').placeholder = translations[lang].searchPlaceholder;
@@ -223,12 +241,10 @@
                 loadingText.innerText = translations[lang].loading;
             }
 
-            // Buton aktiflik durumunu güncelle
             document.getElementById('btn-tr').classList.toggle('active', lang === 'tr');
             document.getElementById('btn-en').classList.toggle('active', lang === 'en');
             document.documentElement.lang = lang;
 
-            // Eğer projeler önceden yüklendiyse, kartları yeni dille tekrar çiz
             if (allProjects.length > 0) {
                 renderProjects(allProjects);
             }
@@ -253,6 +269,9 @@
                 card.className = 'project-card';
                 card.dataset.name = repo.name.toLowerCase();
 
+                // GitHub ZIP indirme linki (varsayılan branch genelde main veya master'dır)
+                const downloadUrl = `${repo.html_url}/archive/refs/heads/main.zip`;
+
                 card.innerHTML = `
                     <div class="project-info">
                         <h3>${repo.name.replace(/_/g, ' ')}</h3>
@@ -260,10 +279,12 @@
                         <div class="project-meta">
                             <span>⭐ ${repo.stargazers_count}</span>
                             <span>🍴 ${repo.forks_count}</span>
-                            
                         </div>
                     </div>
-                    <a href="${repo.html_url}" target="_blank" class="view-btn">${translations[currentLang].viewBtn}</a>
+                    <div class="btn-group">
+                        <a href="${repo.html_url}" target="_blank" class="view-btn">${translations[currentLang].viewBtn}</a>
+                        <a href="${downloadUrl}" class="download-btn">${translations[currentLang].downloadBtn}</a>
+                    </div>
                 `;
                 projectGrid.appendChild(card);
             });
@@ -285,7 +306,6 @@
             });
         });
 
-        // Sayfa ilk açıldığında dili uygula ve projeleri çek
         setLanguage(currentLang);
         fetchProjects();
     </script>
