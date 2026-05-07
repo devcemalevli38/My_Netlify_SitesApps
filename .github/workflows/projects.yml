@@ -2,52 +2,68 @@ name: Projects Data Update
 
 on:
   schedule:
-    - cron: '0 * * * *' # Her saatin başında otomatik çalışır
-  workflow_dispatch: # İstediğinde manuel çalıştırmak için buton ekler
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   update-json:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Dosyaları depoya geri yazabilmesi için şart
+      contents: write
 
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Tüm geçmişi çekerek rebase hatalarını önler
+          fetch-depth: 0
 
-      - name: Fetch Projects and Games
+      - name: Fetch and Merge Project Data
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub'ın otomatik verdiği geçici anahtar
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # İşlenecek repo listesi
+          REPOS=("Python_Muzik_Calar" "Python-Hand-Mouse" "Pushbullet-Sender-Android")
+          USER="cemal201138"
           
-          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://github.com/cemal201138/Python_Muzik_Calar/releases/latest" > muzikcalar.json
-          
-         
-          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://github.com/cemal201138/Python-Hand-Mouse/releases/latest" > handmouse.json
-          
-          
-          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://github.com/cemal201138/Pushbullet-Sender-Android/releases/latest" > senderapk.json
+          # Boş bir JSON dizisi başlat
+          echo "[]" > myprojects.json
+
+          for REPO in "${REPOS[@]}"; do
+            echo "Fetching data for $REPO..."
+            
+            # Repo genel bilgilerini çek (Star, Fork)
+            REPO_INFO=$(curl -sH "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$USER/$REPO")
+            STARS=$(echo $REPO_INFO | jq '.stargazers_count // 0')
+            FORKS=$(echo $REPO_INFO | jq '.forks_count // 0')
+            
+            # Son sürüm bilgilerini çek (Source Code Links)
+            RELEASE_INFO=$(curl -sH "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$USER/$REPO/releases/latest")
+            ZIP_URL=$(echo $RELEASE_INFO | jq -r '.zipball_url // "N/A"')
+            TAR_URL=$(echo $RELEASE_INFO | jq -r '.tarball_url // "N/A"')
+            TAG_NAME=$(echo $RELEASE_INFO | jq -r '.tag_name // "v0.0.0"')
+
+            # Verileri tek bir JSON dosyasında birleştir
+            jq ". += [{
+              name: \"$REPO\",
+              tag: \"$TAG_NAME\",
+              stars: $STARS,
+              forks: $FORKS,
+              source_zip: \"$ZIP_URL\",
+              source_tar: \"$TAR_URL\"
+            }]" myprojects.json > tmp.json && mv tmp.json myprojects.json
+          done
 
       - name: Commit and Push Changes
         run: |
-          # Git kimlik yapılandırması
           git config --local user.name "cemal201138"
           git config --local user.email "cemal201138@users.noreply.github.com"
           
-          # Dosyaları takibe al
-          git add senderapk.json handmouse.json muzikcalar.json
+          git add myprojects.json
           
-          # Eğer değişiklik varsa işlemleri yap
           if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Hourly auto-update: $(date)"
-            
-            # Uzak depodaki (GitHub) değişiklikleri al ve üstüne ekle (Conflict önleyici)
+            git commit -m "Projects updated: $(date)"
             git pull --rebase origin main
-            
-            # Güncel halini geri gönder
             git push origin main
           else
-            echo "Herhangi bir değişiklik yok, commit atılmadı."
+            echo "Değişiklik yok."
           fi
