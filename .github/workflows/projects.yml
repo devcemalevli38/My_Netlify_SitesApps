@@ -73,7 +73,8 @@ jobs:
           git config --local user.email "cemal201138@users.noreply.github.com"
           
           # Dosyaları ekle
-          git add myprojects.json *_release.json
+          git add myprojects.json 
+          # *_release.json
           
           if [ -n "$(git status --porcelain)" ]; then
             git commit -m "Automated update (Full Data & Assets): $(date)"
