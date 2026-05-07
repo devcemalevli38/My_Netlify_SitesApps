@@ -37,7 +37,7 @@ jobs:
           git config --local user.email "cemal201138@users.noreply.github.com"
           
           # Dosyaları takibe al
-          git add projects.json games.json files.json
+          git add senderapk.json handmouse.json muzikcalar.json
           
           # Eğer değişiklik varsa işlemleri yap
           if [ -n "$(git status --porcelain)" ]; then
