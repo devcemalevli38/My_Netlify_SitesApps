@@ -36,20 +36,25 @@ jobs:
             STARS=$(echo $REPO_DATA | jq '.stargazers_count // 0')
             FORKS=$(echo $REPO_DATA | jq '.forks_count // 0')
             
-            # Son sürüm bilgilerini çek ve HAM halini dosyaya kaydet
+            # Son sürüm bilgilerini çek
             RELEASE_DATA=$(curl -sH "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$USER/$REPO/releases/latest")
             
-            # Ham veriyi dosyaya yaz (Örn: Python_Muzik_Calar_release.json)
+            # Ham veriyi dosyaya yaz
             echo "$RELEASE_DATA" > "${REPO}_release.json"
             
-            # Özet verileri değişkenlere ata
+            # Temel sürüm bilgilerini al
             TAG=$(echo $RELEASE_DATA | jq -r '.tag_name // "n/a"')
-            # Otomatik API linkleri yerine tarayıcı dostu linkleri almak için:
+            PUB_DATE=$(echo $RELEASE_DATA | jq -r '.published_at // "n/a"')
+            
+            # Kaynak kod linklerini oluştur
             ZIP_URL="https://github.com/$USER/$REPO/archive/refs/tags/$TAG.zip"
             TAR_URL="https://github.com/$USER/$REPO/archive/refs/tags/$TAG.tar.gz"
-            PUB_DATE=$(echo $RELEASE_DATA | jq -r '.published_at // "n/a"')
 
-            # Özet JSON dosyasına (myprojects.json) ekleme yap
+            # Yüklenmiş dosyaların (assets) isim ve linklerini çek
+            # Bu kısım JSON içinde bir dosya listesi oluşturur
+            ASSETS=$(echo $RELEASE_DATA | jq -c '[.assets[]? | {file_name: .name, download_url: .browser_download_url}] // []')
+
+            # Tüm bilgileri myprojects.json dosyasına ekle
             jq ". += [{
               project: \"$REPO\",
               version: \"$TAG\",
@@ -57,7 +62,8 @@ jobs:
               forks: $FORKS,
               source_zip: \"$ZIP_URL\",
               source_tar: \"$TAR_URL\",
-              updated_at: \"$PUB_DATE\"
+              updated_at: \"$PUB_DATE\",
+              downloadable_files: $ASSETS
             }]" myprojects.json > tmp.json && mv tmp.json myprojects.json
           done
 
@@ -66,11 +72,11 @@ jobs:
           git config --local user.name "cemal201138"
           git config --local user.email "cemal201138@users.noreply.github.com"
           
-          # Hem özet dosyasını hem de tüm release dosyalarını ekle
+          # Dosyaları ekle
           git add myprojects.json *_release.json
           
           if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Automated update (Summary & Raw Releases): $(date)"
+            git commit -m "Automated update (Full Data & Assets): $(date)"
             git pull --rebase origin main
             git push origin main
           else
