@@ -44,8 +44,9 @@ jobs:
             
             # Özet verileri değişkenlere ata
             TAG=$(echo $RELEASE_DATA | jq -r '.tag_name // "n/a"')
-            ZIP_URL=$(echo $RELEASE_DATA | jq -r '.zipball_url // "n/a"')
-            TAR_URL=$(echo $RELEASE_DATA | jq -r '.tarball_url // "n/a"')
+            # Otomatik API linkleri yerine tarayıcı dostu linkleri almak için:
+            ZIP_URL="https://github.com/$USER/$REPO/archive/refs/tags/$TAG.zip"
+            TAR_URL="https://github.com/$USER/$REPO/archive/refs/tags/$TAG.tar.gz"
             PUB_DATE=$(echo $RELEASE_DATA | jq -r '.published_at // "n/a"')
 
             # Özet JSON dosyasına (myprojects.json) ekleme yap
