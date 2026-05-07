@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cemal Evli | Project Downloads</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: rgba(30, 41, 59, 0.7);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f1f5f9;
+            --accent: #38bdf8;
+            --zip-btn: #10b981;
+            --hover: #1e293b;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        * { box-sizing: border-box; transition: all 0.25s ease; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            background-image: radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.1) 0px, transparent 50%);
+            color: var(--text);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 1000px;
+            position: relative;
+        }
+
+        .lang-switcher { position: absolute; top: 0; right: 0; z-index: 100; }
+        .lang-btn {
+            background: var(--card); border: 1px solid var(--border);
+            color: var(--text); padding: 8px 14px; border-radius: 10px;
+            cursor: pointer; backdrop-filter: blur(5px); font-weight: 600;
+        }
+        .lang-dropdown {
+            position: absolute; top: calc(100% + 5px); right: 0;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 10px; display: none; overflow: hidden; min-width: 120px;
+        }
+        .lang-switcher.open .lang-dropdown { display: block; }
+        .lang-option { padding: 10px 15px; cursor: pointer; font-size: 0.85rem; }
+        .lang-option:hover { background: var(--hover); color: var(--accent); }
+
+        h1 { margin: 0; font-size: 2.2rem; letter-spacing: -1px; color: var(--accent); }
+        .sub-text { opacity: 0.7; margin-top: 10px; }
+
+        .container {
+            width: 100%; max-width: 1000px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .project-card {
+            background: var(--card); border: 1px solid var(--border);
+            padding: 24px; border-radius: 20px; backdrop-filter: blur(12px);
+            box-shadow: var(--shadow); display: flex; flex-direction: column;
+            gap: 12px; cursor: pointer; position: relative;
+        }
+        .project-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+
+        .project-header { display: flex; justify-content: space-between; align-items: center; }
+        .project-name { font-size: 1.1rem; font-weight: bold; flex: 1; }
+        .version-badge { background: var(--accent); color: #0f172a; padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; }
+
+        /* Kart Üstü Zip Butonu */
+        .card-zip-btn {
+            background: var(--zip-btn); color: white; text-decoration: none;
+            padding: 10px; border-radius: 10px; text-align: center;
+            font-size: 0.85rem; font-weight: bold; display: flex; align-items: center;
+            justify-content: center; gap: 8px; margin: 5px 0;
+        }
+        .card-zip-btn:hover { opacity: 0.9; transform: scale(1.02); }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center; z-index: 1000;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: var(--bg); border: 1px solid var(--border);
+            padding: 30px; border-radius: 24px; width: 90%; max-width: 500px;
+            position: relative; box-shadow: var(--shadow);
+        }
+        .close-modal {
+            position: absolute; top: 15px; right: 15px; background: none;
+            border: none; color: var(--text); font-size: 1.5rem; cursor: pointer;
+        }
+
+        .file-list { margin-top: 20px; max-height: 300px; overflow-y: auto; }
+        .file-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px; border-bottom: 1px solid var(--border); gap: 10px;
+        }
+        .file-name { font-size: 0.9rem; font-weight: 500; overflow: hidden; text-overflow: ellipsis; }
+        
+        .mini-download-btn {
+            background: var(--accent); color: #0f172a; text-decoration: none;
+            padding: 6px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: bold;
+        }
+
+        .update-info { font-size: 0.65rem; opacity: 0.4; margin-top: auto; padding-top: 10px; border-top: 1px solid var(--border); }
+        #loader { font-size: 1.1rem; font-weight: bold; color: var(--accent); margin-bottom: 20px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="lang-switcher" id="langSwitcher">
+        <button class="lang-btn" id="langBtn">🌐 <span id="currentLangLabel">Türkçe</span> ▾</button>
+        <div class="lang-dropdown">
+            <div class="lang-option" onclick="changeLang('tr')">🇹🇷 Türkçe</div>
+            <div class="lang-option" onclick="changeLang('en')">🇬🇧 English</div>
+        </div>
+    </div>
+    <h1 id="mainTitle">🚀 My Projects Dashboard</h1>
+    <p class="sub-text" id="subTitle">Cemal Evli'nin GitHub projeleri için dinamik indirme merkezi.</p>
+</header>
+
+<div id="loader">Yükleniyor...</div>
+<div id="project-container" class="container"></div>
+
+<div id="fileModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button class="close-modal" onclick="closeModal()">×</button>
+        <h2 id="modalTitle" style="margin:0; color:var(--accent); font-size:1.3rem;"></h2>
+        <div id="fileList" class="file-list"></div>
+    </div>
+</div>
+
+<footer>
+    <p style="margin-top: 50px; font-size: 0.8rem; opacity: 0.6;" id="footerText"></p>
+</footer>
+
+<script>
+    const JSON_URL = "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/myprojects.json";
+    
+    const translations = {
+        tr: {
+            title: "🚀 Proje Paneli",
+            sub: "Projelerime ve dosyalarına buradan ulaşabilirsiniz.",
+            loader: "Veriler Yükleniyor...",
+            update: "Son Güncelleme",
+            footer: "© 2026 Cemal Evli | GitHub Verileri ile Senkronize",
+            langLabel: "Türkçe",
+            download: "İndir",
+            filesTitle: "Ek Dosyalar",
+            zipMain: "📦 Source Code (ZIP)"
+        },
+        en: {
+            title: "🚀 Projects Dashboard",
+            sub: "Access my projects and their files directly.",
+            loader: "Loading Data...",
+            update: "Last Update",
+            footer: "© 2026 Cemal Evli | Synchronized with GitHub Data",
+            langLabel: "English",
+            download: "Download",
+            filesTitle: "Additional Files",
+            zipMain: "📦 Source Code (ZIP)"
+        }
+    };
+
+    let currentLang = localStorage.getItem('selectedLang') || 'tr';
+    let allProjects = [];
+
+    function updateUI() {
+        const t = translations[currentLang];
+        document.getElementById('mainTitle').textContent = t.title;
+        document.getElementById('subTitle').textContent = t.sub;
+        document.getElementById('footerText').textContent = t.footer;
+        document.getElementById('currentLangLabel').textContent = t.langLabel;
+        renderProjects();
+    }
+
+    async function fetchProjects() {
+        try {
+            const response = await fetch(JSON_URL);
+            allProjects = await response.json();
+            document.getElementById('loader').classList.add('hidden');
+            updateUI();
+        } catch (error) {
+            document.getElementById('loader').textContent = "Hata!";
+        }
+    }
+
+    function renderProjects() {
+        const container = document.getElementById('project-container');
+        const t = translations[currentLang];
+        container.innerHTML = "";
+
+        allProjects.forEach((p, index) => {
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+            const date = new Date(p.updated_at).toLocaleDateString(currentLang === 'tr' ? 'tr-TR' : 'en-US', dateOptions);
+            
+            const card = document.createElement('div');
+            card.className = 'project-card';
+            card.onclick = () => openModal(index);
+            card.innerHTML = `
+                <div class="project-header">
+                    <div class="project-name">${p.project.replace(/_/g, ' ')}</div>
+                    <div class="version-badge">${p.version}</div>
+                </div>
+                
+                <a href="${p.source_zip}" class="card-zip-btn" onclick="event.stopPropagation()">
+                    ${t.zipMain}
+                </a>
+
+                <div style="font-size: 0.8rem; opacity: 0.7; text-align: center;">
+                    ${t.filesTitle}: ${p.downloadable_files ? p.downloadable_files.length : 0} ▾
+                </div>
+
+                <div class="update-info">
+                    ${t.update}: ${date}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function openModal(index) {
+        const project = allProjects[index];
+        const modal = document.getElementById('fileModal');
+        const listContainer = document.getElementById('fileList');
+        const t = translations[currentLang];
+
+        document.getElementById('modalTitle').textContent = project.project.replace(/_/g, ' ');
+        listContainer.innerHTML = "";
+
+        // Modalda sadece JSON içindeki downloadable_files gözüksün
+        if (project.downloadable_files && project.downloadable_files.length > 0) {
+            project.downloadable_files.forEach(file => {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.innerHTML = `
+                    <span class="file-name">📄 ${file.file_name}</span>
+                    <a href="${file.download_url}" class="mini-download-btn" target="_blank">${t.download}</a>
+                `;
+                listContainer.appendChild(item);
+            });
+        } else {
+            listContainer.innerHTML = `<p style="opacity:0.5; text-align:center; padding:20px;">Başka dosya bulunamadı.</p>`;
+        }
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('fileModal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    function changeLang(lang) {
+        currentLang = lang;
+        localStorage.setItem('selectedLang', lang);
+        document.getElementById('langSwitcher').classList.remove('open');
+        updateUI();
+    }
+
+    document.getElementById('langBtn').onclick = (e) => {
+        e.stopPropagation();
+        document.getElementById('langSwitcher').classList.toggle('open');
+    };
+
+    window.onclick = () => document.getElementById('langSwitcher').classList.remove('open');
+
+    fetchProjects();
+</script>
+
+</body>
+</html>
