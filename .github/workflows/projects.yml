@@ -17,39 +17,46 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fetch and Merge Project Data
+      - name: Fetch Release Data and Stats
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # İşlenecek repo listesi
+          # Proje listesi
           REPOS=("Python_Muzik_Calar" "Python-Hand-Mouse" "Pushbullet-Sender-Android")
           USER="cemal201138"
           
-          # Boş bir JSON dizisi başlat
+          # Özet JSON dosyasını başlat
           echo "[]" > myprojects.json
 
           for REPO in "${REPOS[@]}"; do
-            echo "Fetching data for $REPO..."
+            echo "Processing $REPO..."
             
-            # Repo genel bilgilerini çek (Star, Fork)
-            REPO_INFO=$(curl -sH "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$USER/$REPO")
-            STARS=$(echo $REPO_INFO | jq '.stargazers_count // 0')
-            FORKS=$(echo $REPO_INFO | jq '.forks_count // 0')
+            # Repo istatistiklerini çek
+            REPO_DATA=$(curl -sH "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$USER/$REPO")
+            STARS=$(echo $REPO_DATA | jq '.stargazers_count // 0')
+            FORKS=$(echo $REPO_DATA | jq '.forks_count // 0')
             
-            # Son sürüm bilgilerini çek (Source Code Links)
-            RELEASE_INFO=$(curl -sH "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$USER/$REPO/releases/latest")
-            ZIP_URL=$(echo $RELEASE_INFO | jq -r '.zipball_url // "N/A"')
-            TAR_URL=$(echo $RELEASE_INFO | jq -r '.tarball_url // "N/A"')
-            TAG_NAME=$(echo $RELEASE_INFO | jq -r '.tag_name // "v0.0.0"')
+            # Son sürüm bilgilerini çek ve HAM halini dosyaya kaydet
+            RELEASE_DATA=$(curl -sH "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$USER/$REPO/releases/latest")
+            
+            # Ham veriyi dosyaya yaz (Örn: Python_Muzik_Calar_release.json)
+            echo "$RELEASE_DATA" > "${REPO}_release.json"
+            
+            # Özet verileri değişkenlere ata
+            TAG=$(echo $RELEASE_DATA | jq -r '.tag_name // "n/a"')
+            ZIP_URL=$(echo $RELEASE_DATA | jq -r '.zipball_url // "n/a"')
+            TAR_URL=$(echo $RELEASE_DATA | jq -r '.tarball_url // "n/a"')
+            PUB_DATE=$(echo $RELEASE_DATA | jq -r '.published_at // "n/a"')
 
-            # Verileri tek bir JSON dosyasında birleştir
+            # Özet JSON dosyasına (myprojects.json) ekleme yap
             jq ". += [{
-              name: \"$REPO\",
-              tag: \"$TAG_NAME\",
+              project: \"$REPO\",
+              version: \"$TAG\",
               stars: $STARS,
               forks: $FORKS,
               source_zip: \"$ZIP_URL\",
-              source_tar: \"$TAR_URL\"
+              source_tar: \"$TAR_URL\",
+              updated_at: \"$PUB_DATE\"
             }]" myprojects.json > tmp.json && mv tmp.json myprojects.json
           done
 
@@ -58,12 +65,13 @@ jobs:
           git config --local user.name "cemal201138"
           git config --local user.email "cemal201138@users.noreply.github.com"
           
-          git add myprojects.json
+          # Hem özet dosyasını hem de tüm release dosyalarını ekle
+          git add myprojects.json *_release.json
           
           if [ -n "$(git status --porcelain)" ]; then
-            git commit -m "Projects updated: $(date)"
+            git commit -m "Automated update (Summary & Raw Releases): $(date)"
             git pull --rebase origin main
             git push origin main
           else
-            echo "Değişiklik yok."
+            echo "No changes detected."
           fi
