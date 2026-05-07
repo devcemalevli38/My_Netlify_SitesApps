@@ -6,7 +6,37 @@
     "forks": 0,
     "source_zip": "https://github.com/cemal201138/Python_Muzik_Calar/archive/refs/tags/V14.zip",
     "source_tar": "https://github.com/cemal201138/Python_Muzik_Calar/archive/refs/tags/V14.tar.gz",
-    "updated_at": "2026-03-05T14:57:14Z"
+    "updated_at": "2026-03-05T14:57:14Z",
+    "downloadable_files": [
+      {
+        "file_name": "5000_port_delete.vbs",
+        "download_url": "https://github.com/cemal201138/Python_Muzik_Calar/releases/download/V14/5000_port_delete.vbs"
+      },
+      {
+        "file_name": "5000_port_new.vbs",
+        "download_url": "https://github.com/cemal201138/Python_Muzik_Calar/releases/download/V14/5000_port_new.vbs"
+      },
+      {
+        "file_name": "app_icon.ico",
+        "download_url": "https://github.com/cemal201138/Python_Muzik_Calar/releases/download/V14/app_icon.ico"
+      },
+      {
+        "file_name": "muzikcalarV14.apk",
+        "download_url": "https://github.com/cemal201138/Python_Muzik_Calar/releases/download/V14/muzikcalarV14.apk"
+      },
+      {
+        "file_name": "muzikcalarV14.exe",
+        "download_url": "https://github.com/cemal201138/Python_Muzik_Calar/releases/download/V14/muzikcalarV14.exe"
+      },
+      {
+        "file_name": "muzikcalarV14.py",
+        "download_url": "https://github.com/cemal201138/Python_Muzik_Calar/releases/download/V14/muzikcalarV14.py"
+      },
+      {
+        "file_name": "muzikcalarV14.zip",
+        "download_url": "https://github.com/cemal201138/Python_Muzik_Calar/releases/download/V14/muzikcalarV14.zip"
+      }
+    ]
   },
   {
     "project": "Python-Hand-Mouse",
@@ -15,7 +45,17 @@
     "forks": 0,
     "source_zip": "https://github.com/cemal201138/Python-Hand-Mouse/archive/refs/tags/HMV1.zip",
     "source_tar": "https://github.com/cemal201138/Python-Hand-Mouse/archive/refs/tags/HMV1.tar.gz",
-    "updated_at": "2025-10-15T13:29:54Z"
+    "updated_at": "2025-10-15T13:29:54Z",
+    "downloadable_files": [
+      {
+        "file_name": "Hand_MouseV1.exe",
+        "download_url": "https://github.com/cemal201138/Python-Hand-Mouse/releases/download/HMV1/Hand_MouseV1.exe"
+      },
+      {
+        "file_name": "Hand_MouseV1.py",
+        "download_url": "https://github.com/cemal201138/Python-Hand-Mouse/releases/download/HMV1/Hand_MouseV1.py"
+      }
+    ]
   },
   {
     "project": "Pushbullet-Sender-Android",
@@ -24,6 +64,20 @@
     "forks": 0,
     "source_zip": "https://github.com/cemal201138/Pushbullet-Sender-Android/archive/refs/tags/apk_appV1.zip",
     "source_tar": "https://github.com/cemal201138/Pushbullet-Sender-Android/archive/refs/tags/apk_appV1.tar.gz",
-    "updated_at": "2025-08-09T18:58:24Z"
+    "updated_at": "2025-08-09T18:58:24Z",
+    "downloadable_files": [
+      {
+        "file_name": "apk-app-codeV1.html",
+        "download_url": "https://github.com/cemal201138/Pushbullet-Sender-Android/releases/download/apk_appV1/apk-app-codeV1.html"
+      },
+      {
+        "file_name": "apk-app-codeV1.txt",
+        "download_url": "https://github.com/cemal201138/Pushbullet-Sender-Android/releases/download/apk_appV1/apk-app-codeV1.txt"
+      },
+      {
+        "file_name": "_PushbulletSender_V1.apk",
+        "download_url": "https://github.com/cemal201138/Pushbullet-Sender-Android/releases/download/apk_appV1/_PushbulletSender_V1.apk"
+      }
+    ]
   }
 ]
