@@ -96,54 +96,6 @@
     }
   },
   {
-    "name": "Pushbullet-Sender-Android_release.json",
-    "path": "Pushbullet-Sender-Android_release.json",
-    "sha": "21cccd73d3882191f2e4df46eae5dbb73cdb7439",
-    "size": 7740,
-    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Pushbullet-Sender-Android_release.json?ref=main",
-    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/Pushbullet-Sender-Android_release.json",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/21cccd73d3882191f2e4df46eae5dbb73cdb7439",
-    "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/Pushbullet-Sender-Android_release.json",
-    "type": "file",
-    "_links": {
-      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Pushbullet-Sender-Android_release.json?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/21cccd73d3882191f2e4df46eae5dbb73cdb7439",
-      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/Pushbullet-Sender-Android_release.json"
-    }
-  },
-  {
-    "name": "Python-Hand-Mouse_release.json",
-    "path": "Python-Hand-Mouse_release.json",
-    "sha": "b47fe5cc7f732d22c5acc08a0d503f092ce3395c",
-    "size": 5716,
-    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Python-Hand-Mouse_release.json?ref=main",
-    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/Python-Hand-Mouse_release.json",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/b47fe5cc7f732d22c5acc08a0d503f092ce3395c",
-    "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/Python-Hand-Mouse_release.json",
-    "type": "file",
-    "_links": {
-      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Python-Hand-Mouse_release.json?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/b47fe5cc7f732d22c5acc08a0d503f092ce3395c",
-      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/Python-Hand-Mouse_release.json"
-    }
-  },
-  {
-    "name": "Python_Muzik_Calar_release.json",
-    "path": "Python_Muzik_Calar_release.json",
-    "sha": "64b34797a5793c17ee2af80bc99b571452f806b1",
-    "size": 15330,
-    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Python_Muzik_Calar_release.json?ref=main",
-    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/Python_Muzik_Calar_release.json",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/64b34797a5793c17ee2af80bc99b571452f806b1",
-    "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/Python_Muzik_Calar_release.json",
-    "type": "file",
-    "_links": {
-      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Python_Muzik_Calar_release.json?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/64b34797a5793c17ee2af80bc99b571452f806b1",
-      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/Python_Muzik_Calar_release.json"
-    }
-  },
-  {
     "name": "README-en.md",
     "path": "README-en.md",
     "sha": "e1a8b83ba09bf52572131a830969094ac872870a",
@@ -322,16 +274,16 @@
   {
     "name": "projects.json",
     "path": "projects.json",
-    "sha": "155469463802ae2887901059537f791d8b313803",
+    "sha": "cd843ab0d0893017c8beccdf8d2206db04f41e20",
     "size": 22325,
     "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/projects.json?ref=main",
     "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/projects.json",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/155469463802ae2887901059537f791d8b313803",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/cd843ab0d0893017c8beccdf8d2206db04f41e20",
     "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/projects.json",
     "type": "file",
     "_links": {
       "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/projects.json?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/155469463802ae2887901059537f791d8b313803",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/cd843ab0d0893017c8beccdf8d2206db04f41e20",
       "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/projects.json"
     }
   },
