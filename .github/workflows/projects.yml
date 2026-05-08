@@ -22,7 +22,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Proje listesi
-          REPOS=("Python_Muzik_Calar" "Python-Hand-Mouse" "Pushbullet-Sender-Android")
+          REPOS=("Python_Muzik_Calar" "Python-Hand-Mouse" "Pushbullet-Sender-Android" "Python_Lock_App")
           USER="cemal201138"
           
           # Özet JSON dosyasını başlat
