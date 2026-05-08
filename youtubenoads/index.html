@@ -180,6 +180,33 @@
         let globalPlaylist = [];
         let currentIndex = 0;
 
+        // Sayfa yüklendiğinde URL parametrelerini kontrol et (API mantığı)
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlValue = urlParams.get('url');
+
+            if (urlValue) {
+                // Virgülle ayrılmış URL'leri diziye bölüyoruz
+                const urls = urlValue.split(',');
+                
+                urls.forEach(url => {
+                    let cleanUrl = url.trim();
+                    if (cleanUrl.includes("youtube.com")) {
+                        globalPlaylist.push(cleanUrl.replace("youtube.com", "yout-ube.com"));
+                    } else if (cleanUrl.includes("youtu.be")) {
+                        // Kısaltılmış link desteği için: youtu.be/ID -> yout-ube.com/watch?v=ID
+                        let videoId = cleanUrl.split('/').pop().split('?')[0];
+                        globalPlaylist.push(`https://www.yout-ube.com/watch?v=${videoId}`);
+                    }
+                });
+
+                if (globalPlaylist.length > 0) {
+                    currentIndex = 0;
+                    oynat(currentIndex);
+                }
+            }
+        };
+
         function yeniKutuEkle() {
             const container = document.getElementById('inputContainer');
             const div = document.createElement('div');
@@ -196,7 +223,6 @@
             
             // 1. Toplu Metin Alanını Temizle ve Parçala
             const bulkText = document.getElementById('bulkInput').value;
-            // Düzenli ifade: Tırnaklar arasındaki her şeyi veya virgülle ayrılmış linkleri bulur
             const bulkMatches = bulkText.match(/"([^"]+)"|'([^']+)'|https?:\/\/[^\s,"]+/g);
             
             if (bulkMatches) {
@@ -204,6 +230,9 @@
                     let cleanUrl = match.replace(/['"]/g, "").trim();
                     if (cleanUrl.includes("youtube.com")) {
                         globalPlaylist.push(cleanUrl.replace("youtube.com", "yout-ube.com"));
+                    } else if (cleanUrl.includes("youtu.be")) {
+                        let videoId = cleanUrl.split('/').pop().split('?')[0];
+                        globalPlaylist.push(`https://www.yout-ube.com/watch?v=${videoId}`);
                     }
                 });
             }
@@ -214,6 +243,9 @@
                 let url = input.value.trim();
                 if (url.includes("youtube.com")) {
                     globalPlaylist.push(url.replace("youtube.com", "yout-ube.com"));
+                } else if (url.includes("youtu.be")) {
+                    let videoId = url.split('/').pop().split('?')[0];
+                    globalPlaylist.push(`https://www.yout-ube.com/watch?v=${videoId}`);
                 }
             });
 
