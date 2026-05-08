@@ -1,4 +1,23 @@
-- name: ProjectDataupdate
+name: Projects Data Update
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch Release Data and Stats
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -12,10 +31,10 @@
             
             # Repo istatistiklerini çek
             REPO_DATA=$(curl -sH "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$USER/$REPO")
-            STARS=$(echo $REPO_DATA | jq '.stargazers_count // 0')
-            FORKS=$(echo $REPO_DATA | jq '.forks_count // 0')
+            STARS=$(echo "$REPO_DATA" | jq '.stargazers_count // 0')
+            FORKS=$(echo "$REPO_DATA" | jq '.forks_count // 0')
             
-            # Son sürüm bilgilerini bir değişkene al (Dosya oluşturmuyoruz)
+            # Son sürüm bilgilerini bir değişkene al
             RELEASE_DATA=$(curl -sH "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/$USER/$REPO/releases/latest")
             
             # Değişkenden verileri ayıkla
@@ -46,11 +65,10 @@
           
           git add myprojects.json
           
-          # Sadece eklediğimiz myprojects.json dosyasında değişiklik varsa devam et
-          if git diff --cached --quiet; then
-            echo "No changes detected."
-          else
+          if ! git diff --cached --quiet; then
             git commit -m "Automated update: $(date)"
             git pull --rebase origin main
             git push origin main
+          else
+            echo "No changes detected."
           fi
