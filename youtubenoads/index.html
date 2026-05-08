@@ -144,9 +144,9 @@
 
         <div class="input-section">
             <div>
-                <h3>1. Toplu Metin Girişi</h3>
-                <p style="font-size: 12px; color: #777;">Örn: "url1", "url2"</p>
-                <textarea id="bulkInput" placeholder='"https://youtube.com/watch?v=abc", "https://youtube.com/watch?v=xyz"'></textarea>
+                <h3>1. Toplu Giriş (Yıldız ile Ayırın)</h3>
+                <p style="font-size: 12px; color: #777;">Örn: url1 * url2</p>
+                <textarea id="bulkInput" placeholder='https://youtube.com/watch?v=abc * https://youtube.com/watch?v=xyz'></textarea>
             </div>
 
             <hr style="border: 0; border-top: 1px solid #333; width: 100%;">
@@ -170,15 +170,14 @@
         let globalPlaylist = [];
         let currentIndex = 0;
 
-        // Sayfa yüklendiğinde URL parametrelerini kontrol et (API mantığı)
+        // Sayfa yüklendiğinde URL parametrelerini kontrol et
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const urlValue = urlParams.get('url');
 
             if (urlValue) {
-                // Linkleri parçalarken virgül işaretini sadece yeni bir link başlangıcından önceyse baz alıyoruz (Regex Lookahead)
-                const urls = urlValue.split(/,(?=https?:\/\/)/);
-                
+                // Artık yıldız (*) işaretine göre bölüyoruz
+                const urls = urlValue.split('*');
                 urls.forEach(url => processAndAdd(url));
 
                 if (globalPlaylist.length > 0) {
@@ -188,14 +187,14 @@
             }
         };
 
-        // Link işleme ve listeye ekleme mantığı
+        // Link işleme ve dönüştürme fonksiyonu
         function processAndAdd(url) {
             let cleanUrl = url.trim();
+            if (!cleanUrl) return;
+
             if (cleanUrl.includes("youtube.com")) {
-                // YouTube linklerini reklamsız proxy'ye çevir
                 globalPlaylist.push(cleanUrl.replace("youtube.com", "yout-ube.com"));
             } else if (cleanUrl.includes("youtu.be")) {
-                // Kısa link desteği (youtu.be/ID)
                 let videoId = cleanUrl.split('/').pop().split(/[?&]/)[0];
                 globalPlaylist.push(`https://www.yout-ube.com/watch?v=${videoId}`);
             } else if (cleanUrl.includes("yout-ube.com")) {
@@ -217,15 +216,16 @@
         function listeyiOlustur() {
             globalPlaylist = [];
             
-            // 1. Toplu Metin Girişi
+            // 1. Toplu Giriş (Yıldız veya boşluk/satır bazlı ayırma)
             const bulkText = document.getElementById('bulkInput').value;
-            const bulkMatches = bulkText.match(/https?:\/\/[^\s,"']+/g);
-            if (bulkMatches) bulkMatches.forEach(url => processAndAdd(url));
+            // Hem yıldız hem de genel URL yapısını yakalayan regex
+            const bulkUrls = bulkText.split('*');
+            bulkUrls.forEach(url => processAndAdd(url));
 
             // 2. Tekli Kutucuklar
             const singleInputs = document.querySelectorAll('.video-url');
             singleInputs.forEach(input => {
-                if (input.value.trim()) processAndAdd(input.value);
+                processAndAdd(input.value);
             });
 
             if (globalPlaylist.length > 0) {
