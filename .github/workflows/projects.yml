@@ -1,4 +1,4 @@
-- name: Project Data Update
+- name: ProjectDataupdate
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
