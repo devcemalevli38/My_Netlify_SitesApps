@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cemal Evli | My Website</title>
     
-    <!-- PWA & Icons -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/pwawebsite/manifest.json">
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -317,11 +316,12 @@
 </footer>
 
 <script>
-// --- PWA Service Worker Registration ---
+// --- PWA Service Worker Kaydı (Alt Klasör Uyumlu) ---
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('Service Worker registered!'))
+    // Kayıt yolu ve kapsam (scope) güncellendi
+    navigator.serviceWorker.register('/pwawebsite/sw.js', { scope: '/pwawebsite/' })
+      .then(reg => console.log('Service Worker registered for scope:', reg.scope))
       .catch(err => console.error('Service Worker failed:', err));
   });
 }
