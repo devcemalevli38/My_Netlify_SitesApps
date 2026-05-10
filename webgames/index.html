@@ -12,16 +12,18 @@
         .menu-btn:hover { background: #383838; border-color: #0078d4; }
         .menu-btn.active { background: #0078d4; border-color: #00a4ef; box-shadow: 0 0 10px rgba(0, 120, 212, 0.4); }
         
-        /* Tam Ekran Butonu Özel Stili */
         .fullscreen-btn { background: #28a745; border-color: #1e7e34; margin-left: auto; }
         .fullscreen-btn:hover { background: #218838; border-color: #ffffff; }
 
         .game-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; width: 100vw; background: #1a1a1a; }
         .iframe-container { width: 98%; height: 95%; border-radius: 10px; overflow: hidden; background: #000; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
         iframe { width: 100%; height: 100%; border: none; }
-        .game-info { height: 30px; color: #888; text-align: center; font-size: 12px; background: #121212; display: flex; align-items: center; justify-content: center; border-top: 1px solid #222; }
         
-        /* Tam ekran modundayken iframe'in tüm alanı kaplaması için */
+        /* Alt bilgi çubuğu stili */
+        .game-info { height: 30px; color: #888; text-align: center; font-size: 12px; background: #121212; display: flex; align-items: center; justify-content: center; border-top: 1px solid #222; }
+        .game-info a { color: #0078d4; text-decoration: none; font-weight: bold; margin: 0 3px; }
+        .game-info a:hover { text-decoration: underline; }
+        
         :fullscreen .iframe-container { width: 100%; height: 100%; border-radius: 0; }
         :-webkit-full-screen .iframe-container { width: 100%; height: 100%; border-radius: 0; }
     </style>
@@ -39,11 +41,10 @@
 </div>
 
 <div class="game-info">
-    <p id="current-game-text">Lütfen bir oyun seçin</p>
+    <p id="current-game-text">Bu sitede <a href="https://html5games.com/" target="_blank">HTML5Games</a>'in oyunları kullanılmaktadır.</p>
 </div>
 
 <script>
-    // --- GÜNCEL AYARLAR ---
     const username = "cemal201138"; 
     const repo = "My_Netlify_SitesApps"; 
     const folderPath = "webgames/htmlgamefolder"; 
@@ -79,7 +80,6 @@
                 if (index === 0) loadGame("htmlgamefolder/" + file.name, btn);
             });
 
-            // Tam Ekran Butonunu En Sona Ekle
             addFullscreenButton();
 
         } catch (error) {
@@ -92,7 +92,9 @@
         iframe.src = path; 
         document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        document.getElementById('current-game-text').innerText = "Şu an oynanan: " + btn.innerText;
+        
+        // ÖNEMLİ: Alt taraftaki metni değiştiren satır silindi. 
+        // Böylece HTML5Games linki sabit kalacak.
     }
 
     function addFullscreenButton() {
