@@ -2,7 +2,8 @@
   "name": "Cemal Evli | Portfolio",
   "short_name": "CemalEvli",
   "description": "Cemal Evli Web Projeleri, Oyunlar ve Dosyalar",
-  "start_url": "index.html",
+  "start_url": "/pwawebsite/index.html",
+  "scope": "/pwawebsite/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#38bdf8",
@@ -11,6 +12,16 @@
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
+    },
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ]
 }
