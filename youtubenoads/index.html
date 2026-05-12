@@ -136,7 +136,6 @@
     <h2>YouTube No Ads</h2>
 
     <div class="container">
-        <!-- SOL: OYNATICI -->
         <div class="player-section">
             <div class="video-screen">
                 <iframe id="mainPlayer" src="" allowfullscreen></iframe>
@@ -148,19 +147,16 @@
             </div>
         </div>
 
-        <!-- SAĞ: GİRİŞ PANELİ -->
         <div class="input-section">
             
-            <!-- Toplu Giriş -->
             <div>
                 <h3>1. Toplu Metin Girişi</h3>
                 <p style="font-size: 12px; color: #777;">Örn: "url1", "url2"</p>
-                <textarea id="bulkInput" placeholder='"https://youtube.com/watch?v=abc", "https://youtube.com/watch?v=xyz"'></textarea>
+                <textarea id="bulkInput" placeholder='"https://youtube.com/watch?v=abc", "https://youtu.be/xyz"'></textarea>
             </div>
 
             <hr style="border: 0; border-top: 1px solid #333; width: 100%;">
 
-            <!-- Tekli Giriş -->
             <div>
                 <h3>2. Tekli Kutucuklar</h3>
                 <div id="inputContainer">
@@ -191,30 +187,43 @@
             container.appendChild(div);
         }
 
+        // URL'yi uygun formata dönüştüren yardımcı fonksiyon
+        function formatYouTubeUrl(url) {
+            url = url.trim();
+            if (url.includes("youtube.com")) {
+                return url.replace("youtube.com", "yout-ube.com");
+            } else if (url.includes("youtu.be/")) {
+                // youtu.be/VIDEO_ID kısmındaki ID'yi al
+                const parts = url.split("youtu.be/");
+                if (parts.length > 1) {
+                    const videoId = parts[1].split(/[?#]/)[0]; // Parametreleri temizle
+                    return `https://www.yout-ube.com/watch?v=${videoId}`;
+                }
+            }
+            return null;
+        }
+
         function listeyiOlustur() {
             globalPlaylist = [];
             
-            // 1. Toplu Metin Alanını Temizle ve Parçala
+            // 1. Toplu Metin Alanını İşle
             const bulkText = document.getElementById('bulkInput').value;
-            // Düzenli ifade: Tırnaklar arasındaki her şeyi veya virgülle ayrılmış linkleri bulur
-            const bulkMatches = bulkText.match(/"([^"]+)"|'([^']+)'|https?:\/\/[^\s,"]+/g);
+            // Regex hem youtube.com hem de youtu.be linklerini yakalayacak şekilde güncellendi
+            const bulkMatches = bulkText.match(/"([^"]+)"|'([^']+)'|https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/[^\s,"]+/g);
             
             if (bulkMatches) {
                 bulkMatches.forEach(match => {
-                    let cleanUrl = match.replace(/['"]/g, "").trim();
-                    if (cleanUrl.includes("youtube.com")) {
-                        globalPlaylist.push(cleanUrl.replace("youtube.com", "yout-ube.com"));
-                    }
+                    const cleanUrl = match.replace(/['"]/g, "");
+                    const formatted = formatYouTubeUrl(cleanUrl);
+                    if (formatted) globalPlaylist.push(formatted);
                 });
             }
 
-            // 2. Tekli Kutucukları Al
+            // 2. Tekli Kutucukları İşle
             const singleInputs = document.querySelectorAll('.video-url');
             singleInputs.forEach(input => {
-                let url = input.value.trim();
-                if (url.includes("youtube.com")) {
-                    globalPlaylist.push(url.replace("youtube.com", "yout-ube.com"));
-                }
+                const formatted = formatYouTubeUrl(input.value);
+                if (formatted) globalPlaylist.push(formatted);
             });
 
             // Listeyi Başlat
@@ -222,7 +231,7 @@
                 currentIndex = 0;
                 oynat(currentIndex);
             } else {
-                alert("Geçerli bir YouTube linki bulunamadı!");
+                alert("Geçerli bir YouTube veya youtu.be linki bulunamadı!");
             }
         }
 
