@@ -17,7 +17,6 @@
 
         .game-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; width: 100vw; background: #1a1a1a; }
         
-        /* DEĞİŞİKLİK: Oyun kutusunu ilk baştaki gibi sınırlandırdık */
         .iframe-container { 
             width: 800px; 
             height: 600px; 
@@ -48,7 +47,7 @@
 <div class="game-wrapper" id="main-display">
     <div class="iframe-container">
         <div id="ruffle-player"></div>
-    </div>
+    }</div>
 </div>
 
 <div class="game-info">
@@ -58,10 +57,6 @@
 <script src="ruffle/ruffle.js"></script>
 
 <script>
-    const username = "cemal201138"; 
-    const repo = "My_Netlify_SitesApps"; 
-    const folderPath = "webgames/oyunlar"; 
-
     const menuContainer = document.getElementById('dynamic-menu');
     const displayArea = document.getElementById('main-display');
     
@@ -78,7 +73,7 @@
         const container = document.getElementById("ruffle-player");
         container.appendChild(player);
         
-        // DEĞİŞİKLİK: Ölçeklendirmeyi orijinal boyutları koruyacak şekle getirdik
+        // Ölçeklendirmeyi orijinal boyutları koruyacak şekle getirdik
         player.config = {
             letterbox: "on",
             scale: "showAll", // Oyunu ekrana yayarak bozmaz, orijinal oranında pencerene sığdırır
@@ -91,35 +86,37 @@
 
     async function fetchGames() {
         try {
-            const response = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/${folderPath}`);
-            const files = await response.json();
-
-            if (!Array.isArray(files)) {
-                throw new Error("Klasör boş veya bulunamadı.");
+            // Statik json dosyamızdan veriyi çekiyoruz
+            const response = await fetch('oyunlar.json');
+            
+            if (!response.ok) {
+                throw new Error(`oyunlar.json yüklenemedi. Durum: ${response.status}`);
             }
+
+            const swfFiles = await response.json();
 
             menuContainer.innerHTML = ""; 
 
-            const swfFiles = files.filter(file => file.name.endsWith('.swf'));
-
-            swfFiles.forEach((file, index) => {
-                const fileName = file.name.replace('.swf', '');
+            swfFiles.forEach((fileNameWithExtension, index) => {
+                const fileName = fileNameWithExtension.replace('.swf', '');
                 const btn = document.createElement('button');
                 btn.className = 'menu-btn';
                 btn.innerText = fileName.replace(/[-_]/g, ' '); 
-                
+
                 btn.onclick = () => {
-                    loadGame("oyunlar/" + file.name, btn);
+                    loadGame("oyunlar/" + fileNameWithExtension, btn);
                 };
 
                 menuContainer.appendChild(btn);
-                if (index === 0) loadGame("oyunlar/" + file.name, btn);
+                
+                // İlk oyunu otomatik yükle
+                if (index === 0) loadGame("oyunlar/" + fileNameWithExtension, btn);
             });
 
             addFullscreenButton();
 
         } catch (error) {
-            menuContainer.innerHTML = "<span style='color:red;'>Hata: Liste alınamadı!</span>";
+            menuContainer.innerHTML = "<span style='color:red;'>Hata: Oyun listesi yüklenemedi!</span>";
             console.error("Hata ayrıntısı:", error);
         }
     }
