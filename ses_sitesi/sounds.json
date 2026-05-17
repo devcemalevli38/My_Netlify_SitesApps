@@ -82,5 +82,54 @@
     "name": "Allahumme Yarab",
     "url": "https://github.com/cemal201138/My_Netlify_SitesApps/raw/refs/heads/main/ses_sitesi/sounds/allahumme-yarab.mp3",
     "searchName": "Allahumme Yarab"
+  },
+  {
+    "id": "audio16",
+    "name": "sad violin",
+    "url": "https://github.com/cemal201138/My_Netlify_SitesApps/raw/refs/heads/main/ses_sitesi/sounds/tf_nemesis.mp3",
+    "searchName": "sad violin"
+  },
+  {
+    "id": "audio17",
+    "name": "Şu karizmaya bak",
+    "url": "https://github.com/cemal201138/My_Netlify_SitesApps/raw/refs/heads/main/ses_sitesi/sounds/anani-avradini-su-karizmaya-bakin.mp3",
+    "searchName": "Şu karizmaya bak"
+  },
+  {
+    "id": "audio18",
+    "name": "arka sokaklar",
+    "url": "https://github.com/cemal201138/My_Netlify_SitesApps/raw/refs/heads/main/ses_sitesi/sounds/arka-sokaklar-bam.mp3",
+    "searchName": "arka sokaklar"
+  },
+  {
+    "id": "audio19",
+    "name": "aykut elmas oc geliyor",
+    "url": "https://github.com/cemal201138/My_Netlify_SitesApps/raw/refs/heads/main/ses_sitesi/sounds/aykut-elmas-oc-geliyor.mp3",
+    "searchName": "aykut elmas oc geliyor"
+  },
+  {
+    "id": "audio20",
+    "name": "napim",
+    "url": "https://github.com/cemal201138/My_Netlify_SitesApps/raw/refs/heads/main/ses_sitesi/sounds/napim-ses-efekti.mp3",
+    "searchName": "napim"
+  },
+  {
+    "id": "audio21",
+    "name": "sen ayrı trende",
+    "url": "https://github.com/cemal201138/My_Netlify_SitesApps/raw/refs/heads/main/ses_sitesi/sounds/sen-ayri-trende-ben-ayri-garda.mp3",
+    "searchName": "sen ayrı trende"
+  },
+  {
+    "id": "audio22",
+    "name": "golem",
+    "url": "https://github.com/cemal201138/My_Netlify_SitesApps/raw/refs/heads/main/ses_sitesi/sounds/sneaky-golem.mp3",
+    "searchName": "golem"
+  },
+  {
+    "id": "audio23",
+    "name": "Allah beni bir kuş edecek",
+    "url": "https://github.com/cemal201138/My_Netlify_SitesApps/raw/refs/heads/main/ses_sitesi/sounds/sonmez-reyiz-ses-efektleri-ulan-senin-allah-beni-bir-kus-edecek-audiotrimmer.mp3",
+    "searchName": "Allah beni bir kuş edecek"
   }
+  
 ]
