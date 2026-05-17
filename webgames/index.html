@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flash Oyun Dünyası</title>
+    <link rel="icon" type="image/x-icon" href="webgames.ico">
     <style>
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #1a1a1a; display: flex; flex-direction: column; font-family: 'Segoe UI', sans-serif; }
         .game-menu { height: 60px; background: #121212; display: flex; justify-content: center; align-items: center; gap: 10px; border-bottom: 2px solid #333; z-index: 10; padding: 0 15px; overflow-x: auto; }
@@ -15,15 +16,27 @@
         .fullscreen-btn:hover { background: #218838; border-color: #ffffff; }
 
         .game-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; width: 100vw; background: #1a1a1a; }
-        .iframe-container { width: 98%; height: 95%; border-radius: 10px; overflow: hidden; background: #000; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
         
-        /* Ruffle elementlerinin container içine düzgün yayılması için */
+        /* DEĞİŞİKLİK: Oyun kutusunu ilk baştaki gibi sınırlandırdık */
+        .iframe-container { 
+            width: 800px; 
+            height: 600px; 
+            max-width: 95vw;   /* Küçük ekranlarda taşmasın diye koruma */
+            max-height: 80vh;  /* Menüye yer kalsın diye koruma */
+            border-radius: 10px; 
+            overflow: hidden; 
+            background: #000; 
+            box-shadow: 0 0 30px rgba(0,0,0,0.5); 
+        }
+        
+        /* Ruffle elementlerinin container içine tam oturması için */
         #ruffle-player, ruffle-player { width: 100% !important; height: 100% !important; display: block !important; }
         
         .game-info { height: 30px; color: #888; text-align: center; font-size: 12px; background: #121212; display: flex; align-items: center; justify-content: center; border-top: 1px solid #222; }
         
-        :fullscreen .iframe-container { width: 100%; height: 100%; border-radius: 0; }
-        :-webkit-full-screen .iframe-container { width: 100%; height: 100%; border-radius: 0; }
+        /* Tam ekrana geçildiğinde kutuyu büyütiyoruz */
+        :fullscreen .iframe-container { width: 100% !important; height: 100% !important; max-width: 100vw; max-height: 100vh; border-radius: 0; }
+        :-webkit-full-screen .iframe-container { width: 100% !important; height: 100% !important; max-width: 100vw; max-height: 100vh; border-radius: 0; }
     </style>
 </head>
 <body>
@@ -45,17 +58,15 @@
 <script src="ruffle/ruffle.js"></script>
 
 <script>
-    // GitHub Yapılandırması
     const username = "cemal201138"; 
     const repo = "My_Netlify_SitesApps"; 
-    const folderPath = "webgames/oyunlar"; // GitHub'daki .swf oyunlarının olduğu klasör yolu
+    const folderPath = "webgames/oyunlar"; 
 
     const menuContainer = document.getElementById('dynamic-menu');
     const displayArea = document.getElementById('main-display');
     
     let player = null;
 
-    // Ruffle İlk Kurulum ve Ayarlar
     window.RufflePlayer = window.RufflePlayer || {};
     window.RufflePlayer.config = {
         publicPath: "ruffle/"
@@ -67,14 +78,14 @@
         const container = document.getElementById("ruffle-player");
         container.appendChild(player);
         
+        // DEĞİŞİKLİK: Ölçeklendirmeyi orijinal boyutları koruyacak şekle getirdik
         player.config = {
             letterbox: "on",
-            scale: "exactFit",
-            forceScale: true,
+            scale: "showAll", // Oyunu ekrana yayarak bozmaz, orijinal oranında pencerene sığdırır
+            forceScale: false,
             quality: "high"
         };
 
-        // Ruffle hazır olduktan sonra GitHub'dan oyunları çekiyoruz
         fetchGames();
     });
 
@@ -89,7 +100,6 @@
 
             menuContainer.innerHTML = ""; 
 
-            // Sadece .swf uzantılı dosyaları filtrele
             const swfFiles = files.filter(file => file.name.endsWith('.swf'));
 
             swfFiles.forEach((file, index) => {
@@ -99,12 +109,10 @@
                 btn.innerText = fileName.replace(/[-_]/g, ' '); 
                 
                 btn.onclick = () => {
-                    // Yerel "oyunlar/" klasöründen swf adını çağırır
                     loadGame("oyunlar/" + file.name, btn);
                 };
 
                 menuContainer.appendChild(btn);
-                // İlk oyunu otomatik başlat
                 if (index === 0) loadGame("oyunlar/" + file.name, btn);
             });
 
@@ -118,7 +126,7 @@
 
     function loadGame(path, btn) {
         if (player) {
-            player.load(path); // Ruffle'a yeni oyun yolunu gönderiyoruz
+            player.load(path); 
         }
         document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
