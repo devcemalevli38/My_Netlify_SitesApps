@@ -12,7 +12,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: #111113; /* Ana arka plan siyah */
+            background: #111113;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -27,15 +27,14 @@
         }
 
         .lp-card {
-            background: #1c1c1e; /* Kart rengi koyu gri */
+            background: #1c1c1e;
             border: 0.5px solid rgba(255,255,255,0.08);
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            position: relative; /* QR butonu için gerekli */
+            position: relative;
         }
 
-        /* QR Butonu Stili */
         .qr-trigger {
             position: absolute;
             top: 15px;
@@ -60,7 +59,6 @@
             transform: scale(1.05);
         }
 
-        /* QR Modal (Açılır Pencere) */
         .qr-modal {
             position: fixed;
             top: 0;
@@ -69,7 +67,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(8px);
-            display: none; /* JS ile açılacak */
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000;
@@ -171,7 +169,6 @@
             text-decoration: underline;
         }
 
-        /* Links */
         .lp-links {
             padding: 20px 20px 8px;
         }
@@ -215,11 +212,11 @@
             flex-shrink: 0;
         }
 
-        .ic-purple { background: #3C3489; color: #CECBF6; }
-        .ic-pink   { background: #72243E; color: #F4C0D1; }
-        .ic-teal   { background: #085041; color: #9FE1CB; }
-        .ic-black  { background: #121212; color: #E0E0E0; }
-
+        .ic-purple  { background: #3C3489; color: #CECBF6; }
+        .ic-pink    { background: #72243E; color: #F4C0D1; }
+        .ic-teal    { background: #085041; color: #9FE1CB; }
+        .ic-black   { background: #121212; color: #E0E0E0; }
+        .ic-spotify { background: #14532d; color: #1ED760; }
 
         .lp-arrow {
             color: #636366;
@@ -287,7 +284,6 @@
     <div class="lp-wrap">
         <div class="lp-card">
             
-            <!-- QR Simge Butonu -->
             <div class="qr-trigger" onclick="toggleQR()" title="QR Kodu Göster">
                 <i class="fas fa-qrcode"></i>
             </div>
@@ -322,11 +318,18 @@
                     <i class="fas fa-arrow-right lp-arrow"></i>
                 </a>
 
-                <a
-href="Https://www.tiktok.com/@imcemalevli" class="lp-link" target="_blank">
+                <a href="https://www.tiktok.com/@imcemalevli" class="lp-link" target="_blank">
                     <div class="lp-link-left">
                         <div class="lp-icon-box ic-black"><i class="fab fa-tiktok"></i></div>
-                        <span>Tiktok</span>
+                        <span>TikTok</span>
+                    </div>
+                    <i class="fas fa-arrow-right lp-arrow"></i>
+                </a>
+
+                <a href="https://open.spotify.com/user/31r7za26zhchmq64y5vcssbvewtq?si=94f7c050c78b4f7a" class="lp-link" target="_blank">
+                    <div class="lp-link-left">
+                        <div class="lp-icon-box ic-spotify"><i class="fab fa-spotify"></i></div>
+                        <span>Spotify</span>
                     </div>
                     <i class="fas fa-arrow-right lp-arrow"></i>
                 </a>
@@ -353,7 +356,6 @@ href="Https://www.tiktok.com/@imcemalevli" class="lp-link" target="_blank">
         </div>
     </div>
 
-    <!-- QR Modal Yapısı -->
     <div class="qr-modal" id="qrModal" onclick="toggleQR()">
         <div class="qr-content" onclick="event.stopPropagation()">
             <img src="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/imcemalevli_qr.png" alt="QR Code">
@@ -363,7 +365,6 @@ href="Https://www.tiktok.com/@imcemalevli" class="lp-link" target="_blank">
     </div>
 
     <script>
-        // QR Modal Yönetimi
         function toggleQR() {
             const modal = document.getElementById('qrModal');
             if (modal.classList.contains('active')) {
@@ -406,7 +407,7 @@ href="Https://www.tiktok.com/@imcemalevli" class="lp-link" target="_blank">
             const bio = document.getElementById('lpBio');
             const fallback = [
                 '| Small wins lead to a big victory: @bunyanfen$$(https://www.instagram.com/bunyanfen/)$$ |',
-                '| 🖤@besiktas$$(https://www.instagram.com/besiktas/)$$ 🤍 | ;)'
+                '| 🖤@besiktas$$(https://www.instagram.com/besiktas/)$$ 🤍 | :)"'
             ];
             try {
                 const r = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/biography?t=' + Date.now());
