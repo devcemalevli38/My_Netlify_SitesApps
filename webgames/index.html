@@ -12,6 +12,10 @@
         .menu-btn:hover { background: #383838; border-color: #0078d4; }
         .menu-btn.active { background: #0078d4; border-color: #00a4ef; box-shadow: 0 0 10px rgba(0, 120, 212, 0.4); }
         
+        /* Yeni Eklenen Cihazdan Yükle Buton Stili */
+        .upload-btn { background: #d83b01; border-color: #a82e00; }
+        .upload-btn:hover { background: #e84c13; border-color: #ffffff; }
+
         .fullscreen-btn { background: #28a745; border-color: #1e7e34; margin-left: auto; }
         .fullscreen-btn:hover { background: #218838; border-color: #ffffff; }
 
@@ -47,20 +51,25 @@
 <div class="game-wrapper" id="main-display">
     <div class="iframe-container">
         <div id="ruffle-player"></div>
-    }</div>
+    </div>
 </div>
 
 <div class="game-info">
     <p id="current-game-text">Bu sitede emülatör olarak <a href="https://ruffle.rs/" target="_blank" style="color: #0078d4; text-decoration: none; font-weight: bold;">Ruffle</a> kullanılmaktadır.</p>
 </div>
 
+<!-- Gizli Dosya Seçme Inputu -->
+<input type="file" id="local-swf-file" accept=".swf" style="display: none;">
+
 <script src="ruffle/ruffle.js"></script>
 
 <script>
     const menuContainer = document.getElementById('dynamic-menu');
     const displayArea = document.getElementById('main-display');
+    const fileInput = document.getElementById('local-swf-file');
     
     let player = null;
+    let currentObjectUrl = null; // Hafıza sızıntısını önlemek için
 
     window.RufflePlayer = window.RufflePlayer || {};
     window.RufflePlayer.config = {
@@ -73,20 +82,19 @@
         const container = document.getElementById("ruffle-player");
         container.appendChild(player);
         
-        // Ölçeklendirmeyi orijinal boyutları koruyacak şekle getirdik
         player.config = {
             letterbox: "on",
-            scale: "showAll", // Oyunu ekrana yayarak bozmaz, orijinal oranında pencerene sığdırır
+            scale: "showAll", 
             forceScale: false,
             quality: "high"
         };
 
         fetchGames();
+        setupLocalFileLoader();
     });
 
     async function fetchGames() {
         try {
-            // Statik json dosyamızdan veriyi çekiyoruz
             const response = await fetch('oyunlar.json');
             
             if (!response.ok) {
@@ -96,6 +104,9 @@
             const swfFiles = await response.json();
 
             menuContainer.innerHTML = ""; 
+
+            // Cihazdan oyun yükleme butonunu en başa ekleyelim
+            addUploadButton();
 
             swfFiles.forEach((fileNameWithExtension, index) => {
                 const fileName = fileNameWithExtension.replace('.swf', '');
@@ -116,17 +127,58 @@
             addFullscreenButton();
 
         } catch (error) {
-            menuContainer.innerHTML = "<span style='color:red;'>Hata: Oyun listesi yüklenemedi!</span>";
+            menuContainer.innerHTML = "";
+            addUploadButton(); // Hata alınsa bile kullanıcın kendi dosya yükleme butonu görünmeye devam etsin
+            menuContainer.innerHTML += "<span style='color:red; margin-left: 10px;'>Sunucu oyun listesi yüklenemedi!</span>";
+            addFullscreenButton();
             console.error("Hata ayrıntısı:", error);
         }
     }
 
     function loadGame(path, btn) {
+        // Eski yüklenen yerel dosya URL'si varsa hafızadan temizle
+        if (currentObjectUrl) {
+            URL.revokeObjectURL(currentObjectUrl);
+            currentObjectUrl = null;
+        }
+
         if (player) {
             player.load(path); 
         }
         document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        if(btn) btn.classList.add('active');
+    }
+
+    // Cihazdan yükleme butonunu menüye yerleştirir
+    function addUploadButton() {
+        const uploadBtn = document.createElement('button');
+        uploadBtn.className = 'menu-btn upload-btn';
+        uploadBtn.id = 'upload-trigger-btn';
+        uploadBtn.innerHTML = '📂 Cihazdan SWF Yükle';
+        uploadBtn.onclick = () => {
+            fileInput.click(); // Gizli inputu tetikle
+        };
+        menuContainer.appendChild(uploadBtn);
+    }
+
+    // Dosya seçim işlemlerini dinleyen fonksiyon
+    function setupLocalFileLoader() {
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Seçilen dosyanın adını buton metni yapalım veya temiz düzenleyelim
+            const uploadBtn = document.getElementById('upload-trigger-btn');
+            
+            // Dosyayı Ruffle'a geçirmek için güvenli bir Blob URL oluşturuyoruz
+            currentObjectUrl = URL.createObjectURL(file);
+            
+            // Oyunu yükle
+            loadGame(currentObjectUrl, uploadBtn);
+            
+            // Inputu sıfırla ki aynı dosya üst üste seçilirse tekrar tetiklenebilsin
+            fileInput.value = '';
+        });
     }
 
     function addFullscreenButton() {
