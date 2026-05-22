@@ -444,7 +444,7 @@ async function loadProjects() {
         
         section.classList.remove("hidden");
         container.innerHTML = "";
-        items.filter(i => i.type === "dir" && i.name !== ".github" && i.name !== "My_Social_Media" && i.name !== "imcemo38" && i.name !== "imcemalevli" && i.name !== "suprizsite" && i.name !== "spotifyprofile" && i.name !== "spotifyplaylist" ).forEach(p => {
+        items.filter(i => i.type === "dir" && i.name !== ".github" && i.name !== "My_Social_Media" && i.name !== "imcemo38" && i.name !== "imcemalevli" && i.name !== "suprizsite" && i.name !== "spotifyprofile" && i.name !== "spotifyplaylist" && i.name !== "Portfolio_Site" ).forEach(p => {
             const card = document.createElement("a");
             card.className = "project-card";
             card.href = p.path;
