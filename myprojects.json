@@ -40,45 +40,23 @@
   },
   {
     "project": "Python-Hand-Mouse",
-    "version": "V1",
-    "stars": 1,
+    "version": "n/a",
+    "stars": 0,
     "forks": 0,
-    "source_zip": "https://github.com/cemal201138/Python-Hand-Mouse/archive/refs/tags/V1.zip",
-    "source_tar": "https://github.com/cemal201138/Python-Hand-Mouse/archive/refs/tags/V1.tar.gz",
-    "updated_at": "2025-10-15T13:29:54Z",
-    "downloadable_files": [
-      {
-        "file_name": "Hand_MouseV1.exe",
-        "download_url": "https://github.com/cemal201138/Python-Hand-Mouse/releases/download/V1/Hand_MouseV1.exe"
-      },
-      {
-        "file_name": "Hand_MouseV1.py",
-        "download_url": "https://github.com/cemal201138/Python-Hand-Mouse/releases/download/V1/Hand_MouseV1.py"
-      }
-    ]
+    "source_zip": "https://github.com/cemal201138/Python-Hand-Mouse/archive/refs/tags/n/a.zip",
+    "source_tar": "https://github.com/cemal201138/Python-Hand-Mouse/archive/refs/tags/n/a.tar.gz",
+    "updated_at": "n/a",
+    "downloadable_files": []
   },
   {
     "project": "Pushbullet-Sender-Android",
-    "version": "V1",
+    "version": "n/a",
     "stars": 1,
     "forks": 0,
-    "source_zip": "https://github.com/cemal201138/Pushbullet-Sender-Android/archive/refs/tags/V1.zip",
-    "source_tar": "https://github.com/cemal201138/Pushbullet-Sender-Android/archive/refs/tags/V1.tar.gz",
-    "updated_at": "2025-08-09T18:58:24Z",
-    "downloadable_files": [
-      {
-        "file_name": "apk-app-codeV1.html",
-        "download_url": "https://github.com/cemal201138/Pushbullet-Sender-Android/releases/download/V1/apk-app-codeV1.html"
-      },
-      {
-        "file_name": "apk-app-codeV1.txt",
-        "download_url": "https://github.com/cemal201138/Pushbullet-Sender-Android/releases/download/V1/apk-app-codeV1.txt"
-      },
-      {
-        "file_name": "_PushbulletSender_V1.apk",
-        "download_url": "https://github.com/cemal201138/Pushbullet-Sender-Android/releases/download/V1/_PushbulletSender_V1.apk"
-      }
-    ]
+    "source_zip": "https://github.com/cemal201138/Pushbullet-Sender-Android/archive/refs/tags/n/a.zip",
+    "source_tar": "https://github.com/cemal201138/Pushbullet-Sender-Android/archive/refs/tags/n/a.tar.gz",
+    "updated_at": "n/a",
+    "downloadable_files": []
   },
   {
     "project": "Python_Lock_App",
