@@ -15,6 +15,10 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html {
+            height: 100%;
+        }
+
         html, body {
             overflow-x: hidden;
             max-width: 100%;
@@ -23,19 +27,19 @@
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: #0b0b0f;
-            min-height: 100vh;
+            min-height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 40px 16px;
+            justify-content: flex-start;
+            padding: 24px 16px;
             color: #f4f4f5;
             position: relative;
         }
 
         body::before, body::after {
             content: '';
-            position: absolute;
+            position: fixed;
             width: 300px;
             height: 300px;
             border-radius: 50%;
@@ -43,6 +47,7 @@
             filter: blur(130px);
             opacity: 0.15;
             z-index: 0;
+            pointer-events: none;
         }
         body::before { top: -50px; left: -50px; }
         body::after { bottom: -50px; right: -50px; }
@@ -531,11 +536,7 @@
             try {
                 const r = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/biography?t=' + Date.now());
                 const d = await r.json();
-                if (d.bio && Array.isArray(d.bio)) {
-                    renderBio(d.bio);
-                } else {
-                    renderBio(fallback);
-                }
+                renderBio(d.bio && Array.isArray(d.bio) ? d.bio : fallback);
             } catch (e) {
                 renderBio(fallback);
                 console.error('Biyografi yükleme hatası:', e);
