@@ -29,7 +29,6 @@
             overflow-x: hidden;
         }
 
-        /* Arka Plan Siber Parlama Efektleri */
         body::before, body::after {
             content: '';
             position: absolute;
@@ -151,6 +150,16 @@
             line-height: 1.6;
             min-height: 48px;
             font-weight: 400;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Her biyografi satırı: nowrap ama taşmayı font-size ile otomatik küçült */
+        .lp-bio span {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: clamp(0.7rem, 3.5vw, 0.88rem);
         }
 
         .lp-bio-link {
@@ -238,7 +247,6 @@
             transform: scale(1.08);
         }
 
-        /* Neo-Glow Renk Paleti */
         .ic-pink     { background: rgba(236, 72, 153, 0.1); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.2); }
         .ic-facebook { background: rgba(24, 119, 242, 0.1); color: #1877f2; border: 1px solid rgba(24, 119, 242, 0.2); }
         .ic-tiktok   { background: rgba(255, 255, 255, 0.05); color: #e4e4e7; border: 1px solid rgba(255, 255, 255, 0.1); }
@@ -300,7 +308,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Modal Yapısı */
         .qr-modal {
             position: fixed;
             top: 0;
@@ -494,6 +501,27 @@
             return line;
         }
 
+        /* Satırı container genişliğine sığana kadar font-size küçültür */
+        function fitLine(span) {
+            const parent = span.parentElement;
+            if (!parent) return;
+            const maxWidth = parent.clientWidth;
+            let size = 14; /* 0.88rem ≈ 14px başlangıç */
+            span.style.fontSize = size + 'px';
+            while (span.scrollWidth > maxWidth && size > 9) {
+                size -= 0.5;
+                span.style.fontSize = size + 'px';
+            }
+        }
+
+        function renderBio(lines) {
+            const bio = document.getElementById('lpBio');
+            bio.innerHTML = lines
+                .map(l => `<span style="display:block;white-space:nowrap;overflow:hidden;">${parseLine(l)}</span>`)
+                .join('');
+            bio.querySelectorAll('span').forEach(fitLine);
+        }
+
         async function loadBiography() {
             const bio = document.getElementById('lpBio');
             const fallback = [
@@ -504,10 +532,12 @@
                 const r = await fetch('https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/biography?t=' + Date.now());
                 const d = await r.json();
                 if (d.bio && Array.isArray(d.bio)) {
-                    bio.innerHTML = d.bio.map(l => `<span style="display:block;white-space:nowrap">${parseLine(l)}</span>`).join('');
+                    renderBio(d.bio);
+                } else {
+                    renderBio(fallback);
                 }
             } catch (e) {
-                bio.innerHTML = fallback.map(l => `<span style="display:block;white-space:nowrap">${parseLine(l)}</span>`).join('');
+                renderBio(fallback);
                 console.error('Biyografi yükleme hatası:', e);
             }
         }
@@ -534,6 +564,11 @@
         window.addEventListener('DOMContentLoaded', () => {
             loadProfileImage();
             loadBiography();
+        });
+
+        /* Ekran boyutu değişirse (döndürme vb.) satırları yeniden fit et */
+        window.addEventListener('resize', () => {
+            document.querySelectorAll('#lpBio span').forEach(fitLine);
         });
     </script>
 </body>
