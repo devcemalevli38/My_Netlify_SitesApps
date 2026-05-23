@@ -15,6 +15,11 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html, body {
+            overflow-x: hidden;
+            max-width: 100%;
+        }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background: #0b0b0f;
@@ -26,7 +31,6 @@
             padding: 40px 16px;
             color: #f4f4f5;
             position: relative;
-            overflow-x: hidden;
         }
 
         body::before, body::after {
@@ -154,12 +158,10 @@
             overflow: hidden;
         }
 
-        /* Her biyografi satırı: nowrap ama taşmayı font-size ile otomatik küçült */
         .lp-bio span {
             display: block;
             white-space: nowrap;
             overflow: hidden;
-            font-size: clamp(0.7rem, 3.5vw, 0.88rem);
         }
 
         .lp-bio-link {
@@ -501,12 +503,11 @@
             return line;
         }
 
-        /* Satırı container genişliğine sığana kadar font-size küçültür */
         function fitLine(span) {
             const parent = span.parentElement;
             if (!parent) return;
             const maxWidth = parent.clientWidth;
-            let size = 14; /* 0.88rem ≈ 14px başlangıç */
+            let size = 14;
             span.style.fontSize = size + 'px';
             while (span.scrollWidth > maxWidth && size > 9) {
                 size -= 0.5;
@@ -523,7 +524,6 @@
         }
 
         async function loadBiography() {
-            const bio = document.getElementById('lpBio');
             const fallback = [
                 'Small wins lead to a big victory: @bunyanfen$$(https://www.instagram.com/bunyanfen/)$$',
                 '🖤 @besiktas$$(https://www.instagram.com/besiktas/)$$ 🤍'
@@ -566,7 +566,6 @@
             loadBiography();
         });
 
-        /* Ekran boyutu değişirse (döndürme vb.) satırları yeniden fit et */
         window.addEventListener('resize', () => {
             document.querySelectorAll('#lpBio span').forEach(fitLine);
         });
