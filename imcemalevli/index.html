@@ -104,11 +104,17 @@
             margin-bottom: 32px;
         }
 
-        .lp-avatar-ring {
+        .lp-avatar-container {
+            position: relative;
             width: 104px;
             height: 104px;
-            border-radius: 50%;
             margin: 0 auto 20px;
+        }
+
+        .lp-avatar-ring {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
             padding: 3px;
             background: linear-gradient(135deg, #4f46e5 0%, #c084fc 50%, #6366f1 100%);
             position: relative;
@@ -143,6 +149,42 @@
             object-fit: cover;
             border-radius: 50%;
             display: block;
+        }
+
+        /* Bilgisayarda Durum Rozeti CSS Alanı Merkezleme Düzeltmeleri */
+        .pc-status-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background: #22c55e !important;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border: 3px solid #131316;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.5);
+            z-index: 99;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* İkonun container içinde tam ortalanması sağlandı */
+        .pc-status-badge i {
+            color: #ffffff !important;
+            font-size: 11px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: auto !important;
+            height: auto !important;
+        }
+
+        .pc-status-badge.active {
+            opacity: 1 !important;
+            transform: scale(1) !important;
         }
 
         .lp-name {
@@ -386,9 +428,14 @@
             </div>
 
             <div class="lp-header">
-                <div class="lp-avatar-ring">
-                    <div class="lp-avatar-inner" id="lpAvatarInner">
-                        <i class="fas fa-user" style="font-size:1.8rem;color:#3f3f46"></i>
+                <div class="lp-avatar-container">
+                    <div class="lp-avatar-ring">
+                        <div class="lp-avatar-inner" id="lpAvatarInner">
+                            <i class="fas fa-user" style="font-size:1.8rem;color:#3f3f46"></i>
+                        </div>
+                    </div>
+                    <div class="pc-status-badge" id="pcStatusBadge" title="Bilgisayarda">
+                        <i class="fas fa-desktop"></i>
                     </div>
                 </div>
                 <div class="lp-name">Cemal Evli</div>
@@ -535,6 +582,28 @@
             }
         }
 
+        // Tailscale Sunucu Durum Kontrolü ve CORS Bypass Algoritması
+        async function checkPCStatus() {
+            const badge = document.getElementById('pcStatusBadge');
+            try {
+                // Tarayıcı CORS engellemelerini aşmak için 'no-cors' modu eklendi
+                const r = await fetch('https://cemal-pc.taileeb5ce.ts.net/?t=' + Date.now(), { 
+                    method: 'GET',
+                    mode: 'no-cors' 
+                });
+                
+                // no-cors modunda response tipi 'opaque' döner ve body doğrudan okunamaz.
+                // Eğer sunucu ayaktaysa fetch başarılı olur ve catch bloğuna düşmez.
+                badge.classList.add('active');
+                console.log('Tailscale bağlantısı başarılı: Cihaz çevrimiçi.');
+
+            } catch (e) {
+                // Eğer no-cors moduna rağmen catch'e düşüyorsa sunucu gerçekten kapalıdır ya da DNS çözümlenemiyordur
+                badge.classList.remove('active');
+                console.log('Tailscale sunucusuna şu an ulaşılamıyor.');
+            }
+        }
+
         async function refreshData() {
             const btn = document.getElementById('refreshBtn');
             const icon = document.getElementById('refreshIcon');
@@ -546,7 +615,7 @@
             bio.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size:11px; color:#6366f1"></i>';
             inner.innerHTML = '<i class="fas fa-circle-notch fa-spin" style="font-size:1.5rem;color:#71717a"></i>';
 
-            await Promise.all([loadProfileImage(), loadBiography()]);
+            await Promise.all([loadProfileImage(), loadBiography(), checkPCStatus()]);
 
             setTimeout(() => {
                 icon.classList.remove('rotating');
@@ -557,6 +626,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             loadProfileImage();
             loadBiography();
+            checkPCStatus();
         });
 
         window.addEventListener('resize', () => {
