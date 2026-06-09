@@ -174,7 +174,7 @@
                 <div class="loader hidden" id="main-loader"></div>
                 <div id="overlay-text" class="status-msg">Başlamak için soldaki menüden bir oyun seçin.</div>
             </div>
-            <iframe id="game-frame" class="hidden" sandbox="allow-scripts allow-same-origin"></iframe>
+            <iframe id="game-frame" class="hidden" sandbox="allow-scripts allow-same-origin allow-forms allow-modals"></iframe>
         </div>
     </div>
 
@@ -184,7 +184,11 @@
         const repoName = 'Offline-HTML-Games-Pack';
         const folderPath = 'offline';
         const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderPath}`;
-        const rawBaseUrl = `https://raw.githubusercontent.com/CoolDude2349/Offline-HTML-Games-Pack/master/offline/`;
+        
+        /* ÇÖZÜM: raw.githubusercontent.com doğrudan iframe içinde render edilmeye izin vermediği için,
+          dosyaları doğru MIME type (text/html) ile sunan githack / jsdelivr benzeri bir proxy yapısı kullanıyoruz.
+        */
+        const rawBaseUrl = `https://raw.githack.com/${repoOwner}/${repoName}/master/${folderPath}/`;
 
         const gameListElement = document.getElementById('game-list');
         const gameFrame = document.getElementById('game-frame');
@@ -246,7 +250,7 @@
             overlayText.textContent = `"${displayName}" yükleniyor, lütfen bekleyin...`;
             gameFrame.classList.add('hidden');
 
-            // Hedef oyunun raw kod kaynağını iframe'e ata
+            // Hedef oyunun githack URL'sini oluşturuyoruz
             const gameUrl = `${rawBaseUrl}${encodeURIComponent(fileName)}`;
             gameFrame.src = gameUrl;
 
