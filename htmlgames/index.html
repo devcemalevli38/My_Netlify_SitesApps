@@ -1,1 +1,290 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oyun Kütüphanesi</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent-color: #3b82f6;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Yan Menü (Oyun Listesi ve Arama) */
+        #sidebar {
+            width: 320px;
+            background-color: var(--card-bg);
+            border-right: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .search-container {
+            padding: 20px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .search-container h2 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #475569;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            outline: none;
+        }
+
+        #search-input:focus {
+            border-color: var(--accent-color);
+        }
+
+        #games-list {
+            list-style: none;
+            overflow-y: auto;
+            flex: 1;
+            padding: 10px;
+        }
+
+        .game-item {
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid transparent;
+        }
+
+        .game-item:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .game-item.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .game-item .game-name {
+            font-weight: 600;
+            display: block;
+            text-transform: capitalize;
+        }
+
+        /* Ana İçerik Alanı (Oyun Ekranı / iframe) */
+        #main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background-color: #020617;
+            position: relative;
+        }
+
+        #game-header {
+            padding: 15px 20px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #game-frame {
+            width: 100%;
+            flex: 1;
+            border: none;
+            background-color: #000;
+        }
+
+        .placeholder-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        .placeholder-text h3 {
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        #loading {
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        /* Kaydırma Çubuğu Özelleştirme */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <div class="search-container">
+            <h2>Oyun Arşivi</h2>
+            <input type="text" id="search-input" placeholder="Oyun ara...">
+        </div>
+        <div id="loading">Oyunlar yükleniyor...</div>
+        <ul id="games-list"></ul>
+    </div>
+
+    <div id="main-content">
+        <div id="game-placeholder" class="placeholder-text">
+            <h3>Kütüphaneye Hoş Geldiniz</h3>
+            <p>Oynamak istediğiniz oyunu sol taraftaki listeden seçin.</p>
+        </div>
+        <div id="game-header" style="display: none;">
+            <h2 id="current-game-title">Oyun Adı</h2>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Netlify Deployment</span>
+        </div>
+        <iframe id="game-frame" style="display: none;" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        // GitHub API ve Repository Bilgileri
+        const owner = "cemal201138";
+        const repo = "My_Netlify_SitesApps";
+        const path = "htmlgames/htmlgamesfolder";
+        
+        // GitHub Pages veya Netlify üzerindeki ham dosya/klasör yapısı için temel URL'ler
+        // Not: GitHub klasör yapısındaki alt klasörleri dinamik olarak çekmek için API kullanıyoruz.
+        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+        
+        // Netlify üzerinde sitenizin barındığı ana domain (veya github pages alt yapısı)
+        // Oyunların çalışabilmesi için iframe'e verilecek url formatı:
+        // Eğer her oyun kendi klasöründe bir 'index.html' ise ona göre yönlendirme yapılacaktır.
+        const baseContentUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}`;
+
+        let allGames = [];
+
+        // GitHub API'den verileri çekme
+        async function fetchGames() {
+            const loadingEl = document.getElementById('loading');
+            const gamesListEl = document.getElementById('games-list');
+
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error('API isteği başarısız oldu.');
+                
+                const data = await response.ok ? await response.json() : [];
+                
+                // Sadece klasörleri (her bir oyun klasörünü) veya doğrudan .html dosyalarını filtrele
+                // Sizin yapınızda her oyun bir klasör ise 'dir', tekil html ise 'file' kontrolü yapılır.
+                allGames = data.filter(item => item.type === 'dir' || item.name.endsWith('.html')).map(item => {
+                    // Temiz isim oluşturma (örn: "super-mario" -> "Super Mario")
+                    let cleanName = item.name.replace('.html', '').replace(/[-_]/g, ' ');
+                    
+                    // Oyunun çalıştırılacağı nihai URL'yi belirleme
+                    let gameUrl = '';
+                    if (item.type === 'dir') {
+                        // Klasör ise içindeki index.html'e yönlendir (GitHub Pages veya ham içerik mantığıyla)
+                        // Doğrudan raw.githubusercontent iframe içinde bazen çalışmayabilir (CORS/Mime type sebebiyle).
+                        // En sağlıklı yöntem oyunları Netlify URL'niz üzerinden açmaktır:
+                        gameUrl = `https://cemal201138.github.io/${repo}/${path}/${item.name}/index.html`; 
+                    } else {
+                        gameUrl = `https://cemal201138.github.io/${repo}/${path}/${item.name}`;
+                    }
+
+                    return {
+                        name: cleanName,
+                        originalName: item.name,
+                        url: gameUrl
+                    };
+                });
+
+                loadingEl.style.display = 'none';
+                renderGames(allGames);
+
+            } catch (error) {
+                console.error('Hata:', error);
+                loadingEl.innerText = "Oyunlar yüklenirken bir hata oluştu. (API limiti dolmuş olabilir)";
+            }
+        }
+
+        // Oyunları Listeleme
+        function renderGames(games) {
+            const gamesListEl = document.getElementById('games-list');
+            gamesListEl.innerHTML = '';
+
+            if(games.length === 0) {
+                gamesListEl.innerHTML = '<li style="padding:10px; color:var(--text-muted);">Oyun bulunamadı.</li>';
+                return;
+            }
+
+            games.forEach((game, index) => {
+                const li = document.createElement('li');
+                li.className = 'game-item';
+                li.innerHTML = `<span class="game-name">${game.name}</span>`;
+                li.addEventListener('click', () => selectGame(game, li));
+                gamesListEl.appendChild(li);
+            });
+        }
+
+        // Oyun Seçme ve Başlatma
+        function selectGame(game, element) {
+            // Aktif class değişimi
+            document.querySelectorAll('.game-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            // DOM Elemanlarını güncelleme
+            document.getElementById('game-placeholder').style.display = 'none';
+            document.getElementById('game-header').style.display = 'flex';
+            
+            const iframe = document.getElementById('game-frame');
+            iframe.style.display = 'block';
+            
+            // Başlığı güncelle ve oyunu yükle
+            document.getElementById('current-game-title').innerText = game.name;
+            iframe.src = game.url;
+        }
+
+        // Canlı Arama Fonksiyonu
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredGames = allGames.filter(game => game.name.toLowerCase().includes(searchTerm));
+            renderGames(filteredGames);
+        });
+
+        // Sayfa yüklendiğinde oyunları getir
+        window.addEventListener('DOMContentLoaded', fetchGames);
+    </script>
+</body>
+</html>
