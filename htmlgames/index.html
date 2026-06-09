@@ -173,7 +173,7 @@
         </div>
         <div id="game-header" style="display: none;">
             <h2 id="current-game-title">Oyun Adı</h2>
-            <span style="font-size: 0.85rem; color: var(--text-muted);">Cemal Evli</span>
+            <span id="game-status" style="font-size: 0.85rem; color: var(--text-muted);">Yükleniyor...</span>
         </div>
         <iframe id="game-frame" style="display: none;" allowfullscreen></iframe>
     </div>
@@ -184,49 +184,32 @@
         const repo = "My_Netlify_SitesApps";
         const path = "htmlgames/htmlgamesfolder";
         
-        // GitHub Pages veya Netlify üzerindeki ham dosya/klasör yapısı için temel URL'ler
-        // Not: GitHub klasör yapısındaki alt klasörleri dinamik olarak çekmek için API kullanıyoruz.
         const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-        
-        // Netlify üzerinde sitenizin barındığı ana domain (veya github pages alt yapısı)
-        // Oyunların çalışabilmesi için iframe'e verilecek url formatı:
-        // Eğer her oyun kendi klasöründe bir 'index.html' ise ona göre yönlendirme yapılacaktır.
-        const baseContentUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}`;
 
         let allGames = [];
 
-        // GitHub API'den verileri çekme
+        // GitHub API'den klasör/dosya yapısını çekme
         async function fetchGames() {
             const loadingEl = document.getElementById('loading');
-            const gamesListEl = document.getElementById('games-list');
-
             try {
                 const response = await fetch(apiUrl);
                 if (!response.ok) throw new Error('API isteği başarısız oldu.');
                 
-                const data = await response.ok ? await response.json() : [];
+                const data = await response.json();
                 
-                // Sadece klasörleri (her bir oyun klasörünü) veya doğrudan .html dosyalarını filtrele
-                // Sizin yapınızda her oyun bir klasör ise 'dir', tekil html ise 'file' kontrolü yapılır.
+                // .html uzantılı dosyaları veya doğrudan alt klasörleri listele
                 allGames = data.filter(item => item.type === 'dir' || item.name.endsWith('.html')).map(item => {
-                    // Temiz isim oluşturma (örn: "super-mario" -> "Super Mario")
                     let cleanName = item.name.replace('.html', '').replace(/[-_]/g, ' ');
                     
-                    // Oyunun çalıştırılacağı nihai URL'yi belirleme
-                    let gameUrl = '';
+                    // Eğer bir klasörse, içerisindeki index.html dosyasının indirileceği GitHub API URL'sini kurgula
+                    let downloadUrl = item.download_url;
                     if (item.type === 'dir') {
-                        // Klasör ise içindeki index.html'e yönlendir (GitHub Pages veya ham içerik mantığıyla)
-                        // Doğrudan raw.githubusercontent iframe içinde bazen çalışmayabilir (CORS/Mime type sebebiyle).
-                        // En sağlıklı yöntem oyunları Netlify URL'niz üzerinden açmaktır:
-                        gameUrl = `https://cemal201138.github.io/${repo}/${path}/${item.name}/index.html`; 
-                    } else {
-                        gameUrl = `https://cemal201138.github.io/${repo}/${path}/${item.name}`;
+                        downloadUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/${path}/${item.name}/index.html`;
                     }
 
                     return {
                         name: cleanName,
-                        originalName: item.name,
-                        url: gameUrl
+                        url: downloadUrl
                     };
                 });
 
@@ -235,11 +218,11 @@
 
             } catch (error) {
                 console.error('Hata:', error);
-                loadingEl.innerText = "Oyunlar yüklenirken bir hata oluştu. (API limiti dolmuş olabilir)";
+                loadingEl.innerText = "Oyun listesi yüklenemedi. API limiti dolmuş olabilir.";
             }
         }
 
-        // Oyunları Listeleme
+        // Oyunları Yan Menüye Listeleme
         function renderGames(games) {
             const gamesListEl = document.getElementById('games-list');
             gamesListEl.innerHTML = '';
@@ -249,7 +232,7 @@
                 return;
             }
 
-            games.forEach((game, index) => {
+            games.forEach((game) => {
                 const li = document.createElement('li');
                 li.className = 'game-item';
                 li.innerHTML = `<span class="game-name">${game.name}</span>`;
@@ -258,22 +241,42 @@
             });
         }
 
-        // Oyun Seçme ve Başlatma
-        function selectGame(game, element) {
-            // Aktif class değişimi
+        // Oyuna Tıklanınca HTML Kodunu Çekip iframe'e Gömme Fonksiyonu
+        async function selectGame(game, element) {
+            // Aktif menü tasarımı değişimi
             document.querySelectorAll('.game-item').forEach(el => el.classList.remove('active'));
             element.classList.add('active');
 
-            // DOM Elemanlarını güncelleme
+            // Görünüm alanlarını ayarlama
             document.getElementById('game-placeholder').style.display = 'none';
             document.getElementById('game-header').style.display = 'flex';
-            
-            const iframe = document.getElementById('game-frame');
-            iframe.style.display = 'block';
-            
-            // Başlığı güncelle ve oyunu yükle
             document.getElementById('current-game-title').innerText = game.name;
-            iframe.src = game.url;
+            
+            const statusEl = document.getElementById('game-status');
+            const iframe = document.getElementById('game-frame');
+            
+            statusEl.innerText = "Kaynak kodlar çekiliyor...";
+            statusEl.style.color = "var(--text-muted)";
+            iframe.style.display = 'none';
+
+            try {
+                // HTML kodunu doğrudan text olarak fetch ile talep ediyoruz
+                const response = await fetch(game.url);
+                if (!response.ok) throw new Error("Oyun kodları indirilemedi.");
+                
+                const htmlContent = await response.text();
+                
+                // Çekilen HTML içeriğini srcdoc özelliğini kullanarak iframe içine enjekte ediyoruz
+                iframe.srcdoc = htmlContent;
+                iframe.style.display = 'block';
+                statusEl.innerText = "Hazır";
+                statusEl.style.color = "#22c55e"; // Yeşil renk
+
+            } catch (error) {
+                console.error("Oyun yükleme hatası:", error);
+                statusEl.innerText = "Oyun yüklenirken hata oluştu!";
+                statusEl.style.color = "#ef4444"; // Kırmızı renk
+            }
         }
 
         // Canlı Arama Fonksiyonu
@@ -283,7 +286,7 @@
             renderGames(filteredGames);
         });
 
-        // Sayfa yüklendiğinde oyunları getir
+        // Sayfa hazır olduğunda çalıştır
         window.addEventListener('DOMContentLoaded', fetchGames);
     </script>
 </body>
