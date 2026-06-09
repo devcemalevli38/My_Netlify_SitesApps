@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Oyun Kitaplığı</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --sidebar-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --card-bg: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        /* Sol Menü (Oyun Listesi) */
+        #sidebar {
+            width: 300px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #475569;
+            z-index: 10;
+        }
+
+        #sidebar h2 {
+            padding: 20px;
+            font-size: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid #475569;
+            background: linear-gradient(45deg, #1e3a8a, var(--accent-color));
+        }
+
+        #game-list {
+            list-style: none;
+            overflow-y: auto;
+            flex-grow: 1;
+            padding: 10px;
+        }
+
+        #game-list li {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background-color: var(--card-bg);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.95rem;
+        }
+
+        #game-list li:hover {
+            background-color: var(--accent-color);
+            transform: translateX(5px);
+        }
+
+        #game-list li.active {
+            background-color: var(--accent-color);
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        /* Sağ Alan (Oyun Ekranı / İframe) */
+        #main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        #top-bar {
+            height: 60px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid #475569;
+        }
+
+        #game-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        #game-container {
+            flex-grow: 1;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background-color: #fff;
+        }
+
+        /* Yükleniyor ve Hata Mesajları */
+        .status-msg {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--accent-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loading-overlay {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--bg-color);
+            z-index: 5;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sidebar">
+        <h2>Arcade Kitaplığı</h2>
+        <ul id="game-list">
+            <div class="status-msg">Oyun listesi çekiliyor...</div>
+        </ul>
+    </div>
+
+    <div id="main-content">
+        <div id="top-bar">
+            <span id="game-title">Lütfen bir oyun seçin</span>
+        </div>
+        <div id="game-container">
+            <div id="loading-overlay">
+                <div class="loader hidden" id="main-loader"></div>
+                <div id="overlay-text" class="status-msg">Başlamak için soldaki menüden bir oyun seçin.</div>
+            </div>
+            <iframe id="game-frame" class="hidden" sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // GitHub API Ayarları
+        const repoOwner = 'CoolDude2349';
+        const repoName = 'Offline-HTML-Games-Pack';
+        const folderPath = 'offline';
+        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${folderPath}`;
+        const rawBaseUrl = `https://raw.githubusercontent.com/CoolDude2349/Offline-HTML-Games-Pack/master/offline/`;
+
+        const gameListElement = document.getElementById('game-list');
+        const gameFrame = document.getElementById('game-frame');
+        const gameTitle = document.getElementById('game-title');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const overlayText = document.getElementById('overlay-text');
+        const mainLoader = document.getElementById('main-loader');
+
+        // 1. AŞAMA: Sadece Oyun İsimlerini Çekip Menüye Ekleme
+        async function fetchGames() {
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error('API bağlantısı kurulamadı.');
+                
+                const files = await response.json();
+                const htmlGames = files.filter(file => file.name.endsWith('.html'));
+                
+                if(htmlGames.length === 0) {
+                    gameListElement.innerHTML = '<div class="status-msg">Klasörde çalıştırılabilir oyun bulunamadı.</div>';
+                    return;
+                }
+
+                renderGameList(htmlGames);
+            } catch (error) {
+                console.error('Hata:', error);
+                gameListElement.innerHTML = '<div class="status-msg" style="color:#ef4444;">Oyun listesi alınamadı!</div>';
+            }
+        }
+
+        // 2. AŞAMA: İsimleri DOM üzerine Listeleme
+        function renderGameList(games) {
+            gameListElement.innerHTML = ''; 
+            
+            games.forEach(game => {
+                const li = document.createElement('li');
+                const cleanName = game.name.replace('.html', '').replace(/-/g, ' ').replace(/_/g, ' ');
+                li.textContent = cleanName.toUpperCase();
+                
+                // Menü elemanına tıklandığında tetiklenecek asenkron yükleme mekanizması
+                li.addEventListener('click', () => {
+                    document.querySelectorAll('#game-list li').forEach(el => el.classList.remove('active'));
+                    li.classList.add('active');
+                    
+                    // Sadece tıklanan oyunu teker teker çeker
+                    loadGame(cleanName, game.name);
+                });
+                
+                gameListElement.appendChild(li);
+            });
+        }
+
+        // 3. AŞAMA: Tıklanan Oyunu Teker Teker Sağ Panelde Yükleme
+        function loadGame(displayName, fileName) {
+            gameTitle.textContent = displayName.toUpperCase();
+            
+            // Arayüzü "Yükleniyor" durumuna getir
+            loadingOverlay.classList.remove('hidden');
+            mainLoader.classList.remove('hidden'); // Spinner'ı göster
+            overlayText.textContent = `"${displayName}" yükleniyor, lütfen bekleyin...`;
+            gameFrame.classList.add('hidden');
+
+            // Hedef oyunun raw kod kaynağını iframe'e ata
+            const gameUrl = `${rawBaseUrl}${encodeURIComponent(fileName)}`;
+            gameFrame.src = gameUrl;
+
+            // Oyun tamamen yüklendiğinde tetiklenen event tetikleyicisi
+            gameFrame.onload = () => {
+                loadingOverlay.classList.add('hidden'); // Yükleme katmanını gizle
+                mainLoader.classList.add('hidden');
+                gameFrame.classList.remove('hidden'); // Oyunu göster
+            };
+        }
+
+        // Projeyi başlat
+        fetchGames();
+    </script>
+</body>
+</html>
