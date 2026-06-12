@@ -37,6 +37,14 @@
             display: flex;
             flex-direction: column;
             height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        /* Tam ekrandayken yan menüyü gizle */
+        body.fullscreen-mode #sidebar {
+            width: 0;
+            border-right: none;
+            overflow: hidden;
         }
 
         .search-container {
@@ -116,6 +124,33 @@
             align-items: center;
         }
 
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Tam Ekran Buton Stili */
+        #fullscreen-btn {
+            background-color: #334155;
+            color: var(--text-color);
+            border: 1px solid #475569;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: background 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #fullscreen-btn:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
         #game-frame {
             width: 100%;
             flex: 1;
@@ -174,7 +209,13 @@
         </div>
         <div id="game-header" style="display: none;">
             <h2 id="current-game-title">Oyun Adı</h2>
-            <span id="game-status" style="font-size: 0.85rem; color: var(--text-muted);">Yükleniyor...</span>
+            <div class="header-controls">
+                <span id="game-status" style="font-size: 0.85rem; color: var(--text-muted);">Yükleniyor...</span>
+                <button id="fullscreen-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+                    <span>Tam Ekran</span>
+                </button>
+            </div>
         </div>
         <iframe id="game-frame" style="display: none;" allowfullscreen></iframe>
     </div>
@@ -273,6 +314,11 @@
                 statusEl.innerText = "Hazır";
                 statusEl.style.color = "#22c55e"; // Yeşil renk
 
+                // Klavye odağını otomatik olarak iframe'e ver (Oyun tuşlarının çalışması için)
+                iframe.onload = () => {
+                    iframe.contentWindow.focus();
+                };
+
             } catch (error) {
                 console.error("Oyun yükleme hatası:", error);
                 statusEl.innerText = "Oyun yüklenirken hata oluştu!";
@@ -286,6 +332,58 @@
             const filteredGames = allGames.filter(game => game.name.toLowerCase().includes(searchTerm));
             renderGames(filteredGames);
         });
+
+        // --- TAM EKRAN FONKSİYONLARI ---
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        const mainContent = document.getElementById('main-content');
+
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                // Tam ekrana geçiş (Farklı tarayıcı destekleri ile)
+                if (mainContent.requestFullscreen) {
+                    mainContent.requestFullscreen();
+                } else if (mainContent.webkitRequestFullscreen) { /* Safari */
+                    mainContent.webkitRequestFullscreen();
+                } else if (mainContent.msRequestFullscreen) { /* IE11 */
+                    mainContent.msRequestFullscreen();
+                }
+            } else {
+                // Tam ekrandan çıkış
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        });
+
+        // Tarayıcının tam ekran değişim durumunu izleme (ESC tuşu dahil)
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
+        function handleFullscreenChange() {
+            const btnText = fullscreenBtn.querySelector('span');
+            const btnIcon = fullscreenBtn.querySelector('svg');
+
+            if (document.fullscreenElement) {
+                // Tam ekrana girildiğinde
+                document.body.classList.add('fullscreen-mode');
+                btnText.innerText = "Normal Ekran";
+                btnIcon.innerHTML = '<path d="M4 14h6v6m10-6h-6v6M4 10h6V4m10 6h-6V4"></path>'; // Çıkış ikonu
+                
+                // Oyunun klavye kontrollerini kaçırmamak için iframe odağını tazele
+                const iframe = document.getElementById('game-frame');
+                if(iframe) iframe.contentWindow.focus();
+            } else {
+                // Tam ekrandan çıkıldığında
+                document.body.classList.remove('fullscreen-mode');
+                btnText.innerText = "Tam Ekran";
+                btnIcon.innerHTML = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>'; // Giriş ikonu
+            }
+        }
 
         // Sayfa hazır olduğunda çalıştır
         window.addEventListener('DOMContentLoaded', fetchGames);
