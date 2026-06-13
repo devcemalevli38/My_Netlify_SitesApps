@@ -59,6 +59,12 @@
             margin-bottom: 26px;
         }
 
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
         .player, .volume-controls {
             display: flex;
             justify-content: center;
@@ -158,6 +164,78 @@
             font-size: 16px;
         }
 
+        /* --- UYUMLU ÖZEL MODAL (ONAY PENCERESİ) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 7, 10, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: linear-gradient(180deg, #141e2b, #0f1621);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 22px;
+            padding: 25px;
+            width: 85%;
+            max-width: 320px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            transform: scale(0.8);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .modal-text {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 22px;
+            line-height: 1.4;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            height: 45px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: none;
+        }
+
+        .modal-btn-cancel {
+            background: #1a2635;
+        }
+
+        .modal-btn-confirm {
+            background: var(--error) !important;
+        }
+
         /* --- ENTEGRE FOOTER TASARIMI --- */
         footer {
             margin-top: 40px;
@@ -188,7 +266,10 @@
 <div class="card">
     <div class="header">
         <h2 style="font-weight: 500; font-size: 1.2rem; margin: 0;">Medya Kontrol Pro</h2>
-        <button style="background:none; box-shadow:none; font-size: 20px; width: 40px; height: 40px;" onclick="toggleSettings()">⚙️</button>
+        <div class="header-actions">
+            <button style="background:none; box-shadow:none; font-size: 18px; width: 40px; height: 40px; border-radius: 50%;" onclick="openExitModal(this)">🛑</button>
+            <button style="background:none; box-shadow:none; font-size: 20px; width: 40px; height: 40px;" onclick="toggleSettings()">⚙️</button>
+        </div>
     </div>
 
     <div class="player">
@@ -218,6 +299,17 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="exitModal">
+    <div class="modal-content">
+        <h3 class="modal-title">Uygulamadan Çıkış</h3>
+        <p class="modal-text">Medya Kontrol Pro uygulamasını kapatmak istediğinize emin misiniz?</p>
+        <div class="modal-buttons">
+            <button class="modal-btn modal-btn-cancel" onclick="closeExitModal()">Vazgeç</button>
+            <button class="modal-btn modal-btn-confirm" id="modalConfirmBtn">Evet, Kapat</button>
+        </div>
+    </div>
+</div>
+
 <footer>
     <p>Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank"><b>Cemal Evli</b></a></p>
 </footer>
@@ -225,6 +317,7 @@
 <script>
     let serverUrl = localStorage.getItem("serverUrl") || "";
     document.getElementById("serverInput").value = serverUrl;
+    let activeExitButton = null;
 
     function toggleSettings() {
         const s = document.getElementById("settings");
@@ -252,6 +345,25 @@
         sendCommand(btn, 'open_url', urlValue);
     }
 
+    // Modal pencerelerini tetikleyen fonksiyonlar
+    function openExitModal(btn) {
+        activeExitButton = btn; // İstek durum rengini yansıtmak için butonu sakla
+        document.getElementById("exitModal").classList.add("active");
+    }
+
+    function closeExitModal() {
+        document.getElementById("exitModal").classList.remove("active");
+        activeExitButton = null;
+    }
+
+    // Modal içindeki onay butonunun dinleyicisi
+    document.getElementById("modalConfirmBtn").addEventListener("click", function() {
+        if (activeExitButton) {
+            sendCommand(activeExitButton, 'exitapp', '');
+        }
+        closeExitModal();
+    });
+
     function handleKeyPress(e) {
         if (e.key === "Enter") {
             handleUrlSend();
@@ -266,7 +378,7 @@
         }
 
         let baseUrl = serverUrl.replace(/\/+$/, "");
-        const finalUrl = `${baseUrl}/komut?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+        const finalUrl = `${baseUrl}/komut?title=${encodeURIComponent(title)}` + (body ? `&body=${encodeURIComponent(body)}` : '');
 
         fetch(finalUrl, {
             method: 'GET',
