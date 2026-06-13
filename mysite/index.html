@@ -101,16 +101,16 @@
     </div>
 
     <script>
-        // Aynı klasördeki data.json dosyasını hedef alıyoruz
         const DATA_URL = './data.json';
         let globalMediaData = { photos: [], videos: [], texts: [] };
+        // İndirilen metin içeriklerini önbelleğe almak için nesne
+        let fetchedTextsCache = {};
 
         function cleanTitle(filename) {
             const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.')) || filename;
             return nameWithoutExt.replace(/[-_]/g, ' ');
         }
 
-        // Sayfa yüklendiğinde data.json dosyasını çekiyoruz
         document.addEventListener("DOMContentLoaded", () => {
             fetch(DATA_URL)
                 .then(response => {
@@ -196,17 +196,39 @@
                 return;
             }
 
+            // Kart şablonlarını oluşturup container'a basıyoruz
             container.innerHTML = data.map((file, index) => {
                 const displayTitle = file.title || cleanTitle(file.name);
-                const summary = file.content.length > 150 ? file.content.substring(0, 150) + "..." : file.content;
+                const uniqueId = `text-summary-${index}`;
                 
+                // Arka planda gerçek .txt dosyasını indiriyoruz
+                fetch(file.download_url)
+                    .then(res => {
+                        if (!res.ok) throw new Error("Yazı içeriği yüklenemedi");
+                        return res.text();
+                    })
+                    .then(text => {
+                        // Çekilen metni modalda göstermek üzere önbelleğe alıyoruz
+                        fetchedTextsCache[index] = text;
+                        // Özet kısmını güncelliyoruz
+                        const summaryEl = document.getElementById(uniqueId);
+                        if (summaryEl) {
+                            summaryEl.innerText = text.length > 150 ? text.substring(0, 150) + "..." : text;
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        const summaryEl = document.getElementById(uniqueId);
+                        if (summaryEl) summaryEl.innerText = "İçerik yüklenirken hata oluştu.";
+                    });
+
                 return `
                     <article class="group bg-neutral-900/20 hover:bg-neutral-900/40 border border-neutral-900 hover:border-neutral-800 p-6 rounded-2xl transition-all duration-300 cursor-pointer shadow-lg animate-fade-in" onclick="openArticle(${index})">
                         <div class="flex items-center gap-3 text-[11px] text-neutral-500 font-semibold mb-4">
                             <span class="text-indigo-400 tracking-wider font-bold">YAZI / BLOG</span>
                         </div>
                         <h2 class="text-xl font-bold text-white group-hover:text-indigo-400 transition-colors duration-300 mb-3 tracking-tight capitalize">${displayTitle}</h2>
-                        <p class="text-neutral-400 text-sm font-light leading-relaxed line-clamp-2">${summary}</p>
+                        <p id="${uniqueId}" class="text-neutral-400 text-sm font-light leading-relaxed line-clamp-2">Yazı yükleniyor...</p>
                         <div class="mt-4 flex items-center text-xs text-neutral-400 font-medium group-hover:text-white transition-colors duration-300">
                             Okumaya Devam Et <i class="fa-solid fa-arrow-right-long ml-2 transition-transform group-hover:translate-x-1"></i>
                         </div>
@@ -258,8 +280,10 @@
             const modal = document.getElementById('article-modal');
             const innerContainer = modal.querySelector('div');
             
+            const contentText = fetchedTextsCache[index] || "Yazı içeriği yükleniyor, lütfen bekleyin...";
+            
             document.getElementById('modal-title').innerText = file.title || cleanTitle(file.name);
-            document.getElementById('modal-content').innerText = file.content;
+            document.getElementById('modal-content').innerText = contentText;
             
             modal.classList.remove('hidden');
             modal.classList.add('flex');
