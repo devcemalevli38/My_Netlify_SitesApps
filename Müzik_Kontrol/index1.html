@@ -276,12 +276,23 @@
 </div>
 
 <footer>
-    <p>Tüm hakları saklıdir. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank"><b>Cemal Evli</b></a></p>
+    <p>Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank"><b>Cemal Evli</b></a></p>
 </footer>
 
 <script>
     let serverUrl = localStorage.getItem("serverUrl") || "";
     let devices = JSON.parse(localStorage.getItem("devices")) || [];
+
+    // Localhost'u otomatik olarak listeye dahil etme mekanizması (Eğer hiç yoksa)
+    const defaultLocal = "http://127.0.0.1:5000";
+    if (devices.filter(d => d.url === defaultLocal).length === 0) {
+        devices.push({ name: "Yerel PC (Localhost)", url: defaultLocal });
+        localStorage.setItem("devices", JSON.stringify(devices));
+        if(!serverUrl) {
+            serverUrl = defaultLocal;
+            localStorage.setItem("serverUrl", defaultLocal);
+        }
+    }
 
     // Sayfa açıldığında kurulumları yap
     document.getElementById("serverInput").value = serverUrl ? serverUrl.replace(/^https?:\/\//, '') : "";
@@ -293,23 +304,20 @@
         s.style.display = (s.style.display === "block") ? "none" : "block";
     }
 
-    // Listeye yeni Spotify mantığında cihaz ekleme
+    // Cihaz ekleme fonksiyonu
     function addNewDevice() {
         let val = document.getElementById("serverInput").value.trim();
         if (!val) return alert("Lütfen geçerli bir IP ve Port girin!");
         if (!val.startsWith('http')) val = 'http://' + val;
 
-        // Cihazın aktif olup olmadığını kontrol ederek ekle
         fetch(`${val}/cihaz-bilgisi`)
         .then(res => res.json())
         .then(data => {
             const newDevice = { name: data.cihaz_adi, url: val };
-            // Mükerrer kaydı engelle
             devices = devices.filter(d => d.url !== val);
             devices.push(newDevice);
             localStorage.setItem("devices", JSON.stringify(devices));
             
-            // Eklenen cihazı doğrudan aktif yap
             selectDevice(val, data.cihaz_adi);
             renderDevices();
             alert(`Cihaz Başarıyla Eklendi: ${data.cihaz_adi}`);
@@ -342,7 +350,6 @@
         });
     }
 
-    // Cihaz seçimi gerçekleştirme
     function selectDevice(url, name) {
         serverUrl = url;
         localStorage.setItem("serverUrl", serverUrl);
@@ -350,7 +357,6 @@
         checkDeviceStatus();
     }
 
-    // Aktif cihazın durumunu kontrol etme ve panel güncelleme
     function checkDeviceStatus() {
         const nameSpan = document.getElementById("activeDeviceName");
         if (!serverUrl) {
@@ -399,7 +405,6 @@
         let baseUrl = serverUrl.replace(/\/+$/, "");
         const finalUrl = `${baseUrl}/komut?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
 
-        // CORS aktif edildiği için tam kontrollü fetch modu (cors) kullanılıyor.
         fetch(finalUrl, {
             method: 'GET',
             mode: 'cors',
