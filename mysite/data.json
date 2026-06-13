@@ -13,9 +13,8 @@
   ],
   "texts": [
     {
-      "name": "selam.txt",
-      "title": "İlk Yazı",
-      "content": "Bu alana depondaki yazi.txt dosyasının içeriğini veya doğrudan yayınlamak istediğin blog metnini ekleyebilirsin. Çift tırnak işaretlerine ve JSON format kurallarına dikkat etmen yeterlidir."
+      "name": "test.txt",
+      "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/mysite/texts/test.txt"
     }
   ]
 }
