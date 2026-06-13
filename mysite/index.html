@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cemal Evli | Kişisel Portfolyo</title>
+    <title>Cemal Evli | Kişisel Blog</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,35 +11,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .animate-fade-in {
-            animation: cubicBlurIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .animate-fade-in { animation: cubicBlurIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes cubicBlurIn {
             from { opacity: 0; transform: translateY(15px); filter: blur(4px); }
             to { opacity: 1; transform: translateY(0); filter: blur(0); }
         }
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #262626;
-            border-radius: 999px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #4f46e5;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #262626; border-radius: 999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
     </style>
 </head>
 <body class="bg-[#050505] text-neutral-200 antialiased selection:bg-indigo-500/30 selection:text-indigo-200 overflow-x-hidden">
@@ -80,7 +63,7 @@
         <p class="text-base sm:text-lg text-neutral-400 max-w-2xl mx-auto leading-relaxed font-light">
             Objektifime takılan kareleri, hazırladığım video projelerini ve kişisel yazılarımı bu platformda bulabilirsiniz.
         </p>
-        
+
         <div class="mt-8 flex justify-center gap-3 flex-wrap">
             <a href="https://github.com/cemal201138" target="_blank" class="w-11 h-11 bg-neutral-900/60 border border-neutral-800/80 hover:border-indigo-500/50 rounded-xl flex items-center justify-center text-neutral-400 hover:text-white hover:-translate-y-1 transition-all duration-300 shadow-sm"><i class="fa-brands fa-github text-lg"></i></a>
             <a href="https://www.instagram.com/cemalevli38/" target="_blank" class="w-11 h-11 bg-neutral-900/60 border border-neutral-800/80 hover:border-indigo-500/50 rounded-xl flex items-center justify-center text-neutral-400 hover:text-white hover:-translate-y-1 transition-all duration-300 shadow-sm"><i class="fa-brands fa-instagram text-lg"></i></a>
@@ -93,19 +76,19 @@
     <main class="relative z-10 max-w-5xl mx-auto px-6 pb-32">
         <section id="photos" class="tab-content active">
             <div id="photos-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                <p class="text-neutral-500 text-sm col-span-full text-center py-12">Fotoğraflar taranıyor...</p>
+                <p class="text-neutral-500 text-sm col-span-full text-center py-12">Fotoğraflar yükleniyor...</p>
             </div>
         </section>
 
         <section id="videos" class="tab-content">
             <div id="videos-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <p class="text-neutral-500 text-sm col-span-full text-center py-12">Videolar taranıyor...</p>
+                <p class="text-neutral-500 text-sm col-span-full text-center py-12">Videolar yükleniyor...</p>
             </div>
         </section>
 
         <section id="posts" class="tab-content">
             <div id="posts-container" class="space-y-6 max-w-3xl mx-auto">
-                <p class="text-neutral-500 text-sm text-center py-12">Yazılar taranıyor...</p>
+                <p class="text-neutral-500 text-sm text-center py-12">Yazılar yükleniyor...</p>
             </div>
         </section>
     </main>
@@ -124,9 +107,9 @@
     </div>
 
     <script>
-        const GH_USER = 'cemal201138';
-        const GH_REPO = 'My_Netlify_SitesApps';
-        const GH_PATH = 'mysite';
+        const PHOTOS_JSON = './mysite/photos.json';
+        const VIDEOS_JSON = './mysite/videos.json';
+        const TEXTS_JSON = './mysite/texts.json';
 
         function cleanTitle(filename) {
             const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.')) || filename;
@@ -140,23 +123,16 @@
         });
 
         function loadPhotos() {
-            const url = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_PATH}/photos`;
-            fetch(url)
+            fetch(PHOTOS_JSON)
                 .then(res => res.json())
                 .then(files => {
                     const grid = document.getElementById('photos-grid');
-                    if (!Array.isArray(files) || files.length === 0) {
-                        grid.innerHTML = `<p class="text-neutral-600 text-sm col-span-full text-center py-12">photos klasöründe görsel bulunamadı.</p>`;
-                        return;
-                    }
-                    
                     const validImages = files.filter(f => /\.(png|jpe?g|gif|webp|svg)$/i.test(f.name));
                     
-                    if(validImages.length === 0) {
-                        grid.innerHTML = `<p class="text-neutral-600 text-sm col-span-full text-center py-12">Uyumlu görsel dosyası bulunamadı.</p>`;
+                    if (validImages.length === 0) {
+                        grid.innerHTML = `<p class="text-neutral-600 text-sm col-span-full text-center py-12">Görsel bulunamadı veya JSON güncelleniyor.</p>`;
                         return;
                     }
-
                     grid.innerHTML = validImages.map(file => {
                         const title = cleanTitle(file.name);
                         return `
@@ -173,31 +149,22 @@
                             </div>
                         `;
                     }).join('');
-                })
-                .catch(err => {
-                    console.error(err);
-                    document.getElementById('photos-grid').innerHTML = `<p class="text-red-500/50 text-sm col-span-full text-center py-12">Görseller yüklenirken hata oluştu.</p>`;
+                }).catch(() => {
+                    document.getElementById('photos-grid').innerHTML = `<p class="text-neutral-600 text-sm col-span-full text-center py-12">Görseller yüklenemedi.</p>`;
                 });
         }
 
         function loadVideos() {
-            const url = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_PATH}/videos`;
-            fetch(url)
+            fetch(VIDEOS_JSON)
                 .then(res => res.json())
                 .then(files => {
                     const grid = document.getElementById('videos-grid');
-                    if (!Array.isArray(files) || files.length === 0) {
-                        grid.innerHTML = `<p class="text-neutral-600 text-sm col-span-full text-center py-12">videos klasöründe video bulunamadı.</p>`;
-                        return;
-                    }
-
                     const validVideos = files.filter(f => /\.(mp4|webm|ogg)$/i.test(f.name));
 
-                    if(validVideos.length === 0) {
-                        grid.innerHTML = `<p class="text-neutral-600 text-sm col-span-full text-center py-12">Uyumlu video dosyası bulunamadı.</p>`;
+                    if (validVideos.length === 0) {
+                        grid.innerHTML = `<p class="text-neutral-600 text-sm col-span-full text-center py-12">Video bulunamadı veya JSON güncelleniyor.</p>`;
                         return;
                     }
-
                     grid.innerHTML = validVideos.map(file => {
                         const title = cleanTitle(file.name);
                         return `
@@ -216,32 +183,23 @@
                             </div>
                         `;
                     }).join('');
-                })
-                .catch(err => {
-                    console.error(err);
-                    document.getElementById('videos-grid').innerHTML = `<p class="text-red-500/50 text-sm col-span-full text-center py-12">Videolar yüklenirken hata oluştu.</p>`;
+                }).catch(() => {
+                    document.getElementById('videos-grid').innerHTML = `<p class="text-neutral-600 text-sm col-span-full text-center py-12">Videolar yüklenemedi.</p>`;
                 });
         }
 
         function loadTexts() {
-            const url = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/${GH_PATH}/texts`;
-            fetch(url)
+            fetch(TEXTS_JSON)
                 .then(res => res.json())
                 .then(files => {
                     const container = document.getElementById('posts-container');
-                    if (!Array.isArray(files) || files.length === 0) {
-                        container.innerHTML = `<p class="text-neutral-600 text-sm text-center py-12">texts klasöründe yazı dosyası bulunamadı.</p>`;
-                        return;
-                    }
-
                     const validTexts = files.filter(f => f.name.endsWith('.txt'));
-                    if(validTexts.length === 0) {
-                        container.innerHTML = `<p class="text-neutral-600 text-sm text-center py-12">Uyumlu yazı (.txt) dosyası bulunamadı.</p>`;
+
+                    if (validTexts.length === 0) {
+                        container.innerHTML = `<p class="text-neutral-600 text-sm text-center py-12">Yazı bulunamadı veya JSON güncelleniyor.</p>`;
                         return;
                     }
-
                     container.innerHTML = '';
-
                     validTexts.forEach(file => {
                         const title = cleanTitle(file.name);
                         
@@ -249,7 +207,6 @@
                             .then(r => r.text())
                             .then(content => {
                                 const summary = content.length > 150 ? content.substring(0, 150) + "..." : content;
-                                
                                 const articleHTML = `
                                     <article class="group bg-neutral-900/20 hover:bg-neutral-900/40 border border-neutral-900 hover:border-neutral-800 p-6 rounded-2xl transition-all duration-300 cursor-pointer shadow-lg animate-fade-in" onclick="openArticle(this)">
                                         <div class="flex items-center gap-3 text-[11px] text-neutral-500 font-semibold mb-4">
@@ -266,10 +223,8 @@
                                 container.insertAdjacentHTML('beforeend', articleHTML);
                             });
                     });
-                })
-                .catch(err => {
-                    console.error(err);
-                    document.getElementById('posts-container').innerHTML = `<p class="text-red-500/50 text-sm text-center py-12">Yazılar yüklenirken hata oluştu.</p>`;
+                }).catch(() => {
+                    document.getElementById('posts-container').innerHTML = `<p class="text-neutral-600 text-sm text-center py-12">Yazılar yüklenemedi.</p>`;
                 });
         }
 
@@ -279,10 +234,8 @@
                 btn.classList.remove('bg-neutral-800/80', 'text-white', 'shadow-sm');
                 btn.classList.add('text-neutral-400');
             });
-
             const activeContent = document.getElementById(tabId);
             activeContent.classList.add('active');
-            
             const activeBtn = document.getElementById('btn-' + tabId);
             activeBtn.classList.remove('text-neutral-400');
             activeBtn.classList.add('bg-neutral-800/80', 'text-white', 'shadow-sm');
@@ -299,6 +252,7 @@
                 img.classList.remove('scale-95');
             }, 10);
         }
+        
         function closeLightbox() {
             const lightbox = document.getElementById('lightbox');
             const img = document.getElementById('lightbox-img');
@@ -313,12 +267,10 @@
         function openArticle(element) {
             const title = element.querySelector('.article-title').innerText;
             const fullContent = element.querySelector('.raw-content').innerText;
-
             const modal = document.getElementById('article-modal');
             const innerContainer = modal.querySelector('div');
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-content').innerText = fullContent;
-            
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             setTimeout(() => {
@@ -326,14 +278,13 @@
                 innerContainer.classList.remove('scale-95');
             }, 10);
         }
+        
         function closeArticle() {
             const modal = document.getElementById('article-modal');
             const innerContainer = modal.querySelector('div');
             modal.classList.add('opacity-0');
             innerContainer.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
         }
     </script>
 </body>
