@@ -176,6 +176,19 @@
             font-size: 16px;
         }
 
+        .disconnect-btn {
+            background: var(--error) !important;
+            color: #fff !important;
+            border-radius: 6px !important;
+            padding: 2px 8px;
+            font-size: 10px !important;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: none !important;
+            cursor: pointer;
+            display: inline-block;
+        }
+
         .device-list {
             margin-top: 10px;
             background: rgba(0, 0, 0, 0.2);
@@ -269,7 +282,10 @@
         <input id="serverInput" type="text" placeholder="Örn: 192.168.1.5:5000">
         <button onclick="addNewDevice()" style="width:100%; border-radius:8px; height:40px; background:var(--accent); font-weight: bold; margin-bottom: 15px;">CİHAZI LISTEYE EKLE</button>
         
-        <div class="volume-section-title" style="text-align:left; margin-bottom: 5px;">Kullanılabilir Cihazlar</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+            <div class="volume-section-title" style="text-align:left; margin: 0;">Kullanılabilir Cihazlar</div>
+            <button id="disconnectBtn" class="disconnect-btn" onclick="disconnectDevice()" style="display: none;">Bağlantıyı Kes</button>
+        </div>
         <div class="device-list" id="deviceList">
             </div>
     </div>
@@ -283,24 +299,48 @@
     let serverUrl = localStorage.getItem("serverUrl") || "";
     let devices = JSON.parse(localStorage.getItem("devices")) || [];
 
-    // Localhost'u otomatik olarak listeye dahil et ama AKTİF BAĞLANTI yapma
-    const defaultLocal = "http://127.0.0.1:5000";
-    if (devices.filter(d => d.url === defaultLocal).length === 0) {
-        devices.push({ name: "Yerel PC (Localhost)", url: defaultLocal });
-        localStorage.setItem("devices", JSON.stringify(devices));
-    }
-
-    // Sayfa açıldığında kurulumları yap (Otomatik bağlanma kaldırıldı)
+    // Sayfa açıldığında kurulumları yap ve dinamik Localhost kontrolünü başlat
     document.getElementById("serverInput").value = serverUrl ? serverUrl.replace(/^https?:\/\//, '') : "";
-    renderDevices();
-    checkDeviceStatus();
+    
+    checkLocalhostAndRender();
 
     function toggleSettings() {
         const s = document.getElementById("settings");
         s.style.display = (s.style.display === "block") ? "none" : "block";
     }
 
-    // Cihaz ekleme fonksiyonu (Ekler eklemez otomatik seçer)
+    // Localhost'un aktif olup olmadığını kontrol eden fonksiyon
+    function checkLocalhostAndRender() {
+        const defaultLocal = "http://127.0.0.1:5000";
+        
+        // Önce listede eski körü körüne eklenmiş IP tabanlı localhost varsa temizle
+        devices = devices.filter(d => d.url !== defaultLocal || d.name !== "Yerel PC (Localhost)");
+
+        fetch(`${defaultLocal}/cihaz-bilgisi`)
+        .then(res => res.json())
+        .then(data => {
+            // Eğer localhost açıksa ve bilgisayar adı alındıysa listeye ekle
+            if (data && data.cihaz_adi) {
+                devices = devices.filter(d => d.url !== defaultLocal);
+                devices.push({ name: data.cihaz_adi, url: defaultLocal });
+                localStorage.setItem("devices", JSON.stringify(devices));
+            }
+            finalizeUI();
+        })
+        .catch(() => {
+            // Localhost kapalıysa veya yanıt vermiyorsa listeden tamamen uçur
+            devices = devices.filter(d => d.url !== defaultLocal);
+            localStorage.setItem("devices", JSON.stringify(devices));
+            finalizeUI();
+        });
+    }
+
+    function finalizeUI() {
+        renderDevices();
+        checkDeviceStatus();
+    }
+
+    // Cihaz ekleme fonksiyonu
     function addNewDevice() {
         let val = document.getElementById("serverInput").value.trim();
         if (!val) return alert("Lütfen geçerli bir IP ve Port girin!");
@@ -334,7 +374,7 @@
         }
 
         devices.forEach(d => {
-            const isActive = d.url === serverUrl;
+            const isActive = serverUrl && d.url === serverUrl;
             const item = document.createElement("div");
             item.className = `device-item ${isActive ? 'active' : ''}`;
             item.innerHTML = `
@@ -344,12 +384,28 @@
             item.onclick = () => selectDevice(d.url, d.name);
             listDiv.appendChild(item);
         });
+
+        // Bağlantıyı kes butonunun görünürlüğünü güncelle
+        const disBtn = document.getElementById("disconnectBtn");
+        if (serverUrl) {
+            disBtn.style.display = "inline-block";
+        } else {
+            disBtn.style.display = "none";
+        }
     }
 
-    // Sadece tıklandığında cihazı aktif hale getirir
+    // Cihaz seçme fonksiyonu
     function selectDevice(url, name) {
         serverUrl = url;
         localStorage.setItem("serverUrl", serverUrl);
+        renderDevices();
+        checkDeviceStatus();
+    }
+
+    // Bağlantıyı tamamen koparma fonksiyonu
+    function disconnectDevice() {
+        serverUrl = "";
+        localStorage.removeItem("serverUrl");
         renderDevices();
         checkDeviceStatus();
     }
