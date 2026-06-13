@@ -286,8 +286,7 @@
             <div class="volume-section-title" style="text-align:left; margin: 0;">Kullanılabilir Cihazlar</div>
             <button id="disconnectBtn" class="disconnect-btn" onclick="disconnectDevice()" style="display: none;">Bağlantıyı Kes</button>
         </div>
-        <div class="device-list" id="deviceList">
-            </div>
+        <div class="device-list" id="deviceList"></div>
     </div>
 </div>
 
@@ -301,7 +300,6 @@
 
     document.getElementById("serverInput").value = serverUrl ? serverUrl.replace(/^https?:\/\//, '') : "";
     
-    // Sayfa açıldığında doğrudan kayıtlı cihazların arayüz güncellemelerini tetikle
     finalizeUI();
 
     function toggleSettings() {
@@ -314,7 +312,6 @@
         checkDeviceStatus();
     }
 
-    // Cihaz ekleme fonksiyonu
     function addNewDevice() {
         let val = document.getElementById("serverInput").value.trim();
         if (!val) return alert("Lütfen geçerli bir IP ve Port girin!");
@@ -323,7 +320,6 @@
         fetch(`${val}/cihaz-bilgisi`)
         .then(res => res.json())
         .then(data => {
-            // Backend'den gelen gerçek yerel IP adresini baz alarak kaydet (127.0.0.1'i engellemek için)
             const targetUrl = `http://${data.yerel_ip}:${data.port}`;
             const newDevice = { name: data.cihaz_adi, url: targetUrl };
             
@@ -332,7 +328,6 @@
             localStorage.setItem("devices", JSON.stringify(devices));
             
             selectDevice(targetUrl, data.cihaz_adi);
-            renderDevices();
             alert(`Cihaz Başarıyla Eklendi: ${data.cihaz_adi} (${data.yerel_ip})`);
         })
         .catch(() => {
@@ -340,7 +335,6 @@
         });
     }
 
-    // Cihazları listeleme
     function renderDevices() {
         const listDiv = document.getElementById("deviceList");
         listDiv.innerHTML = "";
@@ -351,7 +345,7 @@
         }
 
         devices.forEach(d => {
-            const isActive = serverUrl && d.url === serverUrl;
+            const isActive = serverUrl && d.url.replace(/\/+$/, "") === serverUrl.replace(/\/+$/, "");
             const item = document.createElement("div");
             item.className = `device-item ${isActive ? 'active' : ''}`;
             item.innerHTML = `
@@ -370,7 +364,6 @@
         }
     }
 
-    // Cihaz seçme fonksiyonu
     function selectDevice(url, name) {
         serverUrl = url;
         localStorage.setItem("serverUrl", serverUrl);
@@ -378,7 +371,6 @@
         checkDeviceStatus();
     }
 
-    // Bağlantıyı tamamen koparma fonksiyonu
     function disconnectDevice() {
         serverUrl = "";
         localStorage.removeItem("serverUrl");
