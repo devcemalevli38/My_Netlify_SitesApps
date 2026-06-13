@@ -1,9 +1,6 @@
 name: Canli API ile Medya Listesini Guncelle
 
 on:
-  push:
-    branches:
-      - main # main branch'ine kod pushlandığında çalışır
   schedule:
     - cron: '0 */1 * * *' # Her 6 saatte bir otomatik çalışıp listeyi günceller
   workflow_dispatch: # İstediğinde GitHub panelinden elle tetiklemen için
