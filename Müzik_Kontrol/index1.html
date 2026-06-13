@@ -283,18 +283,14 @@
     let serverUrl = localStorage.getItem("serverUrl") || "";
     let devices = JSON.parse(localStorage.getItem("devices")) || [];
 
-    // Localhost'u otomatik olarak listeye dahil etme mekanizması (Eğer hiç yoksa)
+    // Localhost'u otomatik olarak listeye dahil et ama AKTİF BAĞLANTI yapma
     const defaultLocal = "http://127.0.0.1:5000";
     if (devices.filter(d => d.url === defaultLocal).length === 0) {
         devices.push({ name: "Yerel PC (Localhost)", url: defaultLocal });
         localStorage.setItem("devices", JSON.stringify(devices));
-        if(!serverUrl) {
-            serverUrl = defaultLocal;
-            localStorage.setItem("serverUrl", defaultLocal);
-        }
     }
 
-    // Sayfa açıldığında kurulumları yap
+    // Sayfa açıldığında kurulumları yap (Otomatik bağlanma kaldırıldı)
     document.getElementById("serverInput").value = serverUrl ? serverUrl.replace(/^https?:\/\//, '') : "";
     renderDevices();
     checkDeviceStatus();
@@ -304,7 +300,7 @@
         s.style.display = (s.style.display === "block") ? "none" : "block";
     }
 
-    // Cihaz ekleme fonksiyonu
+    // Cihaz ekleme fonksiyonu (Ekler eklemez otomatik seçer)
     function addNewDevice() {
         let val = document.getElementById("serverInput").value.trim();
         if (!val) return alert("Lütfen geçerli bir IP ve Port girin!");
@@ -350,6 +346,7 @@
         });
     }
 
+    // Sadece tıklandığında cihazı aktif hale getirir
     function selectDevice(url, name) {
         serverUrl = url;
         localStorage.setItem("serverUrl", serverUrl);
