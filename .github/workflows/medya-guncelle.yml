@@ -1,0 +1,34 @@
+name: Canli API ile Medya Listesini Guncelle
+
+on:
+  push:
+    branches:
+      - main # main branch'ine kod pushlandığında çalışır
+  schedule:
+    - cron: '0 */1 * * *' # Her 6 saatte bir otomatik çalışıp listeyi günceller
+  workflow_dispatch: # İstediğinde GitHub panelinden elle tetiklemen için
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Depoyu Cek
+        uses: actions/checkout@v4
+
+      - name: GitHub API'den Klasorleri Canli Olarak Sorgula
+        env:
+          # GitHub Secrets'a eklediğin MY_API_TOKEN buradaki robota güvenli şekilde aktarılır
+          GH_TOKEN: ${{ secrets.MY_API_TOKEN }} 
+        run: |
+          # API isteklerini güvenli token ile atıp doğrudan JSON dosyalarına yazıyoruz
+          curl -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/${{ github.repository }}/contents/mysite/photos" | jq 'if type=="array" then . else [] end' > mysite/photos.json
+          curl -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/${{ github.repository }}/contents/mysite/videos" | jq 'if type=="array" then . else [] end' > mysite/videos.json
+          curl -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/${{ github.repository }}/contents/mysite/texts"  | jq 'if type=="array" then . else [] end' > mysite/texts.json
+
+      - name: Olusan JSON Dosyalarini Depoya Geri Yukle
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          git add mysite/photos.json mysite/videos.json mysite/texts.json
+          git diff-index --quiet HEAD || (git commit -m "🤖 Medya JSON listeleri API'den güncellendi [skip ci]" && git push)
