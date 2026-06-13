@@ -150,6 +150,13 @@
 
         button:active { transform: scale(0.90) !important; }
 
+        /* Düzeltme 11: Disabled buton stili */
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
         .volume-section-title {
             text-align: center;
             font-size: 11px;
@@ -194,7 +201,7 @@
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             padding: 5px;
-            max-height: 120px;
+            max-height: 150px;
             overflow-y: auto;
         }
 
@@ -204,7 +211,6 @@
             align-items: center;
             padding: 10px;
             border-radius: 6px;
-            cursor: pointer;
             font-size: 13px;
         }
 
@@ -216,6 +222,53 @@
             background: var(--accent);
             border-left: 3px solid var(--link-accent);
         }
+
+        /* Düzeltme 13: Cihaz silme butonu stili */
+        .device-delete-btn {
+            background: transparent !important;
+            border: none !important;
+            color: var(--error) !important;
+            font-size: 14px !important;
+            width: 28px !important;
+            height: 28px !important;
+            border-radius: 6px !important;
+            box-shadow: none !important;
+            cursor: pointer;
+            flex-shrink: 0;
+            padding: 0;
+        }
+
+        .device-delete-btn:hover {
+            background: rgba(183, 28, 28, 0.2) !important;
+        }
+
+        /* Düzeltme 14: Toast bildirimi stili */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #1e2d3d;
+            color: var(--text);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            z-index: 999;
+            white-space: nowrap;
+        }
+
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        #toast.success { border-color: #2e7d32; }
+        #toast.error   { border-color: #b71c1c; }
+        #toast.info    { border-color: var(--link-accent); }
 
         footer {
             margin-top: 40px;
@@ -242,6 +295,9 @@
     </style>
 </head>
 <body>
+
+<!-- Düzeltme 14: Toast bildirim kutusu -->
+<div id="toast"></div>
 
 <div class="card">
     <div class="header">
@@ -280,7 +336,7 @@
     <div class="settings" id="settings">
         <div class="volume-section-title" style="text-align:left; margin-bottom: 8px;">Yeni Cihaz Ekle</div>
         <input id="serverInput" type="text" placeholder="Örn: 192.168.1.49:5000">
-        <button onclick="addNewDevice()" style="width:100%; border-radius:8px; height:40px; background:var(--accent); font-weight: bold; margin-bottom: 15px;">CİHAZI LISTEYE EKLE</button>
+        <button onclick="addNewDevice()" style="width:100%; border-radius:8px; height:40px; background:var(--accent); font-weight: bold; margin-bottom: 15px;">CİHAZI LİSTEYE EKLE</button>
         
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
             <div class="volume-section-title" style="text-align:left; margin: 0;">Kullanılabilir Cihazlar</div>
@@ -298,9 +354,36 @@
     let serverUrl = localStorage.getItem("serverUrl") || "";
     let devices = JSON.parse(localStorage.getItem("devices")) || [];
 
+    // Düzeltme 10: Periyodik bağlantı kontrolü için interval ID
+    let statusIntervalId = null;
+
     document.getElementById("serverInput").value = serverUrl ? serverUrl.replace(/^https?:\/\//, '') : "";
     
     finalizeUI();
+
+    // --------------------------------------------------
+    // Düzeltme 14: Toast bildirim fonksiyonu
+    // --------------------------------------------------
+    let toastTimer = null;
+    function showToast(msg, type = "info", duration = 2500) {
+        const toast = document.getElementById("toast");
+        toast.textContent = msg;
+        toast.className = "show " + type;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+            toast.className = "";
+        }, duration);
+    }
+
+    // --------------------------------------------------
+    // Düzeltme 8: AbortController ile fetch timeout yardımcı fonksiyonu
+    // --------------------------------------------------
+    function fetchWithTimeout(url, options = {}, timeoutMs = 5000) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        return fetch(url, { ...options, signal: controller.signal })
+            .finally(() => clearTimeout(timer));
+    }
 
     function toggleSettings() {
         const s = document.getElementById("settings");
@@ -310,37 +393,97 @@
     function finalizeUI() {
         renderDevices();
         checkDeviceStatus();
+        startPeriodicStatusCheck(); // Düzeltme 10
+    }
+
+    // --------------------------------------------------
+    // Düzeltme 10: Periyodik bağlantı kontrolü (30 sn)
+    // --------------------------------------------------
+    function startPeriodicStatusCheck() {
+        if (statusIntervalId) clearInterval(statusIntervalId);
+        statusIntervalId = setInterval(() => {
+            if (!document.hidden) {  // Sekme gizliyse atla
+                checkDeviceStatus();
+            }
+        }, 30000);
+
+        // Sekme tekrar görünür olduğunda hemen kontrol et
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) checkDeviceStatus();
+        });
+    }
+
+    // --------------------------------------------------
+    // Düzeltme 9: XSS – cihaz adı güvenli şekilde gösterilir
+    // --------------------------------------------------
+    function safeText(str) {
+        const div = document.createElement("div");
+        div.textContent = str;
+        return div.innerHTML;
     }
 
     function addNewDevice() {
         let val = document.getElementById("serverInput").value.trim();
-        if (!val) return alert("Lütfen geçerli bir IP ve Port girin!");
+        if (!val) { showToast("Lütfen geçerli bir IP ve Port girin!", "error"); return; }
         if (!val.startsWith('http')) val = 'http://' + val;
 
-        fetch(`${val}/cihaz-bilgisi`)
+        // Düzeltme 8: Timeout ile fetch
+        fetchWithTimeout(`${val}/cihaz-bilgisi`)
         .then(res => res.json())
         .then(data => {
             const targetUrl = `http://${data.yerel_ip}:${data.port}`;
+
+            // Düzeltme 9: XSS engeli – cihaz adı güvenli şekilde işlenir
+            const safeName = String(data.cihaz_adi || "").replace(/[<>"'&]/g, c =>
+                ({ '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '&': '&amp;' }[c])
+            );
+            const safeIp = String(data.yerel_ip || "").replace(/[<>"'&]/g, c =>
+                ({ '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '&': '&amp;' }[c])
+            );
+
             const newDevice = { name: data.cihaz_adi, url: targetUrl };
-            
             devices = devices.filter(d => d.url !== targetUrl);
             devices.push(newDevice);
             localStorage.setItem("devices", JSON.stringify(devices));
             
             selectDevice(targetUrl, data.cihaz_adi);
-            alert(`Cihaz Başarıyla Eklendi: ${data.cihaz_adi} (${data.yerel_ip})`);
+            // Düzeltme 9 + 14: alert() yerine güvenli toast kullan
+            showToast(`✅ Eklendi: ${safeName} (${safeIp})`, "success", 3000);
         })
-        .catch(() => {
-            alert("Cihaza bağlanılamadı! Lütfen Flask uygulamasının çalıştığından ve aynı ağda olduğunuzdan emin olun.");
+        .catch(err => {
+            // Düzeltme 8: Timeout hatası ayrıca bildirilir
+            if (err.name === "AbortError") {
+                showToast("⏱ Bağlantı zaman aşımı!", "error");
+            } else {
+                showToast("❌ Cihaza bağlanılamadı! Flask çalışıyor mu?", "error", 3500);
+            }
         });
+    }
+
+    // --------------------------------------------------
+    // Düzeltme 13: Cihaz silme desteği eklendi
+    // --------------------------------------------------
+    function deleteDevice(url, e) {
+        e.stopPropagation(); // Üst tıklama olayını engelle
+        const wasActive = serverUrl && url.replace(/\/+$/, "") === serverUrl.replace(/\/+$/, "");
+        devices = devices.filter(d => d.url !== url);
+        localStorage.setItem("devices", JSON.stringify(devices));
+        if (wasActive) {
+            serverUrl = "";
+            localStorage.removeItem("serverUrl");
+            checkDeviceStatus();
+        }
+        renderDevices();
+        showToast("🗑 Cihaz listeden silindi.", "info");
     }
 
     function renderDevices() {
         const listDiv = document.getElementById("deviceList");
         listDiv.innerHTML = "";
         
-        if(devices.length === 0) {
+        if (devices.length === 0) {
             listDiv.innerHTML = `<div style="padding:10px; font-size:12px; color:var(--muted); text-align:center;">Kayıtlı cihaz yok.</div>`;
+            document.getElementById("disconnectBtn").style.display = "none";
             return;
         }
 
@@ -348,20 +491,41 @@
             const isActive = serverUrl && d.url.replace(/\/+$/, "") === serverUrl.replace(/\/+$/, "");
             const item = document.createElement("div");
             item.className = `device-item ${isActive ? 'active' : ''}`;
-            item.innerHTML = `
-                <span>💻 <b>${d.name}</b> <br><small style="color:var(--muted)">${d.url.replace(/^https?:\/\//, '')}</small></span>
-                ${isActive ? '🟢' : ''}
-            `;
+            
+            // Düzeltme 9: innerHTML yerine textContent kullanıldı (XSS güvenliği)
+            const infoSpan = document.createElement("span");
+            const nameEl = document.createElement("b");
+            nameEl.textContent = d.name;
+            const addrEl = document.createElement("small");
+            addrEl.style.color = "var(--muted)";
+            addrEl.textContent = d.url.replace(/^https?:\/\//, '');
+            infoSpan.appendChild(document.createTextNode("💻 "));
+            infoSpan.appendChild(nameEl);
+            infoSpan.appendChild(document.createElement("br"));
+            infoSpan.appendChild(addrEl);
+
+            // Düzeltme 13: Silme butonu
+            const delBtn = document.createElement("button");
+            delBtn.className = "device-delete-btn";
+            delBtn.title = "Cihazı Sil";
+            delBtn.textContent = "🗑";
+            delBtn.onclick = (e) => deleteDevice(d.url, e);
+
+            const rightSide = document.createElement("div");
+            rightSide.style.display = "flex";
+            rightSide.style.alignItems = "center";
+            rightSide.style.gap = "6px";
+            if (isActive) rightSide.appendChild(document.createTextNode("🟢"));
+            rightSide.appendChild(delBtn);
+
+            item.appendChild(infoSpan);
+            item.appendChild(rightSide);
             item.onclick = () => selectDevice(d.url, d.name);
             listDiv.appendChild(item);
         });
 
         const disBtn = document.getElementById("disconnectBtn");
-        if (serverUrl) {
-            disBtn.style.display = "inline-block";
-        } else {
-            disBtn.style.display = "none";
-        }
+        disBtn.style.display = serverUrl ? "inline-block" : "none";
     }
 
     function selectDevice(url, name) {
@@ -369,6 +533,7 @@
         localStorage.setItem("serverUrl", serverUrl);
         renderDevices();
         checkDeviceStatus();
+        showToast(`📡 Bağlanılıyor: ${name}`, "info");
     }
 
     function disconnectDevice() {
@@ -376,26 +541,41 @@
         localStorage.removeItem("serverUrl");
         renderDevices();
         checkDeviceStatus();
+        showToast("🔌 Bağlantı kesildi.", "info");
     }
 
     function checkDeviceStatus() {
         const nameSpan = document.getElementById("activeDeviceName");
         if (!serverUrl) {
-            nameSpan.innerText = "Seçilmedi";
+            nameSpan.textContent = "Seçilmedi";
             nameSpan.className = "status-offline";
             return;
         }
 
-        fetch(`${serverUrl}/cihaz-bilgisi`)
+        // Düzeltme 8: Timeout ile fetch
+        fetchWithTimeout(`${serverUrl}/cihaz-bilgisi`)
         .then(res => res.json())
         .then(data => {
-            nameSpan.innerText = `${data.cihaz_adi} (Çevrimiçi)`;
+            // Düzeltme 9: textContent kullanıldı (XSS güvenliği)
+            nameSpan.textContent = `${data.cihaz_adi} (Çevrimiçi)`;
             nameSpan.className = "status-online";
         })
         .catch(() => {
-            nameSpan.innerText = "Bağlantı Kopuk / Çevrimdışı";
+            nameSpan.textContent = "Bağlantı Kopuk / Çevrimdışı";
             nameSpan.className = "status-offline";
         });
+    }
+
+    // --------------------------------------------------
+    // Düzeltme 12: URL sanitizasyon ve şema kontrolü
+    // --------------------------------------------------
+    function isValidUrl(str) {
+        try {
+            const url = new URL(str.startsWith("http") ? str : "https://" + str);
+            return ["http:", "https:"].includes(url.protocol);
+        } catch {
+            return false;
+        }
     }
 
     function handleUrlSend() {
@@ -404,9 +584,16 @@
         const urlValue = urlInput.value.trim();
 
         if (!urlValue) {
-            alert("Lütfen bir URL girin!");
+            showToast("Lütfen bir URL girin!", "error");
             return;
         }
+
+        // Düzeltme 12: Tehlikeli şemaları engelle
+        if (!isValidUrl(urlValue)) {
+            showToast("⚠️ Geçersiz veya tehlikeli URL!", "error");
+            return;
+        }
+
         sendCommand(btn, 'open_url', urlValue);
     }
 
@@ -416,38 +603,53 @@
         }
     }
 
+    // --------------------------------------------------
+    // Düzeltme 11: Debounce ile buton spam koruması
+    // Düzeltme 8: AbortController ile timeout
+    // --------------------------------------------------
     function sendCommand(thisBtn, title, body) {
         if (!serverUrl) {
-            alert("Lütfen önce bir cihaz seçin veya ekleyin!");
+            showToast("Lütfen önce bir cihaz seçin!", "error");
             toggleSettings();
             return;
         }
 
+        // Düzeltme 11: Buton zaten disabled ise işlemi durdur
+        if (thisBtn.disabled) return;
+        thisBtn.disabled = true;  // Spam koruması: 300ms boyunca kilitle
+
         let baseUrl = serverUrl.replace(/\/+$/, "");
         const finalUrl = `${baseUrl}/komut?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
 
-        fetch(finalUrl, {
+        // Düzeltme 8: 5 saniyelik timeout ile fetch
+        fetchWithTimeout(finalUrl, {
             method: 'GET',
             mode: 'cors',
             cache: 'no-cache',
-            keepalive: true 
-        })
+            keepalive: true
+        }, 5000)
         .then(res => {
-            if(res.ok) {
+            if (res.ok) {
                 thisBtn.style.setProperty('background', 'var(--success)', 'important');
-                setTimeout(() => { 
-                    thisBtn.style.background = ""; 
-                    thisBtn.style.removeProperty('background'); 
+                setTimeout(() => {
+                    thisBtn.style.background = "";
+                    thisBtn.style.removeProperty('background');
+                    thisBtn.disabled = false;  // Düzeltme 11: Kilidi kaldır
                 }, 300);
             } else {
-                throw new Error();
+                throw new Error("server_error");
             }
         })
-        .catch(() => {
+        .catch(err => {
+            // Düzeltme 8: Timeout hatası özel mesajla bildirilir
+            if (err.name === "AbortError") {
+                showToast("⏱ Bağlantı zaman aşımı!", "error");
+            }
             thisBtn.style.setProperty('background', 'var(--error)', 'important');
-            setTimeout(() => { 
-                thisBtn.style.background = ""; 
+            setTimeout(() => {
+                thisBtn.style.background = "";
                 thisBtn.style.removeProperty('background');
+                thisBtn.disabled = false;  // Düzeltme 11: Hata durumunda da kilidi kaldır
             }, 300);
         });
     }
