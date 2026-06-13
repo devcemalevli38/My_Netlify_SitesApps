@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Medya Kontrol Pro</title>
+    
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/M%C3%BCzik_Kontrol/app_icon.ico">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/M%C3%BCzik_Kontrol/app_icon.ico">
+
+    <style>
+        :root {
+            --bg: #0b0f14;
+            --panel: #121a25;
+            --accent: #243449;
+            --text: #f1f1f1;
+            --muted: #9aa4b2;
+            --success: #2e7d32;
+            --error: #b71c1c;
+            --link-accent: #38bdf8;
+        }
+
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; 
+            transition: all 0.2s ease;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #1b2735, #0b0f14);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .card {
+            background: linear-gradient(180deg, #141e2b, #0f1621);
+            border-radius: 26px;
+            box-shadow: 0 30px 80px rgba(0,0,0,.7);
+            padding: 30px;
+            width: 100%;
+            max-width: 360px;
+            border: 1px solid rgba(255,255,255,0.05);
+            z-index: 2;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 26px;
+        }
+
+        .connection-status {
+            text-align: center;
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            color: var(--muted);
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .connection-status span {
+            font-weight: bold;
+        }
+
+        .status-online { color: #4caf50; }
+        .status-offline { color: #f44336; }
+
+        .player, .volume-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            background: #1a2635;
+            color: var(--text);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            position: relative;
+        }
+
+        button * { pointer-events: none; }
+
+        .player button { width: 60px; height: 60px; font-size: 22px; }
+        
+        .play { 
+            width: 85px !important; 
+            height: 85px !important; 
+            background: #243449 !important; 
+            font-size: 32px !important;
+            border: 1px solid #2c3e56 !important;
+        }
+
+        .volume-controls button { width: 60px; height: 60px; font-size: 22px; }
+        
+        .mute-btn { 
+            width: 110px !important; 
+            border-radius: 20px !important; 
+            font-size: 14px !important; 
+            font-weight: bold;
+            background: #243449 !important;
+        }
+
+        .url-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #000;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .url-input:focus { border-color: var(--muted); }
+
+        .url-send-btn {
+            width: 55px !important;
+            height: 55px !important;
+            border-radius: 15px !important;
+            background: var(--accent) !important;
+            font-size: 18px !important;
+        }
+
+        button:active { transform: scale(0.90) !important; }
+
+        .volume-section-title {
+            text-align: center;
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .settings { 
+            display: none; 
+            padding-top: 15px; 
+            border-top: 1px solid #333; 
+        }
+
+        .settings input { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #333; 
+            margin-bottom: 10px; 
+            background: #000; 
+            color: #fff; 
+            font-size: 16px;
+        }
+
+        .device-list {
+            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 5px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .device-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .device-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .device-item.active {
+            background: var(--accent);
+            border-left: 3px solid var(--link-accent);
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 20px 0;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        footer b { color: var(--link-accent); }
+        
+        footer a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--link-accent);
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="header">
+        <h2 style="font-weight: 500; font-size: 1.2rem; margin: 0;">Medya Kontrol Pro</h2>
+        <div style="display: flex; gap: 5px;">
+            <button style="background:none; box-shadow:none; font-size: 20px; width: 40px; height: 40px;" onclick="checkDeviceStatus()" title="Bağlantıyı Yenile">🔄</button>
+            <button style="background:none; box-shadow:none; font-size: 20px; width: 40px; height: 40px;" onclick="toggleSettings()" title="Cihaz Bağlantı Ayarları">📱</button>
+        </div>
+    </div>
+
+    <div class="connection-status" id="connectionStatus">
+        Bağlı Cihaz: <span id="activeDeviceName" class="status-offline">Seçilmedi</span>
+    </div>
+
+    <div class="player">
+        <button onclick="sendCommand(this, 'media', 'prev')">⏮</button>
+        <button class="play" onclick="sendCommand(this, 'media', 'play')">⏯</button>
+        <button onclick="sendCommand(this, 'media', 'next')">⏭</button>
+    </div>
+
+    <div class="volume-section-title">Sistem Sesi</div>
+    
+    <div class="volume-controls">
+        <button onclick="sendCommand(this, 'media', 'voldown')">🔉</button>
+        <button class="mute-btn" onclick="sendCommand(this, 'media', 'mute')">SESSİZ</button>
+        <button onclick="sendCommand(this, 'media', 'volup')">🔊</button>
+    </div>
+
+    <div class="volume-section-title">Tarayıcıda Aç</div>
+    <div class="url-section">
+        <input id="urlInput" class="url-input" type="text" placeholder="google.com veya link..." 
+               onkeypress="handleKeyPress(event)">
+        <button id="urlSendBtn" class="url-send-btn" onclick="handleUrlSend()">🚀</button>
+    </div>
+
+    <div class="settings" id="settings">
+        <div class="volume-section-title" style="text-align:left; margin-bottom: 8px;">Yeni Cihaz Ekle</div>
+        <input id="serverInput" type="text" placeholder="Örn: 192.168.1.5:5000">
+        <button onclick="addNewDevice()" style="width:100%; border-radius:8px; height:40px; background:var(--accent); font-weight: bold; margin-bottom: 15px;">CİHAZI LISTEYE EKLE</button>
+        
+        <div class="volume-section-title" style="text-align:left; margin-bottom: 5px;">Kullanılabilir Cihazlar</div>
+        <div class="device-list" id="deviceList">
+            </div>
+    </div>
+</div>
+
+<footer>
+    <p>Tüm hakları saklıdir. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank"><b>Cemal Evli</b></a></p>
+</footer>
+
+<script>
+    let serverUrl = localStorage.getItem("serverUrl") || "";
+    let devices = JSON.parse(localStorage.getItem("devices")) || [];
+
+    // Sayfa açıldığında kurulumları yap
+    document.getElementById("serverInput").value = serverUrl ? serverUrl.replace(/^https?:\/\//, '') : "";
+    renderDevices();
+    checkDeviceStatus();
+
+    function toggleSettings() {
+        const s = document.getElementById("settings");
+        s.style.display = (s.style.display === "block") ? "none" : "block";
+    }
+
+    // Listeye yeni Spotify mantığında cihaz ekleme
+    function addNewDevice() {
+        let val = document.getElementById("serverInput").value.trim();
+        if (!val) return alert("Lütfen geçerli bir IP ve Port girin!");
+        if (!val.startsWith('http')) val = 'http://' + val;
+
+        // Cihazın aktif olup olmadığını kontrol ederek ekle
+        fetch(`${val}/cihaz-bilgisi`)
+        .then(res => res.json())
+        .then(data => {
+            const newDevice = { name: data.cihaz_adi, url: val };
+            // Mükerrer kaydı engelle
+            devices = devices.filter(d => d.url !== val);
+            devices.push(newDevice);
+            localStorage.setItem("devices", JSON.stringify(devices));
+            
+            // Eklenen cihazı doğrudan aktif yap
+            selectDevice(val, data.cihaz_adi);
+            renderDevices();
+            alert(`Cihaz Başarıyla Eklendi: ${data.cihaz_adi}`);
+        })
+        .catch(() => {
+            alert("Cihaza bağlanılamadı! Lütfen Flask uygulamasının çalıştığından ve aynı ağda olduğunuzdan emin olun.");
+        });
+    }
+
+    // Cihazları listeleme
+    function renderDevices() {
+        const listDiv = document.getElementById("deviceList");
+        listDiv.innerHTML = "";
+        
+        if(devices.length === 0) {
+            listDiv.innerHTML = `<div style="padding:10px; font-size:12px; color:var(--muted); text-align:center;">Kayıtlı cihaz yok.</div>`;
+            return;
+        }
+
+        devices.forEach(d => {
+            const isActive = d.url === serverUrl;
+            const item = document.createElement("div");
+            item.className = `device-item ${isActive ? 'active' : ''}`;
+            item.innerHTML = `
+                <span>💻 <b>${d.name}</b> <br><small style="color:var(--muted)">${d.url.replace(/^https?:\/\//, '')}</small></span>
+                ${isActive ? '🟢' : ''}
+            `;
+            item.onclick = () => selectDevice(d.url, d.name);
+            listDiv.appendChild(item);
+        });
+    }
+
+    // Cihaz seçimi gerçekleştirme
+    function selectDevice(url, name) {
+        serverUrl = url;
+        localStorage.setItem("serverUrl", serverUrl);
+        renderDevices();
+        checkDeviceStatus();
+    }
+
+    // Aktif cihazın durumunu kontrol etme ve panel güncelleme
+    function checkDeviceStatus() {
+        const nameSpan = document.getElementById("activeDeviceName");
+        if (!serverUrl) {
+            nameSpan.innerText = "Seçilmedi";
+            nameSpan.className = "status-offline";
+            return;
+        }
+
+        fetch(`${serverUrl}/cihaz-bilgisi`)
+        .then(res => res.json())
+        .then(data => {
+            nameSpan.innerText = `${data.cihaz_adi} (Çevrimiçi)`;
+            nameSpan.className = "status-online";
+        })
+        .catch(() => {
+            nameSpan.innerText = "Bağlantı Kopuk / Çevrimdışı";
+            nameSpan.className = "status-offline";
+        });
+    }
+
+    function handleUrlSend() {
+        const urlInput = document.getElementById("urlInput");
+        const btn = document.getElementById("urlSendBtn");
+        const urlValue = urlInput.value.trim();
+
+        if (!urlValue) {
+            alert("Lütfen bir URL girin!");
+            return;
+        }
+        sendCommand(btn, 'open_url', urlValue);
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === "Enter") {
+            handleUrlSend();
+        }
+    }
+
+    function sendCommand(thisBtn, title, body) {
+        if (!serverUrl) {
+            alert("Lütfen önce bir cihaz seçin veya ekleyin!");
+            toggleSettings();
+            return;
+        }
+
+        let baseUrl = serverUrl.replace(/\/+$/, "");
+        const finalUrl = `${baseUrl}/komut?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+
+        // CORS aktif edildiği için tam kontrollü fetch modu (cors) kullanılıyor.
+        fetch(finalUrl, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache',
+            keepalive: true 
+        })
+        .then(res => {
+            if(res.ok) {
+                thisBtn.style.setProperty('background', 'var(--success)', 'important');
+                setTimeout(() => { 
+                    thisBtn.style.background = ""; 
+                    thisBtn.style.removeProperty('background'); 
+                }, 300);
+            } else {
+                throw new Error();
+            }
+        })
+        .catch(() => {
+            thisBtn.style.setProperty('background', 'var(--error)', 'important');
+            setTimeout(() => { 
+                thisBtn.style.background = ""; 
+                thisBtn.style.removeProperty('background');
+            }, 300);
+        });
+    }
+</script>
+
+</body>
+</html>
