@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Medya Kontrol Pro</title>
+    
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/M%C3%BCzik_Kontrol/app_icon.ico">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/M%C3%BCzik_Kontrol/app_icon.ico">
+
+    <style>
+        :root {
+            --bg: #0b0f14;
+            --panel: #121a25;
+            --accent: #243449;
+            --text: #f1f1f1;
+            --muted: #9aa4b2;
+            --success: #2e7d32;
+            --error: #b71c1c;
+            --link-accent: #38bdf8;
+        }
+
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            touch-action: manipulation; 
+            transition: all 0.2s ease;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top, #1b2735, #0b0f14);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: system-ui, -apple-system, sans-serif;
+            color: var(--text);
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .card {
+            background: linear-gradient(180deg, #141e2b, #0f1621);
+            border-radius: 26px;
+            box-shadow: 0 30px 80px rgba(0,0,0,.7);
+            padding: 30px;
+            width: 100%;
+            max-width: 360px;
+            border: 1px solid rgba(255,255,255,0.05);
+            z-index: 2;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 26px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .player, .volume-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            background: #1a2635;
+            color: var(--text);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            position: relative;
+        }
+
+        button * { pointer-events: none; }
+
+        .player button { width: 60px; height: 60px; font-size: 22px; }
+        
+        .play { 
+            width: 85px !important; 
+            height: 85px !important; 
+            background: #243449 !important; 
+            font-size: 32px !important;
+            border: 1px solid #2c3e56 !important;
+        }
+
+        .volume-controls button { width: 60px; height: 60px; font-size: 22px; }
+        
+        .mute-btn { 
+            width: 110px !important; 
+            border-radius: 20px !important; 
+            font-size: 14px !important; 
+            font-weight: bold;
+            background: #243449 !important;
+        }
+
+        .url-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: #000;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .url-input:focus { border-color: var(--muted); }
+
+        .url-send-btn {
+            width: 55px !important;
+            height: 55px !important;
+            border-radius: 15px !important;
+            background: var(--accent) !important;
+            font-size: 18px !important;
+        }
+
+        button:active { transform: scale(0.90) !important; }
+
+        .volume-section-title {
+            text-align: center;
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .settings { 
+            display: none; 
+            padding-top: 15px; 
+            border-top: 1px solid #333; 
+        }
+
+        .settings input { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 8px; 
+            border: 1px solid #333; 
+            margin-bottom: 10px; 
+            background: #000; 
+            color: #fff; 
+            font-size: 16px;
+        }
+
+        /* --- ENTEGRE FOOTER TASARIMI --- */
+        footer {
+            margin-top: 40px;
+            padding: 20px 0;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        footer b { color: var(--link-accent); }
+        
+        footer a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--link-accent);
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="header">
+        <h2 style="font-weight: 500; font-size: 1.2rem; margin: 0;">Medya Kontrol Pro</h2>
+        <div class="header-actions">
+            <button style="background:none; box-shadow:none; font-size: 18px; width: 40px; height: 40px; border-radius: 50%;" onclick="handleExitApp(this)">🛑</button>
+            <button style="background:none; box-shadow:none; font-size: 20px; width: 40px; height: 40px;" onclick="toggleSettings()">⚙️</button>
+        </div>
+    </div>
+
+    <div class="player">
+        <button onclick="sendCommand(this, 'media', 'prev')">⏮</button>
+        <button class="play" onclick="sendCommand(this, 'media', 'play')">⏯</button>
+        <button onclick="sendCommand(this, 'media', 'next')">⏭</button>
+    </div>
+
+    <div class="volume-section-title">Sistem Sesi</div>
+    
+    <div class="volume-controls">
+        <button onclick="sendCommand(this, 'media', 'voldown')">🔉</button>
+        <button class="mute-btn" onclick="sendCommand(this, 'media', 'mute')">SESSİZ</button>
+        <button onclick="sendCommand(this, 'media', 'volup')">🔊</button>
+    </div>
+
+    <div class="volume-section-title">Tarayıcıda Aç</div>
+    <div class="url-section">
+        <input id="urlInput" class="url-input" type="text" placeholder="google.com veya link..." 
+               onkeypress="handleKeyPress(event)">
+        <button id="urlSendBtn" class="url-send-btn" onclick="handleUrlSend()">🚀</button>
+    </div>
+
+    <div class="settings" id="settings">
+        <input id="serverInput" type="text" placeholder="Örn: 192.168.1.5:5000">
+        <button onclick="saveServer()" style="width:100%; border-radius:8px; height:45px; background:var(--accent); font-weight: bold;">KAYDET</button>
+    </div>
+</div>
+
+<footer>
+    <p>Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank"><b>Cemal Evli</b></a></p>
+</footer>
+
+<script>
+    let serverUrl = localStorage.getItem("serverUrl") || "";
+    document.getElementById("serverInput").value = serverUrl;
+
+    function toggleSettings() {
+        const s = document.getElementById("settings");
+        s.style.display = (s.style.display === "block") ? "none" : "block";
+    }
+
+    function saveServer() {
+        let val = document.getElementById("serverInput").value.trim();
+        if (val && !val.startsWith('http')) val = 'http://' + val;
+        serverUrl = val;
+        localStorage.setItem("serverUrl", serverUrl);
+        alert("Bağlantı Kaydedildi!");
+        toggleSettings();
+    }
+
+    function handleUrlSend() {
+        const urlInput = document.getElementById("urlInput");
+        const btn = document.getElementById("urlSendBtn");
+        const urlValue = urlInput.value.trim();
+
+        if (!urlValue) {
+            alert("Lütfen bir URL girin!");
+            return;
+        }
+        sendCommand(btn, 'open_url', urlValue);
+    }
+
+    function handleExitApp(btn) {
+        if (confirm("Uygulamayı kapatmak istediğinize emin misiniz?")) {
+            sendCommand(btn, 'exitapp', '');
+        }
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === "Enter") {
+            handleUrlSend();
+        }
+    }
+
+    function sendCommand(thisBtn, title, body) {
+        if (!serverUrl) {
+            alert("Lütfen Sunucu URL girin!");
+            toggleSettings();
+            return;
+        }
+
+        let baseUrl = serverUrl.replace(/\/+$/, "");
+        // body boş ise URL parametrelerinde çirkin görünmemesi için temiz yapı oluşturuldu
+        const finalUrl = `${baseUrl}/komut?title=${encodeURIComponent(title)}` + (body ? `&body=${encodeURIComponent(body)}` : '');
+
+        fetch(finalUrl, {
+            method: 'GET',
+            mode: 'no-cors',
+            cache: 'no-cache',
+            keepalive: true 
+        })
+        .then(() => {
+            thisBtn.style.setProperty('background', 'var(--success)', 'important');
+            setTimeout(() => { 
+                thisBtn.style.background = ""; 
+                thisBtn.style.removeProperty('background'); 
+            }, 300);
+        })
+        .catch(() => {
+            thisBtn.style.setProperty('background', 'var(--error)', 'important');
+            setTimeout(() => { 
+                thisBtn.style.background = ""; 
+                thisBtn.style.removeProperty('background');
+            }, 300);
+        });
+    }
+</script>
+
+</body>
+</html>
