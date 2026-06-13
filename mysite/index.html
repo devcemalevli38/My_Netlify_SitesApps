@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cemal Evli | Kişisel Blog</title>
+    <!-- Favicon Eklendi -->
+    <link rel="icon" type="image/png" href="https://wsrv.nl/?url=https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/profile.png&w=64&h=64&mask=circle&output=png">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,10 +52,11 @@
     </nav>
 
     <header class="relative z-10 max-w-4xl mx-auto px-6 pt-20 pb-16 text-center">
+        <!-- Ortadaki Kamera Logosu Belirttiğiniz Görselle Değiştirildi -->
         <div class="relative w-28 h-28 mx-auto mb-8 group">
             <div class="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-3xl blur-md opacity-70 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
-            <div class="relative w-full h-full bg-neutral-900 border border-neutral-800 rounded-3xl flex items-center justify-center shadow-2xl">
-                <i class="fa-solid fa-camera text-3xl bg-gradient-to-br from-indigo-400 to-purple-400 bg-clip-text text-transparent"></i>
+            <div class="relative w-full h-full bg-neutral-900 border border-neutral-800 rounded-3xl flex items-center justify-center shadow-2xl overflow-hidden p-1">
+                <img src="https://wsrv.nl/?url=https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/imcemalevli/profile.png&w=64&h=64&mask=circle&output=png" alt="Cemal Evli" class="w-full h-full object-cover rounded-2xl">
             </div>
         </div>
         
@@ -103,7 +106,6 @@
     <script>
         const DATA_URL = './data.json';
         let globalMediaData = { photos: [], videos: [], texts: [] };
-        // İndirilen metin içeriklerini önbelleğe almak için nesne
         let fetchedTextsCache = {};
 
         function cleanTitle(filename) {
@@ -196,21 +198,17 @@
                 return;
             }
 
-            // Kart şablonlarını oluşturup container'a basıyoruz
             container.innerHTML = data.map((file, index) => {
                 const displayTitle = file.title || cleanTitle(file.name);
                 const uniqueId = `text-summary-${index}`;
                 
-                // Arka planda gerçek .txt dosyasını indiriyoruz
                 fetch(file.download_url)
                     .then(res => {
                         if (!res.ok) throw new Error("Yazı içeriği yüklenemedi");
                         return res.text();
                     })
                     .then(text => {
-                        // Çekilen metni modalda göstermek üzere önbelleğe alıyoruz
                         fetchedTextsCache[index] = text;
-                        // Özet kısmını güncelliyoruz
                         const summaryEl = document.getElementById(uniqueId);
                         if (summaryEl) {
                             summaryEl.innerText = text.length > 150 ? text.substring(0, 150) + "..." : text;
