@@ -279,7 +279,7 @@
 
     <div class="settings" id="settings">
         <div class="volume-section-title" style="text-align:left; margin-bottom: 8px;">Yeni Cihaz Ekle</div>
-        <input id="serverInput" type="text" placeholder="Örn: 192.168.1.5:5000">
+        <input id="serverInput" type="text" placeholder="Örn: 192.168.1.49:5000">
         <button onclick="addNewDevice()" style="width:100%; border-radius:8px; height:40px; background:var(--accent); font-weight: bold; margin-bottom: 15px;">CİHAZI LISTEYE EKLE</button>
         
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
@@ -299,40 +299,14 @@
     let serverUrl = localStorage.getItem("serverUrl") || "";
     let devices = JSON.parse(localStorage.getItem("devices")) || [];
 
-    // Sayfa açıldığında kurulumları yap ve dinamik Localhost kontrolünü başlat
     document.getElementById("serverInput").value = serverUrl ? serverUrl.replace(/^https?:\/\//, '') : "";
     
-    checkLocalhostAndRender();
+    // Sayfa açıldığında doğrudan kayıtlı cihazların arayüz güncellemelerini tetikle
+    finalizeUI();
 
     function toggleSettings() {
         const s = document.getElementById("settings");
         s.style.display = (s.style.display === "block") ? "none" : "block";
-    }
-
-    // Localhost'un aktif olup olmadığını kontrol eden fonksiyon
-    function checkLocalhostAndRender() {
-        const defaultLocal = "http://127.0.0.1:5000";
-        
-        // Önce listede eski körü körüne eklenmiş IP tabanlı localhost varsa temizle
-        devices = devices.filter(d => d.url !== defaultLocal || d.name !== "Yerel PC (Localhost)");
-
-        fetch(`${defaultLocal}/cihaz-bilgisi`)
-        .then(res => res.json())
-        .then(data => {
-            // Eğer localhost açıksa ve bilgisayar adı alındıysa listeye ekle
-            if (data && data.cihaz_adi) {
-                devices = devices.filter(d => d.url !== defaultLocal);
-                devices.push({ name: data.cihaz_adi, url: defaultLocal });
-                localStorage.setItem("devices", JSON.stringify(devices));
-            }
-            finalizeUI();
-        })
-        .catch(() => {
-            // Localhost kapalıysa veya yanıt vermiyorsa listeden tamamen uçur
-            devices = devices.filter(d => d.url !== defaultLocal);
-            localStorage.setItem("devices", JSON.stringify(devices));
-            finalizeUI();
-        });
     }
 
     function finalizeUI() {
@@ -349,14 +323,17 @@
         fetch(`${val}/cihaz-bilgisi`)
         .then(res => res.json())
         .then(data => {
-            const newDevice = { name: data.cihaz_adi, url: val };
-            devices = devices.filter(d => d.url !== val);
+            // Backend'den gelen gerçek yerel IP adresini baz alarak kaydet (127.0.0.1'i engellemek için)
+            const targetUrl = `http://${data.yerel_ip}:${data.port}`;
+            const newDevice = { name: data.cihaz_adi, url: targetUrl };
+            
+            devices = devices.filter(d => d.url !== targetUrl);
             devices.push(newDevice);
             localStorage.setItem("devices", JSON.stringify(devices));
             
-            selectDevice(val, data.cihaz_adi);
+            selectDevice(targetUrl, data.cihaz_adi);
             renderDevices();
-            alert(`Cihaz Başarıyla Eklendi: ${data.cihaz_adi}`);
+            alert(`Cihaz Başarıyla Eklendi: ${data.cihaz_adi} (${data.yerel_ip})`);
         })
         .catch(() => {
             alert("Cihaza bağlanılamadı! Lütfen Flask uygulamasının çalıştığından ve aynı ağda olduğunuzdan emin olun.");
@@ -385,7 +362,6 @@
             listDiv.appendChild(item);
         });
 
-        // Bağlantıyı kes butonunun görünürlüğünü güncelle
         const disBtn = document.getElementById("disconnectBtn");
         if (serverUrl) {
             disBtn.style.display = "inline-block";
