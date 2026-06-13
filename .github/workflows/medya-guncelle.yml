@@ -1,6 +1,13 @@
 name: Canli API ile Medya Listesini Guncelle
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'mysite/photos/**'
+      - 'mysite/videos/**'
+      - 'mysite/texts/**'
   schedule:
     - cron: '0 */1 * * *' # Her 6 saatte bir otomatik çalışıp listeyi günceller
   workflow_dispatch: # İstediğinde GitHub panelinden elle tetiklemen için
@@ -17,6 +24,9 @@ jobs:
           # GitHub Secrets'a eklediğin MY_API_TOKEN buradaki robota güvenli şekilde aktarılır
           GH_TOKEN: ${{ secrets.MY_API_TOKEN }} 
         run: |
+          # mysite klasörünün varlığından emin olalım
+          mkdir -p mysite
+
           # API isteklerini güvenli token ile atıp doğrudan JSON dosyalarına yazıyoruz
           curl -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/${{ github.repository }}/contents/mysite/photos" | jq 'if type=="array" then . else [] end' > mysite/photos.json
           curl -H "Authorization: token $GH_TOKEN" "https://api.github.com/repos/${{ github.repository }}/contents/mysite/videos" | jq 'if type=="array" then . else [] end' > mysite/videos.json
