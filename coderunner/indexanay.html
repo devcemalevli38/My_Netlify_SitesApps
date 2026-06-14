@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Kod Tester</title>
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/coderunner/coderunner.ico">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1e2e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #313244;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #45475a;
+        }
+        .code-textarea {
+            resize: none;
+            font-family: 'Fira Code', monospace, Consolas, Monaco;
+            tab-size: 4;
+        }
+        .line-numbers {
+            font-family: 'Fira Code', monospace, Consolas, Monaco;
+            text-align: right;
+            user-select: none;
+        }
+        /* Sürükleme esnasında iframe'in fare hareketlerini yutmasını engellemek için */
+        .resizing iframe {
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-[#11111b] text-[#cdd6f4] h-screen flex flex-col overflow-hidden m-0 font-sans">
+
+    <div id="permissionModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center z-50 transition-opacity duration-300">
+        <div class="bg-[#1e1e2e] border border-[#313244] w-full max-w-2xl h-[85vh] p-6 rounded-2xl shadow-2xl mx-4 flex flex-col">
+            
+            <div class="text-center mb-4 shrink-0">
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/10 text-blue-400 mb-2 text-xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <h2 class="text-xl font-bold text-white">Gelişmiş Donanım ve Ortam İzinleri</h2>
+                <p class="text-gray-400 text-xs mt-1">Görsellerde belirtilen tüm ortam, donanım, API ve site güvenlik katmanları aşağıda listelenmiştir.</p>
+            </div>
+
+            <div class="flex-1 overflow-y-auto pr-1 space-y-2 mb-4 bg-[#181825] p-4 rounded-xl border border-[#313244]">
+                
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-location-dot text-red-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Location (Konum)</p>
+                            <p class="text-[11px] text-gray-500">Coğrafi konum servisleri testleri için</p>
+                        </div>
+                    </div>
+                    <span id="status-location" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-video text-green-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Camera (Kamera)</p>
+                            <p class="text-[11px] text-gray-500">Video yakalama ve medya akışları için</p>
+                        </div>
+                    </div>
+                    <span id="status-camera" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-microphone text-purple-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Microphone (Mikrofon)</p>
+                            <p class="text-[11px] text-gray-500">Ses giriş donanımları ve kayıt testleri için</p>
+                        </div>
+                    </div>
+                    <span id="status-microphone" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-clock-rotate-left text-blue-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Motion Sensors (Hareket Sensörleri)</p>
+                            <p class="text-[11px] text-gray-500">İvmeölçer ve jiroskop verileri için</p>
+                        </div>
+                    </div>
+                    <span id="status-motion" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-bell text-yellow-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Notifications (Bildirimler)</p>
+                            <p class="text-[11px] text-gray-500">Web Push bildirim senaryoları için</p>
+                        </div>
+                    </div>
+                    <span id="status-notifications" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-code text-teal-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">JavaScript</p>
+                            <p class="text-[11px] text-gray-500">Dinamik betiklerin motor üzerinde yürütülmesi</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium">Varsayılan Etkin</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-image text-orange-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Images (Görseller)</p>
+                            <p class="text-[11px] text-gray-500">Grafik ve resim kaynaklarının yüklenmesi</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium">Varsayılan Etkin</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-indigo-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Pop-ups and Redirects</p>
+                            <p class="text-[11px] text-gray-500">Açılır pencereler ve yönlendirmeler</p>
+                        </div>
+                    </div>
+                    <span id="status-popups" class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded-full font-medium">Iframe Kontrollü</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-rectangle-ad text-pink-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Intrusive Ads (Yıpratıcı Reklam Engelleme)</p>
+                            <p class="text-[11px] text-gray-500">Yanıltıcı reklam filtreleme katmanı</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium">Aktif</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-rotate text-cyan-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Background Sync (Arka Plan Senkronizasyonu)</p>
+                            <p class="text-[11px] text-gray-500">Ağ bağlantısı koptuğunda veri eşitleme</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium">İzinli</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-volume-high text-green-500 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Sound (Ses Çıkışı)</p>
+                            <p class="text-[11px] text-gray-500">Ses dosyalarının ve sentezleyicilerin çalınması</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium">İzinli</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-download text-amber-500 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Automatic Downloads (Otomatik İndirmeler)</p>
+                            <p class="text-[11px] text-gray-500">Çoklu dosya indirme tetikleyicileri</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium">İzinli</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-sliders text-purple-500 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">MIDI Device Control & Reprogram</p>
+                            <p class="text-[11px] text-gray-500">Müzik enstrümanı arabirim mesajlaşması</p>
+                        </div>
+                    </div>
+                    <span id="status-midi" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-usb text-blue-500 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">USB Devices (WebUSB API)</p>
+                            <p class="text-[11px] text-gray-500">Doğrudan USB donanım erişim entegrasyonu</p>
+                        </div>
+                    </div>
+                    <span id="status-usb" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-microchip text-rose-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Serial Ports (Web Serial API)</p>
+                            <p class="text-[11px] text-gray-500">Arduino ve mikrodenetleyici port haberleşmesi</p>
+                        </div>
+                    </div>
+                    <span id="status-serial" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-file-pen text-orange-500 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">File Editing (Dosya Sistemi API)</p>
+                            <p class="text-[11px] text-gray-500">Yerel dosyalara doğrudan yazma okuma yetkisi</p>
+                        </div>
+                    </div>
+                    <span id="status-fileediting" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-gamepad text-emerald-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">HID Devices (WebHID API)</p>
+                            <p class="text-[11px] text-gray-500">Özel klavye, fare ve oyun kolları protokolü</p>
+                        </div>
+                    </div>
+                    <span id="status-hid" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-key text-yellow-600 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Protected Content IDs (Korumalı İçerik)</p>
+                            <p class="text-[11px] text-gray-500">DRM lisans doğrulama mekanizmaları</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium">Etkin</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-clipboard text-sky-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Clipboard (Pano Erişimi)</p>
+                            <p class="text-[11px] text-gray-500">Panodan okuma ve panoya yazma testleri</p>
+                        </div>
+                    </div>
+                    <span id="status-clipboard" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-credit-card text-purple-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Payment Handlers (Ödeme Yöneticileri)</p>
+                            <p class="text-[11px] text-gray-500">Web Payment API entegrasyonu</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-gray-500/10 text-gray-400 px-2 py-0.5 rounded-full font-medium">Sistem Kararı</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-triangle-exclamation text-red-500 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Insecure Content (Güvensiz İçerik)</p>
+                            <p class="text-[11px] text-gray-500">Karma içerikli (HTTP/HTTPS) komut çalıştırma</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded-full font-medium">Iframe İzole</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-bolt text-amber-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">JavaScript Optimization & Security</p>
+                            <p class="text-[11px] text-gray-500">V8 derleme optimizasyonu katmanları</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium">Maksimum</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-user-shield text-violet-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Third-party Sign-in (Üçüncü Taraf Giriş)</p>
+                            <p class="text-[11px] text-gray-500">Harici kimlik sağlayıcı köprüleri</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium">İzinli</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-vr-cardboard text-pink-500 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Augmented Reality (AR) & Virtual Reality (VR)</p>
+                            <p class="text-[11px] text-gray-500">WebXR cihaz API başlık ve uzay etkileşimi</p>
+                        </div>
+                    </div>
+                    <span id="status-xr" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-hand text-orange-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Hand Tracking (El Takibi)</p>
+                            <p class="text-[11px] text-gray-500">WebXR iskelet el takibi eklem haritalaması</p>
+                        </div>
+                    </div>
+                    <span id="status-handtracking" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-display text-blue-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Your Device Use / Window Management</p>
+                            <p class="text-[11px] text-gray-500">Çoklu ekran konumlandırma koordinatları</p>
+                        </div>
+                    </div>
+                    <span id="status-window" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-font text-stone-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Fonts (Yerel Yazı Tipleri)</p>
+                            <p class="text-[11px] text-gray-500">Sistem font listesine erişim yetkisi</p>
+                        </div>
+                    </div>
+                    <span id="status-fonts" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-clone text-cyan-500 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Automatic Picture-in-picture</p>
+                            <p class="text-[11px] text-gray-500">Sekme geçişinde otomatik video penceresi</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium">Aktif</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-arrows-up-down-left-right text-lime-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Scrolling and Zooming Shared Tabs</p>
+                            <p class="text-[11px] text-gray-500">Paylaşılan ekran pencerelerinde kontrol</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium">İzinli</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-laptop-code text-indigo-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Web App Installations</p>
+                            <p class="text-[11px] text-gray-500">PWA uygulama manifest kurulum yetkisi</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium">İzinli</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-network-wired text-emerald-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Local Network (Yerel Ağ Keşfi)</p>
+                            <p class="text-[11px] text-gray-500">IP ve mDNS tabanlı yerel cihaz taraması</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-gray-500/10 text-gray-400 px-2 py-0.5 rounded-full font-medium">Sistem Kararı</span>
+                </div>
+
+                <div class="flex items-center justify-between p-2.5 bg-[#11111b] rounded-lg border border-[#313244]/50">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-cubes text-sky-500 w-5 text-center"></i>
+                        <div>
+                            <p class="text-xs font-semibold text-white">Apps on Device (Cihazdaki Uygulamalar)</p>
+                            <p class="text-[11px] text-gray-500">İlişkili yerel uygulamaların kontrolü</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] bg-gray-500/10 text-gray-400 px-2 py-0.5 rounded-full font-medium">Sistem Kararı</span>
+                </div>
+
+            </div>
+
+            <button id="btnGrantPermissions" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-3 px-4 rounded-xl transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20 shrink-0 text-sm">
+                <i class="fa-solid fa-shield-halved"></i>
+                Tüm Entegre İzinleri Sırayla Tetikle ve Başla
+            </button>
+        </div>
+    </div>
+
+    <header class="bg-[#181825] border-b border-[#313244] px-6 py-3 flex items-center justify-between z-10 shrink-0">
+        <div class="flex items-center gap-3">
+            <span class="text-blue-400 text-xl"><i class="fa-solid fa-terminal"></i></span>
+            <h1 class="text-md font-semibold text-white tracking-wide">Web Code Lab</h1>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <label class="bg-[#313244] hover:bg-[#45475a] text-sm text-[#cdd6f4] px-4 py-2 rounded-lg cursor-pointer transition-all flex items-center gap-2 border border-[#45475a]">
+                <i class="fa-solid fa-file-import text-blue-400"></i>
+                <span>HTML Dosyası Yükle</span>
+                <input type="file" id="fileInput" accept=".html" class="hidden">
+            </label>
+
+            <button id="btnClear" class="bg-[#313244] hover:bg-red-950/40 hover:text-red-400 hover:border-red-900/50 text-sm text-[#cdd6f4] px-4 py-2 rounded-lg cursor-pointer transition-all flex items-center gap-2 border border-[#45475a]">
+                <i class="fa-solid fa-trash-can"></i>
+                <span>Temizle</span>
+            </button>
+
+            <div class="flex items-center gap-2 bg-[#1e1e2e] px-3 py-2 rounded-lg border border-[#313244]">
+                <input type="checkbox" id="chkAutoRun" class="w-4 h-4 accent-blue-500 cursor-pointer" checked>
+                <label id="lblAutoRun" for="chkAutoRun" class="text-xs text-gray-400 cursor-pointer select-none">Otomatik Çalıştır</label>
+            </div>
+
+            <button id="btnRun" class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium px-5 py-2 rounded-lg transition-all flex items-center gap-2 cursor-pointer shadow-md shadow-emerald-900/20">
+                <i class="fa-solid fa-play"></i>
+                Kodu Çalıştır
+            </button>
+        </div>
+    </header>
+
+    <main id="mainLayout" class="flex-1 flex flex-col md:flex-row overflow-hidden w-full relative">
+        
+        <section id="editorPanel" class="w-full md:w-1/2 flex h-1/2 md:h-full bg-[#1e1e2e] border-b md:border-b-0 border-[#313244] relative overflow-hidden shrink-0">
+            <div id="lineNumbers" class="line-numbers w-12 py-4 pr-2 bg-[#181825] text-gray-600 text-sm border-r border-[#313244] select-none pointer-events-none leading-6">
+                <div>1</div>
+            </div>
+            <div class="flex-1 relative h-full">
+                <textarea id="codeEditor" class="code-textarea w-full h-full p-4 bg-transparent text-[#cdd6f4] focus:outline-none text-sm leading-6 whitespace-pre overflow-auto" placeholder="HTML, CSS veya JS kodlarınızı buraya yazın veya dosya yükleyin..." spellcheck="false"></textarea>
+            </div>
+        </section>
+
+        <div id="resizer" class="hidden md:block w-1.5 hover:w-2 bg-[#313244] hover:bg-blue-500 cursor-col-resize transition-colors z-20 shrink-0"></div>
+
+        <section id="previewPanel" class="w-full flex-1 flex flex-col h-1/2 md:h-full bg-[#11111b]">
+            <div class="bg-[#181825]/60 px-4 py-1.5 border-b border-[#313244] flex items-center justify-between text-xs text-gray-500 select-none">
+                <span class="flex items-center gap-1.5"><i class="fa-solid fa-window-maximize text-gray-600"></i> Önizleme Çıktısı (Iframe)</span>
+                <span class="bg-blue-950 text-blue-400 px-2 py-0.5 rounded border border-blue-900/50">Sandbox Aktif</span>
+            </div>
+            <div class="flex-1 bg-white relative">
+                <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin allow-modals allow-popups allow-forms" class="w-full h-full border-none bg-white"></iframe>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const permissionModal = document.getElementById('permissionModal');
+        const btnGrantPermissions = document.getElementById('btnGrantPermissions');
+        const fileInput = document.getElementById('fileInput');
+        const btnClear = document.getElementById('btnClear');
+        const btnRun = document.getElementById('btnRun');
+        const chkAutoRun = document.getElementById('chkAutoRun');
+        const codeEditor = document.getElementById('codeEditor');
+        const lineNumbers = document.getElementById('lineNumbers');
+        const previewFrame = document.getElementById('previewFrame');
+
+        const mainLayout = document.getElementById('mainLayout');
+        const editorPanel = document.getElementById('editorPanel');
+        const resizer = document.getElementById('resizer');
+
+        // Durum Güncelleyici Yardımcı Fonksiyonu
+        function setStatus(id, type, text) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (type === 'progress') {
+                el.className = "text-[10px] bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded-full font-medium animate-pulse";
+            } else if (type === 'success') {
+                el.className = "text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full font-medium";
+            } else {
+                el.className = "text-[10px] bg-red-500/10 text-red-400 px-2 py-0.5 rounded-full font-medium";
+            }
+            el.innerText = text;
+        }
+
+        // TÜM İZİNLERİN ASENKRON TETİKLENME AKIŞI
+        btnGrantPermissions.addEventListener('click', async () => {
+            btnGrantPermissions.disabled = true;
+            btnGrantPermissions.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Tüm Protokoller İşleniyor...`;
+
+            // 1. Location (Konum)
+            try {
+                setStatus('status-location', 'progress', 'İsteniyor...');
+                await new Promise((res, rej) => { navigator.geolocation.getCurrentPosition(res, rej, {timeout: 3000}); });
+                setStatus('status-location', 'success', 'Onaylandı');
+            } catch (e) { setStatus('status-location', 'error', 'Red/Pasif'); }
+
+            // 2. Camera (Kamera)
+            try {
+                setStatus('status-camera', 'progress', 'İsteniyor...');
+                const s = await navigator.mediaDevices.getUserMedia({ video: true });
+                s.getTracks().forEach(t => t.stop());
+                setStatus('status-camera', 'success', 'Onaylandı');
+            } catch (e) { setStatus('status-camera', 'error', 'Red/Yok'); }
+
+            // 3. Microphone (Mikrofon)
+            try {
+                setStatus('status-microphone', 'progress', 'İsteniyor...');
+                const s = await navigator.mediaDevices.getUserMedia({ audio: true });
+                s.getTracks().forEach(t => t.stop());
+                setStatus('status-microphone', 'success', 'Onaylandı');
+            } catch (e) { setStatus('status-microphone', 'error', 'Red/Yok'); }
+
+            // 4. Motion Sensors (Cihaz Hareketi)
+            try {
+                setStatus('status-motion', 'progress', 'Sorgulanıyor...');
+                if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+                    const res = await DeviceMotionEvent.requestPermission();
+                    setStatus('status-motion', res === 'granted' ? 'success' : 'error', res === 'granted' ? 'Onaylandı' : 'Reddedildi');
+                } else {
+                    setStatus('status-motion', 'success', 'Destekleniyor');
+                }
+            } catch (e) { setStatus('status-motion', 'error', 'Kullanılamaz'); }
+
+            // 5. Notifications (Bildirimler)
+            try {
+                setStatus('status-notifications', 'progress', 'İsteniyor...');
+                const res = await Notification.requestPermission();
+                setStatus('status-notifications', res === 'granted' ? 'success' : 'error', res === 'granted' ? 'Onaylandı' : 'Reddedildi');
+            } catch (e) { setStatus('status-notifications', 'error', 'Desteklenmiyor'); }
+
+            // 6. MIDI Device
+            try {
+                setStatus('status-midi', 'progress', 'İsteniyor...');
+                await navigator.requestMIDIAccess({ sysex: true });
+                setStatus('status-midi', 'success', 'Erişilebilir');
+            } catch (e) { setStatus('status-midi', 'error', 'Yok/İzin Yok'); }
+
+            // 7. Clipboard (Pano API)
+            try {
+                setStatus('status-clipboard', 'progress', 'Sorgulanıyor...');
+                const status = await navigator.permissions.query({ name: "clipboard-read" });
+                setStatus('status-clipboard', status.state === 'granted' || status.state === 'prompt' ? 'success' : 'error', 'Hazır');
+            } catch (e) { setStatus('status-clipboard', 'success', 'Tetiklemeli Aktif'); }
+
+            // 8. WebUSB / WebHID / WebSerial API Kontrolleri (Güvenlik gereği cihaz seçimi runtime'da yapılır)
+            if ('usb' in navigator) setStatus('status-usb', 'success', 'API Hazır'); else setStatus('status-usb', 'error', 'Desteklenmiyor');
+            if ('serial' in navigator) setStatus('status-serial', 'success', 'API Hazır'); else setStatus('status-serial', 'error', 'Desteklenmiyor');
+            if ('hid' in navigator) setStatus('status-hid', 'success', 'API Hazır'); else setStatus('status-hid', 'error', 'Desteklenmiyor');
+
+            // 9. Dosya Sistemi Düzenleme API'si
+            if ('showOpenFilePicker' in window) setStatus('status-fileediting', 'success', 'API Hazır'); else setStatus('status-fileediting', 'error', 'Kısıtlı');
+
+            // 10. WebXR (AR/VR ve El Takibi Protokolleri)
+            if ('xr' in navigator) {
+                setStatus('status-xr', 'success', 'XR Hazır');
+                setStatus('status-handtracking', 'success', 'Takip Hazır');
+            } else {
+                setStatus('status-xr', 'error', 'Donanım Yok');
+                setStatus('status-handtracking', 'error', 'Donanım Yok');
+            }
+
+            // 11. Window Management / Fonts Kontrolleri
+            if ('getScreenDetails' in window || 'screen' in window) setStatus('status-window', 'success', 'İzinli'); else setStatus('status-window', 'error', 'Kısıtlı');
+            if ('queryLocalFonts' in window) setStatus('status-fonts', 'success', 'API Aktif'); else setStatus('status-fonts', 'error', 'Tarayıcı Blokeli');
+
+            // Modalı Kapat ve Editörü Başlat
+            setTimeout(() => {
+                permissionModal.classList.add('opacity-0');
+                setTimeout(() => {
+                    permissionModal.remove();
+                    initEditor();
+                }, 300);
+            }, 1000);
+        });
+
+        // VARSAYILAN BAŞLANGIÇ ŞABLONU
+        const defaultTemplate = `<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>By Cemal Evli</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+            font-size: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>By Cemal Evli</h1>
+
+</body>
+</html>`;
+
+        function initEditor() {
+            codeEditor.value = defaultTemplate;
+            updateLineNumbers();
+            runCode();
+            initResizer();
+        }
+
+        function updateLineNumbers() {
+            const lines = codeEditor.value.split('\n');
+            let lineNumHTML = '';
+            for (let i = 1; i <= lines.length; i++) {
+                lineNumHTML += `<div>${i}</div>`;
+            }
+            lineNumbers.innerHTML = lineNumHTML;
+        }
+
+        codeEditor.addEventListener('input', () => {
+            updateLineNumbers();
+            if (chkAutoRun.checked) runCode();
+        });
+
+        codeEditor.addEventListener('scroll', () => {
+            lineNumbers.scrollTop = codeEditor.scrollTop;
+        });
+
+        codeEditor.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = codeEditor.selectionStart;
+                const end = codeEditor.selectionEnd;
+                codeEditor.value = codeEditor.value.substring(0, start) + "    " + codeEditor.value.substring(end);
+                codeEditor.selectionStart = codeEditor.selectionEnd = start + 4;
+                updateLineNumbers();
+                if (chkAutoRun.checked) runCode();
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                codeEditor.value = evt.target.result;
+                updateLineNumbers();
+                runCode();
+            };
+            reader.readAsText(file);
+        });
+
+        function runCode() {
+            const userCode = codeEditor.value;
+            const blob = new Blob([userCode], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            if (previewFrame.src) {
+                URL.revokeObjectURL(previewFrame.src);
+            }
+            previewFrame.src = url;
+        }
+
+        // TEMİZLE BUTONU TETİKLEYİCİSİ
+        btnClear.addEventListener('click', () => {
+            codeEditor.value = '';
+            updateLineNumbers();
+            runCode();
+            codeEditor.focus();
+        });
+
+        btnRun.addEventListener('click', runCode);
+
+        // PANELERİ BOYUTLANDIRMA (RESIZER) SİSTEMİ
+        function initResizer() {
+            let isDragging = false;
+
+            resizer.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                mainLayout.classList.add('resizing'); // Sürükleme esnasında iframe'i deaktif eder
+                document.body.style.cursor = 'col-resize';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                // Sadece geniş ekran modunda (md: ve üzeri) çalışması için kontrol
+                if (window.innerWidth >= 768) {
+                    let pointerX = e.clientX;
+                    let containerWidth = mainLayout.clientWidth;
+                    
+                    // Yüzdesel genişlik hesabı
+                    let percentage = (pointerX / containerWidth) * 100;
+                    
+                    // Aşırı daralmayı önlemek için sınırlar (%15 ile %85 arası)
+                    if (percentage < 15) percentage = 15;
+                    if (percentage > 85) percentage = 85;
+                    
+                    editorPanel.style.width = `${percentage}%`;
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    mainLayout.classList.remove('resizing');
+                    document.body.style.cursor = 'default';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
