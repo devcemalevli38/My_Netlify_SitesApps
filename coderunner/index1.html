@@ -771,9 +771,9 @@
             if (!file) return;
 
             // Güvenlik ve Boyut Kontrolü (Maksimum 5MB)
-            const maxSizeInBytes = 5 * 1024 * 1024;
+            const maxSizeInBytes = 30 * 1024 * 1024;
             if (file.size > maxSizeInBytes) {
-                showToast("Hata: Dosya boyutu 5MB'dan büyük olamaz!");
+                showToast("Hata: Dosya boyutu 30MB'dan büyük olamaz!");
                 fileInput.value = ""; 
                 return;
             }
