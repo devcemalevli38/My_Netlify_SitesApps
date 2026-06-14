@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML Kod Tester</title>
-    <link class="cdn-icon" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/coderunner/coderunner.ico">
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/coderunner/coderunner.ico">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -31,6 +31,10 @@
             font-family: 'Fira Code', monospace, Consolas, Monaco;
             text-align: right;
             user-select: none;
+        }
+        /* Sürükleme esnasında iframe'in fare hareketlerini yutmasını engellemek için */
+        .resizing iframe {
+            pointer-events: none;
         }
     </style>
 </head>
@@ -440,18 +444,20 @@
         </div>
     </header>
 
-    <main class="flex-1 flex flex-col md:flex-row overflow-hidden w-full relative">
+    <main id="mainLayout" class="flex-1 flex flex-col md:flex-row overflow-hidden w-full relative">
         
-        <section class="w-full md:w-1/2 flex h-1/2 md:h-full bg-[#1e1e2e] border-b md:border-b-0 md:border-r border-[#313244] relative overflow-hidden">
+        <section id="editorPanel" class="w-full md:w-1/2 flex h-1/2 md:h-full bg-[#1e1e2e] border-b md:border-b-0 border-[#313244] relative overflow-hidden shrink-0">
             <div id="lineNumbers" class="line-numbers w-12 py-4 pr-2 bg-[#181825] text-gray-600 text-sm border-r border-[#313244] select-none pointer-events-none leading-6">
                 <div>1</div>
             </div>
             <div class="flex-1 relative h-full">
-                <textarea id="codeEditor" class="code-textarea w-full h-full p-4 bg-transparent text-[#cdd6f4] focus:outline-none text-sm leading-6 whitespace-pre overflow-auto" placeholder="HTML, CSS veya JS kodlarınızı buraya yazın..." spellcheck="false"></textarea>
+                <textarea id="codeEditor" class="code-textarea w-full h-full p-4 bg-transparent text-[#cdd6f4] focus:outline-none text-sm leading-6 whitespace-pre overflow-auto" placeholder="HTML, CSS veya JS kodlarınızı buraya yazın veya dosya yükleyin..." spellcheck="false"></textarea>
             </div>
         </section>
 
-        <section class="w-full md:w-1/2 flex flex-col h-1/2 md:h-full bg-[#11111b]">
+        <div id="resizer" class="hidden md:block w-1.5 hover:w-2 bg-[#313244] hover:bg-blue-500 cursor-col-resize transition-colors z-20 shrink-0"></div>
+
+        <section id="previewPanel" class="w-full flex-1 flex flex-col h-1/2 md:h-full bg-[#11111b]">
             <div class="bg-[#181825]/60 px-4 py-1.5 border-b border-[#313244] flex items-center justify-between text-xs text-gray-500 select-none">
                 <span class="flex items-center gap-1.5"><i class="fa-solid fa-window-maximize text-gray-600"></i> Önizleme Çıktısı (Iframe)</span>
                 <span class="bg-blue-950 text-blue-400 px-2 py-0.5 rounded border border-blue-900/50">Sandbox Aktif</span>
@@ -473,6 +479,10 @@
         const codeEditor = document.getElementById('codeEditor');
         const lineNumbers = document.getElementById('lineNumbers');
         const previewFrame = document.getElementById('previewFrame');
+
+        const mainLayout = document.getElementById('mainLayout');
+        const editorPanel = document.getElementById('editorPanel');
+        const resizer = document.getElementById('resizer');
 
         // Durum Güncelleyici Yardımcı Fonksiyonu
         function setStatus(id, type, text) {
@@ -613,6 +623,7 @@
             codeEditor.value = defaultTemplate;
             updateLineNumbers();
             runCode();
+            initResizer();
         }
 
         function updateLineNumbers() {
@@ -676,6 +687,44 @@
         });
 
         btnRun.addEventListener('click', runCode);
+
+        // PANELERİ BOYUTLANDIRMA (RESIZER) SİSTEMİ
+        function initResizer() {
+            let isDragging = false;
+
+            resizer.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                mainLayout.classList.add('resizing'); // Sürükleme esnasında iframe'i deaktif eder
+                document.body.style.cursor = 'col-resize';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                // Sadece geniş ekran modunda (md: ve üzeri) çalışması için kontrol
+                if (window.innerWidth >= 768) {
+                    let pointerX = e.clientX;
+                    let containerWidth = mainLayout.clientWidth;
+                    
+                    // Yüzdesel genişlik hesabı
+                    let percentage = (pointerX / containerWidth) * 100;
+                    
+                    // Aşırı daralmayı önlemek için sınırlar (%15 ile %85 arası)
+                    if (percentage < 15) percentage = 15;
+                    if (percentage > 85) percentage = 85;
+                    
+                    editorPanel.style.width = `${percentage}%`;
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    mainLayout.classList.remove('resizing');
+                    document.body.style.cursor = 'default';
+                }
+            });
+        }
     </script>
 </body>
 </html>
