@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced HTML Code Runner</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Özelleştirilmiş Scrollbar ve Kod Alanı Stilleri */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1e2e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #313244;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #45475a;
+        }
+        .code-textarea {
+            resize: none;
+            font-family: 'Fira Code', monospace, Consolas, Monaco;
+            tab-size: 4;
+        }
+        .line-numbers {
+            font-family: 'Fira Code', monospace, Consolas, Monaco;
+            text-align: right;
+            user-select: none;
+        }
+    </style>
+</head>
+<body class="bg-[#11111b] text-[#cdd6f4] h-screen flex flex-col overflow-hidden m-0 font-sans">
+
+    <div id="permissionModal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 transition-opacity duration-300">
+        <div class="bg-[#1e1e2e] border border-[#313244] w-full max-w-lg p-8 rounded-2xl shadow-2xl mx-4">
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-500/10 text-blue-400 mb-4 text-2xl">
+                    <i class="fa-solid fa-code-nodes"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-white">HTML Code Runner'a Hoş Geldiniz</h2>
+                <p class="text-gray-400 text-sm mt-2">Uygulamanın yazdığınız kodlardaki donanım ve API bileşenlerini çalıştırabilmesi için aşağıdaki izinlere ihtiyaç duyulmaktadır.</p>
+            </div>
+
+            <div class="space-y-3 my-6">
+                <div class="flex items-center justify-between p-3 bg-[#181825] rounded-xl border border-[#313244]">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-location-dot text-red-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-white">Konum İzni</p>
+                            <p class="text-xs text-gray-500">Coğrafi konum tabanlı script testleri için</p>
+                        </div>
+                    </div>
+                    <span id="status-geo" class="text-xs bg-yellow-500/10 text-yellow-400 px-2.5 py-1 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-3 bg-[#181825] rounded-xl border border-[#313244]">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-video text-green-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-white">Kamera İzni</p>
+                            <p class="text-xs text-gray-500">Görüntü işleme ve video akış testleri için</p>
+                        </div>
+                    </div>
+                    <span id="status-camera" class="text-xs bg-yellow-500/10 text-yellow-400 px-2.5 py-1 rounded-full font-medium">Bekliyor</span>
+                </div>
+
+                <div class="flex items-center justify-between p-3 bg-[#181825] rounded-xl border border-[#313244]">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-microphone text-purple-400 w-5 text-center"></i>
+                        <div>
+                            <p class="text-sm font-semibold text-white">Mikrofon İzni</p>
+                            <p class="text-xs text-gray-500">Ses kaydı ve ses analizi scriptleri için</p>
+                        </div>
+                    </div>
+                    <span id="status-mic" class="text-xs bg-yellow-500/10 text-yellow-400 px-2.5 py-1 rounded-full font-medium">Bekliyor</span>
+                </div>
+            </div>
+
+            <button id="btnGrantPermissions" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-3.5 px-4 rounded-xl transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20">
+                <i class="fa-solid fa-shield-halved"></i>
+                Tüm İzinleri Onayla ve Başla
+            </button>
+        </div>
+    </div>
+
+    <header class="bg-[#181825] border-b border-[#313244] px-6 py-3 flex items-center justify-between z-10 shrink-0">
+        <div class="flex items-center gap-3">
+            <span class="text-blue-400 text-xl"><i class="fa-solid fa-terminal"></i></span>
+            <h1 class="text-md font-semibold text-white tracking-wide">Web Code Lab</h1>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <label class="bg-[#313244] hover:bg-[#45475a] text-sm text-[#cdd6f4] px-4 py-2 rounded-lg cursor-pointer transition-all flex items-center gap-2 border border-[#45475a]">
+                <i class="fa-solid fa-file-import text-blue-400"></i>
+                <span>HTML Dosyası Yükle</span>
+                <input type="file" id="fileInput" accept=".html" class="hidden">
+            </label>
+
+            <div class="flex items-center gap-2 bg-[#1e1e2e] px-3 py-2 rounded-lg border border-[#313244]">
+                <input type="checkbox" id="chkAutoRun" class="w-4 h-4 accent-blue-500 cursor-pointer" checked>
+                <label id="lblAutoRun" for="chkAutoRun" class="text-xs text-gray-400 cursor-pointer select-none">Otomatik Çalıştır</label>
+            </div>
+
+            <button id="btnRun" class="bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium px-5 py-2 rounded-lg transition-all flex items-center gap-2 cursor-pointer shadow-md shadow-emerald-900/20">
+                <i class="fa-solid fa-play"></i>
+                Kodu Çalıştır
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden w-full relative">
+        
+        <section class="w-full md:w-1/2 flex h-1/2 md:h-full bg-[#1e1e2e] border-b md:border-b-0 md:border-r border-[#313244] relative overflow-hidden">
+            <div id="lineNumbers" class="line-numbers w-12 py-4 pr-2 bg-[#181825] text-gray-600 text-sm border-r border-[#313244] select-none pointer-events-none leading-6">
+                <div>1</div>
+            </div>
+            <div class="flex-1 relative h-full">
+                <textarea id="codeEditor" class="code-textarea w-full h-full p-4 bg-transparent text-[#cdd6f4] focus:outline-none text-sm leading-6 whitespace-pre overflow-auto" placeholder="HTML, CSS veya JS kodlarınızı buraya yazın veya dosya yükleyin..." spellcheck="false"></textarea>
+            </div>
+        </section>
+
+        <section class="w-full md:w-1/2 flex flex-col h-1/2 md:h-full bg-[#11111b]">
+            <div class="bg-[#181825]/60 px-4 py-1.5 border-b border-[#313244] flex items-center justify-between text-xs text-gray-500 select-none">
+                <span class="flex items-center gap-1.5"><i class="fa-solid fa-window-maximize text-gray-600"></i> Önizleme Çıktısı (Iframe)</span>
+                <span class="bg-blue-950 text-blue-400 px-2 py-0.5 rounded border border-blue-900/50">Sandbox Aktif</span>
+            </div>
+            <div class="flex-1 bg-white relative">
+                <iframe id="previewFrame" sandbox="allow-scripts allow-same-origin allow-modals allow-popups allow-forms" class="w-full h-full border-none bg-white"></iframe>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // DOM Elemanları
+        const permissionModal = document.getElementById('permissionModal');
+        const btnGrantPermissions = document.getElementById('btnGrantPermissions');
+        const fileInput = document.getElementById('fileInput');
+        const btnRun = document.getElementById('btnRun');
+        const chkAutoRun = document.getElementById('chkAutoRun');
+        const codeEditor = document.getElementById('codeEditor');
+        const lineNumbers = document.getElementById('lineNumbers');
+        const previewFrame = document.getElementById('previewFrame');
+
+        // Durum Elementleri
+        const statusGeo = document.getElementById('status-geo');
+        const statusCamera = document.getElementById('status-camera');
+        const statusMic = document.getElementById('status-mic');
+
+        // Varsayılan Başlangıç Şablonu
+        const defaultTemplate = `<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            margin: 0;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            color: #333;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 400px;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+        button:hover { background: #1d4ed8; }
+        #output { margin-top: 15px; font-weight: bold; color: #1e3a8a; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Canlı Önizleme Laboratuvarı</h2>
+        <p>Kodlarınız burada anlık olarak çalışır. Aşağıdaki butona tıklayarak donanım API testini deneyebilirsiniz.</p>
+        <button onclick="getRealLocation()">Konumumu Al</button>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function getRealLocation() {
+            const out = document.getElementById('output');
+            if (navigator.geolocation) {
+                out.innerText = "Konum aranıyor...";
+                navigator.geolocation.getCurrentPosition(
+                    (pos) => {
+                        out.innerText = \`Enlem: \${pos.coords.latitude.toFixed(4)}, Boylam: \${pos.coords.longitude.toFixed(4)}\`;
+                    },
+                    (err) => {
+                        out.innerText = "Hata: " + err.message;
+                    }
+                );
+            } else {
+                out.innerText = "Tarayıcınız konum servislerini desteklemiyor.";
+            }
+        }
+    <\/script>
+</body>
+</html>`;
+
+        // 1. İZİN ALMA YÖNETİMİ
+        btnGrantPermissions.addEventListener('click', async () => {
+            btnGrantPermissions.disabled = true;
+            btnGrantPermissions.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> İzinler İşleniyor...`;
+
+            // A. Geolocation İzni
+            try {
+                statusGeo.className = "text-xs bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-full font-medium animate-pulse";
+                statusGeo.innerText = "İsteniyor...";
+                await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+                });
+                statusGeo.className = "text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full font-medium";
+                statusGeo.innerText = "Onaylandı";
+            } catch (err) {
+                statusGeo.className = "text-xs bg-red-500/10 text-red-400 px-2.5 py-1 rounded-full font-medium";
+                statusGeo.innerText = err.code === 1 ? "Reddedildi" : "Kullanılamıyor";
+            }
+
+            // B. Kamera İzni
+            try {
+                statusCamera.className = "text-xs bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-full font-medium animate-pulse";
+                statusCamera.innerText = "İsteniyor...";
+                const camStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                camStream.getTracks().forEach(track => track.stop()); // Akışı hemen kapat
+                statusCamera.className = "text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full font-medium";
+                statusCamera.innerText = "Onaylandı";
+            } catch (err) {
+                statusCamera.className = "text-xs bg-red-500/10 text-red-400 px-2.5 py-1 rounded-full font-medium";
+                statusCamera.innerText = "Reddedildi/Yok";
+            }
+
+            // C. Mikrofon İzni
+            try {
+                statusMic.className = "text-xs bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded-full font-medium animate-pulse";
+                statusMic.innerText = "İsteniyor...";
+                const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                micStream.getTracks().forEach(track => track.stop()); // Akışı hemen kapat
+                statusMic.className = "text-xs bg-emerald-500/10 text-emerald-400 px-2.5 py-1 rounded-full font-medium";
+                statusMic.innerText = "Onaylandı";
+            } catch (err) {
+                statusMic.className = "text-xs bg-red-500/10 text-red-400 px-2.5 py-1 rounded-full font-medium";
+                statusMic.innerText = "Reddedildi/Yok";
+            }
+
+            // Modalı Kapat ve Editörü Başlat
+            setTimeout(() => {
+                permissionModal.classList.add('opacity-0');
+                setTimeout(() => {
+                    permissionModal.remove();
+                    initEditor();
+                }, 300);
+            }, 800);
+        });
+
+        // 2. EDİTÖR KURULUMU VE SATIR NUMARALARI
+        function initEditor() {
+            codeEditor.value = defaultTemplate;
+            updateLineNumbers();
+            runCode();
+        }
+
+        function updateLineNumbers() {
+            const lines = codeEditor.value.split('\n');
+            const lineCount = lines.length;
+            let lineNumHTML = '';
+            for (let i = 1; i <= lineCount; i++) {
+                lineNumHTML += `<div>${i}</div>`;
+            }
+            lineNumbers.innerHTML = lineNumHTML;
+        }
+
+        // Input ve Scroll senkronizasyonu
+        codeEditor.addEventListener('input', () => {
+            updateLineNumbers();
+            if (chkAutoRun.checked) {
+                runCode();
+            }
+        });
+
+        codeEditor.addEventListener('scroll', () => {
+            lineNumbers.scrollTop = codeEditor.scrollTop;
+        });
+
+        // Tab tuşunu algılama ve 4 karakter boşluk bırakma
+        codeEditor.addEventListener('keydown', (e) => {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = codeEditor.selectionStart;
+                const end = codeEditor.selectionEnd;
+                codeEditor.value = codeEditor.value.substring(0, start) + "    " + codeEditor.value.substring(end);
+                codeEditor.selectionStart = codeEditor.selectionEnd = start + 4;
+                updateLineNumbers();
+                if (chkAutoRun.checked) runCode();
+            }
+        });
+
+        // 3. DOSYA YÜKLEME SİSTEMİ
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (evt) => {
+                codeEditor.value = evt.target.result;
+                updateLineNumbers();
+                runCode();
+            };
+            reader.readAsText(file);
+        });
+
+        // 4. RUNNER (KOD ÇALIŞTIRMA MANTIĞI)
+        function runCode() {
+            const userCode = codeEditor.value;
+            
+            // Iframe içeriğini temizleme ve yeniden oluşturma
+            const blob = new Blob([userCode], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            
+            // Eski URL bellek sızıntısını önlemek için revoke edilir
+            if (previewFrame.src) {
+                URL.revokeObjectURL(previewFrame.src);
+            }
+            
+            previewFrame.src = url;
+        }
+
+        btnRun.addEventListener('click', runCode);
+    </script>
+</body>
+</html>
