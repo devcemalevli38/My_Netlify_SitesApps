@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML Kod Tester</title>
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/coderunner/coderunner.ico">
+    <link class="cdn-icon" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/coderunner/coderunner.ico">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -423,6 +423,11 @@
                 <input type="file" id="fileInput" accept=".html" class="hidden">
             </label>
 
+            <button id="btnClear" class="bg-[#313244] hover:bg-red-950/40 hover:text-red-400 hover:border-red-900/50 text-sm text-[#cdd6f4] px-4 py-2 rounded-lg cursor-pointer transition-all flex items-center gap-2 border border-[#45475a]">
+                <i class="fa-solid fa-trash-can"></i>
+                <span>Temizle</span>
+            </button>
+
             <div class="flex items-center gap-2 bg-[#1e1e2e] px-3 py-2 rounded-lg border border-[#313244]">
                 <input type="checkbox" id="chkAutoRun" class="w-4 h-4 accent-blue-500 cursor-pointer" checked>
                 <label id="lblAutoRun" for="chkAutoRun" class="text-xs text-gray-400 cursor-pointer select-none">Otomatik Çalıştır</label>
@@ -442,7 +447,7 @@
                 <div>1</div>
             </div>
             <div class="flex-1 relative h-full">
-                <textarea id="codeEditor" class="code-textarea w-full h-full p-4 bg-transparent text-[#cdd6f4] focus:outline-none text-sm leading-6 whitespace-pre overflow-auto" placeholder="HTML, CSS veya JS kodlarınızı buraya yazın veya dosya yükleyin..." spellcheck="false"></textarea>
+                <textarea id="codeEditor" class="code-textarea w-full h-full p-4 bg-transparent text-[#cdd6f4] focus:outline-none text-sm leading-6 whitespace-pre overflow-auto" placeholder="HTML, CSS veya JS kodlarınızı buraya yazın..." spellcheck="false"></textarea>
             </div>
         </section>
 
@@ -462,6 +467,7 @@
         const permissionModal = document.getElementById('permissionModal');
         const btnGrantPermissions = document.getElementById('btnGrantPermissions');
         const fileInput = document.getElementById('fileInput');
+        const btnClear = document.getElementById('btnClear');
         const btnRun = document.getElementById('btnRun');
         const chkAutoRun = document.getElementById('chkAutoRun');
         const codeEditor = document.getElementById('codeEditor');
@@ -573,7 +579,7 @@
             }, 1000);
         });
 
-        // VARYAYILAN BAŞLANGIÇ ŞABLONU
+        // VARSAYILAN BAŞLANGIÇ ŞABLONU
         const defaultTemplate = `<!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -660,6 +666,14 @@
             }
             previewFrame.src = url;
         }
+
+        // TEMİZLE BUTONU TETİKLEYİCİSİ
+        btnClear.addEventListener('click', () => {
+            codeEditor.value = '';
+            updateLineNumbers();
+            runCode();
+            codeEditor.focus();
+        });
 
         btnRun.addEventListener('click', runCode);
     </script>
