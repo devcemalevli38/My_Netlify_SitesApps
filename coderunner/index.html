@@ -575,61 +575,31 @@
 
         // VARYAYILAN BAŞLANGIÇ ŞABLONU
         const defaultTemplate = `<!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>By Cemal Evli</title>
     <style>
         body {
-            font-family: system-ui, -apple-system, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
-            min-height: 90vh;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            background: #0f172a;
-            color: #f8fafc;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
         }
-        .container {
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            text-align: center;
-            border: 1px solid #334155;
+        h1 {
+            color: #333;
+            font-size: 3rem;
         }
-        button {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        button:hover { background: #2563eb; }
-        #log { margin-top: 15px; color: #38bdf8; font-size: 14px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h3>Donanım API Test İstasyonu</h3>
-        <p>Bütünleşik izinler aktiftir. Aşağıdaki butondan test gerçekleştirebilirsiniz.</p>
-        <button onclick="testSystem()">Konum ve Medya Kontrolü Yap</button>
-        <div id="log"></div>
-    </div>
 
-    <script>
-        function testSystem() {
-            const log = document.getElementById('log');
-            if(navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    p => log.innerHTML = "Enlem: " + p.coords.latitude.toFixed(4) + "<br>Boylam: " + p.coords.longitude.toFixed(4),
-                    e => log.innerText = "Hata veya Erişim Reddedildi."
-                );
-            }
-        }
-    <\/script>
+    <h1>By Cemal Evli</h1>
+
 </body>
 </html>`;
 
