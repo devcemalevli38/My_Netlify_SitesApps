@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HTML Kod Tester</title>
-    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/coderunner/coderunner.ico">
+    <link class="flex" rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/coderunner/coderunner.ico">
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -27,15 +27,25 @@
             font-family: 'Fira Code', monospace, Consolas, Monaco;
             tab-size: 4;
             line-height: 24px;
+            text-align: left !important;
+            direction: ltr !important;
+            box-sizing: border-box !important;
+            padding-left: 1rem !important;
         }
         .line-numbers {
             font-family: 'Fira Code', monospace, Consolas, Monaco;
             text-align: right;
             user-select: none;
             line-height: 24px;
+            box-sizing: border-box !important;
         }
         .resizing iframe {
             pointer-events: none;
+        }
+        /* SORUN 2 ÇÖZÜMÜ: Sürükleme sırasında tüm sayfada seçimi engeller */
+        .resizing, .resizing * {
+            user-select: none !important;
+            -webkit-user-select: none !important;
         }
     </style>
 </head>
@@ -244,7 +254,7 @@
                         <i class="fa-solid fa-gamepad text-emerald-400 w-5 text-center"></i>
                         <div>
                             <p class="text-xs font-semibold text-white">HID Devices (WebHID API)</p>
-                            <p class="text-[11px] text-gray-500">Özel klavye, fare ve oyun kolları protokolü</p>
+                            <p class="text-[11px] text-gray-500">Özen klavye, fare ve oyun kolları protokolü</p>
                         </div>
                     </div>
                     <span id="status-hid" class="text-[10px] bg-yellow-500/10 text-yellow-400 px-2 py-0.5 rounded-full font-medium">Bekliyor</span>
@@ -454,7 +464,7 @@
         </div>
     </header>
 
-    <main id="mainLayout" class="flex-1 flex flex-col md:flex-row overflow-hidden w-full relative">
+    <main id="mainLayout" class="flex-1 flex flex-col md:flex-row items-stretch overflow-hidden w-full relative">
         
         <section id="editorPanel" class="w-full md:w-1/2 flex h-1/2 md:h-full bg-[#1e1e2e] border-b md:border-b-0 border-[#313244] relative overflow-hidden shrink-0">
             <div id="lineNumbers" class="line-numbers w-12 py-4 pr-2 bg-[#181825] text-gray-600 text-sm border-r border-[#313244] select-none pointer-events-none overflow-hidden">
