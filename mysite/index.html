@@ -36,7 +36,7 @@
             <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                 <i class="fa-solid fa-lock text-white text-xl"></i>
             </div>
-            <h2 class="text-2xl font-extrabold text-white tracking-tight mb-2">Korumalı Alan</h2>
+            <h2 class="text-2xl font-extrabold text-white tracking-tight mb-2">Şifre:</h2>
             <p class="text-sm text-neutral-400 mb-6 font-light">Bu içeriği görüntülemek için lütfen erişim şifresini girin.</p>
             
             <form onsubmit="verifyPassword(event)" class="space-y-4">
@@ -409,17 +409,38 @@
             }, 300);
         }
 
+        // HTML injection ve XSS açıklarını önlemek için güvenli metin kaçırma fonksiyonu
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        // Metin içindeki düz URL'leri tespit edip tıklanabilir link haline getiren yardımcı fonksiyon
+        function linkify(text) {
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            return text.replace(urlRegex, function(url) {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-indigo-400 hover:text-indigo-300 underline break-all transition-colors">${url}</a>`;
+            });
+        }
+
         function openArticle(index) {
             const file = globalMediaData.texts[index];
             if (!file) return;
 
             const modal = document.getElementById('article-modal');
             const innerContainer = modal.querySelector('div');
-            
-            const contentText = fetchedTextsCache[index] || "Yazı içeriği yükleniyor, lütfen bekleyin...";
+            const modalContentEl = document.getElementById('modal-content');
             
             document.getElementById('modal-title').innerText = file.title || cleanTitle(file.name);
-            document.getElementById('modal-content').innerText = contentText;
+            
+            if (fetchedTextsCache[index]) {
+                // Güvenlik adımları: Önce metni escape et, sonra linkleri a etiketine dönüştür
+                const safeText = escapeHTML(fetchedTextsCache[index]);
+                modalContentEl.innerHTML = linkify(safeText);
+            } else {
+                modalContentEl.innerText = "Yazı içeriği yükleniyor, lütfen bekleyin...";
+            }
             
             modal.classList.remove('hidden');
             modal.classList.add('flex');
