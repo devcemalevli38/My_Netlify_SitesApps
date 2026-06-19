@@ -232,13 +232,12 @@
 </div>
 
 <script>
-    // Sayfa yüklendiğinde URL parametresini kontrol eden API Mekanizması
+    // Sayfa yüklendiğinde URL parametresini kontrol eden API Mekanizması (Saf JSON Çıktısı)
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
         const targetUrl = urlParams.get('url');
 
         if (targetUrl !== null) {
-            // Eğer URL parametresi varsa temiz bir JSON çıktısı üretelim
             let jsonResponse = {};
             const decodedUrl = decodeURIComponent(targetUrl).trim();
 
@@ -252,18 +251,10 @@
                 jsonResponse = { status: "error", message: "Gecersiz GitHub dosya linki. Link 'blob' icermelidir." };
             }
 
-            // Body içeriğini tamamen temizleyip saf JSON basıyoruz
-            document.body.innerHTML = '';
-            document.body.style.background = '#0a0f1d'; // JSON okumayı kolaylaştıracak koyu arka plan
-            document.body.style.justifyContent = 'flex-start';
-            document.body.style.padding = '20px';
-            
-            const pre = document.createElement('pre');
-            pre.style.color = '#10b981';
-            pre.style.fontFamily = 'monospace';
-            pre.style.fontSize = '14px';
-            pre.innerText = JSON.stringify(jsonResponse, null, 4);
-            document.body.appendChild(pre);
+            // Tarayıcı içeriğini tamamen sıfırlayıp application/json formatına yakın ham çıktı veriyoruz
+            document.open("application/json");
+            document.write(JSON.stringify(jsonResponse, null, 4));
+            document.close();
         }
     };
 
@@ -275,7 +266,6 @@
         const openBtn = document.getElementById('openBtn');
         const copyBtn = document.getElementById('copyBtn');
 
-        // Varsayılan buton durumunu sıfırla
         copyBtn.innerText = "Kopyala";
         copyBtn.classList.remove('success');
 
