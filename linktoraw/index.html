@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cemal Evli | Raw Link Dönüştürücü</title>
+    <title>Cemal Evli | Raw Link Dönüştürücü & API</title>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
@@ -208,7 +208,7 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="mainContainer">
     <h2>GitHub Raw Link Dönüştürücü</h2>
     
     <div class="input-group">
@@ -232,6 +232,30 @@
 </div>
 
 <script>
+    // Sayfa yüklendiğinde URL parametresini kontrol eden API Mekanizması (Doğrudan Yönlendirme)
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetUrl = urlParams.get('url');
+
+        if (targetUrl !== null) {
+            const decodedUrl = decodeURIComponent(targetUrl).trim();
+
+            if (decodedUrl.includes('github.com/') && decodedUrl.includes('/blob/')) {
+                let rawUrl = decodedUrl
+                    .replace('github.com', 'raw.githubusercontent.com')
+                    .replace('/blob/', '/');
+                
+                // Doğrudan oluşturulan Raw Linkine yönlendiriyoruz
+                window.location.href = rawUrl;
+            } else {
+                // Hata durumunda ekrana sadece temiz bir hata mesajı basıyoruz
+                document.open("text/plain");
+                document.write("HATA: Gecersiz GitHub dosya linki. Link 'blob' icermelidir.");
+                document.close();
+            }
+        }
+    };
+
     function convertLink() {
         const inputUrl = document.getElementById('githubUrl').value.trim();
         const errorMsg = document.getElementById('errorMsg');
@@ -240,7 +264,6 @@
         const openBtn = document.getElementById('openBtn');
         const copyBtn = document.getElementById('copyBtn');
 
-        // Varsayılan buton durumunu sıfırla
         copyBtn.innerText = "Kopyala";
         copyBtn.classList.remove('success');
 
@@ -276,8 +299,8 @@
                 copyBtn.classList.remove('success');
             }, 2000);
         }).catch(err => {
-            console.error('Kopyalama başarısız oldu: ', err);
-            alert('Kopyalanamadı, lütfen manuel olarak seçip kopyalayın.');
+            console.error('Kopyalama basarisiz oldu: ', err);
+            alert('Kopyalanamadi, lutfen manuel olarak secip kopyalayin.');
         });
     }
 
