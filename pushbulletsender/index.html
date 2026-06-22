@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Pushbullet Mesaj Gönderici</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #43cea2, #185a9d);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      max-width: 420px;
+      width: 100%;
+      padding: 24px;
+      box-sizing: border-box;
+      animation: fadeIn 0.6s ease;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #185a9d;
+      font-size: 1.5rem;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+      color: #333;
+      font-size: 0.9rem;
+    }
+    input[type="text"], 
+    input[type="password"], 
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+      transition: border-color 0.2s;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #43cea2;
+    }
+    textarea {
+      height: 100px;
+      resize: none;
+    }
+    button {
+      margin-top: 16px;
+      width: 100%;
+      padding: 12px;
+      background: #43cea2;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.1s;
+    }
+    button:hover {
+      background: #36b490;
+    }
+    button:active {
+      transform: scale(0.98);
+    }
+    .log {
+      margin-top: 16px;
+      padding: 12px;
+      background: #f8f8f8;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      border: 1px solid #e0e0e0;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Pushbullet Mesaj Gönder</h1>
+
+    <label>Access Token
+      <input id="token" type="password" placeholder="Pushbullet Access Token'inizi girin">
+    </label>
+
+    <label>Başlık (title)
+      <input id="title" type="text" placeholder="Bildirim başlığı (opsiyonel)">
+    </label>
+
+    <label>Mesaj (body)
+      <textarea id="body" placeholder="Mesajınızı yazın..."></textarea>
+    </label>
+
+    <button id="send">Gönder</button>
+
+    <div class="log" id="log"></div>
+  </div>
+
+  <script>
+    const log = (t) => {
+      document.getElementById('log').innerText =
+        typeof t === 'string' ? t : JSON.stringify(t, null, 2);
+    };
+
+    document.getElementById('send').addEventListener('click', async () => {
+      const token = document.getElementById('token').value.trim();
+      const title = document.getElementById('title').value;
+      const body = document.getElementById('body').value;
+
+      if (!token) {
+        return log('Lütfen token girin.');
+      }
+
+      const payload = { type: 'note', title, body };
+
+      log('Gönderiliyor...');
+
+      try {
+        const r = await fetch('https://api.pushbullet.com/v2/pushes', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await r.json();
+        if (!r.ok) log('Hata: ' + JSON.stringify(data));
+        else log('Başarılı: ' + JSON.stringify(data, null, 2));
+      } catch (e) {
+        log('İstek hatası: ' + e.message);
+      }
+    });
+  </script>
+</body>
+</html>
