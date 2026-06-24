@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JSON Söz Oluşturucu</title>
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/mottoverse_json/mottoverse.ico">
     <style>
         :root {
             --bg-color: #0f172a;
@@ -357,7 +358,7 @@
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonOutput.textContent);
         const downloadAnchor = document.createElement('a');
         downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", "test.json");
+        downloadAnchor.setAttribute("download", "mottoverse.json.json");
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
