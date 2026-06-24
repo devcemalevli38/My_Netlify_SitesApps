@@ -22,7 +22,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           USER="cemal201138"
-          REPOS=("Python_Muzik_Calar" "Python-Hand-Mouse" "Pushbullet-Sender-Android" "Python_Lock_App")
+          REPOS=("Python_Muzik_Calar" "Python-Hand-Mouse" "Pushbullet-Sender-Android" "Python_Lock_App" "Mottoverse")
           
           echo "[]" > myprojects.json
 
