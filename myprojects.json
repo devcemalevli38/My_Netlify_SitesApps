@@ -118,5 +118,36 @@
         "download_url": "https://github.com/cemal201138/Python_Lock_App/releases/download/V1/usb_writer_py.py"
       }
     ]
+  },
+  {
+    "project": "Mottoverse",
+    "version": "V2",
+    "stars": 0,
+    "forks": 0,
+    "source_zip": "https://github.com/cemal201138/Mottoverse/archive/refs/tags/V2.zip",
+    "source_tar": "https://github.com/cemal201138/Mottoverse/archive/refs/tags/V2.tar.gz",
+    "updated_at": "2026-06-24T19:58:42Z",
+    "downloadable_files": [
+      {
+        "file_name": "Mottoverse_V2.zip",
+        "download_url": "https://github.com/cemal201138/Mottoverse/releases/download/V2/Mottoverse_V2.zip"
+      },
+      {
+        "file_name": "Mottoverse_V2_Ico.ico",
+        "download_url": "https://github.com/cemal201138/Mottoverse/releases/download/V2/Mottoverse_V2_Ico.ico"
+      },
+      {
+        "file_name": "Mottoverse_V2_Png.png",
+        "download_url": "https://github.com/cemal201138/Mottoverse/releases/download/V2/Mottoverse_V2_Png.png"
+      },
+      {
+        "file_name": "Mottoverse_V2_Py.exe",
+        "download_url": "https://github.com/cemal201138/Mottoverse/releases/download/V2/Mottoverse_V2_Py.exe"
+      },
+      {
+        "file_name": "Mottoverse_V2_Py.py",
+        "download_url": "https://github.com/cemal201138/Mottoverse/releases/download/V2/Mottoverse_V2_Py.py"
+      }
+    ]
   }
 ]
