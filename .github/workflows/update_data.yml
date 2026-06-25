@@ -25,10 +25,10 @@ jobs:
           curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/" > projects.json
           
           # Oyunları çek
-          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/cemal201138-file-user/games/releases" > games.json
+          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/cemal201138/games/releases" > games.json
           
           # Dosyaları çek
-          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/cemal201138-file-user/files/releases" > files.json
+          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/cemal201138/files/releases" > files.json
 
       - name: Commit and Push Changes
         run: |
