@@ -224,21 +224,18 @@ h1 { font-family:'Cormorant Garamond',serif; font-size:1.85rem; color:var(--whit
 </div>
 
 <script>
-const FORMSPREE_URL = "https://formspree.io/f/xwvwnqbn"; 
-const TARGET_PASS_NORM = "2482011"; // Normalize edilmiş hedef şifre
+const FORMSPREE_URL = "https://formspree.io/f/xwvwnqbn";
+const TARGET_PASS_NORM = "24102011";
 
-// 1. ŞİFRE KONTROLÜ (GELİŞMİŞ)
+// 1. ŞİFRE KONTROLÜ
 function checkAuth() {
   let input = document.getElementById('passInput').value.toLowerCase().trim();
-  
-  // Normalizasyon: "ağustos" kelimesini "8" yap, noktaları/slashları sil, boşlukları kaldır
-   let normalizedInput = input
-    .replace(/mart/g, "3")        // "mart" kelimesini "3" yapar
-    .replace(/ağustos/g, "8")     // "ağustos" kelimesini "8" yapar (eski şifren için gerekliyse kalabilir)
-    .replace(/[^0-9a-z]/gi, '')   // Nokta, slash, tire gibi tüm özel karakterleri SİLER
-    .replace(/\s+/g, '')          // Tüm boşlukları SİLER
-    .replace(/^0+/, '')           // En baştaki '0'ı siler (Örn: 08 -> 8)
-    .replace(/0(?=[0-9])/g, '');  // Sayıların arasındaki '0'ları siler (Örn: 803 -> 83)
+
+  // Normalizasyon: Türkçe ay isimlerini rakama çevir, sonra rakam olmayanların hepsini sil
+  let normalizedInput = input
+    .replace(/mart/g, "3")
+    .replace(/ağustos/g, "8")
+    .replace(/[^0-9]/g, ''); // Rakam olmayan her şeyi sil (nokta, slash, tire, boşluk vs.)
 
   if (normalizedInput === TARGET_PASS_NORM) {
     document.getElementById('auth-overlay').style.opacity = '0';
@@ -251,7 +248,6 @@ function checkAuth() {
     }, 800);
   } else {
     document.getElementById('auth-error').style.display = 'block';
-    // Hatalı girişte inputu hafifçe salla (opsiyonel görsel geri bildirim)
     const box = document.querySelector('#auth-overlay .input-box');
     box.style.transform = 'translateX(10px)';
     setTimeout(() => box.style.transform = 'translateX(-10px)', 100);
@@ -269,18 +265,18 @@ function askName() {
 function submitFinal() {
   const name = document.getElementById('nameInput').value.trim() || "Birisi";
   document.getElementById('name-overlay').style.opacity = '0';
-  
+
   setTimeout(() => {
     document.getElementById('name-overlay').style.display = 'none';
     document.getElementById('card').classList.add('yes');
     document.getElementById('yesScreen').classList.add('show');
     document.getElementById('celebrationTitle').textContent = `Harika, ${name}! ✨`;
-    
+
     fetch(FORMSPREE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ 
-        konu: `${name} Teklifi Kabul Ettti! 🤍`,
+      body: JSON.stringify({
+        konu: `${name} Teklifi Kabul Etti! 🤍`,
         mesaj: `Tebrikler! ${name} isimli kişi teklifini kabul etti.`,
         tarih: new Date().toLocaleString('tr-TR')
       })
