@@ -358,7 +358,7 @@
         const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonOutput.textContent);
         const downloadAnchor = document.createElement('a');
         downloadAnchor.setAttribute("href", dataStr);
-        downloadAnchor.setAttribute("download", "mottoverse.json.json");
+        downloadAnchor.setAttribute("download", "mottoverse-json.json");
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
