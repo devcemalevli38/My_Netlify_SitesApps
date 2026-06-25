@@ -160,7 +160,7 @@
             langLabel: "Türkçe",
             download: "İndir",
             filesTitle: "Ek Dosyalar",
-            zipMain: "📦 Sürüm Kaynak Kodu (ZIP)"
+            zipMain: "📦 Sürüm Paket Dosyası (ZIP)"
         },
         en: {
             title: "🚀 Projects Dashboard",
@@ -171,7 +171,7 @@
             langLabel: "English",
             download: "Download",
             filesTitle: "Additional Files",
-            zipMain: "📦 Releases Source Code (ZIP)"
+            zipMain: "📦 Release Asset Bundle (ZIP)"
         }
     };
 
@@ -207,6 +207,9 @@
             const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
             const date = new Date(p.updated_at).toLocaleDateString(currentLang === 'tr' ? 'tr-TR' : 'en-US', dateOptions);
             
+            // Dinamik indirme URL'sinin oluşturulduğu kısım ({repo_adı} ve {tag} değerleri JSON parametrelerinden alınır)
+            const dynamicZipUrl = `https://github.com/cemal201138/${p.project}/releases/download/${p.version}/${p.project}${p.version}.zip`;
+            
             const card = document.createElement('div');
             card.className = 'project-card';
             card.onclick = () => openModal(index);
@@ -216,7 +219,7 @@
                     <div class="version-badge">${p.version}</div>
                 </div>
                 
-                <a href="${p.source_zip}" class="card-zip-btn" onclick="event.stopPropagation()">
+                <a href="${dynamicZipUrl}" class="card-zip-btn" onclick="event.stopPropagation()" target="_blank">
                     ${t.zipMain}
                 </a>
 
@@ -241,7 +244,6 @@
         document.getElementById('modalTitle').textContent = project.project.replace(/_/g, ' ');
         listContainer.innerHTML = "";
 
-        // Modalda sadece JSON içindeki downloadable_files gözüksün
         if (project.downloadable_files && project.downloadable_files.length > 0) {
             project.downloadable_files.forEach(file => {
                 const item = document.createElement('div');
