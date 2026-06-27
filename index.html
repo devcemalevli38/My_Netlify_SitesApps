@@ -234,14 +234,6 @@
         .newsletter-btn-group button {
             flex: 1;
         }
-
-        @media (max-width: 600px) {
-            header { flex-direction: column; align-items: center; text-align: center; }
-            .controls { justify-content: center; width: 100%; }
-            input { width: 100%; }
-            .grid { grid-template-columns: 1fr; }
-            .section-header { justify-content: center; }
-        }
     </style>
 </head>
 <body>
@@ -323,7 +315,9 @@
 const PROJECTS_DATA_URL = "projects.json"; 
 const GAMES_DATA_URL = "games.json";
 const FILES_DATA_URL = "files.json";
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz7A6ch3QXCuIfThH8NN7eXZqMQl69H77LbrWdDFdCXHpGpQ6x2nfuqQxbID6vdHFfj/exec";
+
+// GÜVENLİ DEĞİŞİKLİK: Google Apps Script URL yerine Cloudflare Worker Proxy adresimizi entegre ettik.
+const WORKER_PROXY_URL = "https://cemalevliqzzio.evlicemal38.workers.dev/";
 
 const TRANSLATIONS = {
     en: {
@@ -446,12 +440,19 @@ async function handleNewsletter(action) {
     }
     
     try {
-        await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(email)}&action=${action}`, { mode: 'no-cors' });
+        // İstek doğrudan Cloudflare Worker yapımıza yönlendiriliyor (no-cors modu kalktı, Workers metin yanıtlarını okuyabiliyoruz)
+        const response = await fetch(`${WORKER_PROXY_URL}?email=${encodeURIComponent(email)}&action=${action}`);
+        const resultText = await response.text();
         
-        if (action === 'subscribe') {
-            msg.innerHTML = `<span style="color:#4ade80">${tr("subscribeSuccess")}</span>`;
+        if (resultText.includes("Başarılı")) {
+            if (action === 'subscribe') {
+                msg.innerHTML = `<span style="color:#4ade80">${tr("subscribeSuccess")}</span>`;
+            } else {
+                msg.innerHTML = `<span style="color:#4ade80">${tr("unsubscribeSuccess")}</span>`;
+            }
         } else {
-            msg.innerHTML = `<span style="color:#4ade80">${tr("unsubscribeSuccess")}</span>`;
+            // Worker üzerinden Google Apps Script'ten dönen spesifik hata mesajını (örneğin e-posta bulunamadı vb.) ekrana basar
+            msg.innerHTML = `<span style="color:#f87171">${resultText}</span>`;
         }
         
         setTimeout(() => { 
