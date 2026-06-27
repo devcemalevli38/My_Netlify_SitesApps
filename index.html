@@ -228,12 +228,30 @@
         }
         footer b { color: var(--accent); }
 
+        .form-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        .form-buttons button {
+            flex: 1;
+        }
+        .unsub-btn {
+            background: rgba(239, 68, 68, 0.2) !important;
+            border: 1px solid rgba(239, 68, 68, 0.4) !important;
+            color: #f87171 !important;
+        }
+        .unsub-btn:hover {
+            background: rgba(239, 68, 68, 0.3) !important;
+        }
+
         @media (max-width: 600px) {
             header { flex-direction: column; align-items: center; text-align: center; }
             .controls { justify-content: center; width: 100%; }
             input { width: 100%; }
             .grid { grid-template-columns: 1fr; }
             .section-header { justify-content: center; }
+            .form-buttons { flex-direction: column; }
         }
     </style>
 </head>
@@ -299,7 +317,10 @@
         <h2 id="newsletterTitle"></h2>
         <form id="newsletter-form" style="display:flex; flex-direction:column; gap:10px; margin-top:15px;">
             <input type="email" id="email-input" required style="width:100%;">
-            <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;"></button>
+            <div class="form-buttons">
+                <button type="submit" id="subscribe-btn" class="tool-btn" style="background:var(--accent); color:#0f172a; border:none;"></button>
+                <button type="button" id="unsubscribe-btn" class="tool-btn unsub-btn"></button>
+            </div>
         </form>
         <div id="status-msg" style="margin-top: 10px; text-align: center; font-weight: bold;"></div>
     </div>
@@ -324,12 +345,15 @@ const TRANSLATIONS = {
         filesTitle: "📁 Files",
         loading: "Loading...",
         error: "Data is not ready yet.",
-        newsletterTitle: "📬 Subscribe to GitHub Newsletter",
+        newsletterTitle: "📬 GitHub Newsletter",
         emailPlaceholder: "Enter your e-mail...",
         subscribeBtn: "Subscribe",
+        unsubscribeBtn: "Unsubscribe",
         subscribing: "Subscribing...",
+        unsubscribing: "Unsubscribing...",
         subscribeSuccess: "✅ Successfully subscribed!",
-        subscribeError: "❌ An error occurred.",
+        unsubscribeSuccess: "❌ Successfully unsubscribed.",
+        subscribeError: "An error occurred.",
         noFiles: "No files found.",
         openBadge: "OPEN",
         downloadBtn: "DOWNLOAD",
@@ -351,9 +375,12 @@ const TRANSLATIONS = {
         newsletterTitle: "📬 GitHub Bültenine Abone Ol",
         emailPlaceholder: "E-posta adresini gir...",
         subscribeBtn: "Abone Ol",
+        unsubscribeBtn: "Abonelikten Çık",
         subscribing: "Kaydediliyor...",
+        unsubscribing: "Siliniyor...",
         subscribeSuccess: "✅ Başarıyla abone oldun!",
-        subscribeError: "❌ Hata oluştu.",
+        unsubscribeSuccess: "❌ Abonelikten başarıyla çıktın.",
+        subscribeError: "Hata oluştu.",
         noFiles: "Dosya bulunamadı.",
         openBadge: "AÇ",
         downloadBtn: "İNDİR",
@@ -378,6 +405,7 @@ function applyLanguage() {
     document.getElementById("newsletterTitle").textContent = tr("newsletterTitle");
     document.getElementById("email-input").placeholder = tr("emailPlaceholder");
     document.getElementById("subscribe-btn").textContent = tr("subscribeBtn");
+    document.getElementById("unsubscribe-btn").textContent = tr("unsubscribeBtn");
     document.getElementById("footerText").innerHTML = tr("footerText");
     document.getElementById("langLabel").textContent = tr("langLabel");
     document.getElementById("bannerText").textContent = tr("updateNotice");
@@ -407,31 +435,63 @@ function toggleModal(id, show) {
     }
 }
 
-document.getElementById('newsletter-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const btn = document.getElementById('subscribe-btn');
+// Ortak bülten istek fonksiyonu (action parametresi alır: 'subscribe' veya 'unsubscribe')
+async function handleNewsletterAction(action) {
+    const subBtn = document.getElementById('subscribe-btn');
+    const unsubBtn = document.getElementById('unsubscribe-btn');
     const msg = document.getElementById('status-msg');
     const email = document.getElementById('email-input').value;
+
+    if (!email || !document.getElementById('email-input').checkValidity()) {
+        document.getElementById('email-input').reportValidity();
+        return;
+    }
     
-    btn.disabled = true; 
-    btn.innerText = tr("subscribing");
+    subBtn.disabled = true; 
+    unsubBtn.disabled = true;
+    
+    if (action === 'subscribe') {
+        subBtn.innerText = tr("subscribing");
+    } else {
+        unsubBtn.innerText = tr("unsubscribing");
+    }
     
     try {
-        await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(email)}`, { mode: 'no-cors' });
-        msg.innerHTML = `<span style="color:#4ade80">${tr("subscribeSuccess")}</span>`;
+        await fetch(`${GOOGLE_SCRIPT_URL}?email=${encodeURIComponent(email)}&action=${action}`, { mode: 'no-cors' });
+        
+        if (action === 'subscribe') {
+            msg.innerHTML = `<span style="color:#4ade80">${tr("subscribeSuccess")}</span>`;
+        } else {
+            msg.innerHTML = `<span style="color:#f87171">${tr("unsubscribeSuccess")}</span>`;
+        }
         
         setTimeout(() => { 
             toggleModal('newsletterModal', false); 
-            btn.disabled = false; 
-            btn.innerText = tr("subscribeBtn");
+            subBtn.disabled = false; 
+            unsubBtn.disabled = false;
+            subBtn.innerText = tr("subscribeBtn");
+            unsubBtn.innerText = tr("unsubscribeBtn");
             msg.innerHTML = "";
             document.getElementById('email-input').value = "";
         }, 2000);
     } catch (err) { 
-        msg.innerHTML = `<span style="color:#f87171">${tr("subscribeError")}</span>`; 
-        btn.disabled = false;
-        btn.innerText = tr("subscribeBtn");
+        msg.innerHTML = `<span style="color:#f87171">❌ ${tr("subscribeError")}</span>`; 
+        subBtn.disabled = false;
+        unsubBtn.disabled = false;
+        subBtn.innerText = tr("subscribeBtn");
+        unsubBtn.innerText = tr("unsubscribeBtn");
     }
+}
+
+// Form submit edildiğinde normal abone olma işlemi tetiklenir
+document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    handleNewsletterAction('subscribe');
+});
+
+// Abonelikten çık butonu tıklandığında tetiklenir
+document.getElementById('unsubscribe-btn').addEventListener('click', function() {
+    handleNewsletterAction('unsubscribe');
 });
 
 async function loadProjects() {
@@ -518,7 +578,6 @@ async function loadFiles() {
     } catch (e) { section.classList.add("hidden"); }
 }
 
-// --- DÜZELTİLEN VE ENTEGRE EDİLEN MODAL FONKSİYONU ---
 function openGameModal(rel) {
     const fileContainer = document.getElementById("fileContainer");
     const altContainer = document.getElementById("altLinksContainer");
@@ -530,7 +589,6 @@ function openGameModal(rel) {
     altList.innerHTML = "";
     altContainer.classList.add("hidden");
 
-    // 1. GitHub Assets (Ana Dosyalar)
     if (rel.assets && rel.assets.length > 0) {
         rel.assets.forEach(asset => {
             const div = document.createElement("div");
@@ -541,7 +599,7 @@ function openGameModal(rel) {
                     <div class="file-icon" style="font-size:1.2rem;">${getFileIcon(asset.name)}</div>
                     <div style="min-width:0; flex:1;">
                         <div style="font-weight:bold; font-size:0.85rem; word-break:break-all;">${asset.name}</div>
-                        <div style="font-size:0.7rem; opacity:0.6;">${size} MB</div>
+                        <div style="font-size:0.75rem; opacity:0.6;">${size} MB</div>
                     </div>
                 </div>
                 <a href="${asset.browser_download_url}" class="download-link" target="_blank">${tr("downloadBtn")}</a>
@@ -552,16 +610,12 @@ function openGameModal(rel) {
         fileContainer.innerHTML = `<p style='padding:20px; opacity:0.6; text-align:center;'>${tr("noFiles")}</p>`;
     }
 
-    // 2. ALTERNATİF LİNKLERİN ENTEGRASYONU
-    
-    // Durum A: JSON'da 'alt_links' dizisi (Array) varsa
     if (rel.alt_links && rel.alt_links.length > 0) {
         altContainer.classList.remove("hidden");
         rel.alt_links.forEach(link => {
             addAltLinkRow(link.name, link.url);
         });
     } 
-    // Durum B: JSON'da 'body' içinde metin olarak link varsa (Senin games.json dosyan için)
     else if (rel.body && rel.body.trim().startsWith("http")) {
         altContainer.classList.remove("hidden");
         addAltLinkRow("Google Drive / Cloud", rel.body.trim());
