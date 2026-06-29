@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /about.html
+Allow: /privacy.html
+
+Sitemap: https://cemalevli.qzz.io/sitemap.xml
