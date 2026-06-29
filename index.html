@@ -227,6 +227,25 @@
             text-align: center; font-size: 0.9rem; opacity: 0.7;
         }
         footer b { color: var(--accent); }
+        
+        .footer-links {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 0.85rem;
+        }
+        .footer-links a {
+            color: var(--text);
+            text-decoration: none;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+        .footer-links a:hover {
+            color: var(--accent);
+            opacity: 1;
+            text-decoration: underline;
+        }
 
         .newsletter-btn-group {
             display: flex; gap: 10px; margin-top: 5px;
@@ -309,6 +328,10 @@
 
 <footer>
     <p id="footerText"></p>
+    <div class="footer-links">
+        <a href="about.html" id="linkAbout"></a> | 
+        <a href="privacy.html" id="linkPrivacy"></a>
+    </div>
 </footer>
 
 <script>
@@ -316,7 +339,6 @@ const PROJECTS_DATA_URL = "projects.json";
 const GAMES_DATA_URL = "games.json";
 const FILES_DATA_URL = "files.json";
 
-// GÜVENLİ DEĞİŞİKLİK: Google Apps Script URL yerine Cloudflare Worker Proxy adresimizi entegre ettik.
 const WORKER_PROXY_URL = "https://cemalevliqzzio.evlicemal38.workers.dev/";
 
 const TRANSLATIONS = {
@@ -345,7 +367,9 @@ const TRANSLATIONS = {
         footerText: 'All rights reserved. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank" style="text-decoration:none; color:inherit;"><b>Cemal Evli</b></a>',
         langLabel: "English",
         updateNotice: "🔄 Note: Data on this site is updated every hour.",
-        bannerConfirm: "Got it!"
+        bannerConfirm: "Got it!",
+        linkAbout: "About & Impressum",
+        linkPrivacy: "Privacy Policy"
     },
     tr: {
         searchPlaceholder: "🔍 Proje veya Oyun Ara...",
@@ -372,7 +396,9 @@ const TRANSLATIONS = {
         footerText: 'Tüm hakları saklıdır. &copy; 2026 <a href="https://github.com/cemal201138" target="_blank" style="text-decoration:none; color:inherit;"><b>Cemal Evli</b></a>',
         langLabel: "Türkçe",
         updateNotice: "🔄 Bilgi: Sitedeki veriler her saat başı otomatik olarak güncellenmektedir.",
-        bannerConfirm: "Tamam"
+        bannerConfirm: "Tamam",
+        linkAbout: "Hakkımda & Künye",
+        linkPrivacy: "Gizlilik Politikası"
     }
 };
 
@@ -394,6 +420,8 @@ function applyLanguage() {
     document.getElementById("bannerText").textContent = tr("updateNotice");
     document.getElementById("bannerBtn").textContent = tr("bannerConfirm");
     document.getElementById("altTitle").textContent = tr("altTitle");
+    document.getElementById("linkAbout").textContent = tr("linkAbout");
+    document.getElementById("linkPrivacy").textContent = tr("linkPrivacy");
 
     loadProjects();
     loadGames();
@@ -440,7 +468,6 @@ async function handleNewsletter(action) {
     }
     
     try {
-        // İstek doğrudan Cloudflare Worker yapımıza yönlendiriliyor (no-cors modu kalktı, Workers metin yanıtlarını okuyabiliyoruz)
         const response = await fetch(`${WORKER_PROXY_URL}?email=${encodeURIComponent(email)}&action=${action}`);
         const resultText = await response.text();
         
@@ -451,7 +478,6 @@ async function handleNewsletter(action) {
                 msg.innerHTML = `<span style="color:#4ade80">${tr("unsubscribeSuccess")}</span>`;
             }
         } else {
-            // Worker üzerinden Google Apps Script'ten dönen spesifik hata mesajını (örneğin e-posta bulunamadı vb.) ekrana basar
             msg.innerHTML = `<span style="color:#f87171">${resultText}</span>`;
         }
         
