@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakkımda & Künye</title>
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #212529;
+            --text-muted: #6c757d;
+            --primary-color: #0d6efd;
+            --border-color: #dee2e6;
+            --info-bg: #f1f3f5;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --card-bg: #1e1e1e;
+                --text-color: #e0e0e0;
+                --text-muted: #a0a0a0;
+                --primary-color: #375a7f;
+                --border-color: #333333;
+                --info-bg: #2a2a2a;
+            }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            font-weight: 700;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            color: var(--text-color);
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .info-box {
+            background-color: var(--info-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 30px 0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            row-gap: 12px;
+            font-size: 1.05rem;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .info-value {
+            color: var(--text-color);
+        }
+
+        .info-value a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .info-value a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-nav {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-nav a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: 500;
+        }
+
+        .footer-nav a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 576px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+                row-gap: 5px;
+            }
+            .info-label {
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Hakkımda & Künye</h1>
+
+    <p>Merhaba, ben <strong>Cemal Evli</strong>. Kayseri'de yaşayan bir öğrenci, yazılım geliştirici ve teknoloji meraklısıyım.</p>
+    
+    <p>Bu web sitesi; tamamen kişisel çalışmalarımı, açık kaynak kodlu yazılım projelerimi, IoT/gömülü sistemler (Arduino vb.) üzerine yaptığım donanım tasarımlarımı ve arayüz geliştirme projelerimi sergilemek amacıyla oluşturulmuş <strong>bireysel bir portfolyo ve dijital özgeçmiş alanıdır.</strong></p>
+    
+    <p>Sitede yer alan tüm içerikler ve projeler eğitim, kişisel gelişim ve teknolojik araştırma-geliştirme amacı taşımaktadır. Sitede ticari bir faaliyet, ürün satışı, reklam veya kâr amacı güden herhangi bir unsur bulunmamaktadır.</p>
+
+    <div class="info-box">
+        <h2>SİTE KÜNYESİ & İLETİŞİM</h2>
+        <div class="info-grid">
+            <div class="info-create"></div>
+            <div class="info-label">Site Sahibi / Yönetici:</div>
+            <div class="info-value">Cemal Evli</div>
+
+            <div class="info-label">Faaliyet Amacı:</div>
+            <div class="info-value">Kişisel Yazılım Geliştirme ve Portfolyo Sunumu</div>
+
+            <div class="info-label">Lokasyon:</div>
+            <div class="info-value">Kayseri, Türkiye</div>
+
+            <div class="info-label">E-Posta:</div>
+            <div class="info-value"><a href="mailto:mylab@cemalevli.qzz.io">mylab@cemalevli.qzz.io</a></div>
+
+            <div class="info-label">Web Sitesi:</div>
+            <div class="info-value"><a href="https://cemalevli.qzz.io">cemalevli.qzz.io</a></div>
+        </div>
+    </div>
+
+    <p>Sitede yayınlanan içeriklerle ya da projelerle ilgili geri bildirimde bulunmak veya bilgi almak için yukarıda yer alan kurumsal iletişim e-posta adresi üzerinden site yöneticisi ile doğrudan iletişime geçebilirsiniz. En kısa sürede dönüş sağlanacaktır.</p>
+
+    <div class="footer-nav">
+        <a href="/">Anasayfa</a> | 
+        <a href="privacy.html">Gizlilik Politikası</a>
+    </div>
+</div>
+
+</body>
+</html>
