@@ -64,22 +64,6 @@
     }
   },
   {
-    "name": "MacroDroid_Media_Control",
-    "path": "MacroDroid_Media_Control",
-    "sha": "d2cab721a5e4db0e542bb4eeb0b5cacbd1313e87",
-    "size": 0,
-    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/MacroDroid_Media_Control?ref=main",
-    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/MacroDroid_Media_Control",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/d2cab721a5e4db0e542bb4eeb0b5cacbd1313e87",
-    "download_url": null,
-    "type": "dir",
-    "_links": {
-      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/MacroDroid_Media_Control?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/d2cab721a5e4db0e542bb4eeb0b5cacbd1313e87",
-      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/MacroDroid_Media_Control"
-    }
-  },
-  {
     "name": "Müzik_Kontrol",
     "path": "Müzik_Kontrol",
     "sha": "1126dfde177bcaa4ec9608be68a7066b6282af46",
@@ -141,22 +125,6 @@
       "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/README.md?ref=main",
       "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/f82c46c4451b799d943ae66b9cc3f698da9967b3",
       "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/README.md"
-    }
-  },
-  {
-    "name": "Spotify_Calınıyor",
-    "path": "Spotify_Calınıyor",
-    "sha": "a6f1f3335f61cdbc640fe9ac8b4514931e6d5f8a",
-    "size": 0,
-    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Spotify_Cal%C4%B1n%C4%B1yor?ref=main",
-    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/Spotify_Cal%C4%B1n%C4%B1yor",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/a6f1f3335f61cdbc640fe9ac8b4514931e6d5f8a",
-    "download_url": null,
-    "type": "dir",
-    "_links": {
-      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/Spotify_Cal%C4%B1n%C4%B1yor?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/a6f1f3335f61cdbc640fe9ac8b4514931e6d5f8a",
-      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/Spotify_Cal%C4%B1n%C4%B1yor"
     }
   },
   {
@@ -386,16 +354,16 @@
   {
     "name": "projects.json",
     "path": "projects.json",
-    "sha": "b2920953a87fcb84143fc0f3ea1f2d8bc6267b90",
+    "sha": "b84d68c01a8cdc26a0889a293dcb93c55a5c8e0c",
     "size": 32564,
     "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/projects.json?ref=main",
     "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/projects.json",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/b2920953a87fcb84143fc0f3ea1f2d8bc6267b90",
+    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/b84d68c01a8cdc26a0889a293dcb93c55a5c8e0c",
     "download_url": "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/projects.json",
     "type": "file",
     "_links": {
       "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/projects.json?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/b2920953a87fcb84143fc0f3ea1f2d8bc6267b90",
+      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/blobs/b84d68c01a8cdc26a0889a293dcb93c55a5c8e0c",
       "html": "https://github.com/cemal201138/My_Netlify_SitesApps/blob/main/projects.json"
     }
   },
@@ -541,22 +509,6 @@
       "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/webgames?ref=main",
       "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/a0d3285c5c27a62ed45f346fc5557eb7d45528a5",
       "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/webgames"
-    }
-  },
-  {
-    "name": "youtubenoads",
-    "path": "youtubenoads",
-    "sha": "24a0d32589c428ca21cb9dfd57086ed6a232cd85",
-    "size": 0,
-    "url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/youtubenoads?ref=main",
-    "html_url": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/youtubenoads",
-    "git_url": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/24a0d32589c428ca21cb9dfd57086ed6a232cd85",
-    "download_url": null,
-    "type": "dir",
-    "_links": {
-      "self": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/youtubenoads?ref=main",
-      "git": "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/git/trees/24a0d32589c428ca21cb9dfd57086ed6a232cd85",
-      "html": "https://github.com/cemal201138/My_Netlify_SitesApps/tree/main/youtubenoads"
     }
   },
   {
