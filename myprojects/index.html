@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cemal Evli | Project Downloads</title>
-    <link rel="icon" type="image/x-icon" href="myprojects.ico">
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/refs/heads/main/myprojects/myprojects.ico">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
         :root {
             --bg: #0f172a;
@@ -32,11 +33,55 @@
             min-height: 100vh;
         }
 
+        /* Gerçek CAPTCHA Ekranı Tasarımı */
+        .captcha-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .captcha-box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            padding: 35px;
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .g-recaptcha {
+            margin: 15px 0 5px 0;
+        }
+
+        /* Ana İçerik Gizleme Sınıfı */
+        .main-content {
+            display: none;
+            width: 100%;
+            max-width: 1000px;
+            flex-direction: column;
+            align-items: center;
+        }
+        .main-content.authorized {
+            display: flex;
+        }
+
         header {
             text-align: center;
             margin-bottom: 40px;
             width: 100%;
-            max-width: 1000px;
             position: relative;
         }
 
@@ -59,8 +104,9 @@
         .sub-text { opacity: 0.7; margin-top: 10px; }
 
         .container {
-            width: 100%; max-width: 1000px;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 20px;
         }
 
@@ -76,7 +122,6 @@
         .project-name { font-size: 1.1rem; font-weight: bold; flex: 1; }
         .version-badge { background: var(--accent); color: #0f172a; padding: 3px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; }
 
-        /* Kart Üstü Zip Butonu */
         .card-zip-btn {
             background: var(--zip-btn); color: white; text-decoration: none;
             padding: 10px; border-radius: 10px; text-align: center;
@@ -120,32 +165,43 @@
 </head>
 <body>
 
-<header>
-    <div class="lang-switcher" id="langSwitcher">
-        <button class="lang-btn" id="langBtn">🌐 <span id="currentLangLabel">Türkçe</span> ▾</button>
-        <div class="lang-dropdown">
-            <div class="lang-option" onclick="changeLang('tr')">🇹🇷 Türkçe</div>
-            <div class="lang-option" onclick="changeLang('en')">🇬🇧 English</div>
-        </div>
-    </div>
-    <h1 id="mainTitle">🚀 My Projects Dashboard</h1>
-    <p class="sub-text" id="subTitle">Cemal Evli'nin GitHub projeleri için dinamik indirme merkezi.</p>
-</header>
-
-<div id="loader">Yükleniyor...</div>
-<div id="project-container" class="container"></div>
-
-<div id="fileModal" class="modal-overlay" onclick="closeModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <button class="close-modal" onclick="closeModal()">×</button>
-        <h2 id="modalTitle" style="margin:0; color:var(--accent); font-size:1.3rem;"></h2>
-        <div id="fileList" class="file-list"></div>
+<div class="captcha-wrapper" id="captchaWrapper">
+    <div class="captcha-box">
+        <h3 id="captchaTitle" style="margin:0; color:var(--accent);">Güvenlik Doğrulaması</h3>
+        <p style="font-size:0.85rem; opacity:0.8; margin:0;" id="captchaSub">Lütfen robot olmadığınızı doğrulayın.</p>
+        
+        <div class="g-recaptcha" data-sitekey="6LcF1D8tAAAAAEuenR7PRBrjYbA5QaQDb7BA_oF4" data-theme="dark" data-callback="onCaptchaSuccess"></div>
     </div>
 </div>
 
-<footer>
-    <p style="margin-top: 50px; font-size: 0.8rem; opacity: 0.6;" id="footerText"></p>
-</footer>
+<div class="main-content" id="mainContent">
+    <header>
+        <div class="lang-switcher" id="langSwitcher">
+            <button class="lang-btn" id="langBtn">🌐 <span id="currentLangLabel">Türkçe</span> ▾</button>
+            <div class="lang-dropdown">
+                <div class="lang-option" onclick="changeLang('tr')">🇹🇷 Türkçe</div>
+                <div class="lang-option" onclick="changeLang('en')">🇬🇧 English</div>
+            </div>
+        </div>
+        <h1 id="mainTitle">🚀 My Projects Dashboard</h1>
+        <p class="sub-text" id="subTitle">Cemal Evli'nin GitHub projeleri için dinamik indirme merkezi.</p>
+    </header>
+
+    <div id="loader">Yükleniyor...</div>
+    <div id="project-container" class="container"></div>
+
+    <div id="fileModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-modal" onclick="closeModal()">×</button>
+            <h2 id="modalTitle" style="margin:0; color:var(--accent); font-size:1.3rem;"></h2>
+            <div id="fileList" class="file-list"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p style="margin-top: 50px; font-size: 0.8rem; opacity: 0.6;" id="footerText"></p>
+    </footer>
+</div>
 
 <script>
     const JSON_URL = "https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/myprojects.json";
@@ -160,7 +216,9 @@
             langLabel: "Türkçe",
             download: "İndir",
             filesTitle: "Ek Dosyalar",
-            zipMain: "📦 Sürüm Paket Dosyası (ZIP)"
+            zipMain: "📦 Sürüm Paket Dosyası (ZIP)",
+            captchaTitle: "Güvenlik Doğrulaması",
+            captchaSub: "Lütfen robot olmadığınızı doğrulayın."
         },
         en: {
             title: "🚀 Projects Dashboard",
@@ -171,12 +229,24 @@
             langLabel: "English",
             download: "Download",
             filesTitle: "Additional Files",
-            zipMain: "📦 Release Asset Bundle (ZIP)"
+            zipMain: "📦 Release Asset Bundle (ZIP)",
+            captchaTitle: "Security Verification",
+            captchaSub: "Please verify that you are not a robot."
         }
     };
 
     let currentLang = localStorage.getItem('selectedLang') || 'tr';
     let allProjects = [];
+
+    // --- OTOMATİK DOĞRULAMA FONKSİYONU ---
+    function onCaptchaSuccess(response) {
+        if (response.length !== 0) {
+            // Kutucuk başarıyla tiklendiğinde doğrudan burası çalışır
+            document.getElementById('captchaWrapper').style.display = 'none';
+            document.getElementById('mainContent').classList.add('authorized');
+            fetchProjects();
+        }
+    }
 
     function updateUI() {
         const t = translations[currentLang];
@@ -184,6 +254,10 @@
         document.getElementById('subTitle').textContent = t.sub;
         document.getElementById('footerText').textContent = t.footer;
         document.getElementById('currentLangLabel').textContent = t.langLabel;
+        
+        document.getElementById('captchaTitle').textContent = t.captchaTitle;
+        document.getElementById('captchaSub').textContent = t.captchaSub;
+
         renderProjects();
     }
 
@@ -207,7 +281,6 @@
             const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
             const date = new Date(p.updated_at).toLocaleDateString(currentLang === 'tr' ? 'tr-TR' : 'en-US', dateOptions);
             
-            // Dinamik indirme URL'sinin oluşturulduğu kısım ({repo_adı} ve {tag} değerleri JSON parametrelerinden alınır)
             const dynamicZipUrl = `https://github.com/cemal201138/${p.project}/releases/download/${p.version}/${p.project}${p.version}.zip`;
             
             const card = document.createElement('div');
@@ -280,8 +353,6 @@
     };
 
     window.onclick = () => document.getElementById('langSwitcher').classList.remove('open');
-
-    fetchProjects();
 </script>
 
 </body>
