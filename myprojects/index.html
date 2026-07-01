@@ -238,13 +238,15 @@
     let currentLang = localStorage.getItem('selectedLang') || 'tr';
     let allProjects = [];
 
-    // --- OTOMATİK DOĞRULAMA FONKSİYONU ---
+    // --- OTOMATİK DOĞRULAMA VE GECİKTİRME FONKSİYONU ---
     function onCaptchaSuccess(response) {
         if (response.length !== 0) {
-            // Kutucuk başarıyla tiklendiğinde doğrudan burası çalışır
-            document.getElementById('captchaWrapper').style.display = 'none';
-            document.getElementById('mainContent').classList.add('authorized');
-            fetchProjects();
+            // Başarıyla onaylandıktan sonra mesaj göstermeden 3 saniye bekler ve giriş yapar
+            setTimeout(() => {
+                document.getElementById('captchaWrapper').style.display = 'none';
+                document.getElementById('mainContent').classList.add('authorized');
+                fetchProjects();
+            }, 3000);
         }
     }
 
