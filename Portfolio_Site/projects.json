@@ -1,1 +1,23 @@
-a
+[
+  {
+    "name": "Python Hand Mouse",
+    "url": "https://github.com/cemal201138/Python-Hand-Mouse",
+    "description_tr": "El hareketleriyle fare kontrolü sağlayan yapay zeka tabanlı uygulama.",
+    "description_en": "AI-based computer mouse control application using hand gestures.",
+    "tags": ["Python", "OpenCV", "MediaPipe"]
+  },
+  {
+    "name": "Python Müzik Çalar",
+    "url": "https://github.com/cemal201138/Python_Muzik_Calar",
+    "description_tr": "Gelişmiş arayüze ve ekolayzer ayarlarına sahip müzik çalar oynatıcısı.",
+    "description_en": "Music player with an advanced interface and equalizer settings.",
+    "tags": ["Tkinter", "Pygame", "Python"]
+  },
+  {
+    "name": "Mottoverse",
+    "url": "https://github.com/cemal201138/Mottoverse",
+    "description_tr": "Saatlik Rastgele Söz Akışı (Desktop Widget)",
+    "description_en": "Hourly Random Quote Flow (Desktop Widget)",
+    "tags": ["HTML", "Windows", "Tkinter"]
+  }
+]
