@@ -319,7 +319,7 @@
             transition: opacity 0.3s;
         }
 
-        .about-text.loading {
+        .about-text.loading, .projects-container.loading {
             opacity: 0.45;
             font-style: italic;
         }
@@ -329,7 +329,7 @@
             100% { border-color: rgba(56, 189, 248, 0.1); box-shadow: none; }
         }
 
-        .about-text.updated {
+        .about-text.updated, .project-card.updated {
             animation: updated-flash 1.5s ease-out forwards;
         }
 
@@ -340,6 +340,10 @@
         }
 
         /* ─── PROJECT CARDS ─── */
+        .projects-container {
+            transition: opacity 0.3s;
+        }
+
         .project-card {
             background: var(--card-bg);
             padding: 25px;
@@ -358,13 +362,30 @@
             background: rgba(30, 41, 59, 0.6);
         }
 
+        .project-card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.35rem;
+        }
+
+        .project-card p {
+            color: var(--text-dim);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
         .tag {
             background: rgba(56, 189, 248, 0.1);
             color: var(--accent);
             padding: 4px 12px;
             border-radius: 100px;
             font-size: 0.75rem;
-            margin-right: 5px;
         }
 
         footer {
@@ -393,7 +414,6 @@
 </head>
 <body>
 
-    <!-- ─── NAVBAR ─── -->
     <nav class="navbar" id="navbar">
         <ul class="nav-links">
             <li><a data-section="hero"     id="nav-home"     class="active">Home</a></li>
@@ -402,14 +422,11 @@
         </ul>
     </nav>
 
-    <!-- ─── ÜST SAĞ: YENİLE + DİL ─── -->
     <div class="top-controls">
-        <!-- Yenile butonu -->
         <button class="refresh-btn" id="refresh-btn" title="Verileri yenile / Refresh data" onclick="hardRefresh()">
             <i class="fas fa-rotate-right"></i>
         </button>
 
-        <!-- Dil seçici -->
         <div class="lang-container">
             <button class="lang-btn" onclick="toggleDropdown()">
                 <i class="fas fa-language"></i> <span id="btn-text">Language</span>
@@ -438,24 +455,7 @@
 
         <section id="projects">
             <h2 class="section-title" id="ui-projects-title">My Projects</h2>
-            
-            <a href="https://github.com/cemal201138/Python-Hand-Mouse" class="project-card">
-                <h3>Python Hand Mouse</h3>
-                <p id="ui-p1-desc">Mouse control with hand gestures.</p>
-                <div>
-                    <span class="tag">Python</span>
-                    <span class="tag">OpenCV</span>
-                </div>
-            </a>
-
-            <a href="https://github.com/cemal201138/Python_Muzik_Calar" class="project-card">
-                <h3>Python Müzik Çalar</h3>
-                <p id="ui-p2-desc">Music player with advanced interface.</p>
-                <div>
-                    <span class="tag">Tkinter</span>
-                    <span class="tag">Pygame</span>
-                </div>
-            </a>
+            <div class="projects-container loading" id="projects-container">Loading...</div>
         </section>
     </div>
 
@@ -485,7 +485,7 @@
             url: 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/social-links',
             cacheKey: 'social_links',
             fallback: JSON.stringify([
-                {"icon": "fab fa-github",    "url": "https://github.com/cemal201138",                              "title": "GitHub"},
+                {"icon": "fab fa-github",    "url": "https://github.com/cemal201138",                               "title": "GitHub"},
                 {"icon": "fab fa-facebook",  "url": "https://www.facebook.com/profile.php?id=100076601840154",     "title": "Facebook"},
                 {"icon": "fab fa-instagram", "url": "https://www.instagram.com/cemalevli38/",                      "title": "Instagram"},
                 {"icon": "fas fa-envelope",  "url": "mailto:mylab@cemalevli.qzz.io",                               "title": "E-posta"},
@@ -493,11 +493,33 @@
             ])
         };
 
+        const PROJECTS_SOURCE = {
+            url: 'https://raw.githubusercontent.com/cemal201138/My_Netlify_SitesApps/main/Portfolio_Site/projects.json',
+            cacheKey: 'projects_list',
+            fallback: JSON.stringify([
+                {
+                    "name": "Python Hand Mouse",
+                    "url": "https://github.com/cemal201138/Python-Hand-Mouse",
+                    "description_tr": "El hareketleriyle fare kontrolü.",
+                    "description_en": "Mouse control with hand gestures.",
+                    "tags": ["Python", "OpenCV"]
+                },
+                {
+                    "name": "Python Müzik Çalar",
+                    "url": "https://github.com/cemal201138/Python_Muzik_Calar",
+                    "description_tr": "Gelişmiş arayüzlü müzik oynatıcı.",
+                    "description_en": "Music player with advanced interface.",
+                    "tags": ["Tkinter", "Pygame"]
+                }
+            ])
+        };
+
         // Silinecek cache key'lerin tamamı
         const ALL_CACHE_KEYS = [
             ABOUT_SOURCES.en.cacheKey,
             ABOUT_SOURCES.tr.cacheKey,
-            SOCIAL_SOURCE.cacheKey
+            SOCIAL_SOURCE.cacheKey,
+            PROJECTS_SOURCE.cacheKey
         ];
 
         // ════════════════════════════════════════
@@ -513,12 +535,17 @@
             // 1) Tüm cache'i sil
             ALL_CACHE_KEYS.forEach(k => localStorage.removeItem(k));
 
-            // 2) About alanını "yükleniyor" haline döndür
+            // 2) Dinamik alanları "yükleniyor" haline döndür
             const d = translations[currentLang];
+            
             const aboutEl = document.getElementById('ui-about-text');
             aboutEl.classList.remove('updated');
             aboutEl.classList.add('loading');
             aboutEl.textContent = d.loading;
+
+            const projectsEl = document.getElementById('projects-container');
+            projectsEl.classList.add('loading');
+            projectsEl.textContent = d.loading;
 
             // 3) Butonu döndür
             btn.classList.add('spinning');
@@ -592,15 +619,46 @@
         }
 
         // ════════════════════════════════════════
+        //  PROJECT CARDS DYNAMIC RENDER
+        // ════════════════════════════════════════
+
+        function renderProjects(jsonText, flash = false) {
+            const container = document.getElementById('projects-container');
+            let projects;
+            try {
+                projects = JSON.parse(jsonText);
+            } catch (e) {
+                console.warn('[Projects] JSON parse hatası:', e);
+                return;
+            }
+
+            container.classList.remove('loading');
+            
+            container.innerHTML = projects.map(proj => {
+                const description = currentLang === 'tr' ? proj.description_tr : proj.description_en;
+                const tagsHtml = proj.tags.map(t => `<span class="tag">${t}</span>`).join('');
+                
+                return `
+                    <a href="${proj.url}" target="_blank" class="project-card ${flash ? 'updated' : ''}">
+                        <h3>${proj.name}</h3>
+                        <p>${description}</p>
+                        <div class="tag-container">${tagsHtml}</div>
+                    </a>
+                `;
+            }).join('');
+        }
+
+        // ════════════════════════════════════════
         //  ANA FETCH DÖNGÜSÜ
         //  force=true → değişmese bile her zaman render et
         // ════════════════════════════════════════
 
         async function fetchAndDetectChanges(force = false) {
-            const [engResult, trResult, socialResult] = await Promise.allSettled([
+            const [engResult, trResult, socialResult, projectsResult] = await Promise.allSettled([
                 fetchOne(ABOUT_SOURCES.en.url, ABOUT_SOURCES.en.cacheKey, ABOUT_SOURCES.en.fallback),
                 fetchOne(ABOUT_SOURCES.tr.url,  ABOUT_SOURCES.tr.cacheKey,  ABOUT_SOURCES.tr.fallback),
-                fetchOne(SOCIAL_SOURCE.url,      SOCIAL_SOURCE.cacheKey,     SOCIAL_SOURCE.fallback)
+                fetchOne(SOCIAL_SOURCE.url,      SOCIAL_SOURCE.cacheKey,      SOCIAL_SOURCE.fallback),
+                fetchOne(PROJECTS_SOURCE.url,    PROJECTS_SOURCE.cacheKey,    PROJECTS_SOURCE.fallback)
             ]);
 
             const aboutResult = currentLang === 'tr' ? trResult : engResult;
@@ -610,6 +668,10 @@
 
             if (socialResult.status === 'fulfilled' && (socialResult.value.changed || force)) {
                 renderSocialLinks(socialResult.value.text, true);
+            }
+
+            if (projectsResult.status === 'fulfilled' && (projectsResult.value.changed || force)) {
+                renderProjects(projectsResult.value.text, true);
             }
         }
 
@@ -621,8 +683,6 @@
             en: {
                 btnText: "English", subtitle: "Student and Future Developer",
                 aboutTitle: "About Me", projectsTitle: "My Projects",
-                p1Desc: "Mouse control with hand gestures.",
-                p2Desc: "Music player with advanced interface.",
                 footer: "All rights reserved.",
                 navHome: "Home", navAbout: "About", navProjects: "Projects",
                 loading: "Loading..."
@@ -630,8 +690,6 @@
             tr: {
                 btnText: "Türkçe", subtitle: "Öğrenci ve Geleceğin Yazılımcısı",
                 aboutTitle: "Hakkımda", projectsTitle: "Projelerim",
-                p1Desc: "El hareketleriyle fare kontrolü.",
-                p2Desc: "Gelişmiş arayüzlü müzik oynatıcı.",
                 footer: "Tüm hakları saklıdır.",
                 navHome: "Ana Sayfa", navAbout: "Hakkımda", navProjects: "Projeler",
                 loading: "Yükleniyor..."
@@ -657,21 +715,26 @@
             document.getElementById('ui-subtitle').innerText       = d.subtitle;
             document.getElementById('ui-about-title').innerText    = d.aboutTitle;
             document.getElementById('ui-projects-title').innerText = d.projectsTitle;
-            document.getElementById('ui-p1-desc').innerText        = d.p1Desc;
-            document.getElementById('ui-p2-desc').innerText        = d.p2Desc;
             document.getElementById('ui-footer-text').innerText    = d.footer;
             document.getElementById('nav-home').innerText          = d.navHome;
             document.getElementById('nav-about').innerText         = d.navAbout;
             document.getElementById('nav-projects').innerText      = d.navProjects;
             document.documentElement.lang = lang;
 
-            const cached = localStorage.getItem(ABOUT_SOURCES[lang].cacheKey);
-            const el = document.getElementById('ui-about-text');
-            if (cached) {
-                renderAbout(cached, false);
+            // Hakkımda Güncelle
+            const cachedAbout = localStorage.getItem(ABOUT_SOURCES[lang].cacheKey);
+            const aboutEl = document.getElementById('ui-about-text');
+            if (cachedAbout) {
+                renderAbout(cachedAbout, false);
             } else {
-                el.classList.add('loading');
-                el.textContent = d.loading;
+                aboutEl.classList.add('loading');
+                aboutEl.textContent = d.loading;
+            }
+
+            // Projeleri Güncelle (Dil değiştiğinde açıklamalar değişmeli)
+            const cachedProjects = localStorage.getItem(PROJECTS_SOURCE.cacheKey);
+            if (cachedProjects) {
+                renderProjects(cachedProjects, false);
             }
         }
 
@@ -724,6 +787,9 @@
 
             const cachedSocial = localStorage.getItem(SOCIAL_SOURCE.cacheKey);
             renderSocialLinks(cachedSocial || SOCIAL_SOURCE.fallback, false);
+
+            const cachedProjects = localStorage.getItem(PROJECTS_SOURCE.cacheKey);
+            renderProjects(cachedProjects || PROJECTS_SOURCE.fallback, false);
 
             await fetchAndDetectChanges();
         };
