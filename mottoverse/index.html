@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mottoverse — Masaüstünüzde nefes alan sözler</title>
+<meta name="description" content="Mottoverse, RSS akışlarından veya yerel JSON dosyanızdan saatlik motivasyon sözleri çeken, Windows masaüstüne sabitlenen açık kaynaklı Python widget'ı.">
+<link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/cemal201138/Mottoverse/refs/heads/main/Mottoverse_Ico.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* ============ DESIGN TOKENS ============ */
+  :root{
+    --bg:#101018;
+    --bg-soft:#15161f;
+    --surface:#1a1b26;
+    --surface-2:#24283b;
+    --border:#2d3250;
+    --text:#c0caf5;
+    --text-dim:#8489b0;
+    --text-faint:#565f89;
+    --violet:#9d7cd8;
+    --cyan:#7dcfff;
+    --gold:#e0af68;
+    --green:#9ece6a;
+    --red:#f7768e;
+
+    --shadow-color: 245 70% 3%;
+    --radius-lg:26px;
+    --radius-md:16px;
+    --radius-sm:10px;
+
+    --font-display:'Fraunces', serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+
+  html[data-theme="light"]{
+    --bg:#eef0f9;
+    --bg-soft:#e7e9f6;
+    --surface:#ffffff;
+    --surface-2:#e7e9f6;
+    --border:#d4d8ee;
+    --text:#22243a;
+    --text-dim:#4d5178;
+    --text-faint:#767ba3;
+    --violet:#6c4fc4;
+    --cyan:#1668c9;
+    --gold:#a2650f;
+    --green:#3f7a2c;
+    --red:#c23557;
+    --shadow-color: 230 40% 70%;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    transition:background .4s ease, color .4s ease;
+    overflow-x:hidden;
+  }
+
+  ::selection{ background:var(--violet); color:var(--bg); }
+
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  button{font:inherit; cursor:pointer; background:none; border:none; color:inherit;}
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    letter-spacing:.12em;
+    color:var(--gold);
+    text-transform:uppercase;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:1px;
+    background:var(--gold);
+    opacity:.7;
+  }
+
+  h1,h2,h3{ font-family:var(--font-display); font-weight:600; line-height:1.12; letter-spacing:-.01em; }
+
+  .section-title{ font-size:clamp(28px,3.6vw,42px); margin-bottom:14px; }
+  .section-sub{ color:var(--text-dim); max-width:560px; font-size:16px; margin-bottom:52px; }
+
+  section{ position:relative; padding:110px 0; }
+
+  /* ============ SCROLL REVEAL ============ */
+  .reveal{ opacity:0; transform:translateY(22px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+  /* ============ NAV ============ */
+  header.nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    backdrop-filter:blur(14px) saturate(140%);
+    background:hsla(var(--shadow-color)/ 0.55);
+    border-bottom:1px solid var(--border);
+    transition:background .4s ease, border-color .4s ease;
+  }
+  html[data-theme="light"] header.nav{ background:hsla(230 60% 96% / 0.72); }
+
+  .nav-inner{
+    max-width:1180px; margin:0 auto; padding:16px 32px;
+    display:flex; align-items:center; justify-content:space-between; gap:24px;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:var(--font-mono); font-size:16px; font-weight:600; }
+  .brand img{ width:22px; height:22px; border-radius:6px; }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  .nav-links{ display:flex; gap:34px; font-size:14.5px; color:var(--text-dim); }
+  .nav-links a{ position:relative; padding:4px 0; transition:color .25s ease; }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-links a::after{
+    content:""; position:absolute; left:0; bottom:0; width:0; height:1px;
+    background:var(--gold); transition:width .25s ease;
+  }
+  .nav-links a:hover::after{ width:100%; }
+
+  .nav-actions{ display:flex; align-items:center; gap:14px; }
+
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 18px; border-radius:999px;
+    font-size:14px; font-weight:600; font-family:var(--font-body);
+    transition:transform .25s ease, box-shadow .25s ease, background .25s ease, border-color .25s ease;
+    border:1px solid transparent; white-space:nowrap;
+  }
+  .btn-primary{ background:var(--gold); color:#161217; }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 10px 26px -8px hsla(38 74% 60% / .55); }
+  .btn-ghost{ border-color:var(--border); color:var(--text); }
+  .btn-ghost:hover{ border-color:var(--violet); color:var(--violet); transform:translateY(-2px); }
+  .btn-sm{ padding:8px 14px; font-size:13px; }
+
+  .theme-toggle{
+    width:38px; height:38px; border-radius:50%;
+    border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+    color:var(--text); transition:border-color .25s ease, transform .3s ease;
+    flex-shrink:0;
+  }
+  .theme-toggle:hover{ border-color:var(--gold); transform:rotate(20deg); }
+  .theme-toggle svg{ width:17px; height:17px; }
+  .icon-moon{ display:block; }
+  .icon-sun{ display:none; }
+  html[data-theme="light"] .icon-moon{ display:none; }
+  html[data-theme="light"] .icon-sun{ display:block; }
+
+  .nav-burger{ display:none; }
+
+  /* ============ HERO ============ */
+  .hero{ padding:190px 0 90px; position:relative; overflow:hidden; }
+  .hero::before{
+    content:""; position:absolute; inset:-20% -10% auto -10%; height:640px;
+    background:
+      radial-gradient(480px 320px at 15% 20%, hsla(266 55% 60% / .18), transparent 70%),
+      radial-gradient(420px 300px at 85% 10%, hsla(196 100% 76% / .14), transparent 70%);
+    pointer-events:none; z-index:0;
+  }
+  .hero-grid{
+    position:relative; z-index:1;
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:60px; align-items:center;
+  }
+  .hero h1{ font-size:clamp(36px,4.6vw,58px); margin-bottom:22px; }
+  .hero h1 em{ font-style:italic; color:var(--gold); }
+  .hero p.lead{ font-size:17.5px; color:var(--text-dim); max-width:480px; margin-bottom:34px; }
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:38px; }
+
+  .hero-meta{ display:flex; gap:26px; font-family:var(--font-mono); font-size:12.5px; color:var(--text-faint); }
+  .hero-meta span{ display:flex; align-items:center; gap:7px; }
+  .dot{ width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 0 3px hsla(96 40% 60% / .18); }
+
+  /* --- widget mockup (signature element) --- */
+  .mock-stage{ position:relative; display:flex; justify-content:center; align-items:center; min-height:420px; }
+  .mock-widget{
+    width:300px;
+    background:linear-gradient(165deg, var(--surface), var(--surface-2));
+    border:1px solid var(--border);
+    border-radius:28px;
+    padding:26px 24px 22px;
+    box-shadow:0 30px 60px -20px hsla(var(--shadow-color) / .6), 0 2px 0 hsla(0 0% 100% / .03) inset;
+    transform:rotate(-3.5deg);
+    position:relative;
+    animation:float 6s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{ transform:rotate(-3.5deg) translateY(0); }
+    50%{ transform:rotate(-3.5deg) translateY(-12px); }
+  }
+  .mock-widget::before, .mock-widget::after{
+    content:""; position:absolute; width:13px; height:13px; border-color:var(--text-faint); opacity:.55;
+  }
+  .mock-widget::before{ top:9px; left:9px; border-top:2px solid; border-left:2px solid; border-radius:4px 0 0 0; }
+  .mock-widget::after{ bottom:9px; right:9px; border-bottom:2px solid; border-right:2px solid; border-radius:0 0 4px 0; }
+
+  .mock-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--font-mono); font-size:10.5px; letter-spacing:.04em;
+    color:var(--green); background:hsla(96 40% 60% / .12);
+    padding:4px 10px; border-radius:999px; margin-bottom:18px;
+  }
+  .mock-badge .dot{ box-shadow:none; animation:pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
+
+  .mock-quote{
+    font-family:var(--font-display); font-style:italic; font-weight:500;
+    font-size:19px; line-height:1.45; color:var(--text); min-height:96px;
+  }
+  .mock-quote .cursor2{ display:inline-block; width:2px; height:18px; background:var(--cyan); margin-left:2px; vertical-align:-3px; animation:blink 1s step-end infinite; }
+
+  .mock-footer{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top:20px; padding-top:16px; border-top:1px solid var(--border);
+    font-family:var(--font-mono); font-size:10.5px; color:var(--text-faint);
+  }
+
+  .mock-satellite{
+    position:absolute; font-family:var(--font-mono); font-size:11.5px;
+    background:var(--surface); border:1px solid var(--border); color:var(--text-dim);
+    padding:8px 12px; border-radius:12px; box-shadow:0 14px 30px -14px hsla(var(--shadow-color)/.55);
+  }
+  .sat-1{ top:6%; right:2%; animation:float2 7s ease-in-out infinite; }
+  .sat-2{ bottom:10%; left:0%; animation:float2 7s ease-in-out infinite 1.5s; }
+  @keyframes float2{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-9px); } }
+
+  /* ============ MARQUEE ============ */
+  .marquee-band{
+    border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+    padding:22px 0; overflow:hidden; background:var(--bg-soft);
+  }
+  .marquee-track{ display:flex; gap:52px; width:max-content; animation:scroll 34s linear infinite; }
+  .marquee-band:hover .marquee-track{ animation-play-state:paused; }
+  @keyframes scroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  .marquee-track span{
+    font-family:var(--font-display); font-style:italic; font-size:19px; color:var(--text-dim);
+    white-space:nowrap; display:flex; align-items:center; gap:52px;
+  }
+  .marquee-track span em{ color:var(--gold); font-style:normal; font-family:var(--font-mono); font-size:13px; margin-right:6px; }
+
+  /* ============ FEATURES ============ */
+  .bento{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md);
+    padding:28px; transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  .card:hover{ transform:translateY(-5px); border-color:var(--violet); box-shadow:0 18px 40px -18px hsla(var(--shadow-color)/.5); }
+  .card.span2{ grid-column:span 2; }
+  .card .icon-wrap{
+    width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    background:var(--surface-2); color:var(--violet); margin-bottom:20px;
+  }
+  .card .icon-wrap svg{ width:21px; height:21px; }
+  .card h3{ font-size:19px; margin-bottom:9px; font-weight:600; }
+  .card p{ color:var(--text-dim); font-size:14.5px; }
+  .card .tag{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.08em; color:var(--text-faint); margin-bottom:10px; display:block; }
+
+  /* ============ INSTALL ============ */
+  .install-grid{ display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:start; }
+  .steps{ display:flex; flex-direction:column; gap:36px; }
+  .step{ display:flex; gap:20px; }
+  .step-num{
+    font-family:var(--font-display); font-style:italic; font-size:30px; color:var(--gold);
+    flex-shrink:0; width:48px;
+  }
+  .step h3{ font-size:18.5px; margin-bottom:7px; }
+  .step p{ color:var(--text-dim); font-size:14.5px; }
+  .step a{ color:var(--cyan); border-bottom:1px solid transparent; transition:border-color .2s ease; }
+  .step a:hover{ border-color:var(--cyan); }
+
+  .terminal{
+    background:#0d0e14; border:1px solid var(--border); border-radius:var(--radius-md);
+    overflow:hidden; box-shadow:0 30px 60px -24px hsla(var(--shadow-color)/.6); position:sticky; top:120px;
+  }
+  html[data-theme="light"] .terminal{ background:#1a1c2b; }
+  .terminal-bar{ display:flex; gap:7px; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.06); }
+  .terminal-bar i{ width:10px; height:10px; border-radius:50%; display:block; }
+  .terminal-bar i:nth-child(1){ background:#f7768e; }
+  .terminal-bar i:nth-child(2){ background:#e0af68; }
+  .terminal-bar i:nth-child(3){ background:#9ece6a; }
+  .terminal-body{ padding:24px; font-family:var(--font-mono); font-size:13.5px; line-height:2; color:#c0caf5; }
+  .terminal-body .p{ color:#7dcfff; }
+  .terminal-body .c{ color:#565f89; }
+  .terminal-body .g{ color:#9ece6a; }
+
+  /* ============ SCREENSHOTS ============ */
+  .gallery{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .gallery figure{
+    border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border);
+    background:var(--surface); cursor:zoom-in; position:relative; aspect-ratio:4/3.4;
+  }
+  .gallery figure img{ width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
+  .gallery figure:hover img{ transform:scale(1.06); }
+  .gallery figure figcaption{
+    position:absolute; left:0; right:0; bottom:0; padding:12px 14px;
+    background:linear-gradient(to top, hsla(var(--shadow-color)/.85), transparent);
+    font-family:var(--font-mono); font-size:11px; color:#fff; opacity:0; transition:opacity .3s ease;
+  }
+  .gallery figure:hover figcaption{ opacity:1; }
+  .gallery figure.placeholder{ display:flex; align-items:center; justify-content:center; cursor:default; }
+  .gallery figure.placeholder span{ font-family:var(--font-mono); font-size:11.5px; color:var(--text-faint); text-align:center; padding:20px; }
+
+  .lightbox{
+    position:fixed; inset:0; background:hsla(var(--shadow-color)/.92); z-index:1000;
+    display:none; align-items:center; justify-content:center; padding:40px; backdrop-filter:blur(6px);
+  }
+  .lightbox.active{ display:flex; }
+  .lightbox img{ max-width:min(900px,100%); max-height:85vh; border-radius:14px; box-shadow:0 40px 80px -20px rgba(0,0,0,.6); }
+  .lightbox-close{
+    position:absolute; top:28px; right:32px; width:42px; height:42px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.25); color:#fff; display:flex; align-items:center; justify-content:center;
+  }
+
+  /* ============ FAQ ============ */
+  .faq-list{ max-width:760px; }
+  .faq-item{ border-bottom:1px solid var(--border); }
+  .faq-item summary{
+    list-style:none; cursor:pointer; padding:24px 4px; display:flex; align-items:center; justify-content:space-between; gap:20px;
+  }
+  .faq-item summary::-webkit-details-marker{ display:none; }
+  .faq-q{ display:flex; align-items:baseline; gap:14px; }
+  .faq-q .qn{ font-family:var(--font-mono); font-size:12px; color:var(--gold); flex-shrink:0; }
+  .faq-item h3{ font-family:var(--font-body); font-weight:600; font-size:16px; }
+  .faq-chev{ flex-shrink:0; width:20px; height:20px; color:var(--text-faint); transition:transform .3s ease; }
+  .faq-item[open] .faq-chev{ transform:rotate(45deg); color:var(--violet); }
+  .faq-a{ padding:0 4px 26px 40px; color:var(--text-dim); font-size:14.5px; max-width:640px; }
+
+  /* ============ FOOTER ============ */
+  footer{ padding:70px 0 40px; border-top:1px solid var(--border); }
+  .footer-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:40px; flex-wrap:wrap; margin-bottom:50px; }
+  .footer-brand h3{ font-size:24px; margin-bottom:10px; }
+  .footer-brand p{ color:var(--text-dim); font-size:14px; max-width:340px; }
+  .footer-links{ display:flex; gap:64px; flex-wrap:wrap; }
+  .footer-col span.h{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--text-faint); display:block; margin-bottom:14px; text-transform:uppercase; }
+  .footer-col a{ display:block; color:var(--text-dim); font-size:14px; margin-bottom:10px; transition:color .2s ease; }
+  .footer-col a:hover{ color:var(--gold); }
+  .footer-bottom{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+    padding-top:26px; border-top:1px solid var(--border);
+    font-family:var(--font-mono); font-size:12px; color:var(--text-faint);
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:920px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .mock-stage{ min-height:340px; margin-top:20px; }
+    .install-grid{ grid-template-columns:1fr; }
+    .terminal{ position:static; }
+    .bento{ grid-template-columns:1fr 1fr; }
+    .card.span2{ grid-column:span 2; }
+    .gallery{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:720px){
+    .nav-links{ display:none; }
+    .wrap{ padding:0 20px; }
+    .bento{ grid-template-columns:1fr; }
+    .card.span2{ grid-column:span 1; }
+    .gallery{ grid-template-columns:1fr 1fr; }
+    section{ padding:76px 0; }
+    .hero{ padding-top:150px; }
+    .footer-top{ flex-direction:column; }
+  }
+  @media (max-width:520px){
+    .gallery{ grid-template-columns:1fr; }
+    .hero-ctas{ flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top">
+      <img src="https://raw.githubusercontent.com/cemal201138/Mottoverse/refs/heads/main/Mottoverse_Ico.ico" alt="Mottoverse Icon">
+      Mottoverse
+    </a>
+    <nav class="nav-links">
+      <a href="#ozellikler">Özellikler</a>
+      <a href="#kurulum">Kurulum</a>
+      <a href="#gorseller">Ekran Görüntüleri</a>
+      <a href="#sss">SSS</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-ghost btn-sm" href="https://github.com/cemal201138" target="_blank" rel="noopener">GitHub</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Tema değiştir">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Açık Kaynak · Windows Masaüstü Widget'ı</p>
+        <h1>Masaüstünüzde sessizce <em>nefes alan</em> sözler.</h1>
+        <p class="lead">Mottoverse; favori RSS akışlarınızdan ya da yerel bir JSON dosyasından, saatlik veya anlık olarak motivasyon sözleri çekip Windows masaüstünüze şık bir widget olarak sabitleyen, Python ile yazılmış minimalist bir araç.</p>
+        <div class="hero-ctas">
+          <a id="downloadBtn" class="btn btn-primary" href="https://github.com/cemal201138/Mottoverse/releases/latest" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13m0 0-4-4m4 4 4-4M4 21h16"/></svg>
+            İndir ve Dene
+          </a>
+          <a class="btn btn-ghost" href="https://github.com/cemal201138/Mottoverse" target="_blank" rel="noopener">GitHub'da İncele</a>
+        </div>
+        <div class="hero-meta">
+          <span><span class="dot"></span> MIT Lisanslı</span>
+          <span>// yalnızca Windows</span>
+          <span>// ekstra bağımlılık yok</span>
+        </div>
+      </div>
+
+      <div class="mock-stage">
+        <div class="mock-satellite sat-1">Win + D ⌘ gizlenmez</div>
+        <div class="mock-widget">
+          <span class="mock-badge"><span class="dot"></span> RSS · canlı</span>
+          <p class="mock-quote" id="mockQuote"></p>
+          <div class="mock-footer">
+            <span>mottoverse.json</span>
+            <span>◤ &nbsp; ◢</span>
+          </div>
+        </div>
+        <div class="mock-satellite sat-2">📌 masaüstüne sabit</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee-band">
+    <div class="marquee-track" id="marqueeTrack"></div>
+  </div>
+
+  <section id="ozellikler">
+    <div class="wrap">
+      <p class="eyebrow reveal">Neler Sunuyor</p>
+      <h2 class="section-title reveal">Küçük bir widget, dikkatle düşünülmüş detaylar.</h2>
+      <p class="section-sub reveal">Her özellik, masaüstünüzü bozmadan, arka planın doğal bir parçası gibi çalışması için tasarlandı.</p>
+
+      <div class="bento">
+        <div class="card span2 reveal">
+          <span class="tag">PIN-TO-DESKTOP</span>
+          <div class="icon-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6M9 8h6l1 4H8l1-4z"/><path d="M12 12v10M8 22h8"/></svg>
+          </div>
+          <h3>Masaüstüne Sabitleme</h3>
+          <p>Windows API entegrasyonu sayesinde widget, duvar kağıdınızın hemen üzerine yerleşir. Diğer pencereler önüne geçebilir, ama <strong>Win + D</strong> ile "Masaüstünü Göster" dediğinizde asla kaybolmaz — çünkü sistem onu wallpaper'ın bir parçası gibi görür.</p>
+        </div>
+
+        <div class="card reveal">
+          <span class="tag">TOKYO NIGHT</span>
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+          <h3>Modern Tokyo Night Teması</h3>
+          <p>Gözü yormayan #1a1b26 / #24283b renk paletiyle minimalist, sakin bir arayüz.</p>
+        </div>
+
+        <div class="card reveal">
+          <span class="tag">DWM API</span>
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="6"/></svg></div>
+          <h3>Donanımsal Köşe Yumuşatma</h3>
+          <p>Destekleyen Windows sürümlerinde <code>DwmSetWindowAttribute</code> ile Windows 11 tarzı yuvarlak köşeler.</p>
+        </div>
+
+        <div class="card reveal">
+          <span class="tag">AUTO-SIZE</span>
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+          <h3>Dinamik Boyutlandırma</h3>
+          <p>İçeriğe göre kendi yüksekliğini ayarlar; ◤ ve ◢ tutamaçlarından elle de boyutlandırılabilir.</p>
+        </div>
+
+        <div class="card reveal">
+          <span class="tag">FAILOVER</span>
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7M21 3v6h-6"/></svg></div>
+          <h3>Yedekli RSS Sistemi</h3>
+          <p>Birincil kaynağınızda sorun oluşursa uygulama otomatik olarak yedek akışa geçer, hiç çökmez.</p>
+        </div>
+
+        <div class="card reveal">
+          <span class="tag">LOCK</span>
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <h3>Kilitlenebilir Arayüz</h3>
+          <p>Yanlışlıkla yerini değiştirmemek için widget'ı sağ tıkla kilitleyin, tutamaçlar gizlensin.</p>
+        </div>
+
+        <div class="card reveal">
+          <span class="tag">APPDATA/JSON</span>
+          <div class="icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h5"/></svg></div>
+          <h3>Akıllı Konfigürasyon</h3>
+          <p>Kaydettiğiniz kaynak URL'leri AppData/Roaming altında saklanır, her açılışta tekrar girmezsiniz.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kurulum">
+    <div class="wrap install-grid">
+      <div>
+        <p class="eyebrow reveal">Başlarken</p>
+        <h2 class="section-title reveal">Üç adımda çalışır hâle gelir.</h2>
+        <p class="section-sub reveal">Ekstra bir <code>pip install</code> yok — Mottoverse yalnızca Python'ın yerleşik kütüphanelerini (tkinter, urllib, xml, ctypes) kullanır.</p>
+
+        <div class="steps">
+          <div class="step reveal">
+            <span class="step-num">01</span>
+            <div>
+              <h3>İndir ve çalıştır</h3>
+              <p>Deponun son sürümünü indirin ve <code>.exe</code> dosyasını çalıştırın, ya da son sürümdeki <code>.py</code> kodunu çalıştırın.</p>
+            </div>
+          </div>
+          <div class="step reveal">
+            <span class="step-num">02</span>
+            <div>
+              <h3>Kaynağınızı tanımlayın</h3>
+              <p>İlk açılışta karşınıza çıkan pencereye en az bir geçerli RSS URL'i girin veya json dosyanızı uygulamaya gösterin. Örnek yapı için <a href="https://github.com/cemal201138/rss-feed" target="_blank" rel="noopener">rss-feed</a> reposuna göz atabilirsiniz.</p>
+            </div>
+          </div>
+          <div class="step reveal">
+            <span class="step-num">03</span>
+            <div>
+              <h3>Yerleştirin ve kilitleyin</h3>
+              <p>Widget'ı masaüstünde istediğiniz yere sürükleyin; sağ tık menüsünden 📌 <em>Sabitle</em> diyerek yerini koruma altına alın.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="terminal reveal">
+        <div class="terminal-bar"><i></i><i></i><i></i></div>
+        <div class="terminal-body">
+          <div>&nbsp;</div>
+          <div><span class="g">✓</span> Veri Kaynağı Ayarları penceresi açıldı</div>
+          <div><span class="g">✓</span> RSS URL doğrulandı</div>
+          <div><span class="g">✓</span> Widget masaüstüne sabitlendi</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="gorseller">
+    <div class="wrap">
+      <p class="eyebrow reveal">Ekran Görüntüleri</p>
+      <h2 class="section-title reveal">Uygulamadan gerçek kareler.</h2>
+      <p class="section-sub reveal">Ayarlar penceresinden masaüstündeki son haline; büyütmek için bir görsele tıklayın.</p>
+
+      <div class="gallery" id="gallery">
+        <figure class="reveal" data-full="https://github.com/user-attachments/assets/8402188a-1c91-428f-845c-9b3e3adc6092">
+          <img src="https://github.com/user-attachments/assets/8402188a-1c91-428f-845c-9b3e3adc6092" alt="Mottoverse widget masaüstü görünümü" loading="lazy" onerror="this.closest('figure').classList.add('placeholder'); this.remove();">
+          <figcaption>Masaüstü widget görünümü</figcaption>
+        </figure>
+        <figure class="reveal" data-full="https://github.com/user-attachments/assets/9061bbf7-0194-4e58-98c9-443ead5bd0e4">
+          <img src="https://github.com/user-attachments/assets/9061bbf7-0194-4e58-98c9-443ead5bd0e4" alt="Mottoverse widget alternatif görünüm" loading="lazy" onerror="this.closest('figure').classList.add('placeholder'); this.remove();">
+          <figcaption>Widget — alternatif konum</figcaption>
+        </figure>
+        <figure class="reveal" data-full="https://github.com/user-attachments/assets/d6eace68-7af3-480e-876b-c0526f069342">
+          <img src="https://github.com/user-attachments/assets/d6eace68-7af3-480e-876b-c0526f069342" alt="RSS kaynak ayarları penceresi" loading="lazy" onerror="this.closest('figure').classList.add('placeholder'); this.remove();">
+          <figcaption>Kaynak ayarları penceresi</figcaption>
+        </figure>
+        <figure class="reveal" data-full="https://github.com/user-attachments/assets/d06a1d9f-fa9a-4377-98b2-b7e39f929b6c">
+          <img src="https://github.com/user-attachments/assets/d06a1d9f-fa9a-4377-98b2-b7e39f929b6c" alt="Sağ tık menüsü" loading="lazy" onerror="this.closest('figure').classList.add('placeholder'); this.remove();">
+          <figcaption>Sağ tık menüsü</figcaption>
+        </figure>
+        <figure class="reveal" data-full="https://github.com/user-attachments/assets/98fcad29-c873-4a2a-ab67-6096bcef9dc8">
+          <img src="https://github.com/user-attachments/assets/98fcad29-c873-4a2a-ab67-6096bcef9dc8" alt="Widget yeniden boyutlandırma" loading="lazy" onerror="this.closest('figure').classList.add('placeholder'); this.remove();">
+          <figcaption>Yeniden boyutlandırma tutamaçları</figcaption>
+        </figure>
+        <figure class="reveal placeholder">
+          <span>Daha fazlası için<br>GitHub reposuna göz atın →</span>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section id="sss">
+    <div class="wrap">
+      <p class="eyebrow reveal">Sıkça Sorulanlar</p>
+      <h2 class="section-title reveal">Aklınıza takılabilecek birkaç soru.</h2>
+      <p class="section-sub reveal">Kapsamlı liste için depodaki <a href="https://github.com/cemal201138/Mottoverse/blob/main/SSS.md" target="_blank" rel="noopener" style="color:var(--cyan)">SSS.md</a> dosyasına bakabilirsiniz.</p>
+
+      <div class="faq-list">
+        <details class="faq-item reveal">
+          <summary>
+            <span class="faq-q"><span class="qn">01</span><h3>Çalıştırmak için ekstra Python kütüphanesi kurmam gerekiyor mu?</h3></span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </summary>
+          <p class="faq-a">Hayır. Mottoverse yalnızca Python'ın yerleşik kütüphanelerini (tkinter, urllib, xml, ctypes, json, shutil) kullanır; herhangi bir <code>pip install</code> komutuna gerek kalmadan doğrudan çalışır.</p>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>
+            <span class="faq-q"><span class="qn">02</span><h3>Widget neden Win + D ile gizlenmiyor?</h3></span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </summary>
+          <p class="faq-a">Uygulama yerel Windows <code>user32</code> API'lerini kullanarak, masaüstü katmanını yöneten arka plan pencerelerine (Progman / WorkerW) bir alt pencere olarak bağlanır. Böylece sistem onu duvar kağıdının bir parçası olarak görür.</p>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>
+            <span class="faq-q"><span class="qn">03</span><h3>RSS modu ile Yerel JSON modu arasındaki fark nedir?</h3></span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </summary>
+          <p class="faq-a">RSS Modu, belirttiğiniz canlı akışları dinler ve yeni bir söz eklendiğinde otomatik güncellenir. Yerel JSON Modu ise bilgisayarınızdaki bir <code>.json</code> dosyasını referans alır ve tanımladığınız saniye aralığında rastgele seçim yapar.</p>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>
+            <span class="faq-q"><span class="qn">04</span><h3>Widget'ın konumunu kilitleyebilir miyim?</h3></span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </summary>
+          <p class="faq-a">Evet. Widget'a sağ tıklayıp "📌 Pin" seçeneğini seçtiğinizde arayüz kilitlenir; yeniden boyutlandırma tutamaçları gizlenir ve widget yanlışlıkla taşınamaz.</p>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>
+            <span class="faq-q"><span class="qn">05</span><h3>İnternet bağlantım koparsa widget çöker mi?</h3></span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </summary>
+          <p class="faq-a">Hayır. Kod mimarisi yedekli RSS ve korumalı hata blokları (try/except) içerir. Birincil kaynağa ulaşılamazsa yedek adrese geçer; hiçbirine ulaşılamazsa uygulama arka planda güvenle bekler ve bağlantı geri geldiğinde akışı çekmeye devam eder.</p>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>
+            <span class="faq-q"><span class="qn">06</span><h3>Linux veya macOS'ta çalışır mı?</h3></span>
+            <svg class="faq-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </summary>
+          <p class="faq-a">Hayır. Masaüstüne sabitleme ve gelişmiş arayüz özellikleri tamamen Windows'a özgü API'lere bağlı olduğundan uygulama yalnızca Windows işletim sisteminde çalışır.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h3>Mottoverse</h3>
+        <p>Masaüstünüze şık ve minimalist bir şekilde entegre olan, saatlik motivasyon sözü akışı sağlayan açık kaynak Python tabanlı widget uygulaması.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <span class="h">Proje</span>
+          <a href="https://github.com/cemal201138/Mottoverse" target="_blank" rel="noopener">GitHub Reposu</a>
+          <a href="https://github.com/cemal201138/Mottoverse/releases" target="_blank" rel="noopener">Sürümler</a>
+          <a href="https://github.com/cemal201138/rss-feed" target="_blank" rel="noopener">Örnek RSS Kaynağı</a>
+        </div>
+        <div class="footer-col">
+          <span class="h">Kaynaklar</span>
+          <a href="https://github.com/cemal201138/Mottoverse/blob/main/SSS.md" target="_blank" rel="noopener">SSS (TR)</a>
+          <a href="https://github.com/cemal201138/Mottoverse/blob/main/FAQ.md" target="_blank" rel="noopener">FAQ (EN)</a>
+          <a href="https://github.com/cemal201138/Mottoverse/blob/main/README-gb.md" target="_blank" rel="noopener">English README</a>
+          <a href="https://github.com/cemal201138/Mottoverse/blob/main/README.md" target="_blank" rel="noopener">Türkçe README</a>
+        </div>
+        <div class="footer-col">
+          <span class="h">Lisans</span>
+          <a href="https://github.com/cemal201138/Mottoverse/blob/main/LICENSE" target="_blank" rel="noopener">MIT Lisansı</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Cemal Evli — MIT Lisansı altında yayınlanmıştır.</span>
+      <span>Mottoverse_ // her saat başı yeni bir söz.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Kapat">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+  </button>
+  <img id="lightboxImg" src="" alt="Büyütülmüş ekran görüntüsü">
+</div>
+
+<script>
+  // ---------- THEME TOGGLE (with localStorage persistence) ----------
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  
+  // LocalStorage üzerinden kaydedilen temayı al, yoksa 'dark' olarak varsayılan belirle
+  const savedTheme = localStorage.getItem('mottoverse_theme') || 'dark';
+  root.setAttribute('data-theme', savedTheme);
+
+  themeToggle.addEventListener('click', () => {
+    const currentTheme = root.getAttribute('data-theme');
+    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    root.setAttribute('data-theme', nextTheme);
+    localStorage.setItem('mottoverse_theme', nextTheme); // Temayı tarayıcıya kaydet
+  });
+
+  // ---------- QUOTE POOL ----------
+  const quotes = [
+    "Küçük adımlar, sessizce büyük mesafeler alır.",
+    "Bugün attığın her adım, yarının zeminidir.",
+    "Disiplin, hedefe duyulan sevginin sessiz hâlidir.",
+    "Zorluk geçicidir; bıraktığın iz kalıcı.",
+    "Başlamak için mükemmel an değil, doğru irade gerekir.",
+    "Odaklan; gerisi zamanla kendini toparlar.",
+    "Her saat başı, yeni bir bakış açısı."
+  ];
+
+  // ---------- HERO MOCK WIDGET: typewriter cycle ----------
+  const mockEl = document.getElementById('mockQuote');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function typeQuote(text, done){
+    let i = 0;
+    mockEl.innerHTML = '';
+    const span = document.createElement('span');
+    mockEl.appendChild(span);
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor2';
+    mockEl.appendChild(cursor);
+    const iv = setInterval(() => {
+      span.textContent = text.slice(0, i+1);
+      i++;
+      if(i >= text.length){ clearInterval(iv); done && done(); }
+    }, 34);
+  }
+
+  let qi = 0;
+  function cycleQuotes(){
+    if(reduced){ mockEl.textContent = quotes[0]; return; }
+    typeQuote(quotes[qi], () => {
+      setTimeout(() => {
+        qi = (qi + 1) % quotes.length;
+        cycleQuotes();
+      }, 3200);
+    });
+  }
+  cycleQuotes();
+
+  // ---------- MARQUEE ----------
+  const track = document.getElementById('marqueeTrack');
+  const build = () => quotes.map(q => `<span><em>“</em>${q}</span>`).join('');
+  track.innerHTML = build() + build();
+
+  // ---------- SCROLL REVEAL ----------
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('is-visible'));
+  }
+
+  // ---------- LIGHTBOX ----------
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  document.getElementById('gallery').addEventListener('click', (e) => {
+    const fig = e.target.closest('figure[data-full]');
+    if(!fig) return;
+    lightboxImg.src = fig.getAttribute('data-full');
+    lightbox.classList.add('active');
+  });
+  function closeLightbox(){ lightbox.classList.remove('active'); lightboxImg.src=''; }
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
+
+  // ---------- FETCH LATEST RELEASE TAG ----------
+  async function fetchLatestRelease() {
+    const downloadBtn = document.getElementById('downloadBtn');
+    if (!downloadBtn) return;
+    try {
+      const response = await fetch('https://api.github.com/repos/cemal201138/Mottoverse/releases/latest');
+      if (response.ok) {
+        const data = await response.json();
+        const tagName = data.tag_name;
+        downloadBtn.href = `https://github.com/cemal201138/Mottoverse/releases/latest/download/Mottoverse${tagName}.zip`;
+      }
+    } catch (error) {
+      console.error("GitHub API'den son sürüm etiket bilgisi alınamadı:", error);
+    }
+  }
+  fetchLatestRelease();
+</script>
+
+</body>
+</html>
