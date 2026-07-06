@@ -12,6 +12,7 @@
             --primary-color: #4a90e2;
             --success-color: #2ecc71;
             --danger-color: #e74c3c;
+            --info-color: #e67e22;
             --text-color: #333;
         }
 
@@ -61,7 +62,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
-            align-items: flex-end; /* Elemanların taban çizgilerini ve silme butonunu kusursuz hizalar */
+            align-items: flex-end;
             background: #fafafa;
             padding: 12px;
             border-radius: 6px;
@@ -103,22 +104,45 @@
             transition: background 0.2s;
         }
 
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
         .btn-add {
             background-color: var(--primary-color);
             color: white;
             padding: 10px 15px;
-            width: 100%;
+            flex: 2;
             font-size: 16px;
-            margin-top: 10px;
         }
 
         .btn-add:hover { background-color: #357abd; }
 
+        .btn-upload-trigger {
+            background-color: var(--info-color);
+            color: white;
+            padding: 10px 15px;
+            flex: 1;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-upload-trigger:hover { background-color: #d35400; }
+
+        #file-input {
+            display: none;
+        }
+
         .btn-delete {
             background-color: var(--danger-color);
             color: white;
-            padding: 9px 12px; /* Input yüksekliği ile tam eşitlenmesi için optimize edildi */
-            height: 35px; /* Input'lar ile aynı dikey boyuta sabitlendi */
+            padding: 9px 12px;
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -200,6 +224,9 @@
                 height: auto;
                 padding: 10px;
             }
+            .action-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -209,9 +236,13 @@
 
     <div class="container">
         <div class="panel">
-            <div id="form-container">
-                </div>
-            <button class="btn-add" onclick="addRow()"><i class="fas fa-plus"></i> Yeni Link Ekle</button>
+            <div id="form-container"></div>
+            
+            <div class="action-buttons">
+                <button class="btn-add" onclick="addRow()"><i class="fas fa-plus"></i> Yeni Link Ekle</button>
+                <button class="btn-upload-trigger" onclick="triggerFileInput()"><i class="fas fa-upload"></i> JSON Yükle</button>
+                <input type="file" id="file-input" accept=".json" onchange="loadJSONFile(event)">
+            </div>
         </div>
 
         <div class="panel">
@@ -228,19 +259,6 @@
     </footer>
 
     <script>
-        // İhtiyaç halinde kullanılabilecek şablon verileriniz
-        const initialData = [
-            {"icon": "fab fa-instagram",        "url": "https://www.instagram.com/cemalevli38/",     "title": "Instagram"},
-            {"icon": "fab fa-threads",           "url": "https://www.threads.com/@cemalevli38",             "title": "Threads"},
-            {"icon": "fab fa-reddit",           "url": "https://www.reddit.com/user/cemalevli/",             "title": "Reddit"},
-            {"icon": "fab fa-facebook",         "url": "https://www.facebook.com/profile.php?id=100076601840154",               "title": "Facebook"},
-            {"icon": "fab fa-github",           "url": "https://github.com/cemal201138",             "title": "GitHub"},
-            {"icon": "fab fa-instagram",        "url": "https://www.instagram.com/cemalevli38y/",     "title": "Instagram Yedek"},
-            {"icon": "fas fa-envelope",         "url": "mailto:mylab@cemalevli.qzz.io",              "title": "E-posta"},
-            {"icon": "fas fa-globe",            "url": "https://cemalevli.dpdns.org/",                   "title": "Web Sitem"},
-            {"icon": "fas fa-user-circle",      "url": "https://cemalevli.dpdns.org/imcemalevli/",                "title": "Sosyal Medya Hesaplarım"}
-        ];
-
         // Form alanındaki değişiklikleri dinle ve JSON'ı güncelle
         document.getElementById('form-container').addEventListener('input', updateJSON);
 
@@ -277,6 +295,46 @@
             const row = button.parentElement;
             row.remove();
             updateJSON();
+        }
+
+        // Gizli dosya inputunu tetikler
+        function triggerFileInput() {
+            document.getElementById('file-input').click();
+        }
+
+        // Dosyadan yüklenen veya import edilen veriyi forma basan fonksiyon
+        function renderDataToForm(dataArray) {
+            const container = document.getElementById('form-container');
+            container.innerHTML = ""; // Mevcut form elemanlarını temizle
+
+            if (!Array.isArray(dataArray) || dataArray.length === 0) {
+                container.appendChild(createRowHTML());
+            } else {
+                dataArray.forEach(item => {
+                    container.appendChild(createRowHTML(item.icon || "", item.url || "", item.title || ""));
+                });
+            }
+            updateJSON();
+        }
+
+        // Dosya seçildiğinde tetiklenen yükleme fonksiyonu
+        function loadJSONFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const parsedData = JSON.parse(e.target.result);
+                    renderDataToForm(parsedData);
+                    alert("JSON başarıyla yüklendi ve forma aktarıldı!");
+                } catch (error) {
+                    alert("Hata: Geçersiz bir JSON dosyası seçtiniz.");
+                }
+                // Aynı dosyayı tekrar seçebilmek için inputu sıfırla
+                event.target.value = "";
+            };
+            reader.readAsText(file);
         }
 
         // Her bir objeyi tek satırda yan yana tutan özel formatlama fonksiyonu
@@ -335,7 +393,7 @@
         // Sayfa ilk yüklendiğinde temiz, tek bir boş satır basar
         function initializeForm() {
             const container = document.getElementById('form-container');
-            container.appendChild(createRowHTML()); // Herhangi bir ön ek olmadan boş satır ekler
+            container.appendChild(createRowHTML());
             updateJSON();
         }
 
