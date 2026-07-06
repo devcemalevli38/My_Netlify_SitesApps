@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Link Oluşturucu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --primary-color: #4a90e2;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --text-color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            align-items: flex-start;
+            flex: 1;
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 300px;
+        }
+
+        /* Form Alanı */
+        .link-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+            background: #fafafa;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .input-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .input-group label {
+            font-size: 12px;
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--primary-color);
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn-add {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .btn-add:hover { background-color: #357abd; }
+
+        .btn-delete {
+            background-color: var(--danger-color);
+            color: white;
+            padding: 8px 12px;
+            margin-top: 18px;
+        }
+
+        .btn-delete:hover { background-color: #c0392b; }
+
+        /* JSON Önizleme Alanı */
+        .json-header {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 10px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .btn-copy { background-color: #9b59b6; }
+        .btn-copy:hover { background-color: #8e44ad; }
+
+        .btn-download { background-color: var(--success-color); }
+        .btn-download:hover { background-color: #27ae60; }
+
+        pre {
+            background: #2d3748;
+            color: #f7fafc;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            max-height: 600px;
+            overflow-y: auto;
+            white-space: pre;
+        }
+
+        /* Alt Bilgi (Footer) Alanı */
+        footer {
+            margin-top: 30px;
+            padding: 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #7f8c8d;
+            width: 100%;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #357abd;
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Social Links JSON Oluşturucu</h1>
+
+    <div class="container">
+        <div class="panel">
+            <div id="form-container">
+                </div>
+            <button class="btn-add" onclick="addRow()"><i class="fas fa-plus"></i> Yeni Link Ekle</button>
+        </div>
+
+        <div class="panel">
+            <div class="json-header">
+                <button class="btn-action btn-copy" onclick="copyJSON()"><i class="fas fa-copy"></i> Kopyala</button>
+                <button class="btn-action btn-download" onclick="downloadJSON()"><i class="fas fa-download"></i> İndir</button>
+            </div>
+            <pre id="json-output">[]</pre>
+        </div>
+    </div>
+
+    <footer>
+        <i class="fas fa-info-circle"></i> İkon isimlerini bulmak için <a href="https://www.w3schools.com/icons/icons_reference.asp" target="_blank" rel="noopener noreferrer">W3Schools Font Awesome Referans</a> sitesini kullanabilirsiniz.
+    </footer>
+
+    <script>
+        // İhtiyaç halinde kullanılabilecek şablon verileriniz
+        const initialData = [
+            {"icon": "fab fa-instagram",        "url": "https://www.instagram.com/cemalevli38/",     "title": "Instagram"},
+            {"icon": "fab fa-threads",           "url": "https://www.threads.com/@cemalevli38",             "title": "Threads"},
+            {"icon": "fab fa-reddit",           "url": "https://www.reddit.com/user/cemalevli/",             "title": "Reddit"},
+            {"icon": "fab fa-facebook",         "url": "https://www.facebook.com/profile.php?id=100076601840154",               "title": "Facebook"},
+            {"icon": "fab fa-github",           "url": "https://github.com/cemal201138",             "title": "GitHub"},
+            {"icon": "fab fa-instagram",        "url": "https://www.instagram.com/cemalevli38y/",     "title": "Instagram Yedek"},
+            {"icon": "fas fa-envelope",         "url": "mailto:mylab@cemalevli.qzz.io",              "title": "E-posta"},
+            {"icon": "fas fa-globe",            "url": "https://cemalevli.dpdns.org/",                   "title": "Web Sitem"},
+            {"icon": "fas fa-user-circle",      "url": "https://cemalevli.dpdns.org/imcemalevli/",                "title": "Sosyal Medya Hesaplarım"}
+        ];
+
+        // Form alanındaki değişiklikleri dinle ve JSON'ı güncelle
+        document.getElementById('form-container').addEventListener('input', updateJSON);
+
+        // Belirli verilerle veya tamamen boş satır oluşturan fonksiyon
+        function createRowHTML(iconValue = "", urlValue = "", titleValue = "") {
+            const div = document.createElement('div');
+            div.className = 'link-row';
+            div.innerHTML = `
+                <div class="input-group">
+                    <label>İkon (Class)</label>
+                    <input type="text" class="input-icon" value="${iconValue}" placeholder="örn: fab fa-github">
+                </div>
+                <div class="input-group">
+                    <label>URL</label>
+                    <input type="text" class="input-url" value="${urlValue}" placeholder="https://...">
+                </div>
+                <div class="input-group">
+                    <label>Başlık</label>
+                    <input type="text" class="input-title" value="${titleValue}" placeholder="örn: GitHub">
+                </div>
+                <button class="btn-delete" onclick="removeRow(this)"><i class="fas fa-trash"></i></button>
+            `;
+            return div;
+        }
+
+        // Kullanıcı manuel artı butonuna bastığında çalışır
+        function addRow() {
+            const container = document.getElementById('form-container');
+            container.appendChild(createRowHTML());
+            updateJSON();
+        }
+
+        function removeRow(button) {
+            const row = button.parentElement;
+            row.remove();
+            updateJSON();
+        }
+
+        // Her bir objeyi tek satırda yan yana tutan özel formatlama fonksiyonu
+        function formatCustomJSON(arr) {
+            if (arr.length === 0) return "[]";
+            
+            const lines = arr.map(item => {
+                return `  {"icon": "${item.icon}", "url": "${item.url}", "title": "${item.title}"}`;
+            });
+            
+            return `[\n${lines.join(",\n")}\n]`;
+        }
+
+        function updateJSON() {
+            const rows = document.querySelectorAll('.link-row');
+            const data = [];
+
+            rows.forEach(row => {
+                const icon = row.querySelector('.input-icon').value;
+                const url = row.querySelector('.input-url').value;
+                const title = row.querySelector('.input-title').value;
+
+                // Sadece alanlardan en az biri doluysa listeye ekle
+                if (icon || url || title) {
+                    data.push({ icon, url, title });
+                }
+            });
+
+            // Özel formatlama fonksiyonunu kullanarak önizleme alanını güncelle
+            document.getElementById('json-output').textContent = formatCustomJSON(data);
+        }
+
+        function copyJSON() {
+            const jsonText = document.getElementById('json-output').textContent;
+            navigator.clipboard.writeText(jsonText).then(() => {
+                alert('JSON panoya kopyalandı!');
+            }).catch(err => {
+                alert('Kopyalama başarısız: ', err);
+            });
+        }
+
+        function downloadJSON() {
+            const jsonText = document.getElementById('json-output').textContent;
+            const blob = new Blob([jsonText], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'social-links.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Sayfa ilk yüklendiğinde temiz, tek bir boş satır basar
+        function initializeForm() {
+            const container = document.getElementById('form-container');
+            container.appendChild(createRowHTML()); // Herhangi bir ön ek olmadan boş satır ekler
+            updateJSON();
+        }
+
+        // Uygulamayı başlat
+        initializeForm();
+    </script>
+</body>
+</html>
