@@ -11,13 +11,13 @@
     "url": "https://github.com/cemal201138/Python_Muzik_Calar",
     "description_tr": "Gelişmiş arayüze ve ekolayzer ayarlarına sahip müzik çalar oynatıcısı.",
     "description_en": "Music player with an advanced interface and equalizer settings.",
-    "tags": ["Tkinter", "Pygame", "Python"]
+    "tags": ["Python", "Pygame", "Tkinter"]
   },
   {
     "name": "Mottoverse",
     "url": "https://github.com/cemal201138/Mottoverse",
     "description_tr": "Saatlik Rastgele Söz Akışı (Desktop Widget)",
     "description_en": "Hourly Random Quote Flow (Desktop Widget)",
-    "tags": ["HTML", "Windows", "Tkinter"]
+    "tags": ["Python", "Windows", "Tkinter"]
   }
 ]
