@@ -1,9 +1,9 @@
 [
   {
-    "url": "https://api.github.com/repos/cemal201138/games/releases/309447225",
-    "assets_url": "https://api.github.com/repos/cemal201138/games/releases/309447225/assets",
-    "upload_url": "https://uploads.github.com/repos/cemal201138/games/releases/309447225/assets{?name,label}",
-    "html_url": "https://github.com/cemal201138/games/releases/tag/FlashGame4",
+    "url": "https://api.github.com/repos/cemalevli38/games/releases/309447225",
+    "assets_url": "https://api.github.com/repos/cemalevli38/games/releases/309447225/assets",
+    "upload_url": "https://uploads.github.com/repos/cemalevli38/games/releases/309447225/assets{?name,label}",
+    "html_url": "https://github.com/cemalevli38/games/releases/tag/FlashGame4",
     "id": 309447225,
     "author": {
       "login": "website-file-user",
@@ -38,7 +38,7 @@
     "published_at": "2026-04-15T16:12:58Z",
     "assets": [
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/397113227",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/397113227",
         "id": 397113227,
         "node_id": "RA_kwDOSDhlpc4Xq3eL",
         "name": "HappyWheels.zip",
@@ -71,18 +71,18 @@
         "download_count": 7,
         "created_at": "2026-04-15T16:12:34Z",
         "updated_at": "2026-04-15T16:12:56Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame4/HappyWheels.zip"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame4/HappyWheels.zip"
       }
     ],
-    "tarball_url": "https://api.github.com/repos/cemal201138/games/tarball/FlashGame4",
-    "zipball_url": "https://api.github.com/repos/cemal201138/games/zipball/FlashGame4",
+    "tarball_url": "https://api.github.com/repos/cemalevli38/games/tarball/FlashGame4",
+    "zipball_url": "https://api.github.com/repos/cemalevli38/games/zipball/FlashGame4",
     "body": ""
   },
   {
-    "url": "https://api.github.com/repos/cemal201138/games/releases/313316068",
-    "assets_url": "https://api.github.com/repos/cemal201138/games/releases/313316068/assets",
-    "upload_url": "https://uploads.github.com/repos/cemal201138/games/releases/313316068/assets{?name,label}",
-    "html_url": "https://github.com/cemal201138/games/releases/tag/FlashGame3",
+    "url": "https://api.github.com/repos/cemalevli38/games/releases/313316068",
+    "assets_url": "https://api.github.com/repos/cemalevli38/games/releases/313316068/assets",
+    "upload_url": "https://uploads.github.com/repos/cemalevli38/games/releases/313316068/assets{?name,label}",
+    "html_url": "https://github.com/cemalevli38/games/releases/tag/FlashGame3",
     "id": 313316068,
     "author": {
       "login": "website-file-user",
@@ -117,7 +117,7 @@
     "published_at": "2026-04-24T16:38:07Z",
     "assets": [
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404606681",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404606681",
         "id": 404606681,
         "node_id": "RA_kwDOSDhlpc4YHc7Z",
         "name": "EarnToDieNotDoppler.swf",
@@ -150,10 +150,10 @@
         "download_count": 1,
         "created_at": "2026-04-24T16:37:43Z",
         "updated_at": "2026-04-24T16:38:07Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame3/EarnToDieNotDoppler.swf"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame3/EarnToDieNotDoppler.swf"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404606787",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404606787",
         "id": 404606787,
         "node_id": "RA_kwDOSDhlpc4YHc9D",
         "name": "EarnToDieNotDoppler.zip",
@@ -186,18 +186,18 @@
         "download_count": 2,
         "created_at": "2026-04-24T16:37:57Z",
         "updated_at": "2026-04-24T16:38:06Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame3/EarnToDieNotDoppler.zip"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame3/EarnToDieNotDoppler.zip"
       }
     ],
-    "tarball_url": "https://api.github.com/repos/cemal201138/games/tarball/FlashGame3",
-    "zipball_url": "https://api.github.com/repos/cemal201138/games/zipball/FlashGame3",
+    "tarball_url": "https://api.github.com/repos/cemalevli38/games/tarball/FlashGame3",
+    "zipball_url": "https://api.github.com/repos/cemalevli38/games/zipball/FlashGame3",
     "body": ""
   },
   {
-    "url": "https://api.github.com/repos/cemal201138/games/releases/313313802",
-    "assets_url": "https://api.github.com/repos/cemal201138/games/releases/313313802/assets",
-    "upload_url": "https://uploads.github.com/repos/cemal201138/games/releases/313313802/assets{?name,label}",
-    "html_url": "https://github.com/cemal201138/games/releases/tag/FlashGame2",
+    "url": "https://api.github.com/repos/cemalevli38/games/releases/313313802",
+    "assets_url": "https://api.github.com/repos/cemalevli38/games/releases/313313802/assets",
+    "upload_url": "https://uploads.github.com/repos/cemalevli38/games/releases/313313802/assets{?name,label}",
+    "html_url": "https://github.com/cemalevli38/games/releases/tag/FlashGame2",
     "id": 313313802,
     "author": {
       "login": "website-file-user",
@@ -232,7 +232,7 @@
     "published_at": "2026-04-24T16:35:57Z",
     "assets": [
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404601679",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404601679",
         "id": 404601679,
         "node_id": "RA_kwDOSDhlpc4YHbtP",
         "name": "snail-bob-1.swf",
@@ -265,10 +265,10 @@
         "download_count": 0,
         "created_at": "2026-04-24T16:32:35Z",
         "updated_at": "2026-04-24T16:35:57Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame2/snail-bob-1.swf"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame2/snail-bob-1.swf"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404601938",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404601938",
         "id": 404601938,
         "node_id": "RA_kwDOSDhlpc4YHbxS",
         "name": "snail-bob-2.swf",
@@ -301,10 +301,10 @@
         "download_count": 0,
         "created_at": "2026-04-24T16:32:43Z",
         "updated_at": "2026-04-24T16:32:53Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame2/snail-bob-2.swf"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame2/snail-bob-2.swf"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404602167",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404602167",
         "id": 404602167,
         "node_id": "RA_kwDOSDhlpc4YHb03",
         "name": "snail-bob-3.swf",
@@ -337,10 +337,10 @@
         "download_count": 0,
         "created_at": "2026-04-24T16:32:53Z",
         "updated_at": "2026-04-24T16:33:06Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame2/snail-bob-3.swf"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame2/snail-bob-3.swf"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404601390",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404601390",
         "id": 404601390,
         "node_id": "RA_kwDOSDhlpc4YHbou",
         "name": "snail-bob-4-space.swf",
@@ -373,10 +373,10 @@
         "download_count": 0,
         "created_at": "2026-04-24T16:32:23Z",
         "updated_at": "2026-04-24T16:35:57Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame2/snail-bob-4-space.swf"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame2/snail-bob-4-space.swf"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404600126",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404600126",
         "id": 404600126,
         "node_id": "RA_kwDOSDhlpc4YHbU-",
         "name": "snail-bob-5-love-story.swf",
@@ -409,10 +409,10 @@
         "download_count": 0,
         "created_at": "2026-04-24T16:31:25Z",
         "updated_at": "2026-04-24T16:31:43Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame2/snail-bob-5-love-story.swf"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame2/snail-bob-5-love-story.swf"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404600528",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404600528",
         "id": 404600528,
         "node_id": "RA_kwDOSDhlpc4YHbbQ",
         "name": "snail-bob-6-winter-story.swf",
@@ -445,10 +445,10 @@
         "download_count": 0,
         "created_at": "2026-04-24T16:31:43Z",
         "updated_at": "2026-04-24T16:31:55Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame2/snail-bob-6-winter-story.swf"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame2/snail-bob-6-winter-story.swf"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404600752",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404600752",
         "id": 404600752,
         "node_id": "RA_kwDOSDhlpc4YHbew",
         "name": "snail-bob-7-fantasy-story.swf",
@@ -481,10 +481,10 @@
         "download_count": 0,
         "created_at": "2026-04-24T16:31:55Z",
         "updated_at": "2026-04-24T16:32:05Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame2/snail-bob-7-fantasy-story.swf"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame2/snail-bob-7-fantasy-story.swf"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404600986",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404600986",
         "id": 404600986,
         "node_id": "RA_kwDOSDhlpc4YHbia",
         "name": "snail-bob-8-island-story.swf",
@@ -517,10 +517,10 @@
         "download_count": 0,
         "created_at": "2026-04-24T16:32:05Z",
         "updated_at": "2026-04-24T16:32:23Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame2/snail-bob-8-island-story.swf"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame2/snail-bob-8-island-story.swf"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404603043",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404603043",
         "id": 404603043,
         "node_id": "RA_kwDOSDhlpc4YHcCj",
         "name": "SnailBobFull.zip",
@@ -553,18 +553,18 @@
         "download_count": 0,
         "created_at": "2026-04-24T16:33:40Z",
         "updated_at": "2026-04-24T16:35:57Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame2/SnailBobFull.zip"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame2/SnailBobFull.zip"
       }
     ],
-    "tarball_url": "https://api.github.com/repos/cemal201138/games/tarball/FlashGame2",
-    "zipball_url": "https://api.github.com/repos/cemal201138/games/zipball/FlashGame2",
+    "tarball_url": "https://api.github.com/repos/cemalevli38/games/tarball/FlashGame2",
+    "zipball_url": "https://api.github.com/repos/cemalevli38/games/zipball/FlashGame2",
     "body": ""
   },
   {
-    "url": "https://api.github.com/repos/cemal201138/games/releases/313313043",
-    "assets_url": "https://api.github.com/repos/cemal201138/games/releases/313313043/assets",
-    "upload_url": "https://uploads.github.com/repos/cemal201138/games/releases/313313043/assets{?name,label}",
-    "html_url": "https://github.com/cemal201138/games/releases/tag/FlashGame1",
+    "url": "https://api.github.com/repos/cemalevli38/games/releases/313313043",
+    "assets_url": "https://api.github.com/repos/cemalevli38/games/releases/313313043/assets",
+    "upload_url": "https://uploads.github.com/repos/cemalevli38/games/releases/313313043/assets{?name,label}",
+    "html_url": "https://github.com/cemalevli38/games/releases/tag/FlashGame1",
     "id": 313313043,
     "author": {
       "login": "website-file-user",
@@ -599,7 +599,7 @@
     "published_at": "2026-04-24T16:30:22Z",
     "assets": [
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404597565",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404597565",
         "id": 404597565,
         "node_id": "RA_kwDOSDhlpc4YHas9",
         "name": "redball3.swf",
@@ -632,10 +632,10 @@
         "download_count": 1,
         "created_at": "2026-04-24T16:29:17Z",
         "updated_at": "2026-04-24T16:29:36Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame1/redball3.swf"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame1/redball3.swf"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/404597947",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/404597947",
         "id": 404597947,
         "node_id": "RA_kwDOSDhlpc4YHay7",
         "name": "RedBall3.zip",
@@ -668,18 +668,18 @@
         "download_count": 1,
         "created_at": "2026-04-24T16:29:37Z",
         "updated_at": "2026-04-24T16:30:00Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/FlashGame1/RedBall3.zip"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/FlashGame1/RedBall3.zip"
       }
     ],
-    "tarball_url": "https://api.github.com/repos/cemal201138/games/tarball/FlashGame1",
-    "zipball_url": "https://api.github.com/repos/cemal201138/games/zipball/FlashGame1",
+    "tarball_url": "https://api.github.com/repos/cemalevli38/games/tarball/FlashGame1",
+    "zipball_url": "https://api.github.com/repos/cemalevli38/games/zipball/FlashGame1",
     "body": ""
   },
   {
-    "url": "https://api.github.com/repos/cemal201138/games/releases/309442919",
-    "assets_url": "https://api.github.com/repos/cemal201138/games/releases/309442919/assets",
-    "upload_url": "https://uploads.github.com/repos/cemal201138/games/releases/309442919/assets{?name,label}",
-    "html_url": "https://github.com/cemal201138/games/releases/tag/CS16",
+    "url": "https://api.github.com/repos/cemalevli38/games/releases/309442919",
+    "assets_url": "https://api.github.com/repos/cemalevli38/games/releases/309442919/assets",
+    "upload_url": "https://uploads.github.com/repos/cemalevli38/games/releases/309442919/assets{?name,label}",
+    "html_url": "https://github.com/cemalevli38/games/releases/tag/CS16",
     "id": 309442919,
     "author": {
       "login": "website-file-user",
@@ -714,7 +714,7 @@
     "published_at": "2026-04-15T16:05:04Z",
     "assets": [
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/397107901",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/397107901",
         "id": 397107901,
         "node_id": "RA_kwDOSDhlpc4Xq2K9",
         "name": "cs16.zip",
@@ -747,10 +747,10 @@
         "download_count": 5,
         "created_at": "2026-04-15T16:03:48Z",
         "updated_at": "2026-04-15T16:04:59Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/CS16/cs16.zip"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/CS16/cs16.zip"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/397106684",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/397106684",
         "id": 397106684,
         "node_id": "RA_kwDOSDhlpc4Xq138",
         "name": "Portable_CS1.6.exe",
@@ -783,18 +783,18 @@
         "download_count": 12,
         "created_at": "2026-04-15T16:02:25Z",
         "updated_at": "2026-04-15T16:03:44Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/CS16/Portable_CS1.6.exe"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/CS16/Portable_CS1.6.exe"
       }
     ],
-    "tarball_url": "https://api.github.com/repos/cemal201138/games/tarball/CS16",
-    "zipball_url": "https://api.github.com/repos/cemal201138/games/zipball/CS16",
+    "tarball_url": "https://api.github.com/repos/cemalevli38/games/tarball/CS16",
+    "zipball_url": "https://api.github.com/repos/cemalevli38/games/zipball/CS16",
     "body": "https://drive.google.com/file/d/1Ku39ds2OuHH9zf20kKsgHCJhwM5tnArY/view?usp=sharing"
   },
   {
-    "url": "https://api.github.com/repos/cemal201138/games/releases/309446767",
-    "assets_url": "https://api.github.com/repos/cemal201138/games/releases/309446767/assets",
-    "upload_url": "https://uploads.github.com/repos/cemal201138/games/releases/309446767/assets{?name,label}",
-    "html_url": "https://github.com/cemal201138/games/releases/tag/BubbleTrouble",
+    "url": "https://api.github.com/repos/cemalevli38/games/releases/309446767",
+    "assets_url": "https://api.github.com/repos/cemalevli38/games/releases/309446767/assets",
+    "upload_url": "https://uploads.github.com/repos/cemalevli38/games/releases/309446767/assets{?name,label}",
+    "html_url": "https://github.com/cemalevli38/games/releases/tag/BubbleTrouble",
     "id": 309446767,
     "author": {
       "login": "website-file-user",
@@ -829,7 +829,7 @@
     "published_at": "2026-04-15T16:11:35Z",
     "assets": [
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/397112658",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/397112658",
         "id": 397112658,
         "node_id": "RA_kwDOSDhlpc4Xq3VS",
         "name": "bubbletrouble.exe",
@@ -862,18 +862,18 @@
         "download_count": 2,
         "created_at": "2026-04-15T16:11:23Z",
         "updated_at": "2026-04-15T16:11:25Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/BubbleTrouble/bubbletrouble.exe"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/BubbleTrouble/bubbletrouble.exe"
       }
     ],
-    "tarball_url": "https://api.github.com/repos/cemal201138/games/tarball/BubbleTrouble",
-    "zipball_url": "https://api.github.com/repos/cemal201138/games/zipball/BubbleTrouble",
+    "tarball_url": "https://api.github.com/repos/cemalevli38/games/tarball/BubbleTrouble",
+    "zipball_url": "https://api.github.com/repos/cemalevli38/games/zipball/BubbleTrouble",
     "body": ""
   },
   {
-    "url": "https://api.github.com/repos/cemal201138/games/releases/309445882",
-    "assets_url": "https://api.github.com/repos/cemal201138/games/releases/309445882/assets",
-    "upload_url": "https://uploads.github.com/repos/cemal201138/games/releases/309445882/assets{?name,label}",
-    "html_url": "https://github.com/cemal201138/games/releases/tag/BarbieGiydirmece",
+    "url": "https://api.github.com/repos/cemalevli38/games/releases/309445882",
+    "assets_url": "https://api.github.com/repos/cemalevli38/games/releases/309445882/assets",
+    "upload_url": "https://uploads.github.com/repos/cemalevli38/games/releases/309445882/assets{?name,label}",
+    "html_url": "https://github.com/cemalevli38/games/releases/tag/BarbieGiydirmece",
     "id": 309445882,
     "author": {
       "login": "website-file-user",
@@ -908,7 +908,7 @@
     "published_at": "2026-04-15T16:09:52Z",
     "assets": [
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/397111394",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/397111394",
         "id": 397111394,
         "node_id": "RA_kwDOSDhlpc4Xq3Bi",
         "name": "Fotografci.Kiz.Giydirme.exe",
@@ -941,10 +941,10 @@
         "download_count": 2,
         "created_at": "2026-04-15T16:09:20Z",
         "updated_at": "2026-04-15T16:09:34Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/BarbieGiydirmece/Fotografci.Kiz.Giydirme.exe"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/BarbieGiydirmece/Fotografci.Kiz.Giydirme.exe"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/397111655",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/397111655",
         "id": 397111655,
         "node_id": "RA_kwDOSDhlpc4Xq3Fn",
         "name": "Fotografci.Kiz.Giydirme.zip",
@@ -977,18 +977,18 @@
         "download_count": 0,
         "created_at": "2026-04-15T16:09:38Z",
         "updated_at": "2026-04-15T16:09:47Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/BarbieGiydirmece/Fotografci.Kiz.Giydirme.zip"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/BarbieGiydirmece/Fotografci.Kiz.Giydirme.zip"
       }
     ],
-    "tarball_url": "https://api.github.com/repos/cemal201138/games/tarball/BarbieGiydirmece",
-    "zipball_url": "https://api.github.com/repos/cemal201138/games/zipball/BarbieGiydirmece",
+    "tarball_url": "https://api.github.com/repos/cemalevli38/games/tarball/BarbieGiydirmece",
+    "zipball_url": "https://api.github.com/repos/cemalevli38/games/zipball/BarbieGiydirmece",
     "body": ""
   },
   {
-    "url": "https://api.github.com/repos/cemal201138/games/releases/309445346",
-    "assets_url": "https://api.github.com/repos/cemal201138/games/releases/309445346/assets",
-    "upload_url": "https://uploads.github.com/repos/cemal201138/games/releases/309445346/assets{?name,label}",
-    "html_url": "https://github.com/cemal201138/games/releases/tag/BA%C5%9ELATICI",
+    "url": "https://api.github.com/repos/cemalevli38/games/releases/309445346",
+    "assets_url": "https://api.github.com/repos/cemalevli38/games/releases/309445346/assets",
+    "upload_url": "https://uploads.github.com/repos/cemalevli38/games/releases/309445346/assets{?name,label}",
+    "html_url": "https://github.com/cemalevli38/games/releases/tag/BA%C5%9ELATICI",
     "id": 309445346,
     "author": {
       "login": "website-file-user",
@@ -1023,28 +1023,28 @@
     "published_at": "2026-04-15T16:08:45Z",
     "assets": [
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/459403660",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/459403660",
         "id": 459403660,
         "node_id": "RA_kwDOSDhlpc4bYfGM",
         "name": "BASLATICI_11.4.exe",
         "label": null,
         "uploader": {
-          "login": "cemal201138",
+          "login": "devcemalevli38",
           "id": 157701620,
           "node_id": "U_kgDOCWZV9A",
           "avatar_url": "https://avatars.githubusercontent.com/u/157701620?v=4",
           "gravatar_id": "",
-          "url": "https://api.github.com/users/cemal201138",
-          "html_url": "https://github.com/cemal201138",
-          "followers_url": "https://api.github.com/users/cemal201138/followers",
-          "following_url": "https://api.github.com/users/cemal201138/following{/other_user}",
-          "gists_url": "https://api.github.com/users/cemal201138/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/cemal201138/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/cemal201138/subscriptions",
-          "organizations_url": "https://api.github.com/users/cemal201138/orgs",
-          "repos_url": "https://api.github.com/users/cemal201138/repos",
-          "events_url": "https://api.github.com/users/cemal201138/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/cemal201138/received_events",
+          "url": "https://api.github.com/users/devcemalevli38",
+          "html_url": "https://github.com/devcemalevli38",
+          "followers_url": "https://api.github.com/users/devcemalevli38/followers",
+          "following_url": "https://api.github.com/users/devcemalevli38/following{/other_user}",
+          "gists_url": "https://api.github.com/users/devcemalevli38/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/devcemalevli38/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/devcemalevli38/subscriptions",
+          "organizations_url": "https://api.github.com/users/devcemalevli38/orgs",
+          "repos_url": "https://api.github.com/users/devcemalevli38/repos",
+          "events_url": "https://api.github.com/users/devcemalevli38/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/devcemalevli38/received_events",
           "type": "User",
           "user_view_type": "public",
           "site_admin": false
@@ -1056,31 +1056,31 @@
         "download_count": 0,
         "created_at": "2026-06-27T10:02:41Z",
         "updated_at": "2026-06-27T10:02:57Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/BA%C5%9ELATICI/BASLATICI_11.4.exe"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/BA%C5%9ELATICI/BASLATICI_11.4.exe"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/459403779",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/459403779",
         "id": 459403779,
         "node_id": "RA_kwDOSDhlpc4bYfID",
         "name": "BASLATICI_32.exe",
         "label": null,
         "uploader": {
-          "login": "cemal201138",
+          "login": "devcemalevli38",
           "id": 157701620,
           "node_id": "U_kgDOCWZV9A",
           "avatar_url": "https://avatars.githubusercontent.com/u/157701620?v=4",
           "gravatar_id": "",
-          "url": "https://api.github.com/users/cemal201138",
-          "html_url": "https://github.com/cemal201138",
-          "followers_url": "https://api.github.com/users/cemal201138/followers",
-          "following_url": "https://api.github.com/users/cemal201138/following{/other_user}",
-          "gists_url": "https://api.github.com/users/cemal201138/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/cemal201138/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/cemal201138/subscriptions",
-          "organizations_url": "https://api.github.com/users/cemal201138/orgs",
-          "repos_url": "https://api.github.com/users/cemal201138/repos",
-          "events_url": "https://api.github.com/users/cemal201138/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/cemal201138/received_events",
+          "url": "https://api.github.com/users/devcemalevli38",
+          "html_url": "https://github.com/devcemalevli38",
+          "followers_url": "https://api.github.com/users/devcemalevli38/followers",
+          "following_url": "https://api.github.com/users/devcemalevli38/following{/other_user}",
+          "gists_url": "https://api.github.com/users/devcemalevli38/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/devcemalevli38/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/devcemalevli38/subscriptions",
+          "organizations_url": "https://api.github.com/users/devcemalevli38/orgs",
+          "repos_url": "https://api.github.com/users/devcemalevli38/repos",
+          "events_url": "https://api.github.com/users/devcemalevli38/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/devcemalevli38/received_events",
           "type": "User",
           "user_view_type": "public",
           "site_admin": false
@@ -1092,31 +1092,31 @@
         "download_count": 0,
         "created_at": "2026-06-27T10:02:57Z",
         "updated_at": "2026-06-27T10:03:28Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/BA%C5%9ELATICI/BASLATICI_32.exe"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/BA%C5%9ELATICI/BASLATICI_32.exe"
       },
       {
-        "url": "https://api.github.com/repos/cemal201138/games/releases/assets/459403462",
+        "url": "https://api.github.com/repos/cemalevli38/games/releases/assets/459403462",
         "id": 459403462,
         "node_id": "RA_kwDOSDhlpc4bYfDG",
         "name": "Full.zip",
         "label": null,
         "uploader": {
-          "login": "cemal201138",
+          "login": "devcemalevli38",
           "id": 157701620,
           "node_id": "U_kgDOCWZV9A",
           "avatar_url": "https://avatars.githubusercontent.com/u/157701620?v=4",
           "gravatar_id": "",
-          "url": "https://api.github.com/users/cemal201138",
-          "html_url": "https://github.com/cemal201138",
-          "followers_url": "https://api.github.com/users/cemal201138/followers",
-          "following_url": "https://api.github.com/users/cemal201138/following{/other_user}",
-          "gists_url": "https://api.github.com/users/cemal201138/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/cemal201138/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/cemal201138/subscriptions",
-          "organizations_url": "https://api.github.com/users/cemal201138/orgs",
-          "repos_url": "https://api.github.com/users/cemal201138/repos",
-          "events_url": "https://api.github.com/users/cemal201138/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/cemal201138/received_events",
+          "url": "https://api.github.com/users/devcemalevli38",
+          "html_url": "https://github.com/devcemalevli38",
+          "followers_url": "https://api.github.com/users/devcemalevli38/followers",
+          "following_url": "https://api.github.com/users/devcemalevli38/following{/other_user}",
+          "gists_url": "https://api.github.com/users/devcemalevli38/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/devcemalevli38/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/devcemalevli38/subscriptions",
+          "organizations_url": "https://api.github.com/users/devcemalevli38/orgs",
+          "repos_url": "https://api.github.com/users/devcemalevli38/repos",
+          "events_url": "https://api.github.com/users/devcemalevli38/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/devcemalevli38/received_events",
           "type": "User",
           "user_view_type": "public",
           "site_admin": false
@@ -1128,11 +1128,11 @@
         "download_count": 0,
         "created_at": "2026-06-27T10:02:23Z",
         "updated_at": "2026-06-27T10:03:53Z",
-        "browser_download_url": "https://github.com/cemal201138/games/releases/download/BA%C5%9ELATICI/Full.zip"
+        "browser_download_url": "https://github.com/cemalevli38/games/releases/download/BA%C5%9ELATICI/Full.zip"
       }
     ],
-    "tarball_url": "https://api.github.com/repos/cemal201138/games/tarball/BAŞLATICI",
-    "zipball_url": "https://api.github.com/repos/cemal201138/games/zipball/BAŞLATICI",
+    "tarball_url": "https://api.github.com/repos/cemalevli38/games/tarball/BAŞLATICI",
+    "zipball_url": "https://api.github.com/repos/cemalevli38/games/zipball/BAŞLATICI",
     "body": "https://drive.google.com/file/d/19C6cluMN8glZUybhJFycQM1HltEu79na/view?usp=sharing"
   }
 ]
