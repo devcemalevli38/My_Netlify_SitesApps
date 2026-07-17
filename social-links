@@ -1,6 +1,6 @@
 [
   {"icon": "fab fa-instagram",        "url": "https://www.instagram.com/dev._.dev38/",     "title": "Instagram"},
   {"icon": "fab fa-github",           "url": "https://github.com/devcemalevli38",             "title": "GitHub"},
-  {"icon": "fas fa-envelope",         "url": "mailto:mylab@cemalevli.qzz.io",              "title": "E-posta"},
+  {"icon": "fas fa-envelope",         "url": "mailto:cemal201138.dev@gmail.com",              "title": "E-posta"},
   {"icon": "fas fa-globe",            "url": "https://cemalevli.dpdns.org/",                   "title": "Web Sitem"}
 ]
