@@ -286,6 +286,7 @@
 
 <script>
 const PROJECTS_DATA_URL = "https://raw.githubusercontent.com/devcemalevli38/My_Netlify_SitesApps/refs/heads/main/projects.json"; 
+const NO_INDEX_URL = "https://raw.githubusercontent.com/devcemalevli38/My_Netlify_SitesApps/refs/heads/main/no-index-folder.txt";
 const WORKER_PROXY_URL = "https://cemalevliqzzio.evlicemal38.workers.dev/";
 
 const TRANSLATIONS = {
@@ -430,13 +431,43 @@ async function loadProjects() {
     const container = document.getElementById("project-container");
     const section = document.getElementById("projects-section");
     try {
+        // 1. İndekslenmeyecek klasör listesini çek
+        let noIndexFolders = [];
+        try {
+            const noIndexRes = await fetch(NO_INDEX_URL);
+            noIndexFolders = await noIndexRes.json();
+            if (!Array.isArray(noIndexFolders)) noIndexFolders = [];
+        } catch (e) {
+            console.warn("no-index-folder.txt yüklenemedi veya geçersiz formatta.", e);
+        }
+
+        // Sabit olarak engellenen klasörlerin listesi
+        const hardcodedExcludes = [
+            ".github", "My_Social_Media", "imcemo38", "imcemalevli", 
+            "suprizsite", "spotifyprofile", "spotifyplaylist", 
+            "Portfolio_Site", "Spotify_Calınıyor", "social-png"
+        ];
+
+        // 2. Tüm projeleri çek
         const res = await fetch(PROJECTS_DATA_URL);
         const items = await res.json();
         if(!items || items.length === 0) { section.classList.add("hidden"); return; }
         
         section.classList.remove("hidden");
         container.innerHTML = "";
-        items.filter(i => i.type === "dir" && i.name !== ".github" && i.name !== "My_Social_Media" && i.name !== "imcemo38" && i.name !== "imcemalevli" && i.name !== "suprizsite" && i.name !== "spotifyprofile" && i.name !== "spotifyplaylist" && i.name !== "Portfolio_Site" && i.name !== "Spotify_Calınıyor" && i.name !== "social-png" ).forEach(p => {
+        
+        items.filter(i => {
+            // Sadece klasör (dir) olanları al
+            if (i.type !== "dir") return false;
+            
+            // Sabit listede varsa engelle
+            if (hardcodedExcludes.includes(i.name)) return false;
+            
+            // Dinamik no-index-folder.txt listesinde varsa engelle
+            if (noIndexFolders.includes(i.name)) return false;
+            
+            return true;
+        }).forEach(p => {
             const card = document.createElement("a");
             card.className = "project-card";
             card.href = p.path;
