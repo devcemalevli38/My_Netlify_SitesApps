@@ -67,6 +67,30 @@
             padding: 12px;
             border-radius: 6px;
             border: 1px solid #eee;
+            cursor: grab;
+            transition: transform 0.2s, background-color 0.2s;
+            user-select: none;
+        }
+
+        .link-row:active {
+            cursor: grabbing;
+        }
+
+        .link-row.dragging {
+            opacity: 0.5;
+            background: #e2e8f0;
+            border: 1px dashed #cbd5e0;
+        }
+
+        .drag-handle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 35px;
+            padding: 0 5px;
+            color: #a0aec0;
+            font-size: 18px;
+            cursor: grab;
         }
 
         .input-group {
@@ -218,6 +242,10 @@
                 flex-direction: column;
                 align-items: stretch;
             }
+            .drag-handle {
+                height: auto;
+                padding: 5px 0;
+            }
             .btn-delete {
                 margin-top: 5px;
                 width: 100%;
@@ -259,14 +287,57 @@
     </footer>
 
     <script>
+        const formContainer = document.getElementById('form-container');
+
         // Form alanındaki değişiklikleri dinle ve JSON'ı güncelle
-        document.getElementById('form-container').addEventListener('input', updateJSON);
+        formContainer.addEventListener('input', updateJSON);
+
+        // Drag & Drop event listener'ları kapsayıcıya ekliyoruz (Event Delegation)
+        formContainer.addEventListener('dragstart', (e) => {
+            if (e.target.classList.contains('link-row')) {
+                e.target.classList.add('dragging');
+            }
+        });
+
+        formContainer.addEventListener('dragend', (e) => {
+            if (e.target.classList.contains('link-row')) {
+                e.target.classList.remove('dragging');
+                updateJSON(); // Sıralama bitince JSON çıktısını güncelle
+            }
+        });
+
+        formContainer.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const draggingItem = document.querySelector('.link-row.dragging');
+            if (!draggingItem) return;
+
+            // Sürüklenen öğe haricindeki diğer satırları alıyoruz
+            const siblings = [...formContainer.querySelectorAll('.link-row:not(.dragging)')];
+
+            // Fare pozisyonuna göre en yakın kardeşi buluyoruz
+            const nextSibling = siblings.find(sibling => {
+                const box = sibling.getBoundingClientRect();
+                const offset = e.clientY - box.top - box.height / 2;
+                return offset < 0;
+            });
+
+            // Sürüklenen satırı uygun konuma yerleştiriyoruz
+            if (nextSibling) {
+                formContainer.insertBefore(draggingItem, nextSibling);
+            } else {
+                formContainer.appendChild(draggingItem);
+            }
+        });
 
         // Belirli verilerle veya tamamen boş satır oluşturan fonksiyon
         function createRowHTML(iconValue = "", urlValue = "", titleValue = "") {
             const div = document.createElement('div');
             div.className = 'link-row';
+            div.setAttribute('draggable', 'true'); // Sürüklenebilir yaptık
             div.innerHTML = `
+                <div class="drag-handle">
+                    <i class="fas fa-bars"></i>
+                </div>
                 <div class="input-group">
                     <label>İkon (Class)</label>
                     <input type="text" class="input-icon" value="${iconValue}" placeholder="örn: fab fa-github">
@@ -286,8 +357,7 @@
 
         // Kullanıcı manuel artı butonuna bastığında çalışır
         function addRow() {
-            const container = document.getElementById('form-container');
-            container.appendChild(createRowHTML());
+            formContainer.appendChild(createRowHTML());
             updateJSON();
         }
 
@@ -304,14 +374,13 @@
 
         // Dosyadan yüklenen veya import edilen veriyi forma basan fonksiyon
         function renderDataToForm(dataArray) {
-            const container = document.getElementById('form-container');
-            container.innerHTML = ""; // Mevcut form elemanlarını temizle
+            formContainer.innerHTML = ""; // Mevcut form elemanlarını temizle
 
             if (!Array.isArray(dataArray) || dataArray.length === 0) {
-                container.appendChild(createRowHTML());
+                formContainer.appendChild(createRowHTML());
             } else {
                 dataArray.forEach(item => {
-                    container.appendChild(createRowHTML(item.icon || "", item.url || "", item.title || ""));
+                    formContainer.appendChild(createRowHTML(item.icon || "", item.url || "", item.title || ""));
                 });
             }
             updateJSON();
@@ -392,8 +461,7 @@
 
         // Sayfa ilk yüklendiğinde temiz, tek bir boş satır basar
         function initializeForm() {
-            const container = document.getElementById('form-container');
-            container.appendChild(createRowHTML());
+            formContainer.appendChild(createRowHTML());
             updateJSON();
         }
 
