@@ -524,7 +524,7 @@
                 'hata'
             ];
             try {
-                const r = await fetch('https://raw.githubusercontent.com/devcemalevli38/My_Netlify_SitesApps/main/devsocial/biography?t=' + Date.now());
+                const r = await fetch('https://raw.githubusercontent.com/devcemalevli38/My_Netlify_SitesApps/main/social/biography?t=' + Date.now());
                 const d = await r.json();
                 renderBio(d.bio && Array.isArray(d.bio) ? d.bio : fallback);
             } catch (e) {
