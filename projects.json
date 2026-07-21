@@ -176,22 +176,6 @@
     }
   },
   {
-    "name": "devsocial",
-    "path": "devsocial",
-    "sha": "37fd2c81068ae09e2706f47138b54fc96229d8da",
-    "size": 0,
-    "url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/devsocial?ref=main",
-    "html_url": "https://github.com/devcemalevli38/My_Netlify_SitesApps/tree/main/devsocial",
-    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/37fd2c81068ae09e2706f47138b54fc96229d8da",
-    "download_url": null,
-    "type": "dir",
-    "_links": {
-      "self": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/devsocial?ref=main",
-      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/37fd2c81068ae09e2706f47138b54fc96229d8da",
-      "html": "https://github.com/devcemalevli38/My_Netlify_SitesApps/tree/main/devsocial"
-    }
-  },
-  {
     "name": "favicon.ico",
     "path": "favicon.ico",
     "sha": "a6c4c5173226795a98278aa7b1ec32f1f381363d",
@@ -386,16 +370,16 @@
   {
     "name": "projects.json",
     "path": "projects.json",
-    "sha": "c87184b05f56a942214ea9203ef7e5b3e96a66ab",
+    "sha": "d945652466edd2391ce7bd12af0ad734a82e41b4",
     "size": 30684,
     "url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/projects.json?ref=main",
     "html_url": "https://github.com/devcemalevli38/My_Netlify_SitesApps/blob/main/projects.json",
-    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/c87184b05f56a942214ea9203ef7e5b3e96a66ab",
+    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/d945652466edd2391ce7bd12af0ad734a82e41b4",
     "download_url": "https://raw.githubusercontent.com/devcemalevli38/My_Netlify_SitesApps/main/projects.json",
     "type": "file",
     "_links": {
       "self": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/projects.json?ref=main",
-      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/c87184b05f56a942214ea9203ef7e5b3e96a66ab",
+      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/d945652466edd2391ce7bd12af0ad734a82e41b4",
       "html": "https://github.com/devcemalevli38/My_Netlify_SitesApps/blob/main/projects.json"
     }
   },
@@ -493,6 +477,22 @@
       "self": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/social-logos?ref=main",
       "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/6754d7bd9ae0d882a358b7f07a941be784ab0c32",
       "html": "https://github.com/devcemalevli38/My_Netlify_SitesApps/tree/main/social-logos"
+    }
+  },
+  {
+    "name": "social",
+    "path": "social",
+    "sha": "1987ddfd9e824c461a25f594825ec62ebaec5ce5",
+    "size": 0,
+    "url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/social?ref=main",
+    "html_url": "https://github.com/devcemalevli38/My_Netlify_SitesApps/tree/main/social",
+    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/1987ddfd9e824c461a25f594825ec62ebaec5ce5",
+    "download_url": null,
+    "type": "dir",
+    "_links": {
+      "self": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/social?ref=main",
+      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/1987ddfd9e824c461a25f594825ec62ebaec5ce5",
+      "html": "https://github.com/devcemalevli38/My_Netlify_SitesApps/tree/main/social"
     }
   },
   {
