@@ -1,52 +1,161 @@
 [
   {
     "project": "Python_Muzik_Calar",
-    "version": "n/a",
-    "stars": 0,
+    "version": "V14",
+    "stars": 1,
     "forks": 0,
-    "source_zip": "https://github.com/cemal201138/Python_Muzik_Calar/archive/refs/tags/n/a.zip",
-    "source_tar": "https://github.com/cemal201138/Python_Muzik_Calar/archive/refs/tags/n/a.tar.gz",
-    "updated_at": "n/a",
-    "downloadable_files": []
+    "source_zip": "https://github.com/devcemalevli38/Python_Muzik_Calar/archive/refs/tags/V14.zip",
+    "source_tar": "https://github.com/devcemalevli38/Python_Muzik_Calar/archive/refs/tags/V14.tar.gz",
+    "updated_at": "2026-03-05T14:57:14Z",
+    "downloadable_files": [
+      {
+        "file_name": "5000_port_delete.vbs",
+        "download_url": "https://github.com/devcemalevli38/Python_Muzik_Calar/releases/download/V14/5000_port_delete.vbs"
+      },
+      {
+        "file_name": "5000_port_new.vbs",
+        "download_url": "https://github.com/devcemalevli38/Python_Muzik_Calar/releases/download/V14/5000_port_new.vbs"
+      },
+      {
+        "file_name": "app_icon.ico",
+        "download_url": "https://github.com/devcemalevli38/Python_Muzik_Calar/releases/download/V14/app_icon.ico"
+      },
+      {
+        "file_name": "muzikcalarV14.apk",
+        "download_url": "https://github.com/devcemalevli38/Python_Muzik_Calar/releases/download/V14/muzikcalarV14.apk"
+      },
+      {
+        "file_name": "muzikcalarV14.exe",
+        "download_url": "https://github.com/devcemalevli38/Python_Muzik_Calar/releases/download/V14/muzikcalarV14.exe"
+      },
+      {
+        "file_name": "muzikcalarV14.py",
+        "download_url": "https://github.com/devcemalevli38/Python_Muzik_Calar/releases/download/V14/muzikcalarV14.py"
+      },
+      {
+        "file_name": "Python_Muzik_CalarV14.zip",
+        "download_url": "https://github.com/devcemalevli38/Python_Muzik_Calar/releases/download/V14/Python_Muzik_CalarV14.zip"
+      }
+    ]
   },
   {
     "project": "Python-Hand-Mouse",
-    "version": "n/a",
-    "stars": 0,
+    "version": "V1",
+    "stars": 1,
     "forks": 0,
-    "source_zip": "https://github.com/cemal201138/Python-Hand-Mouse/archive/refs/tags/n/a.zip",
-    "source_tar": "https://github.com/cemal201138/Python-Hand-Mouse/archive/refs/tags/n/a.tar.gz",
-    "updated_at": "n/a",
-    "downloadable_files": []
+    "source_zip": "https://github.com/devcemalevli38/Python-Hand-Mouse/archive/refs/tags/V1.zip",
+    "source_tar": "https://github.com/devcemalevli38/Python-Hand-Mouse/archive/refs/tags/V1.tar.gz",
+    "updated_at": "2025-10-15T13:29:54Z",
+    "downloadable_files": [
+      {
+        "file_name": "Hand_MouseV1.exe",
+        "download_url": "https://github.com/devcemalevli38/Python-Hand-Mouse/releases/download/V1/Hand_MouseV1.exe"
+      },
+      {
+        "file_name": "Hand_MouseV1.py",
+        "download_url": "https://github.com/devcemalevli38/Python-Hand-Mouse/releases/download/V1/Hand_MouseV1.py"
+      },
+      {
+        "file_name": "Python-Hand-MouseV1.zip",
+        "download_url": "https://github.com/devcemalevli38/Python-Hand-Mouse/releases/download/V1/Python-Hand-MouseV1.zip"
+      }
+    ]
   },
   {
     "project": "Pushbullet-Sender-Android",
-    "version": "n/a",
-    "stars": 0,
+    "version": "V1",
+    "stars": 1,
     "forks": 0,
-    "source_zip": "https://github.com/cemal201138/Pushbullet-Sender-Android/archive/refs/tags/n/a.zip",
-    "source_tar": "https://github.com/cemal201138/Pushbullet-Sender-Android/archive/refs/tags/n/a.tar.gz",
-    "updated_at": "n/a",
-    "downloadable_files": []
+    "source_zip": "https://github.com/devcemalevli38/Pushbullet-Sender-Android/archive/refs/tags/V1.zip",
+    "source_tar": "https://github.com/devcemalevli38/Pushbullet-Sender-Android/archive/refs/tags/V1.tar.gz",
+    "updated_at": "2025-08-09T18:58:24Z",
+    "downloadable_files": [
+      {
+        "file_name": "apk-app-codeV1.html",
+        "download_url": "https://github.com/devcemalevli38/Pushbullet-Sender-Android/releases/download/V1/apk-app-codeV1.html"
+      },
+      {
+        "file_name": "Pushbullet-Sender-AndroidV1.zip",
+        "download_url": "https://github.com/devcemalevli38/Pushbullet-Sender-Android/releases/download/V1/Pushbullet-Sender-AndroidV1.zip"
+      },
+      {
+        "file_name": "_PushbulletSender_V1.apk",
+        "download_url": "https://github.com/devcemalevli38/Pushbullet-Sender-Android/releases/download/V1/_PushbulletSender_V1.apk"
+      }
+    ]
   },
   {
     "project": "Python_Lock_App",
-    "version": "n/a",
-    "stars": 0,
+    "version": "V1",
+    "stars": 1,
     "forks": 0,
-    "source_zip": "https://github.com/cemal201138/Python_Lock_App/archive/refs/tags/n/a.zip",
-    "source_tar": "https://github.com/cemal201138/Python_Lock_App/archive/refs/tags/n/a.tar.gz",
-    "updated_at": "n/a",
-    "downloadable_files": []
+    "source_zip": "https://github.com/devcemalevli38/Python_Lock_App/archive/refs/tags/V1.zip",
+    "source_tar": "https://github.com/devcemalevli38/Python_Lock_App/archive/refs/tags/V1.tar.gz",
+    "updated_at": "2026-04-23T09:10:39Z",
+    "downloadable_files": [
+      {
+        "file_name": "icon.ico",
+        "download_url": "https://github.com/devcemalevli38/Python_Lock_App/releases/download/V1/icon.ico"
+      },
+      {
+        "file_name": "icon.png",
+        "download_url": "https://github.com/devcemalevli38/Python_Lock_App/releases/download/V1/icon.png"
+      },
+      {
+        "file_name": "LockV1.apk",
+        "download_url": "https://github.com/devcemalevli38/Python_Lock_App/releases/download/V1/LockV1.apk"
+      },
+      {
+        "file_name": "Python_Lock.exe",
+        "download_url": "https://github.com/devcemalevli38/Python_Lock_App/releases/download/V1/Python_Lock.exe"
+      },
+      {
+        "file_name": "Python_Lock_AppV1.zip",
+        "download_url": "https://github.com/devcemalevli38/Python_Lock_App/releases/download/V1/Python_Lock_AppV1.zip"
+      },
+      {
+        "file_name": "server_py.py",
+        "download_url": "https://github.com/devcemalevli38/Python_Lock_App/releases/download/V1/server_py.py"
+      },
+      {
+        "file_name": "Usb_Writer.exe",
+        "download_url": "https://github.com/devcemalevli38/Python_Lock_App/releases/download/V1/Usb_Writer.exe"
+      },
+      {
+        "file_name": "usb_writer_py.py",
+        "download_url": "https://github.com/devcemalevli38/Python_Lock_App/releases/download/V1/usb_writer_py.py"
+      }
+    ]
   },
   {
     "project": "Mottoverse",
-    "version": "n/a",
-    "stars": 0,
+    "version": "V2",
+    "stars": 1,
     "forks": 0,
-    "source_zip": "https://github.com/cemal201138/Mottoverse/archive/refs/tags/n/a.zip",
-    "source_tar": "https://github.com/cemal201138/Mottoverse/archive/refs/tags/n/a.tar.gz",
-    "updated_at": "n/a",
-    "downloadable_files": []
+    "source_zip": "https://github.com/devcemalevli38/Mottoverse/archive/refs/tags/V2.zip",
+    "source_tar": "https://github.com/devcemalevli38/Mottoverse/archive/refs/tags/V2.tar.gz",
+    "updated_at": "2026-06-24T19:58:42Z",
+    "downloadable_files": [
+      {
+        "file_name": "MottoverseV2.zip",
+        "download_url": "https://github.com/devcemalevli38/Mottoverse/releases/download/V2/MottoverseV2.zip"
+      },
+      {
+        "file_name": "Mottoverse_V2_Ico.ico",
+        "download_url": "https://github.com/devcemalevli38/Mottoverse/releases/download/V2/Mottoverse_V2_Ico.ico"
+      },
+      {
+        "file_name": "Mottoverse_V2_Png.png",
+        "download_url": "https://github.com/devcemalevli38/Mottoverse/releases/download/V2/Mottoverse_V2_Png.png"
+      },
+      {
+        "file_name": "Mottoverse_V2_Py.exe",
+        "download_url": "https://github.com/devcemalevli38/Mottoverse/releases/download/V2/Mottoverse_V2_Py.exe"
+      },
+      {
+        "file_name": "Mottoverse_V2_Py.py",
+        "download_url": "https://github.com/devcemalevli38/Mottoverse/releases/download/V2/Mottoverse_V2_Py.py"
+      }
+    ]
   }
 ]
