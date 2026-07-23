@@ -13,6 +13,7 @@
             --success-color: #2ecc71;
             --danger-color: #e74c3c;
             --info-color: #e67e22;
+            --purple-color: #8e44ad;
             --text-color: #333;
         }
 
@@ -106,7 +107,7 @@
             color: #7f8c8d;
         }
 
-        input {
+        input, textarea {
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -116,7 +117,7 @@
             width: 100%;
         }
 
-        input:focus {
+        input:focus, textarea:focus {
             border-color: var(--primary-color);
         }
 
@@ -132,6 +133,7 @@
             display: flex;
             gap: 10px;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
 
         .btn-add {
@@ -139,7 +141,7 @@
             color: white;
             padding: 10px 15px;
             flex: 2;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .btn-add:hover { background-color: #357abd; }
@@ -149,7 +151,7 @@
             color: white;
             padding: 10px 15px;
             flex: 1;
-            font-size: 16px;
+            font-size: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -157,6 +159,20 @@
         }
 
         .btn-upload-trigger:hover { background-color: #d35400; }
+
+        .btn-text-import {
+            background-color: var(--purple-color);
+            color: white;
+            padding: 10px 15px;
+            flex: 1;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-text-import:hover { background-color: #712688; }
 
         #file-input {
             display: none;
@@ -206,6 +222,49 @@
             overflow-y: auto;
             white-space: pre;
         }
+
+        /* JSON Metin Giriş Alanı (Pencere/Section) */
+        .json-input-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px dashed var(--purple-color);
+            border-radius: 6px;
+            display: none;
+        }
+
+        .json-input-section.active {
+            display: block;
+        }
+
+        .json-input-section textarea {
+            min-height: 120px;
+            font-family: monospace;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+
+        .json-input-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-apply-text {
+            background-color: var(--success-color);
+            color: white;
+            padding: 8px 15px;
+        }
+
+        .btn-apply-text:hover { background-color: #27ae60; }
+
+        .btn-cancel-text {
+            background-color: #95a5a6;
+            color: white;
+            padding: 8px 15px;
+        }
+
+        .btn-cancel-text:hover { background-color: #7f8c8d; }
 
         /* Alt Bilgi (Footer) Alanı */
         footer {
@@ -268,8 +327,21 @@
             
             <div class="action-buttons">
                 <button class="btn-add" onclick="addRow()"><i class="fas fa-plus"></i> Yeni Link Ekle</button>
+                <button class="btn-text-import" onclick="toggleJsonTextInput()"><i class="fas fa-code"></i> JSON Yaz/Yapıştır</button>
                 <button class="btn-upload-trigger" onclick="triggerFileInput()"><i class="fas fa-upload"></i> JSON Yükle</button>
                 <input type="file" id="file-input" accept=".json" onchange="loadJSONFile(event)">
+            </div>
+
+            <!-- JSON Metin Yapıştırma/Yazma Alanı -->
+            <div id="json-input-section" class="json-input-section">
+                <div class="input-group">
+                    <label>JSON Formatındaki Metni Buraya Yapıştırın veya Yazın:</label>
+                    <textarea id="json-textarea" placeholder='[{"icon": "fab fa-github", "url": "https://...", "title": "GitHub"}]'></textarea>
+                </div>
+                <div class="json-input-actions">
+                    <button class="btn-cancel-text" onclick="toggleJsonTextInput()">İptal</button>
+                    <button class="btn-apply-text" onclick="applyTextJSON()"><i class="fas fa-check"></i> Uygula</button>
+                </div>
             </div>
         </div>
 
@@ -370,6 +442,31 @@
         // Gizli dosya inputunu tetikler
         function triggerFileInput() {
             document.getElementById('file-input').click();
+        }
+
+        // JSON metin yazma alanını açar/kapatır
+        function toggleJsonTextInput() {
+            const section = document.getElementById('json-input-section');
+            section.classList.toggle('active');
+        }
+
+        // Metin kutusuna yazılan JSON verisini çözüp forma aktarır
+        function applyTextJSON() {
+            const text = document.getElementById('json-textarea').value.trim();
+            if (!text) {
+                alert("Lütfen önce geçerli bir JSON metni girin.");
+                return;
+            }
+
+            try {
+                const parsedData = JSON.parse(text);
+                renderDataToForm(parsedData);
+                document.getElementById('json-textarea').value = ""; // Temizle
+                toggleJsonTextInput(); // Paneli kapat
+                alert("JSON başarıyla forma aktarıldı!");
+            } catch (error) {
+                alert("Hata: Yazdığınız JSON formatı geçersiz! Lütfen kontrol edin.");
+            }
         }
 
         // Dosyadan yüklenen veya import edilen veriyi forma basan fonksiyon
