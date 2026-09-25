@@ -1,575 +1,298 @@
 <!DOCTYPE html>
-<html lang="tr" class="dark">
+<html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Kod Çalıştırma ve PIP Kütüphane Yöneticisi</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f0f9ff',
-                            500: '#0284c7',
-                            600: '#0369a1',
-                            900: '#0c4a6e',
-                        },
-                        pyblue: '#306998',
-                        pyyellow: '#FFE873'
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        code, pre { font-family: 'Fira Code', monospace; }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #1e293b;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #475569;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #64748b;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PyRun — Online Python Çalıştırıcı</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#151a21; --panel2:#11151b; --border:#232a33;
+    --text:#d7dee6; --muted:#7c8a99; --accent:#5fd0a0; --accent2:#e8b34c;
+    --err:#e5686b; --mono: 'JetBrains Mono','Fira Code',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    padding-top: env(safe-area-inset-top,0px);
+    padding-bottom: env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#f4f6f8; --panel:#ffffff; --panel2:#eef1f4; --border:#dbe1e7;
+      --text:#1c232b; --muted:#5c6773; --accent:#1f9d6c; --accent2:#b97a12;
+    }
+  }
+  :root[data-theme="dark"]{ --bg:#0e1116; --panel:#151a21; --panel2:#11151b; --border:#232a33; --text:#d7dee6; --muted:#7c8a99; --accent:#5fd0a0; --accent2:#e8b34c; }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+  header{
+    display:flex; align-items:center; gap:12px;
+    padding:10px 16px; padding-top:calc(10px + env(safe-area-inset-top,0px));
+    border-bottom:1px solid var(--border); background:var(--panel2); flex:0 0 auto;
+  }
+  .logo{ font-weight:700; font-size:15px; letter-spacing:.2px; color:var(--text); display:flex; align-items:center; gap:6px;}
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);}
+  select{
+    background:var(--panel); color:var(--text); border:1px solid var(--border);
+    border-radius:6px; padding:6px 10px; font-size:13px; font-family:var(--mono);
+  }
+  .spacer{flex:1;}
+  button{
+    font-family:inherit; font-size:13px; border-radius:6px; border:1px solid var(--border);
+    padding:7px 14px; cursor:pointer; background:var(--panel); color:var(--text);
+  }
+  button:hover{border-color:var(--muted);}
+  #run{
+    background:var(--accent); color:#08130e; border:none; font-weight:600;
+    display:flex; align-items:center; gap:6px;
+  }
+  #run:disabled{opacity:.6; cursor:default;}
+  #run svg{width:12px;height:12px;}
+  main{flex:1; display:flex; min-height:0;}
+  .pane{display:flex; flex-direction:column; min-width:0;}
+  #editorPane{flex:1.3; border-right:1px solid var(--border);}
+  #outPane{flex:1;}
+  .paneHead{
+    padding:7px 14px; font-size:11px; color:var(--muted); letter-spacing:.4px;
+    border-bottom:1px solid var(--border); background:var(--panel2); flex:0 0 auto;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .paneHead button{padding:3px 9px; font-size:11px;}
+  #editorWrap{flex:1; position:relative; min-height:0;}
+  textarea#code{
+    width:100%; height:100%; resize:none; border:none; outline:none;
+    background:var(--bg); color:var(--text); font-family:var(--mono);
+    font-size:14px; line-height:1.55; padding:14px 14px 14px 54px; tab-size:4;
+  }
+  #lines{
+    position:absolute; left:0; top:0; bottom:0; width:44px;
+    padding:14px 0; font-family:var(--mono); font-size:14px; line-height:1.55;
+    color:var(--muted); text-align:right; user-select:none; pointer-events:none;
+    background:var(--panel2); border-right:1px solid var(--border);
+  }
+  #lines div{padding-right:8px;}
+  #output{
+    flex:1; overflow:auto; padding:14px; font-family:var(--mono); font-size:13px;
+    line-height:1.6; white-space:pre-wrap; word-break:break-word; background:var(--bg);
+  }
+  #output .err{color:var(--err);}
+  #output .ok{color:var(--accent);}
+  #output .hint{color:var(--muted);}
+  #stdinRow{
+    display:flex; gap:8px; padding:8px 14px; border-top:1px solid var(--border);
+    background:var(--panel2); flex:0 0 auto;
+  }
+  #stdinRow input{
+    flex:1; background:var(--bg); color:var(--text); border:1px solid var(--border);
+    border-radius:6px; padding:7px 10px; font-family:var(--mono); font-size:13px; outline:none;
+  }
+  #stdinRow input:focus{border-color:var(--accent);}
+  #stdinRow button{white-space:nowrap;}
+  footer{
+    flex:0 0 auto; padding:6px 16px; padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));
+    font-size:11px; color:var(--muted); border-top:1px solid var(--border); background:var(--panel2);
+    display:flex; justify-content:space-between;
+  }
+  @media (max-width: 720px){
+    main{flex-direction:column;}
+    #editorPane{border-right:none; border-bottom:1px solid var(--border); flex:1;}
+    #outPane{flex:1;}
+  }
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;}
+</style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-sky-500 selection:text-white">
+<body>
 
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="bg-gradient-to-tr from-sky-500 to-amber-400 p-2 rounded-xl text-slate-950 font-black text-xl shadow-lg shadow-sky-500/20">
-                    <i class="fa-brands fa-python"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-lg leading-none bg-gradient-to-r from-sky-400 via-amber-300 to-sky-200 bg-clip-text text-transparent">Python Runner & PIP Manager</h1>
-                    <p class="text-xs text-slate-400 mt-0.5">Kod Çalıştırma, GUI Yapıları ve PIP Kütüphane Rehberi</p>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    Sistem Hazır
-                </span>
-            </div>
-        </div>
-    </header>
+<header>
+  <div class="logo"><span class="dot"></span>PyRun</div>
+  <select id="preset">
+    <option value="hello">Merhaba Dünya</option>
+    <option value="loop">Döngü örneği</option>
+    <option value="input">Girdi (input) örneği</option>
+    <option value="error">Hata örneği</option>
+  </select>
+  <div class="spacer"></div>
+  <button id="clear">Temizle</button>
+  <button id="run" disabled>
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+    <span id="runLabel">Yükleniyor…</span>
+  </button>
+</header>
 
-    <!-- Ana İçerik Konteyneri -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
-
-        <!-- Tab Navigasyonu -->
-        <div class="flex border-b border-slate-800 overflow-x-auto custom-scrollbar gap-2 pb-1">
-            <button onclick="switchTab('tab-runner')" id="btn-tab-runner" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-all bg-sky-600/20 text-sky-400 border border-sky-500/30">
-                <i class="fa-solid fa-terminal text-sky-400"></i> Interaktif Kod Çalıştırıcı
-            </button>
-            <button onclick="switchTab('tab-methods')" id="btn-tab-methods" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800/50">
-                <i class="fa-solid fa-code-merge"></i> Kod/Dosya Çalıştırma Yöntemleri
-            </button>
-            <button onclick="switchTab('tab-pip')" id="btn-tab-pip" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800/50">
-                <i class="fa-solid fa-box-open"></i> PIP & Programmatik Yükleme
-            </button>
-            <button onclick="switchTab('tab-gui')" id="btn-tab-gui" class="tab-btn px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-2 transition-all text-slate-400 hover:text-slate-200 hover:bg-slate-800/50">
-                <i class="fa-solid fa-window-restore"></i> Python GUI Kütüphaneleri
-            </button>
-        </div>
-
-        <!-- TAB 1: INTERAKTİF KOD ÇALIŞTIRICI MOCKUP -->
-        <section id="tab-runner" class="tab-content space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                    <div>
-                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-play text-amber-400"></i> Python Simüle Kod Çalıştırıcı
-                        </h2>
-                        <p class="text-sm text-slate-400">Aşağıdaki editöre Python kodlarınızı yazıp simüle edilmiş terminalde çıktıları gözlemleyin.</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <select id="code-template" onchange="loadTemplate()" class="bg-slate-800 border border-slate-700 text-slate-200 text-xs rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500">
-                            <option value="hello">Şablon: Merhaba Dünya</option>
-                            <option value="subprocess">Şablon: Subprocess Dosya Çalıştırma</option>
-                            <option value="pip_install">Şablon: Kod İçinden PIP İle Yükleme</option>
-                            <option value="tkinter_gui">Şablon: Tkinter GUI Penceresi Açma</option>
-                        </select>
-                        <button onclick="runPythonCode()" class="px-5 py-2 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-semibold text-sm rounded-lg shadow-lg shadow-sky-500/20 flex items-center gap-2 transition-all transform active:scale-95">
-                            <i class="fa-solid fa-play"></i> Çalıştır
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Editor ve Terminal Split Panel -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <!-- Kod Editörü -->
-                    <div class="flex flex-col rounded-xl overflow-hidden border border-slate-800 bg-slate-950">
-                        <div class="bg-slate-800/80 px-4 py-2 flex items-center justify-between border-b border-slate-700/50">
-                            <div class="flex items-center gap-2">
-                                <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
-                                <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
-                                <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
-                                <span class="text-xs text-slate-400 font-mono ml-2">script.py</span>
-                            </div>
-                            <button onclick="clearEditor()" class="text-xs text-slate-400 hover:text-slate-200"><i class="fa-solid fa-eraser"></i> Temizle</button>
-                        </div>
-                        <textarea id="python-code-input" class="w-full h-80 bg-slate-950 text-sky-300 font-mono text-sm p-4 focus:outline-none resize-none leading-relaxed custom-scrollbar" spellcheck="false"># Python Kod Örneği
-import os
-import sys
-
-print("Python Sürümü:", sys.version)
-print("Mevcut Çalışma Dizini:", os.getcwd())
-
-# Sistem üzerinde bir komut çalıştırmak:
-# os.system("python baska_dosya.py")
-
-print("\n[İşlem Başarıyla Tamamlandı]")</textarea>
-                    </div>
-
-                    <!-- Konsol Çıktısı -->
-                    <div class="flex flex-col rounded-xl overflow-hidden border border-slate-800 bg-slate-950">
-                        <div class="bg-slate-800/80 px-4 py-2 flex items-center justify-between border-b border-slate-700/50">
-                            <div class="flex items-center gap-2">
-                                <i class="fa-solid fa-terminal text-xs text-slate-400"></i>
-                                <span class="text-xs text-slate-400 font-mono">Terminal Output / STDOUT</span>
-                            </div>
-                            <button onclick="clearConsole()" class="text-xs text-slate-400 hover:text-slate-200"><i class="fa-solid fa-trash-can"></i> Konsolu Temizle</button>
-                        </div>
-                        <div id="console-output" class="w-full h-80 bg-slate-950 text-emerald-400 font-mono text-xs p-4 overflow-y-auto leading-relaxed custom-scrollbar whitespace-pre-wrap">
-<span class="text-slate-500"># Kodunuzu çalıştırmak için "Çalıştır" butonuna tıklayın...</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 2: DOSYA VE KOD ÇALIŞTIRMA YÖNTEMLERİ -->
-        <section id="tab-methods" class="tab-content hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-gear text-sky-400"></i> Python'da Başka Bir Python Dosyasını veya Kodunu Çalıştırma Yöntemleri
-                </h2>
-                <p class="text-slate-400 text-sm mb-6">Python içerisinden harici `.py` dosyalarını çalıştırmak veya string olarak verilen Python kodlarını yürütmek için 4 temel yöntem vardır:</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Method 1: Subprocess -->
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <h3 class="font-bold text-sky-400 flex items-center gap-2">
-                                    <span class="bg-sky-500/20 text-sky-300 text-xs px-2 py-0.5 rounded font-mono">1</span>
-                                    subprocess Modülü (En Güvenli & Önerilen)
-                                </h3>
-                                <button onclick="copyCode('code-subprocess')" class="text-xs text-slate-400 hover:text-sky-400"><i class="fa-regular fa-copy"></i> Kopyala</button>
-                            </div>
-                            <p class="text-xs text-slate-400 mb-3">Harici bir python dosyasını ayrı bir süreç (process) olarak çalıştırır. Çıktıları (stdout/stderr) yakalamanıza olanak tanır.</p>
-                            <pre id="code-subprocess" class="bg-slate-900 p-3 rounded-lg text-xs text-slate-200 overflow-x-auto font-mono">import subprocess
-
-# 1. Dosya çalıştırma ve çıktısını alma
-result = subprocess.run(
-    ["python", "hedef_dosya.py"], 
-    capture_output=True, 
-    text=True
-)
-
-print("Çıktı:", result.stdout)
-print("Hatalar:", result.stderr)
-
-# 2. Arka planda bağımsız başlatma (GUI veya uzun işlemler için)
-subprocess.Popen(["python", "gui_app.py"])</pre>
-                        </div>
-                        <div class="mt-4 pt-3 border-t border-slate-800 flex items-center text-xs text-emerald-400">
-                            <i class="fa-solid fa-circle-check mr-1.5"></i> Standart kütüphanedir, pip yüklemesi gerektirmez.
-                        </div>
-                    </div>
-
-                    <!-- Method 2: os.system -->
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <h3 class="font-bold text-amber-400 flex items-center gap-2">
-                                    <span class="bg-amber-500/20 text-amber-300 text-xs px-2 py-0.5 rounded font-mono">2</span>
-                                    os.system Yöntemi (Basit Kullanım)
-                                </h3>
-                                <button onclick="copyCode('code-os')" class="text-xs text-slate-400 hover:text-amber-400"><i class="fa-regular fa-copy"></i> Kopyala</button>
-                            </div>
-                            <p class="text-xs text-slate-400 mb-3">Sistem terminaline doğrudan komut gönderir. Basit işler için uygundur ancak çıktıları değişken olarak yakalamak zordur.</p>
-                            <pre id="code-os" class="bg-slate-900 p-3 rounded-lg text-xs text-slate-200 overflow-x-auto font-mono">import os
-
-# Terminal komutu gibi python dosyasını çalıştırır
-exit_code = os.system("python hedef_dosya.py")
-
-if exit_code == 0:
-    print("Başarıyla çalıştırıldı!")
-else:
-    print("Hata kodu:", exit_code)</pre>
-                        </div>
-                        <div class="mt-4 pt-3 border-t border-slate-800 flex items-center text-xs text-amber-400">
-                            <i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Eski bir yöntemdir, karmaşık çıktılar için `subprocess` tercih edilmelidir.
-                        </div>
-                    </div>
-
-                    <!-- Method 3: exec() & eval() -->
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <h3 class="font-bold text-purple-400 flex items-center gap-2">
-                                    <span class="bg-purple-500/20 text-purple-300 text-xs px-2 py-0.5 rounded font-mono">3</span>
-                                    exec() Fonksiyonu (Dinamik Kodu Çalıştırma)
-                                </h3>
-                                <button onclick="copyCode('code-exec')" class="text-xs text-slate-400 hover:text-purple-400"><i class="fa-regular fa-copy"></i> Kopyala</button>
-                            </div>
-                            <p class="text-xs text-slate-400 mb-3">Metin (String) formatındaki Python kodlarını dinamik olarak mevcut çalışma alanında çalıştırır.</p>
-                            <pre id="code-exec" class="bg-slate-900 p-3 rounded-lg text-xs text-slate-200 overflow-x-auto font-mono"># Metin halindeki python kodunu çalıştırma
-python_kodu = """
-def selamla(isim):
-    return f'Merhaba {isim}'
-
-print(selamla('Ahmet'))
-"""
-
-exec(python_kodu)
-
-# Dosyadan okuyup içeriğini exec ile çalıştırmak:
-with open("script.py", "r", encoding="utf-8") as f:
-    exec(f.read())</pre>
-                        </div>
-                        <div class="mt-4 pt-3 border-t border-slate-800 flex items-center text-xs text-purple-400">
-                            <i class="fa-solid fa-shield-cat mr-1.5"></i> Güvensiz kaynaklardan gelen string'lerde kullanırken dikkat edilmelidir.
-                        </div>
-                    </div>
-
-                    <!-- Method 4: importlib -->
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center justify-between mb-3">
-                                <h3 class="font-bold text-emerald-400 flex items-center gap-2">
-                                    <span class="bg-emerald-500/20 text-emerald-300 text-xs px-2 py-0.5 rounded font-mono">4</span>
-                                    importlib Modülü (Modül Olarak İçe Aktarma)
-                                </h3>
-                                <button onclick="copyCode('code-importlib')" class="text-xs text-slate-400 hover:text-emerald-400"><i class="fa-regular fa-copy"></i> Kopyala</button>
-                            </div>
-                            <p class="text-xs text-slate-400 mb-3">Başka bir Python dosyasını dinamik olarak modül gibi içeri aktarır ve içindeki fonksiyonları çağırır.</p>
-                            <pre id="code-importlib" class="bg-slate-900 p-3 rounded-lg text-xs text-slate-200 overflow-x-auto font-mono">import importlib
-
-# 'hesapla.py' dosyasını dinamik olarak import eder
-modul = importlib.import_module("hesapla")
-
-# Modül içindeki fonksiyonu çağırma
-sonuc = modul.topla(5, 10)
-print(sonuc)
-
-# Modülü yeniden yüklemek istenirse:
-importlib.reload(modul)</pre>
-                        </div>
-                        <div class="mt-4 pt-3 border-t border-slate-800 flex items-center text-xs text-emerald-400">
-                            <i class="fa-solid fa-code-branch mr-1.5"></i> Modüler mimariler ve eklenti sistemleri için idealdir.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 3: PIP VE PROGRAMMATİK YÜKLEME -->
-        <section id="tab-pip" class="tab-content hidden space-y-6">
-            <!-- Programmatik PIP Yükleme Kod Örneği -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <div>
-                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                            <i class="fa-solid fa-download text-emerald-400"></i> Python Kodunun İçinden PIP Paketlerini Otomatik Yükleme
-                        </h2>
-                        <p class="text-slate-400 text-sm">Projeniz çalıştırıldığında eksik kütüphaneleri otomatik kontrol edip yüklemesini sağlayan kod yapısı:</p>
-                    </div>
-                    <button onclick="copyCode('code-pip-auto')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200 rounded-lg flex items-center gap-1.5 border border-slate-700">
-                        <i class="fa-regular fa-copy"></i> Kodu Kopyala
-                    </button>
-                </div>
-
-                <pre id="code-pip-auto" class="bg-slate-950 p-4 rounded-xl text-xs text-sky-300 font-mono overflow-x-auto border border-slate-800 leading-relaxed">import sys
-import subprocess
-
-def package_install(package_name):
-    """Eksik paketi programmatik olarak pip ile kurar"""
-    print(f"[{package_name}] kütüphanesi yükleniyor...")
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package_name])
-    print(f"[{package_name}] başarıyla yüklendi!")
-
-# Örnek Kullanım: Requests kütüphanesini kontrol et ve yükle
-try:
-    import requests
-    print("Requests kütüphanesi zaten yüklü.")
-except ImportError:
-    print("Requests kütüphanesi bulunamadı, otomatik yükleniyor...")
-    package_install("requests")
-    import requests
-
-# Artık kullanılabilir:
-# response = requests.get("https://api.github.com")</pre>
-            </div>
-
-            <!-- Popüler PIP Paket Kartları Kataloğu -->
-            <div class="space-y-4">
-                <h3 class="text-lg font-semibold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-boxes-stacked text-sky-400"></i> Sık Kullanılan Paketler & PIP Komut Kataloğu
-                </h3>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="pip-package-grid">
-                    <!-- PIP Kartları Javascript ile dinamik dolacak veya statik kartlar -->
-                </div>
-            </div>
-        </section>
-
-        <!-- TAB 4: PYTHON GUI KÜTÜPHANELERİ -->
-        <section id="tab-gui" class="tab-content hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <i class="fa-solid fa-desktop text-purple-400"></i> Python GUI (Arayüz) Kütüphaneleri ve exe Dönüştürme
-                </h2>
-                <p class="text-slate-400 text-sm mb-6">Masaüstü uygulaması geliştirmek için kullanabileceğiniz ana framework'ler ve tek tıkla `.exe` yapma yöntemleri.</p>
-
-                <!-- GUI Framework Seçenekleri -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <!-- Tkinter -->
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-lg font-bold text-sky-400">Tkinter / CustomTkinter</span>
-                            <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-mono">Dahili / Kolay</span>
-                        </div>
-                        <p class="text-xs text-slate-400 mb-4">Python ile birlikte dahili gelen standart GUI kütüphanesidir. Modern görünüm için CustomTkinter tercih edilebilir.</p>
-                        <pre class="bg-slate-900 p-3 rounded-lg text-xs text-slate-300 font-mono mb-3"># Pip ile modern Tkinter yüklemek için:
-# pip install customtkinter
-
-import tkinter as tk
-
-root = tk.Tk()
-root.title("Python GUI")
-root.geometry("300x150")
-
-label = tk.Label(root, text="Merhaba Tkinter!")
-label.pack(pady=20)
-
-root.mainloop()</pre>
-                    </div>
-
-                    <!-- PyQt / PySide -->
-                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
-                        <div class="flex items-center justify-between mb-3">
-                            <span class="text-lg font-bold text-indigo-400">PyQt6 / PySide6</span>
-                            <span class="text-[10px] bg-purple-500/20 text-purple-400 px-2 py-0.5 rounded font-mono">Gelişmiş / Profesyonel</span>
-                        </div>
-                        <p class="text-xs text-slate-400 mb-4">C++ Qt framework'ünün Python bağlamıdır. Karmaşık ve profesyonel masaüstü yazılımları için 1 numaralı tercihtir.</p>
-                        <pre class="bg-slate-900 p-3 rounded-lg text-xs text-slate-300 font-mono mb-3"># Yükleme: pip install PyQt6
-
-from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout
-
-app = QApplication([])
-window = QWidget()
-window.setWindowTitle('PyQt6 Örneği')
-
-layout = QVBoxLayout()
-layout.addWidget(QLabel('Merhaba PyQt6!'))
-window.setLayout(layout)
-
-window.show()
-app.exec()</pre>
-                    </div>
-                </div>
-
-                <!-- PyInstaller ile EXE Yapma Rehberi -->
-                <div class="bg-slate-950 border border-sky-500/30 rounded-xl p-5">
-                    <h3 class="text-md font-bold text-amber-300 mb-2 flex items-center gap-2">
-                        <i class="fa-solid fa-box text-amber-400"></i> Python Dosyasını Tek Tıkla Masaüstü (.EXE) Uygulamasına Dönüştürme
-                    </h3>
-                    <p class="text-xs text-slate-400 mb-4">Geliştirdiğiniz `.py` scriptlerini ve GUI uygulamalarını kullanıcının bilgisayarında Python yüklü olmasa bile çalışabilen tek bir `.exe` dosyası haline getirebilirsiniz.</p>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
-                        <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
-                            <span class="text-sky-400 font-bold block mb-1">1. PyInstaller Yükleyin</span>
-                            <code class="text-slate-300 select-all bg-slate-950 px-2 py-1 rounded block">pip install pyinstaller</code>
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
-                            <span class="text-amber-400 font-bold block mb-1">2. EXE Oluşturun</span>
-                            <code class="text-slate-300 select-all bg-slate-950 px-2 py-1 rounded block">pyinstaller --onefile --noconsole main.py</code>
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
-                            <span class="text-emerald-400 font-bold block mb-1">3. Dosyayı Alın</span>
-                            <span class="text-slate-400 block text-[11px]">Oluşan `.exe` dosyası projenizdeki <b>dist/</b> klasörü içinde yer alacaktır.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Kopyalandı Bildirim Kutusu (Toast) -->
-    <div id="toast" class="fixed bottom-5 right-5 bg-sky-500 text-white px-4 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 text-sm font-medium transition-all transform translate-y-20 opacity-0 pointer-events-none z-50">
-        <i class="fa-solid fa-circle-check"></i>
-        <span id="toast-message">Pano kopyalandı!</span>
+<main>
+  <section class="pane" id="editorPane">
+    <div class="paneHead"><span>main.py</span></div>
+    <div id="editorWrap">
+      <div id="lines"></div>
+      <textarea id="code" spellcheck="false"></textarea>
     </div>
+  </section>
+  <section class="pane" id="outPane">
+    <div class="paneHead">
+      <span>Çıktı (Console)</span>
+      <button id="clearOut">Temizle</button>
+    </div>
+    <div id="output"><span class="hint">Python ortamı yükleniyor, birkaç saniye sürebilir…</span></div>
+    <div id="stdinRow">
+      <input id="stdinInput" placeholder="input() bekliyorsa buraya yaz ve Enter'a bas" disabled>
+      <button id="stdinSend" disabled>Gönder</button>
+    </div>
+  </section>
+</main>
 
-    <footer class="border-t border-slate-800 bg-slate-900/50 py-4 text-center text-xs text-slate-500">
-        Python Code Execution & Package Manager GUI Guide &bull; Designed with HTML5/Tailwind/JS
-    </footer>
+<footer>
+  <span>Ctrl/Cmd + Enter ile çalıştır</span>
+  <span id="status">hazırlanıyor…</span>
+</footer>
 
-    <script>
-        // Sık kullanılan PIP paket verileri
-        const pipPackages = [
-            { name: "customtkinter", category: "GUI Framework", desc: "Tkinter için modern ve özelleştirilebilir arayüz elemanları.", cmd: "pip install customtkinter" },
-            { name: "PyQt6", category: "GUI Framework", desc: "Gelişmiş masaüstü yazılımları için profesyonel Qt arayüz kütüphanesi.", cmd: "pip install PyQt6" },
-            { name: "pyinstaller", category: "Executable / Exe", desc: "Python scriptlerinizi bağımsız .exe dosyalarına dönüştürür.", cmd: "pip install pyinstaller" },
-            { name: "requests", category: "HTTP & API", desc: "Web istekleri göndermek ve API'ler ile haberleşmek için standart kütüphane.", cmd: "pip install requests" },
-            { name: "pandas", category: "Veri Analizi", desc: "Veri işleme, analiz ve Excel/CSV manipülasyonu için popüler paket.", cmd: "pip install pandas" },
-            { name: "opencv-python", category: "Görüntü İşleme", desc: "Kamera, video işleme ve yapay zeka/görüntü analizi araçları.", cmd: "pip install opencv-python" },
-            { name: "flet", category: "Modern GUI", desc: "Flutter tabanlı, Python ile aşırı hızlı ve şık GUI araçları üretme kütüphanesi.", cmd: "pip install flet" },
-            { name: "pillow", category: "Resim / Image", desc: "Resim düzenleme, kırpma, filtreleme ve format dönüştürme kütüphanesi.", cmd: "pip install Pillow" },
-            { name: "pytest", category: "Test", desc: "Python kodlarınız için birim (unit) testleri yazma kütüphanesi.", cmd: "pip install pytest" }
-        ];
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+<script>
+(function(){
+  const codeEl = document.getElementById('code');
+  const linesEl = document.getElementById('lines');
+  const outEl = document.getElementById('output');
+  const runBtn = document.getElementById('run');
+  const runLabel = document.getElementById('runLabel');
+  const statusEl = document.getElementById('status');
+  const stdinInput = document.getElementById('stdinInput');
+  const stdinSend = document.getElementById('stdinSend');
+  const presetSel = document.getElementById('preset');
 
-        // Tab değiştirme mantığı
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-sky-600/20', 'text-sky-400', 'border', 'border-sky-500/30');
-                btn.classList.add('text-slate-400');
-            });
+  const presets = {
+    hello: `print("Merhaba dünya!")\nisim = "Cemal"\nprint(f"Selam {isim}, PyRun'a hoş geldin.")`,
+    loop: `toplam = 0\nfor i in range(1, 11):\n    toplam += i\n    print(i, "-> toplam:", toplam)\nprint("Sonuç:", toplam)`,
+    input: `isim = input("Adın ne? ")\nyas = input("Yaşın kaç? ")\nprint(f"Merhaba {isim}, {yas} yaşındasın demek.")`,
+    error: `sayilar = [1, 2, 3]\nprint(sayilar[5])  # bilerek hata`,
+  };
+  presetSel.addEventListener('change', () => {
+    codeEl.value = presets[presetSel.value] || '';
+    updateLines();
+  });
+  codeEl.value = presets.hello;
 
-            document.getElementById(tabId).classList.remove('hidden');
-            const activeBtn = document.getElementById('btn-' + tabId);
-            activeBtn.classList.add('bg-sky-600/20', 'text-sky-400', 'border', 'border-sky-500/30');
-            activeBtn.classList.remove('text-slate-400');
-        }
+  function updateLines(){
+    const n = codeEl.value.split('\n').length;
+    let html = '';
+    for(let i=1;i<=n;i++) html += '<div>'+i+'</div>';
+    linesEl.innerHTML = html;
+    linesEl.scrollTop = codeEl.scrollTop;
+  }
+  codeEl.addEventListener('input', updateLines);
+  codeEl.addEventListener('scroll', () => linesEl.scrollTop = codeEl.scrollTop);
+  codeEl.addEventListener('keydown', (e) => {
+    if(e.key === 'Tab'){
+      e.preventDefault();
+      const s = codeEl.selectionStart, en = codeEl.selectionEnd;
+      codeEl.value = codeEl.value.slice(0,s) + '    ' + codeEl.value.slice(en);
+      codeEl.selectionStart = codeEl.selectionEnd = s+4;
+      updateLines();
+    }
+    if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){ e.preventDefault(); runCode(); }
+  });
+  updateLines();
 
-        // PIP kartlarını dinamik render etme
-        function renderPipPackages() {
-            const container = document.getElementById('pip-package-grid');
-            container.innerHTML = pipPackages.map(pkg => `
-                <div class="bg-slate-950 border border-slate-800 hover:border-slate-700 rounded-xl p-4 flex flex-col justify-between transition-all">
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <h4 class="font-bold text-white text-sm">${pkg.name}</h4>
-                            <span class="text-[10px] bg-slate-800 text-sky-400 px-2 py-0.5 rounded font-mono">${pkg.category}</span>
-                        </div>
-                        <p class="text-xs text-slate-400 mb-3">${pkg.desc}</p>
-                    </div>
-                    <div class="bg-slate-900 rounded-lg p-2 flex items-center justify-between border border-slate-800/80">
-                        <code class="text-xs text-amber-300 font-mono select-all">${pkg.cmd}</code>
-                        <button onclick="copyText('${pkg.cmd}')" class="text-slate-400 hover:text-white text-xs p-1" title="Kopyala">
-                            <i class="fa-regular fa-copy"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
+  document.getElementById('clear').addEventListener('click', ()=>{ codeEl.value=''; updateLines(); codeEl.focus(); });
+  document.getElementById('clearOut').addEventListener('click', ()=>{ outEl.innerHTML=''; });
 
-        // Hazır Şablonları Yükleme
-        const templates = {
-            hello: `# Python Kod Örneği\nimport os\nimport sys\n\nprint("Python Sürümü:", sys.version)\nprint("Mevcut Çalışma Dizini:", os.getcwd())\n\nprint("\\n[İşlem Başarıyla Tamamlandı]")`,
-            subprocess: `# Subprocess ile Harici Dosya Çalıştırma\nimport subprocess\n\nprint("Harici dosya tetikleniyor...")\n# Örnek: subprocess.run(["python", "script2.py"])\nprint("Komut: subprocess.run(['python', 'hedef.py']) gönderildi.")\nprint("Çıktı: Target script executed successfully!")`,
-            pip_install: `# Kod İçinden Otomatik PIP Yükleyici\nimport sys\nimport subprocess\n\ndef install_package(package):\n    print(f"'{package}' kuruluyor...") me\n    # subprocess.check_call([sys.executable, "-m", "pip", "install", package])\n    print(f"'{package}' başarıyla kuruldu!")\n\ninstall_package("requests")`,
-            tkinter_gui: `# Tkinter Pencere Başlatma Kodu\nimport tkinter as tk\n\nprint("Tkinter GUI Penceresi Oluşturuluyor...")\nprint("root = tk.Tk()")\nprint("root.title('Test Penceresi')")\nprint("root.mainloop() -> [GUI Arayüzü Başlatıldı]")`
-        };
+  function appendOut(text, cls){
+    const span = document.createElement('span');
+    if(cls) span.className = cls;
+    span.textContent = text;
+    outEl.appendChild(span);
+    outEl.scrollTop = outEl.scrollHeight;
+  }
 
-        function loadTemplate() {
-            const select = document.getElementById('code-template');
-            const val = select.value;
-            if(templates[val]) {
-                document.getElementById('python-code-input').value = templates[val];
-            }
-        }
+  let pyodide = null;
+  let stdinResolve = null;
 
-        // Simüle Edilmiş Python Kodu Çalıştırıcı
-        function runPythonCode() {
-            const code = document.getElementById('python-code-input').value;
-            const consoleEl = document.getElementById('console-output');
-            
-            consoleEl.innerHTML = `<span class="text-sky-400">[Çalıştırılıyor...] python script.py</span>\n\n`;
+  async function boot(){
+    try{
+      pyodide = await loadPyodide();
+      outEl.innerHTML = '';
+      appendOut('Python ortamı hazır. Kodunu yaz ve Çalıştır\'a bas.\n', 'ok');
+      runBtn.disabled = false;
+      runLabel.textContent = 'Çalıştır';
+      statusEl.textContent = 'hazır';
 
-            setTimeout(() => {
-                let output = "";
-                const lines = code.split('\n');
-                
-                // Basit Kod Okuma Simülasyonu
-                lines.forEach(line => {
-                    const trimmed = line.trim();
-                    if(trimmed.startsWith('print(')) {
-                        // Print içeriğini basitçe yakala
-                        let content = trimmed.substring(6, trimmed.lastIndexOf(')'));
-                        // Tırnak işaretlerini temizle
-                        content = content.replace(/^["']|["']$/g, '');
-                        if(content.includes('sys.version')) content = "3.11.4 (main, Jun 2026, 10:00:00)";
-                        if(content.includes('os.getcwd()')) content = "C:\\Users\\PythonProject";
-                        output += content + "\n";
-                    }
-                });
+      pyodide.setStdout({ batched: (s) => appendOut(s + (s.endsWith('\n') ? '' : '\n')) });
+      pyodide.setStderr({ batched: (s) => appendOut(s + (s.endsWith('\n') ? '' : '\n'), 'err') });
 
-                if(!output) {
-                    output = "[Kod çalıştırıldı. Herhangi bir print çıktısı üretilmedi.]\nProcess finished with exit code 0";
-                } else {
-                    output += "\n<span class=\"text-slate-500\">Process finished with exit code 0</span>";
-                }
+      await pyodide.runPythonAsync(`
+import builtins
+async def _js_input(prompt=""):
+    from js import __py_input_bridge
+    if prompt:
+        print(prompt, end="")
+    val = await __py_input_bridge(prompt)
+    return val
+`);
+    }catch(err){
+      appendOut('Python ortamı yüklenemedi: ' + err + '\n', 'err');
+      statusEl.textContent = 'hata';
+    }
+  }
 
-                consoleEl.innerHTML += output;
-                consoleEl.scrollTop = consoleEl.scrollHeight;
-            }, 400);
-        }
+  window.__py_input_bridge = function(prompt){
+    return new Promise((resolve) => {
+      stdinResolve = resolve;
+      stdinInput.disabled = false;
+      stdinSend.disabled = false;
+      stdinInput.focus();
+    });
+  };
 
-        function clearEditor() {
-            document.getElementById('python-code-input').value = '';
-        }
+  function sendStdin(){
+    if(!stdinResolve) return;
+    const val = stdinInput.value;
+    appendOut(val + '\n');
+    stdinInput.value = '';
+    stdinInput.disabled = true;
+    stdinSend.disabled = true;
+    const r = stdinResolve;
+    stdinResolve = null;
+    r(val);
+  }
+  stdinSend.addEventListener('click', sendStdin);
+  stdinInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendStdin(); });
 
-        function clearConsole() {
-            document.getElementById('console-output').innerHTML = '<span class="text-slate-500"># Konsol Temizlendi.</span>';
-        }
+  async function runCode(){
+    if(!pyodide || runBtn.disabled) return;
+    runBtn.disabled = true;
+    runLabel.textContent = 'Çalışıyor…';
+    statusEl.textContent = 'çalışıyor…';
+    outEl.innerHTML = '';
+    stdinInput.disabled = true; stdinSend.disabled = true;
 
-        // Metin Kopyalama Fonksiyonları
-        function copyCode(elementId) {
-            const text = document.getElementById(elementId).innerText;
-            copyText(text);
-        }
+    let src = codeEl.value;
+    // input() çağrılarını async bridge'e yönlendir
+    const wrapped = `
+import ast, asyncio
+_user_src = ${JSON.stringify(src)}
+_tree = ast.parse(_user_src, mode="exec")
+_code = compile(_tree, "<main.py>", "exec")
+async def __run():
+    ns = {"input": _js_input, "__name__": "__main__"}
+    exec(_code, ns)
+await __run()
+`;
+    try{
+      await pyodide.runPythonAsync(wrapped);
+      appendOut('\n[Program tamamlandı]\n', 'ok');
+    }catch(err){
+      appendOut(String(err), 'err');
+    }finally{
+      runBtn.disabled = false;
+      runLabel.textContent = 'Çalıştır';
+      statusEl.textContent = 'hazır';
+      stdinInput.disabled = true; stdinSend.disabled = true;
+    }
+  }
+  runBtn.addEventListener('click', runCode);
 
-        function copyText(text) {
-            // Document.execCommand fallback kullanımı
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            try {
-                document.execCommand('copy');
-                showToast("Pano kopyalandı!");
-            } catch (err) {
-                showToast("Kopyalama başarısız!");
-            }
-            document.body.removeChild(textarea);
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').innerText = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-            }, 2500);
-        }
-
-        // Sayfa Yüklendiğinde
-        window.onload = function() {
-            renderPipPackages();
-        };
-    </script>
+  boot();
+})();
+</script>
 </body>
 </html>
