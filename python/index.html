@@ -221,12 +221,12 @@
 
       await pyodide.runPythonAsync(`
 import builtins
-async def _js_input(prompt=""):
-    from js import __py_input_bridge
-    if prompt:
-        print(prompt, end="")
-    val = await __py_input_bridge(prompt)
+from js import __py_input_bridge
+def _js_input(prompt=""):
+    val = __py_input_bridge(prompt)
+    print(str(prompt) + str(val))
     return val
+builtins.input = _js_input
 `);
     }catch(err){
       appendOut('Python ortamı yüklenemedi: ' + err + '\n', 'err');
@@ -234,28 +234,13 @@ async def _js_input(prompt=""):
     }
   }
 
+  // input() çağrıları tarayıcının senkron prompt() kutusunu kullanır
   window.__py_input_bridge = function(prompt){
-    return new Promise((resolve) => {
-      stdinResolve = resolve;
-      stdinInput.disabled = false;
-      stdinSend.disabled = false;
-      stdinInput.focus();
-    });
+    const val = window.prompt(prompt || '');
+    return val === null ? '' : val;
   };
-
-  function sendStdin(){
-    if(!stdinResolve) return;
-    const val = stdinInput.value;
-    appendOut(val + '\n');
-    stdinInput.value = '';
-    stdinInput.disabled = true;
-    stdinSend.disabled = true;
-    const r = stdinResolve;
-    stdinResolve = null;
-    r(val);
-  }
-  stdinSend.addEventListener('click', sendStdin);
-  stdinInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendStdin(); });
+  stdinInput.placeholder = "input() burada değil, açılan pencerede sorulur";
+  stdinInput.disabled = true; stdinSend.disabled = true;
 
   async function runCode(){
     if(!pyodide || runBtn.disabled) return;
@@ -266,16 +251,10 @@ async def _js_input(prompt=""):
     stdinInput.disabled = true; stdinSend.disabled = true;
 
     let src = codeEl.value;
-    // input() çağrılarını async bridge'e yönlendir
     const wrapped = `
-import ast, asyncio
 _user_src = ${JSON.stringify(src)}
-_tree = ast.parse(_user_src, mode="exec")
-_code = compile(_tree, "<main.py>", "exec")
-async def __run():
-    ns = {"input": _js_input, "__name__": "__main__"}
-    exec(_code, ns)
-await __run()
+_code = compile(_user_src, "<main.py>", "exec")
+exec(_code, {"__name__": "__main__"})
 `;
     try{
       await pyodide.runPythonAsync(wrapped);
