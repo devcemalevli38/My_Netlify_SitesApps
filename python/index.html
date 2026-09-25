@@ -136,7 +136,7 @@
     </div>
     <div id="output"><span class="hint">Python ortamı yükleniyor, birkaç saniye sürebilir…</span></div>
     <div id="stdinRow">
-      <input id="stdinInput" placeholder="input() bekliyorsa buraya yaz ve Enter'a bas" disabled>
+      <input id="stdinInput" placeholder="program input() ile veri istediğinde burası aktifleşir" disabled>
       <button id="stdinSend" disabled>Gönder</button>
     </div>
   </section>
@@ -219,14 +219,46 @@
       pyodide.setStdout({ batched: (s) => appendOut(s + (s.endsWith('\n') ? '' : '\n')) });
       pyodide.setStderr({ batched: (s) => appendOut(s + (s.endsWith('\n') ? '' : '\n'), 'err') });
 
+      // input() çağrılarını, kullanıcı koddaki input() satırlarını "await" ile
+      // yazmasa bile, alttaki stdin kutusuna yönlendiren bir çalıştırıcı kuruyoruz.
       await pyodide.runPythonAsync(`
-import builtins
+import ast
 from js import __py_input_bridge
-def _js_input(prompt=""):
-    val = __py_input_bridge(prompt)
-    print(str(prompt) + str(val))
+
+async def _js_input(prompt=""):
+    if prompt:
+        print(prompt, end="")
+    val = await __py_input_bridge(str(prompt))
+    print(val)
     return val
-builtins.input = _js_input
+
+class _InputAwaiter(ast.NodeTransformer):
+    def visit_Call(self, node):
+        self.generic_visit(node)
+        if isinstance(node.func, ast.Name) and node.func.id == "input":
+            return ast.copy_location(ast.Await(value=node), node)
+        return node
+
+def _compile_runner(src):
+    tree = ast.parse(src, mode="exec")
+    _InputAwaiter().visit(tree)
+    ast.fix_missing_locations(tree)
+    fn = ast.AsyncFunctionDef(
+        name="__pyrun_main__",
+        args=ast.arguments(posonlyargs=[], args=[], vararg=None,
+                            kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[]),
+        body=tree.body or [ast.Pass()],
+        decorator_list=[], returns=None, type_comment=None,
+    )
+    mod = ast.Module(body=[fn], type_ignores=[])
+    ast.fix_missing_locations(mod)
+    return compile(mod, "<main.py>", "exec")
+
+async def _run_user_code(src):
+    ns = {"input": _js_input, "__name__": "__main__"}
+    code = _compile_runner(src)
+    exec(code, ns)
+    await ns["__pyrun_main__"]()
 `);
     }catch(err){
       appendOut('Python ortamı yüklenemedi: ' + err + '\n', 'err');
@@ -234,13 +266,28 @@ builtins.input = _js_input
     }
   }
 
-  // input() çağrıları tarayıcının senkron prompt() kutusunu kullanır
+  // input() çağrıları alttaki stdin kutusundan cevap bekler
   window.__py_input_bridge = function(prompt){
-    const val = window.prompt(prompt || '');
-    return val === null ? '' : val;
+    return new Promise((resolve) => {
+      stdinResolve = resolve;
+      stdinInput.disabled = false;
+      stdinSend.disabled = false;
+      stdinInput.focus();
+    });
   };
-  stdinInput.placeholder = "input() burada değil, açılan pencerede sorulur";
-  stdinInput.disabled = true; stdinSend.disabled = true;
+
+  function sendStdin(){
+    if(!stdinResolve) return;
+    const val = stdinInput.value;
+    stdinInput.value = '';
+    stdinInput.disabled = true;
+    stdinSend.disabled = true;
+    const r = stdinResolve;
+    stdinResolve = null;
+    r(val);
+  }
+  stdinSend.addEventListener('click', sendStdin);
+  stdinInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') sendStdin(); });
 
   async function runCode(){
     if(!pyodide || runBtn.disabled) return;
@@ -251,13 +298,10 @@ builtins.input = _js_input
     stdinInput.disabled = true; stdinSend.disabled = true;
 
     let src = codeEl.value;
-    const wrapped = `
-_user_src = ${JSON.stringify(src)}
-_code = compile(_user_src, "<main.py>", "exec")
-exec(_code, {"__name__": "__main__"})
-`;
     try{
-      await pyodide.runPythonAsync(wrapped);
+      const runner = pyodide.globals.get('_run_user_code');
+      await runner(src);
+      runner.destroy();
       appendOut('\n[Program tamamlandı]\n', 'ok');
     }catch(err){
       appendOut(String(err), 'err');
