@@ -26,13 +26,23 @@
             resize: none;
             font-family: 'Fira Code', monospace, Consolas, Monaco;
             tab-size: 4;
+            /* SORUN 1 DÜZELTMESİ: Metin hizalama ve kutu modeli sabitleme */
+            text-align: left;
+            direction: ltr;
+            box-sizing: border-box;
         }
         .line-numbers {
             font-family: 'Fira Code', monospace, Consolas, Monaco;
             text-align: right;
             user-select: none;
+            /* SORUN 1 DÜZELTMESİ: Kutu modeli sabitleme */
+            box-sizing: border-box;
         }
-        /* Sürükleme esnasında iframe'in fare hareketlerini yutmasını engellemek için */
+        /* SORUN 2 DÜZELTMESİ: Sürükleme esnasında metin seçimini ve iframe etkileşimini engellemek için */
+        .resizing * {
+            user-select: none !important;
+            -webkit-user-select: none !important;
+        }
         .resizing iframe {
             pointer-events: none;
         }
@@ -446,7 +456,7 @@
 
     <main id="mainLayout" class="flex-1 flex flex-col md:flex-row overflow-hidden w-full relative">
         
-        <section id="editorPanel" class="w-full md:w-1/2 flex h-1/2 md:h-full bg-[#1e1e2e] border-b md:border-b-0 border-[#313244] relative overflow-hidden shrink-0">
+        <section id="editorPanel" class="w-full md:w-1/2 flex items-stretch h-1/2 md:h-full bg-[#1e1e2e] border-b md:border-b-0 border-[#313244] relative overflow-hidden shrink-0">
             <div id="lineNumbers" class="line-numbers w-12 py-4 pr-2 bg-[#181825] text-gray-600 text-sm border-r border-[#313244] select-none pointer-events-none leading-6">
                 <div>1</div>
             </div>
@@ -696,6 +706,10 @@
                 isDragging = true;
                 mainLayout.classList.add('resizing'); // Sürükleme esnasında iframe'i deaktif eder
                 document.body.style.cursor = 'col-resize';
+                
+                // SORUN 2 DÜZELTMESİ: Sürükleme sırasında metin seçilmesini sayfa genelinde engelle
+                document.body.style.userSelect = 'none';
+                document.body.style.webkitUserSelect = 'none';
             });
 
             document.addEventListener('mousemove', (e) => {
@@ -722,6 +736,10 @@
                     isDragging = false;
                     mainLayout.classList.remove('resizing');
                     document.body.style.cursor = 'default';
+                    
+                    // SORUN 2 DÜZELTMESİ: Sürükleme bittiğinde metin seçimine tekrar izin ver
+                    document.body.style.userSelect = '';
+                    document.body.style.webkitUserSelect = '';
                 }
             });
         }
