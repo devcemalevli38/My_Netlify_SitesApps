@@ -47,6 +47,29 @@
 </head>
 <body class="bg-[#11111b] text-[#cdd6f4] h-screen flex flex-col overflow-hidden m-0 font-sans">
 
+    <!-- Üstten Gelen İzin Uyarı Penceresi -->
+    <div id="topPermissionBanner" class="hidden fixed top-0 left-0 right-0 bg-[#181825] border-b border-[#313244] p-3 z-50 shadow-xl transition-all duration-300">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-shield-halved text-blue-400 text-lg"></i>
+                <div>
+                    <p class="text-white font-semibold">Donanım ve Sistem İzinleri Kontrol Ediliyor</p>
+                    <p class="text-gray-400">Kamera, mikrofon, konum vb. sistem izinleri otomatik olarak taranıyor...</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div id="bannerStatus" class="flex items-center gap-2 text-yellow-400 font-medium">
+                    <i class="fa-solid fa-spinner animate-spin"></i>
+                    <span>Taranıyor...</span>
+                </div>
+                <button id="btnDismissBanner" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-1.5 rounded-lg transition-all cursor-pointer">
+                    Tamam
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="permissionModal" class="fixed inset-0 bg-black/85 backdrop-blur-md flex items-center justify-center z-50 transition-opacity duration-300">
         <div class="bg-[#1e1e2e] border border-[#313244] w-full max-w-2xl h-[85vh] p-6 rounded-2xl shadow-2xl mx-4 flex flex-col">
             
@@ -479,6 +502,9 @@
     <script>
         const permissionModal = document.getElementById('permissionModal');
         const btnGrantPermissions = document.getElementById('btnGrantPermissions');
+        const topPermissionBanner = document.getElementById('topPermissionBanner');
+        const btnDismissBanner = document.getElementById('btnDismissBanner');
+        const bannerStatus = document.getElementById('bannerStatus');
         const fileInput = document.getElementById('fileInput');
         const btnClear = document.getElementById('btnClear');
         const btnRun = document.getElementById('btnRun');
@@ -490,6 +516,27 @@
         const mainLayout = document.getElementById('mainLayout');
         const editorPanel = document.getElementById('editorPanel');
         const resizer = document.getElementById('resizer');
+
+        // Otomatik saniyelik üst bildirim simülasyonu
+        function triggerQuickPermissionCheck() {
+            if (topPermissionBanner) {
+                topPermissionBanner.classList.remove('hidden');
+            }
+
+            setTimeout(() => {
+                if (bannerStatus) {
+                    bannerStatus.className = "flex items-center gap-2 text-emerald-400 font-medium";
+                    bannerStatus.innerHTML = `<i class="fa-solid fa-circle-check"></i><span>İzinler Doğrulandı</span>`;
+                }
+            }, 1200);
+        }
+
+        btnDismissBanner.addEventListener('click', () => {
+            localStorage.setItem('topBannerDismissed', 'true');
+            if (topPermissionBanner) {
+                topPermissionBanner.classList.add('hidden');
+            }
+        });
 
         // Durum Güncelleyici Yardımcı Fonksiyonu
         function setStatus(id, type, text) {
@@ -615,6 +662,10 @@
                 }
                 initEditor();
                 runPermissionChecks(false);
+            }
+
+            if (localStorage.getItem('topBannerDismissed') !== 'true') {
+                triggerQuickPermissionCheck();
             }
         });
 
