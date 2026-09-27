@@ -26,7 +26,6 @@
             resize: none;
             font-family: 'Fira Code', monospace, Consolas, Monaco;
             tab-size: 4;
-            /* SORUN 1 DÜZELTMESİ: Metin hizalama ve kutu modeli sabitleme */
             text-align: left;
             direction: ltr;
             box-sizing: border-box;
@@ -35,10 +34,8 @@
             font-family: 'Fira Code', monospace, Consolas, Monaco;
             text-align: right;
             user-select: none;
-            /* SORUN 1 DÜZELTMESİ: Kutu modeli sabitleme */
             box-sizing: border-box;
         }
-        /* SORUN 2 DÜZELTMESİ: Sürükleme esnasında metin seçimini ve iframe etkileşimini engellemek için */
         .resizing * {
             user-select: none !important;
             -webkit-user-select: none !important;
@@ -509,9 +506,11 @@
         }
 
         // TÜM İZİNLERİN ASENKRON TETİKLENME AKIŞI
-        btnGrantPermissions.addEventListener('click', async () => {
-            btnGrantPermissions.disabled = true;
-            btnGrantPermissions.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Tüm Protokoller İşleniyor...`;
+        async function runPermissionChecks(interactive = true) {
+            if (interactive && btnGrantPermissions) {
+                btnGrantPermissions.disabled = true;
+                btnGrantPermissions.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Tüm Protokoller İşleniyor...`;
+            }
 
             // 1. Location (Konum)
             try {
@@ -568,7 +567,7 @@
                 setStatus('status-clipboard', status.state === 'granted' || status.state === 'prompt' ? 'success' : 'error', 'Hazır');
             } catch (e) { setStatus('status-clipboard', 'success', 'Tetiklemeli Aktif'); }
 
-            // 8. WebUSB / WebHID / WebSerial API Kontrolleri (Güvenlik gereği cihaz seçimi runtime'da yapılır)
+            // 8. WebUSB / WebHID / WebSerial API Kontrolleri
             if ('usb' in navigator) setStatus('status-usb', 'success', 'API Hazır'); else setStatus('status-usb', 'error', 'Desteklenmiyor');
             if ('serial' in navigator) setStatus('status-serial', 'success', 'API Hazır'); else setStatus('status-serial', 'error', 'Desteklenmiyor');
             if ('hid' in navigator) setStatus('status-hid', 'success', 'API Hazır'); else setStatus('status-hid', 'error', 'Desteklenmiyor');
@@ -589,14 +588,34 @@
             if ('getScreenDetails' in window || 'screen' in window) setStatus('status-window', 'success', 'İzinli'); else setStatus('status-window', 'error', 'Kısıtlı');
             if ('queryLocalFonts' in window) setStatus('status-fonts', 'success', 'API Aktif'); else setStatus('status-fonts', 'error', 'Tarayıcı Blokeli');
 
+            // İlk tıklamada izni kaydet
+            localStorage.setItem('permissionsGranted', 'true');
+
             // Modalı Kapat ve Editörü Başlat
-            setTimeout(() => {
-                permissionModal.classList.add('opacity-0');
+            if (permissionModal && permissionModal.parentNode) {
                 setTimeout(() => {
+                    permissionModal.classList.add('opacity-0');
+                    setTimeout(() => {
+                        if (permissionModal.parentNode) permissionModal.remove();
+                        initEditor();
+                    }, 300);
+                }, 1000);
+            }
+        }
+
+        btnGrantPermissions.addEventListener('click', () => {
+            runPermissionChecks(true);
+        });
+
+        // Sayfa yüklendiğinde otomatik kontrol yapılması
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('permissionsGranted') === 'true') {
+                if (permissionModal) {
                     permissionModal.remove();
-                    initEditor();
-                }, 300);
-            }, 1000);
+                }
+                initEditor();
+                runPermissionChecks(false);
+            }
         });
 
         // VARSAYILAN BAŞLANGIÇ ŞABLONU
@@ -629,7 +648,10 @@
 </body>
 </html>`;
 
+        let isEditorInitialized = false;
         function initEditor() {
+            if (isEditorInitialized) return;
+            isEditorInitialized = true;
             codeEditor.value = defaultTemplate;
             updateLineNumbers();
             runCode();
@@ -704,10 +726,9 @@
 
             resizer.addEventListener('mousedown', (e) => {
                 isDragging = true;
-                mainLayout.classList.add('resizing'); // Sürükleme esnasında iframe'i deaktif eder
+                mainLayout.classList.add('resizing');
                 document.body.style.cursor = 'col-resize';
                 
-                // SORUN 2 DÜZELTMESİ: Sürükleme sırasında metin seçilmesini sayfa genelinde engelle
                 document.body.style.userSelect = 'none';
                 document.body.style.webkitUserSelect = 'none';
             });
@@ -715,15 +736,12 @@
             document.addEventListener('mousemove', (e) => {
                 if (!isDragging) return;
                 
-                // Sadece geniş ekran modunda (md: ve üzeri) çalışması için kontrol
                 if (window.innerWidth >= 768) {
                     let pointerX = e.clientX;
                     let containerWidth = mainLayout.clientWidth;
                     
-                    // Yüzdesel genişlik hesabı
                     let percentage = (pointerX / containerWidth) * 100;
                     
-                    // Aşırı daralmayı önlemek için sınırlar (%15 ile %85 arası)
                     if (percentage < 15) percentage = 15;
                     if (percentage > 85) percentage = 85;
                     
@@ -737,7 +755,6 @@
                     mainLayout.classList.remove('resizing');
                     document.body.style.cursor = 'default';
                     
-                    // SORUN 2 DÜZELTMESİ: Sürükleme bittiğinde metin seçimine tekrar izin ver
                     document.body.style.userSelect = '';
                     document.body.style.webkitUserSelect = '';
                 }
