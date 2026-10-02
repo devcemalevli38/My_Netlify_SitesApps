@@ -22,19 +22,19 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub'ın otomatik verdiği geçici anahtar
         run: |
           # Projeleri çek (Token ile güvenli ve yüksek limitli)
-          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/cemal201138/My_Netlify_SitesApps/contents/" > projects.json
+          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/" > projects.json
           
           # Oyunları çek
-          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/cemal201138/games/releases" > games.json
+          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/devcemalevli38/games/releases" > games.json
           
           # Dosyaları çek
-          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/cemal201138/files/releases" > files.json
+          curl -sL -H "Authorization: Bearer $GH_TOKEN" "https://api.github.com/repos/devcemalevli38/files/releases" > files.json
 
       - name: Commit and Push Changes
         run: |
           # Git kimlik yapılandırması
-          git config --local user.name "cemal201138"
-          git config --local user.email "cemal201138@users.noreply.github.com"
+          git config --local user.name "devcemalevli38"
+          git config --local user.email "devcemalevli38@users.noreply.github.com"
           
           # Dosyaları takibe al
           git add projects.json games.json files.json
