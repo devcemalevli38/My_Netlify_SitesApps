@@ -95,18 +95,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .section-header {
-            width: 100%; max-width: 900px;
-            display: flex; justify-content: space-between; align-items: center;
-            margin: 20px 0 15px;
-        }
-
-        .section-title {
-            font-size: 1.1rem; display: flex; align-items: center;
-            gap: 10px; color: var(--text); margin: 0;
-            font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-        }
-
         .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 
         input {
@@ -155,6 +143,7 @@
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px; width: 100%; max-width: 900px;
             justify-content: start;
+            margin-top: 10px;
         }
 
         .project-card {
@@ -232,7 +221,7 @@
             text-align: center; font-size: 0.9rem; opacity: 0.8;
         }
         footer b { color: var(--accent); }
-         
+           
         .footer-links {
             margin-top: 14px; display: flex; justify-content: center; gap: 20px; font-size: 0.85rem;
         }
@@ -253,7 +242,7 @@
 </div>
 
 <header>
-    <h1>🚀 Cemal Evli</h1>
+    <h1>⚡ Cemal Evli</h1>
     <div class="controls">
         <input id="search" placeholder="">
         <button id="openNewsletter" class="tool-btn" onclick="toggleModal('newsletterModal', true)">📧</button>
@@ -269,9 +258,6 @@
 </header>
 
 <div id="projects-section" style="width: 100%; max-width: 900px;">
-    <div class="section-header">
-        <h2 class="section-title" id="projectsTitle"></h2>
-    </div>
     <div id="project-container" class="grid"></div>
 </div>
 
@@ -300,13 +286,13 @@
 
 <script>
 const PROJECTS_DATA_URL = "https://raw.githubusercontent.com/devcemalevli38/My_Netlify_SitesApps/refs/heads/main/projects.json"; 
+const NO_INDEX_URL = "https://raw.githubusercontent.com/devcemalevli38/My_Netlify_SitesApps/refs/heads/main/no-index-folder.txt";
 const WORKER_PROXY_URL = "https://cemalevliqzzio.evlicemal38.workers.dev/";
 
 const TRANSLATIONS = {
     en: {
         searchPlaceholder: "🔍 Search projects...",
         newsletterBtnTitle: "Subscribe",
-        projectsTitle: "📂 My Web Projects",
         loading: "Loading...",
         error: "Data is not ready yet.",
         newsletterTitle: "📬 GitHub Newsletter",
@@ -329,7 +315,6 @@ const TRANSLATIONS = {
     tr: {
         searchPlaceholder: "🔍 Proje Ara...",
         newsletterBtnTitle: "Abone Ol",
-        projectsTitle: "📂 Web Projelerim",
         loading: "Yükleniyor...",
         error: "Veriler henüz hazır değil.",
         newsletterTitle: "📬 GitHub Bültenine Kayıt",
@@ -357,7 +342,6 @@ function tr(key) { return TRANSLATIONS[currentLang][key] || TRANSLATIONS["en"][k
 function applyLanguage() {
     document.documentElement.lang = currentLang;
     document.getElementById("search").placeholder = tr("searchPlaceholder");
-    document.getElementById("projectsTitle").textContent = tr("projectsTitle");
     document.getElementById("newsletterTitle").textContent = tr("newsletterTitle");
     document.getElementById("email-input").placeholder = tr("emailPlaceholder");
     document.getElementById("subscribe-btn").textContent = tr("subscribeBtn");
@@ -447,13 +431,43 @@ async function loadProjects() {
     const container = document.getElementById("project-container");
     const section = document.getElementById("projects-section");
     try {
+        // 1. İndekslenmeyecek klasör listesini çek
+        let noIndexFolders = [];
+        try {
+            const noIndexRes = await fetch(NO_INDEX_URL);
+            noIndexFolders = await noIndexRes.json();
+            if (!Array.isArray(noIndexFolders)) noIndexFolders = [];
+        } catch (e) {
+            console.warn("no-index-folder.txt yüklenemedi veya geçersiz formatta.", e);
+        }
+
+        // Sabit olarak engellenen klasörlerin listesi
+        const hardcodedExcludes = [
+            ".github", "My_Social_Media", "imcemo38", "imcemalevli", 
+            "suprizsite", "spotifyprofile", "spotifyplaylist", 
+            "Portfolio_Site", "Spotify_Calınıyor", "social-png"
+        ];
+
+        // 2. Tüm projeleri çek
         const res = await fetch(PROJECTS_DATA_URL);
         const items = await res.json();
         if(!items || items.length === 0) { section.classList.add("hidden"); return; }
         
         section.classList.remove("hidden");
         container.innerHTML = "";
-        items.filter(i => i.type === "dir" && i.name !== ".github" && i.name !== "My_Social_Media" && i.name !== "imcemo38" && i.name !== "imcemalevli" && i.name !== "suprizsite" && i.name !== "spotifyprofile" && i.name !== "spotifyplaylist" && i.name !== "Portfolio_Site" && i.name !== "Spotify_Calınıyor" && i.name !== "social-png" ).forEach(p => {
+        
+        items.filter(i => {
+            // Sadece klasör (dir) olanları al
+            if (i.type !== "dir") return false;
+            
+            // Sabit listede varsa engelle
+            if (hardcodedExcludes.includes(i.name)) return false;
+            
+            // Dinamik no-index-folder.txt listesinde varsa engelle
+            if (noIndexFolders.includes(i.name)) return false;
+            
+            return true;
+        }).forEach(p => {
             const card = document.createElement("a");
             card.className = "project-card";
             card.href = p.path;
