@@ -370,16 +370,16 @@
   {
     "name": "projects.json",
     "path": "projects.json",
-    "sha": "f3ccb421fddea6ed9449b805963b811c947ac59f",
+    "sha": "bff4ba356ba5f92522c1617de27100cc8b2cb27a",
     "size": 32287,
     "url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/projects.json?ref=main",
     "html_url": "https://github.com/devcemalevli38/My_Netlify_SitesApps/blob/main/projects.json",
-    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/f3ccb421fddea6ed9449b805963b811c947ac59f",
+    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/bff4ba356ba5f92522c1617de27100cc8b2cb27a",
     "download_url": "https://raw.githubusercontent.com/devcemalevli38/My_Netlify_SitesApps/main/projects.json",
     "type": "file",
     "_links": {
       "self": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/projects.json?ref=main",
-      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/f3ccb421fddea6ed9449b805963b811c947ac59f",
+      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/bff4ba356ba5f92522c1617de27100cc8b2cb27a",
       "html": "https://github.com/devcemalevli38/My_Netlify_SitesApps/blob/main/projects.json"
     }
   },
@@ -498,16 +498,16 @@
   {
     "name": "social",
     "path": "social",
-    "sha": "f3ee8b0cac32801ba4c8381e79f0aa06928a34c5",
+    "sha": "3880df8638a555664594d001d7a2f2ece8e0e58e",
     "size": 0,
     "url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/social?ref=main",
     "html_url": "https://github.com/devcemalevli38/My_Netlify_SitesApps/tree/main/social",
-    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/f3ee8b0cac32801ba4c8381e79f0aa06928a34c5",
+    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/3880df8638a555664594d001d7a2f2ece8e0e58e",
     "download_url": null,
     "type": "dir",
     "_links": {
       "self": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/social?ref=main",
-      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/f3ee8b0cac32801ba4c8381e79f0aa06928a34c5",
+      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/3880df8638a555664594d001d7a2f2ece8e0e58e",
       "html": "https://github.com/devcemalevli38/My_Netlify_SitesApps/tree/main/social"
     }
   },
