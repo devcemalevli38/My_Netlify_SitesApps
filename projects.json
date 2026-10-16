@@ -162,16 +162,16 @@
   {
     "name": "biography",
     "path": "biography",
-    "sha": "b6a5873ab323d6975ecfea3e954f3f1257341c9c",
-    "size": 316,
+    "sha": "9be80a5f4683e6376fb03f04cf67a850eda7a7b9",
+    "size": 315,
     "url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/biography?ref=main",
     "html_url": "https://github.com/devcemalevli38/My_Netlify_SitesApps/blob/main/biography",
-    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/b6a5873ab323d6975ecfea3e954f3f1257341c9c",
+    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/9be80a5f4683e6376fb03f04cf67a850eda7a7b9",
     "download_url": "https://raw.githubusercontent.com/devcemalevli38/My_Netlify_SitesApps/main/biography",
     "type": "file",
     "_links": {
       "self": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/biography?ref=main",
-      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/b6a5873ab323d6975ecfea3e954f3f1257341c9c",
+      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/9be80a5f4683e6376fb03f04cf67a850eda7a7b9",
       "html": "https://github.com/devcemalevli38/My_Netlify_SitesApps/blob/main/biography"
     }
   },
@@ -370,16 +370,16 @@
   {
     "name": "projects.json",
     "path": "projects.json",
-    "sha": "bff4ba356ba5f92522c1617de27100cc8b2cb27a",
+    "sha": "806cec46e9cca77baa8b95f309a910085aec33f3",
     "size": 32287,
     "url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/projects.json?ref=main",
     "html_url": "https://github.com/devcemalevli38/My_Netlify_SitesApps/blob/main/projects.json",
-    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/bff4ba356ba5f92522c1617de27100cc8b2cb27a",
+    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/806cec46e9cca77baa8b95f309a910085aec33f3",
     "download_url": "https://raw.githubusercontent.com/devcemalevli38/My_Netlify_SitesApps/main/projects.json",
     "type": "file",
     "_links": {
       "self": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/projects.json?ref=main",
-      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/bff4ba356ba5f92522c1617de27100cc8b2cb27a",
+      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/806cec46e9cca77baa8b95f309a910085aec33f3",
       "html": "https://github.com/devcemalevli38/My_Netlify_SitesApps/blob/main/projects.json"
     }
   },
@@ -498,16 +498,16 @@
   {
     "name": "social",
     "path": "social",
-    "sha": "3880df8638a555664594d001d7a2f2ece8e0e58e",
+    "sha": "86f136760b257b15e7b4d55b93bd573c76c079ce",
     "size": 0,
     "url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/social?ref=main",
     "html_url": "https://github.com/devcemalevli38/My_Netlify_SitesApps/tree/main/social",
-    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/3880df8638a555664594d001d7a2f2ece8e0e58e",
+    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/86f136760b257b15e7b4d55b93bd573c76c079ce",
     "download_url": null,
     "type": "dir",
     "_links": {
       "self": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/social?ref=main",
-      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/3880df8638a555664594d001d7a2f2ece8e0e58e",
+      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/86f136760b257b15e7b4d55b93bd573c76c079ce",
       "html": "https://github.com/devcemalevli38/My_Netlify_SitesApps/tree/main/social"
     }
   },
@@ -525,6 +525,38 @@
       "self": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/teleplay?ref=main",
       "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/trees/b3c065b2be835cb05b8bbf6bb6a16f31e0d8b8d3",
       "html": "https://github.com/devcemalevli38/My_Netlify_SitesApps/tree/main/teleplay"
+    }
+  },
+  {
+    "name": "wallpaper-pc.avif",
+    "path": "wallpaper-pc.avif",
+    "sha": "72fa6b57a2a7f6a1fa99c7ead91492ff9a5a94d2",
+    "size": 57634,
+    "url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/wallpaper-pc.avif?ref=main",
+    "html_url": "https://github.com/devcemalevli38/My_Netlify_SitesApps/blob/main/wallpaper-pc.avif",
+    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/72fa6b57a2a7f6a1fa99c7ead91492ff9a5a94d2",
+    "download_url": "https://raw.githubusercontent.com/devcemalevli38/My_Netlify_SitesApps/main/wallpaper-pc.avif",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/wallpaper-pc.avif?ref=main",
+      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/72fa6b57a2a7f6a1fa99c7ead91492ff9a5a94d2",
+      "html": "https://github.com/devcemalevli38/My_Netlify_SitesApps/blob/main/wallpaper-pc.avif"
+    }
+  },
+  {
+    "name": "wallpaper-phone.avif",
+    "path": "wallpaper-phone.avif",
+    "sha": "49f1ccaef4a3aa99cecc689b1ab100dc322e806c",
+    "size": 57142,
+    "url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/wallpaper-phone.avif?ref=main",
+    "html_url": "https://github.com/devcemalevli38/My_Netlify_SitesApps/blob/main/wallpaper-phone.avif",
+    "git_url": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/49f1ccaef4a3aa99cecc689b1ab100dc322e806c",
+    "download_url": "https://raw.githubusercontent.com/devcemalevli38/My_Netlify_SitesApps/main/wallpaper-phone.avif",
+    "type": "file",
+    "_links": {
+      "self": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/contents/wallpaper-phone.avif?ref=main",
+      "git": "https://api.github.com/repos/devcemalevli38/My_Netlify_SitesApps/git/blobs/49f1ccaef4a3aa99cecc689b1ab100dc322e806c",
+      "html": "https://github.com/devcemalevli38/My_Netlify_SitesApps/blob/main/wallpaper-phone.avif"
     }
   },
   {
